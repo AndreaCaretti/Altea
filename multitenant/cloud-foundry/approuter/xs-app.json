@@ -5,13 +5,7 @@
 			"source": "^/srv_api/(.*)",
 			"target": "$1",
 			"destination": "srv_api"
-		},
-		{
-			"source": "^(.*)$",
-			"target": "$1",
-			"service": "html5-apps-repo-rt",
-			"authenticationType": "xsuaa"
 		}
 	],
-	"welcomeFile": "/cp.portal"
+	"welcomeFile": "/srv_api/flpSandbox.html"
 }

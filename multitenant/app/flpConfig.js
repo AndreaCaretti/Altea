@@ -27,5 +27,14 @@ window["sap-ushell-config"] = {
 			url: "./cloudcoldchain.customercategories/webapp",
 			navigationMode: "embedded",
 		},
+		"Customers-manage": {
+			title: "Manage Customers",
+			description: "Customers Maintenance",
+			icon: "sap-icon://add",
+			additionalInformation: "SAPUI5.Component=cloudcoldchain.customers",
+			applicationType: "URL",
+			url: "./cloudcoldchain.customers/webapp",
+			navigationMode: "embedded",
+		},
 	},
 };

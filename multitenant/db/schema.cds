@@ -22,3 +22,12 @@ entity CustomerCategories : cuid, managed {
     name        : String(50);
     description : localized String(200);
 }
+
+@cds.odata.valuelist
+@UI.Identification : [name]
+entity Customers : cuid, managed {
+    @title : 'Customers'
+    name               : String(50);
+    category           : Association to one CustomerCategories;
+    gs1_company_prefix : String(10)
+}

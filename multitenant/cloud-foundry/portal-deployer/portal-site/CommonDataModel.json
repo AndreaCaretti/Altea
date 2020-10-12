@@ -39,6 +39,11 @@
 							"id": "customercategories",
 							"appId": "cloudcoldchain.customercategories",
 							"vizId": "CustomerCategories-manage"
+						},
+						{
+							"id": "customers",
+							"appId": "cloudcoldchain.customers",
+							"vizId": "Customers-manage"
 						}
 					]
 				}

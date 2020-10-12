@@ -7,3 +7,7 @@ annotate cloudcoldchain.AccessRights with {
 annotate cloudcoldchain.CustomerCategories with {
     ID @Core.Computed;
 }
+
+annotate cloudcoldchain.Customers with {
+    ID @Core.Computed;
+}
