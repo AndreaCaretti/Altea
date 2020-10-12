@@ -1,0 +1,2 @@
+Folder html5-deployer must be present when mbt build run.
+This empty file force git to commit the folder.
