@@ -35,7 +35,9 @@ modules:
       buildpack: nodejs_buildpack
     build-parameters:
       ignore: ["default-env.json", "node_modules/"]
-      buildpack: nodejs_buildpack
+      builder: custom
+      commands: []
+
     properties:
       SAP_JWT_TRUST_ACL: [{ "clientid": "*", "identityzone": "sap-provisioning" }] # Trust between server and SaaS Manager
       EXIT: 1
@@ -69,6 +71,9 @@ modules:
       SEND_XFRAMEOPTIONS: false
     build-parameters:
       ignore: ["default-env.json", "node_modules/"]
+      builder: custom
+      commands: []
+
     requires:
       - name: mtt-destination
       - name: mtt-xsuaa
