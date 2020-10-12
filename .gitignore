@@ -40,4 +40,4 @@ Makefile*
 mta-*
 approuter/webapp/
 
-cloud-foundry/html5-deployer/resources/
+multitenant/cloud-foundry/html5-deployer/resources/
