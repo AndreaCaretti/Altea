@@ -3,7 +3,7 @@
 #    GLOBALS                                 #
 # ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄ #
 #
-ID: cloud-cloud-chain-tenant
+ID: cloud-cold-chain-multitenant
 _schema-version: 3.2.0
 description: Cloud Cold Chain - Multitenant
 version: 0.0.1
@@ -203,7 +203,7 @@ resources:
       service: xsuaa
       service-plan: application
       path: cloud-foundry/xsuaa/xs-security.json
-      xsuaa-app: ${space}-mt-app-pub
+      xsuaa-app: ${space}-cloud-cold-chain
       config:
         xsappname: ${xsuaa-app}
         tenant-mode: shared
@@ -224,13 +224,9 @@ resources:
       config:
         appName: ~{mtt-xsuaa/XSAPPNAME}
         xsappname: ~{mtt-xsuaa/XSAPPNAME}
-        displayName: ~{mtt-xsuaa/XSAPPNAME}
-        description: |-
-          org:   ${org}
-          space: ${space}
-          XSAPPNAME: ~{mtt-xsuaa/XSAPPNAME}
-          onSubscription: ~{mtt-cap-services-mtx-api/mtx-url}/mtx/v1/provisioning/tenant/{tenantId}
-        category: "From ZERO Category"
+        displayName: "Cloud Cold Chain"
+        description: Cloud Cold Chain
+        category: "Cloud Cold Chain"
         appUrls:
           getDependencies: ~{mtt-approuter-provisioning/url}/mtx/v1/provisioning/dependencies
           onSubscription: ~{mtt-cap-services-mtx-api/mtx-url}/mtx/v1/provisioning/tenant/{tenantId}
