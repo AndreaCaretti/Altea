@@ -18,5 +18,14 @@ window["sap-ushell-config"] = {
 			url: "./com.alteaup.solutions.accessrights/webapp",
 			navigationMode: "embedded",
 		},
+		"CustomerCategories-manage": {
+			title: "Manage CustomerCategories",
+			description: "CustomerCategories Maintenance",
+			icon: "sap-icon://add",
+			additionalInformation: "SAPUI5.Component=cloudcoldchain.customercategories",
+			applicationType: "URL",
+			url: "./cloudcoldchain.customercategories/webapp",
+			navigationMode: "embedded",
+		},
 	},
 };

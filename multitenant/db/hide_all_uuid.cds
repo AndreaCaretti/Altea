@@ -1,5 +1,9 @@
-using {alteaup.solutions.systems as solutions} from './schema';
+using {cloudcoldchain} from './schema';
 
-annotate solutions.AccessRights with {
+annotate cloudcoldchain.AccessRights with {
+    ID @UI.Hidden;
+}
+
+annotate cloudcoldchain.CustomerCategories with {
     ID @UI.Hidden;
 }

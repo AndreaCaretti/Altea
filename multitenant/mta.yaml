@@ -101,6 +101,16 @@ modules:
       supported-platforms: []
       build-result: dist
   #
+  - name: ui_customercategories
+    type: html5
+    path: app/cloudcoldchain.customercategories
+    build-parameters:
+      builder: custom
+      commands:
+        - npm run build
+      supported-platforms: []
+      build-result: dist
+  #
   #   ╔═══════════════════════════════════════╗   #
   #   ║            HTML5 DEPLOYER             ║   #
   #   ╚═══════════════════════════════════════╝   #
@@ -116,6 +126,10 @@ modules:
       build-result: resources
       requires:
         - name: ui_accessrights
+          artifacts:
+            - ./uimodule*.zip
+          target-path: resources/
+        - name: ui_customercategories
           artifacts:
             - ./uimodule*.zip
           target-path: resources/
