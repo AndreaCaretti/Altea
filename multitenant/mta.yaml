@@ -32,6 +32,7 @@ modules:
     parameters:
       disk-quota: 512M
       memory: 256M
+      buildpack: nodejs_buildpack
     build-parameters:
       ignore: ["default-env.json", "node_modules/"]
       buildpack: nodejs_buildpack
