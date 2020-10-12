@@ -28,6 +28,8 @@ entity CustomerCategories : cuid, managed {
 entity Customers : cuid, managed {
     @title : 'Customers'
     name               : String(50);
+    @title : 'Category'
     category           : Association to one CustomerCategories;
+    @title : 'GS1 Company Prefix'
     gs1_company_prefix : String(10)
 }
