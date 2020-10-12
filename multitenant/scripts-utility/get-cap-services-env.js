@@ -1,8 +1,7 @@
 const request = require("request");
+const spawn = require("child_process").spawn;
 
 const region = "us10";
-const username = "sbarzaghi@alteanet.it";
-const password = "XXXX";
 
 async function callService(options) {
 	return new Promise((resolve, reject) => {
@@ -14,24 +13,25 @@ async function callService(options) {
 }
 
 async function getAccessToken() {
-	let options = {
-		method: "POST",
-		url: `https://login.cf.${region}.hana.ondemand.com/oauth/token`,
-		headers: {
-			"Content-Type": "application/x-www-form-urlencoded",
-			Accept: "*/*",
-			Authorization: "Basic Y2Y6",
-		},
-		form: {
-			grant_type: "password",
-			username: username,
-			password: password,
-			scope: "",
-		},
-	};
+	return new Promise((resolve, reject) => {
+		try {
+			oauthToken = spawn("cf", ["oauth-token"]);
+		} catch (error) {
+			reject(error);
+		}
 
-	let response = await callService(options);
-	return JSON.parse(response.body).access_token;
+		oauthToken.stdout.on("data", function (data) {
+			resolve(data.toString().slice(0, -1));
+		});
+
+		oauthToken.stderr.on("data", function (data) {
+			console.log("ERROR: " + data.toString());
+		});
+
+		oauthToken.on("exit", function (code) {
+			resolve(code.toString());
+		});
+	});
 }
 
 async function getAppEnviroment(appGuid, access_token) {
@@ -39,7 +39,7 @@ async function getAppEnviroment(appGuid, access_token) {
 		method: "GET",
 		url: `https://api.cf.${region}.hana.ondemand.com/v3/apps/${appGuid}/env/`,
 		headers: {
-			Authorization: `Bearer ${access_token}`,
+			Authorization: access_token,
 		},
 	};
 
@@ -53,4 +53,4 @@ async function main(appGuid) {
 	console.log(JSON.stringify(enviroment, null, 2));
 }
 
-main("40c62cf2-1b43-411c-adc4-376182c27069");
+main("a0d2af5f-eb8b-4e72-9d8b-d60339e0163c");
