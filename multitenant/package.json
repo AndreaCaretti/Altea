@@ -27,10 +27,10 @@
 	},
 	"scripts": {
 		"start": "cds run",
-		"build": "mbt build",
+		"build": "scripts-utility/build.sh",
 		"deploy": "echo 'Starting deploy...'; date; cf deploy mta_archives/cloud-cold-chain-multitenant_0.0.1.mtar -f; echo 'deploy finished'; date",
 		"refreshEnv": "node scripts-utility/get-cap-services-env.js > default-env.json",
-		"upgrade-tenants": "node scripts-utility/upgrade-tenants.js"
+        "upgrade-tenants": "node scripts-utility/upgrade-tenants.js"
 	},
 	"cds": {
 		"hana": {
