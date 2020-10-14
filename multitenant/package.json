@@ -44,6 +44,9 @@
 			"db": {
 				"kind": "sql",
 				"multiTenant": true,
+				"credentials": {
+					"database": "local-test-data.db"
+				},
 				"vcap": {
 					"label": "service-manager"
 				}
