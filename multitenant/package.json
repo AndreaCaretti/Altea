@@ -40,15 +40,28 @@
 		"requires": {
 			"uaa": {
 				"kind": "xsuaa"
-			},
-			"db": {
-				"kind": "sql",
-				"multiTenant": true,
-				"credentials": {
-					"database": "local-test-data.db"
-				},
-				"vcap": {
-					"label": "service-manager"
+			}
+		},
+		"[development]": {
+			"comment": "Anything defined inside of [development] will overrided prior values.",
+			"requires": {
+				"db": {
+					"kind": "sqlite",
+					"credentials": {
+						"database": "local-test-data.db"
+					}
+				}
+			}
+		},
+		"[production]": {
+			"comment": "Anything defined inside of [production] will overrided prior values.",
+			"requires": {
+				"db": {
+					"kind": "hana",
+					"multiTenant": true,
+					"vcap": {
+						"label": "service-manager"
+					}
 				}
 			}
 		},
