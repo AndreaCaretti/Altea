@@ -1,6 +1,10 @@
 namespace cloudcoldchain;
 
 using {
+  cloudcoldchain.SSCC
+} from './global_types';
+
+using {
     Currency,
     managed,
     cuid
@@ -12,6 +16,8 @@ using {
 entity AccessRights : cuid, managed {
     @title : 'Access Rights'
     name : String(50);
+    sscc : SSCC;
+        
 }
 
 @cds.autoexpose
