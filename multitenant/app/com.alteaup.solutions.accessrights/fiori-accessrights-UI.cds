@@ -41,7 +41,7 @@ annotate Services.AccessRights with @(
 		},
 		FieldGroup#General: {
 			Data: [
-				// {Value: name}
+				{Value: sscc}
 			]
 		},
 		FieldGroup#Admin: {
