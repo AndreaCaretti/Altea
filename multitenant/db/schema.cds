@@ -12,8 +12,7 @@ using {
 
 @cds.autoexpose
 @cds.odata.valuelist
-@UI.Identification : [name]
-entity AccessRights : cuid, managed {
+define entity AccessRights : cuid, managed {
     @title : 'Access Rights'
     name : String(50);
     sscc : SSCC;
@@ -22,17 +21,14 @@ entity AccessRights : cuid, managed {
 
 @cds.autoexpose
 @cds.odata.valuelist
-@UI.Identification : [name]
-entity CustomerCategories : cuid, managed {
+define entity CustomerCategories : cuid, managed {
     @title : 'Customer Categories'
     name        : String(50);
     description : localized String(200);
 }
 
 @cds.odata.valuelist
-@UI.Identification : [name]
-entity Customers : cuid, managed {
-    @title : 'Customers'
+define entity Customers : cuid, managed {
     name               : String(50);
     @title : 'Category'
     category           : Association to one CustomerCategories;
