@@ -2,7 +2,7 @@
 _out
 *.db
 connection.properties
-/default-env.json
+/multitenant/default-env.json
 gen/
 node_modules/
 target/
@@ -41,3 +41,6 @@ mta-*
 approuter/webapp/
 
 multitenant/cloud-foundry/html5-deployer/resources/
+
+# In git le due versioni xs-app-cloud.json e xs-app-local.json, questa viene creata per copia
+multitenant/cloud-foundry/approuter/xs-app.json
