@@ -1,4 +1,5 @@
 const cds = require("@sap/cds");
+const log = require("cf-nodejs-logging-support");
 
 var myLogger = function (req, res, next) {
 	console.log("XXX_LOGGED");
@@ -9,12 +10,14 @@ var myLogger = function (req, res, next) {
 };
 
 cds.on("bootstrap", async (app) => {
+	log.setLoggingLevel("debug");
+
+	log.info("🤷‍♂️ Activating my logs... ");
+	app.use(log.logNetwork);
+
 	await cds.mtx.in(app); // serve cds-mtx APIs
 
-	console.log("🤷‍♂️ Activating my logs... ");
-	app.use(myLogger);
-
-	console.log("🤷‍♂️ Overriding Default Provisioning... ");
+	log.info("🤷‍♂️ Overriding Default Provisioning... ");
 	const provisioning = await cds.connect.to("ProvisioningService");
 	provisioning.impl(require("./srv/saas-provisioning/provisioning"));
 });
