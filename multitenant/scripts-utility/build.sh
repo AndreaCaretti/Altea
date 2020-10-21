@@ -4,7 +4,12 @@ NC='\033[0m'
 
 echo -e "${GREEN}Rinomina precedente mtar:${NC}"
 mv -v mta_archives/cloud-cold-chain-multitenant_0.0.1.mtar mta_archives/cloud-cold-chain-multitenant_0.0.1.mtar_old
+
+echo -e "${GREEN}Cancellazione makefile rimasti appesi:${NC}"
+rm -v Makefile*
+
 set -o errexit
+
 echo -e "${GREEN}Configurazione approuter per SCP:${NC}"
 cp cloud-foundry/approuter/xs-app-cloud.json cloud-foundry/approuter/xs-app.json -v
 echo -e "\n"
