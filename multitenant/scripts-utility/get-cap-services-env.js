@@ -1,7 +1,7 @@
 const request = require("request");
 const spawn = require("child_process").spawn;
 
-const region = "us10";
+const region = "eu10";
 
 async function callService(options) {
 	return new Promise((resolve, reject) => {
@@ -53,4 +53,6 @@ async function main(appGuid) {
 	console.log(JSON.stringify(enviroment, null, 2));
 }
 
-main("a0d2af5f-eb8b-4e72-9d8b-d60339e0163c");
+// GUID dell'app mtt-cap-services preso dall'url del cockpit SCP esempio:
+// https://account.eu1.hana.ondemand.com/cockpit#/globalaccount/CA12869611TID000000000741429957/subaccount/8da3ba0a-5a8a-436a-bfe7-fb7eb40a3b6e/org/d82773c3-5b40-4deb-9e9f-15c8ce1b6799/space/68ec91f6-3b26-4fca-8b8d-9c03085ab458/app/902d68b5-14dd-444b-92fd-0a6c86f33233/overview
+main("902d68b5-14dd-444b-92fd-0a6c86f33233");

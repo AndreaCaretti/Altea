@@ -38,7 +38,7 @@ async function upgradeTenants(access_token) {
 	let options = {
 		method: "POST",
 		url:
-			"https://2630provider-mt-test-mtt-cap-services.cfapps.us10.hana.ondemand.com/mtx/v1/model/asyncUpgrade",
+			"https://ccp-provider-dev-qas-dev-mtt-cap-services.cfapps.eu10.hana.ondemand.com/mtx/v1/model/asyncUpgrade",
 		headers: {
 			"Content-Type": "application/json",
 			Authorization: `Bearer ${access_token}`,
@@ -52,7 +52,7 @@ async function upgradeTenants(access_token) {
 async function getJobStatus(jobID, access_token) {
 	let options = {
 		method: "GET",
-		url: `https://2630provider-mt-test-mtt-cap-services.cfapps.us10.hana.ondemand.com/mtx/v1/model/status/${jobID}`,
+		url: `https://ccp-provider-dev-qas-dev-mtt-cap-services.cfapps.eu10.hana.ondemand.com/mtx/v1/model/status/${jobID}`,
 		headers: {
 			"Content-Type": "application/json",
 			Authorization: `Bearer ${access_token}`,
