@@ -242,7 +242,7 @@ resources:
         appName: ~{mtt-xsuaa/XSAPPNAME}
         xsappname: ~{mtt-xsuaa/XSAPPNAME}
         displayName: "Cloud Cold Chain"
-        description: Cloud Cold Chain
+        description: ~{mtt-approuter-provisioning/url}/mtx/v1/provisioning/dependencies
         category: "Cloud Cold Chain"
         appUrls:
           getDependencies: ~{mtt-approuter-provisioning/url}/mtx/v1/provisioning/dependencies
