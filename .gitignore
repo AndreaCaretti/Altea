@@ -42,5 +42,5 @@ approuter/webapp/
 
 multitenant/cloud-foundry/html5-deployer/resources/
 
-# In git le due versioni xs-app-cloud.json e xs-app-local.json, questa viene creata per copia
+# In git le due versioni xs-app-cloud.json e xs-app-local.json, questa viene creata per copia non serve in git
 multitenant/cloud-foundry/approuter/xs-app.json
