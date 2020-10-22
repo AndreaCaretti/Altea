@@ -60,3 +60,11 @@ define entity Books : cuid, managed {
     SSCC : Association to one HandlingUnits;
     DIR  : String(1) @assert.range enum { F; B; };
 }
+
+define entity HandlingUnitsRawMovements : cuid, managed {
+    CP_ID   : String(36);
+    TE   : String(24);
+    TS   : String(24);
+    SSCC_ID : String(18);
+    DIR  : String(1);
+}

@@ -25,3 +25,20 @@ Content-Type: application/json
 {
 	"ID": "90abe75c-e2c6-4e5f-a12f-fb81aa50d011"
 }
+
+
+### Create HandlingUnitsRawMovements
+POST http://localhost:4004/handling-unit-moved/HandlingUnitsRawMovements HTTP/1.1
+Content-Type: application/json
+
+{
+	"CP_ID": "90abe75c-e2c6-4e5f-a12f-fb81aa50d011",
+    "TE": "2020-10-14T09:01:33.763Z",
+	"TS": "2020-10-14T09:01:34.763Z",
+    "SSCC_ID": "123456789012345678",
+    "DIR": "B"
+}
+
+
+### Create HandlingUnitsRawMovements
+GET http://localhost:4004/handling-unit-moved/HandlingUnitsRawMovements HTTP/1.1
