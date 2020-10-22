@@ -9,3 +9,5 @@ cp cloud-foundry/approuter/xs-app-local.json cloud-foundry/approuter/xs-app.json
 cds watch & 
 cd cloud-foundry/approuter/
 npm start
+
+echo -e "${GREEN}Apri il browser all'indirizzo http://localhost:5000${NC}"
