@@ -1,0 +1,2 @@
+### Get HandlingUnitsRawMovements
+GET https://ccp-customera-dev-mtt-approuter.cfapps.eu10.hana.ondemand.com/srv_api/handling-unit-moved/HandlingUnitsRawMovements HTTP/1.1

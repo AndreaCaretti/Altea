@@ -40,5 +40,5 @@ Content-Type: application/json
 }
 
 
-### Create HandlingUnitsRawMovements
+### Get HandlingUnitsRawMovements
 GET http://localhost:4004/handling-unit-moved/HandlingUnitsRawMovements HTTP/1.1
