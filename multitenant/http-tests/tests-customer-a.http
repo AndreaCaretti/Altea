@@ -1,2 +1,11 @@
 ### Get HandlingUnitsRawMovements
 GET https://ccp-customera-dev-mtt-approuter.cfapps.eu10.hana.ondemand.com/srv_api/handling-unit-moved/HandlingUnitsRawMovements HTTP/1.1
+
+## Promemoria per autenticazione con grant_type code, funziona solo da browser a causa di redirect e javascript che viene eseguito sulla pagina
+
+# ## Il recupero del code funziona solo da browser quindi lanciare questa chiamata dal browser e copiare il code che appare nell'url:
+# GET https://ccp-customera.authentication.eu10.hana.ondemand.com/oauth/authorize?response_type=code&client_id=sb-dev-cloud-cold-chain!t61773 HTTP/1.1
+
+# ## Copiare il code e metterlo in fondo, anche questa chiamata funziona solo da browser perchè gli servono i cookie di sessione
+# GET https://ccp-customera.authentication.eu10.hana.ondemand.com/oauth/token?grant_type=authorization_code&code=XXXXXXXX HTTP/1.1
+
