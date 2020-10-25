@@ -2,33 +2,25 @@ const cds = require("@sap/cds");
 const log = require("cf-nodejs-logging-support");
 
 async function checkStatus() {
-	console.debug("🤷‍♂️ Check status");
-
-	console.debug("🤷‍♂️ Tech");
 	const technicalUser = new cds.User({
 		id: "sbarzaghi@alteanet.it",
 		tenant: "a1d03e7f-53e4-414b-aca0-c4d44157f2a0",
 	});
 
-	console.debug("🤷‍♂️ Request");
 	const request = new cds.Request({ user: technicalUser });
 
-	console.debug("🤷‍♂️ Transaction");
 	const tx = cds.transaction(request);
 
-	console.debug("🤷‍♂️ Entities");
 	const { HandlingUnitsRawMovements } = cds.entities;
 
-	console.debug("🤷‍♂️ Select");
 	const select = SELECT.from(HandlingUnitsRawMovements).columns("ID", "CP_ID");
 
-	console.debug("🤷‍♂️ Run");
 	try {
 		const h = await tx.run(select);
 		console.debug("HandlingUnitsRawMovements", h);
 		tx.commit();
 	} catch (error) {
-		console.debug("🤢 Timeout tx run");
+		console.error("🤢", error);
 	}
 
 	setTimeout(checkStatus, 1000);
