@@ -1,14 +1,6 @@
 const cds = require("@sap/cds");
 const log = require("cf-nodejs-logging-support");
 
-var myLogger = function (req, res, next) {
-	console.log("XXX_LOGGED");
-	console.log("XXX_==== method: " + req.method + " + " + req.url);
-	console.log("XXX_==== headers:" + JSON.stringify(req.headers, null, 2) + "====");
-	console.log("XXX_==== body:" + JSON.stringify(req.body, null, 2) + "====");
-	next();
-};
-
 async function checkStatus() {
 	console.debug("🤷‍♂️ Check status");
 
