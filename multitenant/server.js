@@ -31,8 +31,13 @@ async function checkStatus() {
 	const select = SELECT.from(HandlingUnitsRawMovements).columns("ID", "CP_ID");
 
 	console.debug("🤷‍♂️ Run");
-	const h = await tx.run(select);
-	console.debug("HandlingUnitsRawMovements", new Date(), h);
+	try {
+		const h = await tx.run(select);
+		console.debug("HandlingUnitsRawMovements", h);
+		tx.commit();
+	} catch (error) {
+		console.debug("🤢 Timeout tx run");
+	}
 
 	setTimeout(checkStatus, 1000);
 }
