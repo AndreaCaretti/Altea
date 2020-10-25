@@ -12,13 +12,29 @@ var myLogger = function (req, res, next) {
 async function checkStatus() {
 	console.debug("🤷‍♂️ Check status");
 
-	const dbService = await cds.connect.to("db");
+	console.debug("🤷‍♂️ Tech");
+	const technicalUser = new cds.User({
+		id: "sbarzaghi@alteanet.it",
+		tenant: "a1d03e7f-53e4-414b-aca0-c4d44157f2a0",
+	});
+
+	console.debug("🤷‍♂️ Request");
+	const request = new cds.Request({ user: technicalUser });
+
+	console.debug("🤷‍♂️ Transaction");
+	const tx = cds.transaction(request);
+
+	console.debug("🤷‍♂️ Entities");
 	const { HandlingUnitsRawMovements } = cds.entities;
 
-	let select = SELECT.from(HandlingUnitsRawMovements).columns("ID", "CP_ID");
+	console.debug("🤷‍♂️ Select");
+	const select = SELECT.from(HandlingUnitsRawMovements).columns("ID", "CP_ID");
 
-	let h = await dbService.run(select);
+	console.debug("🤷‍♂️ Run");
+	const h = await tx.run(select);
 	console.debug("HandlingUnitsRawMovements", new Date(), h);
+
+	setTimeout(checkStatus, 1000);
 }
 
 cds.on("bootstrap", async (app) => {
@@ -32,9 +48,10 @@ cds.on("bootstrap", async (app) => {
 	log.info("🤷‍♂️ Overriding Default Provisioning... ");
 	const provisioning = await cds.connect.to("ProvisioningService");
 	provisioning.impl(require("./srv/saas-provisioning/provisioning"));
-
-	setInterval(checkStatus, 1000);
 });
 
+cds.on("served", async (app) => {
+	setTimeout(checkStatus, 1000);
+});
 // Delegate bootstrapping to built-in server.js
 module.exports = cds.server;
