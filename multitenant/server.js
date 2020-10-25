@@ -9,6 +9,18 @@ var myLogger = function (req, res, next) {
 	next();
 };
 
+async function checkStatus() {
+	console.debug("🤷‍♂️ Check status");
+
+	const dbService = await cds.connect.to("db");
+	const { HandlingUnitsRawMovements } = cds.entities;
+
+	let select = SELECT.from(HandlingUnitsRawMovements).columns("ID", "CP_ID");
+
+	let h = await dbService.run(select);
+	console.debug("HandlingUnitsRawMovements", new Date(), h);
+}
+
 cds.on("bootstrap", async (app) => {
 	log.setLoggingLevel("debug");
 
@@ -20,6 +32,8 @@ cds.on("bootstrap", async (app) => {
 	log.info("🤷‍♂️ Overriding Default Provisioning... ");
 	const provisioning = await cds.connect.to("ProvisioningService");
 	provisioning.impl(require("./srv/saas-provisioning/provisioning"));
+
+	setInterval(checkStatus, 1000);
 });
 
 // Delegate bootstrapping to built-in server.js
