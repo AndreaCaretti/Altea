@@ -42,7 +42,7 @@ It contains these folders and files, following our recommended project layout:
 
 poi per lanciare:
 ```
-export CDS_ENV = production
+export CDS_ENV=production
 cds run
 ```
 *nota: `cds watch` non funziona perchè lancia in modalità sviluppo*
