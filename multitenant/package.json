@@ -30,6 +30,7 @@
 		"start": "cds run",
 		"watch": "scripts-utility/watch-local.sh",
 		"build": "scripts-utility/build.sh",
+		"debug": "scripts-utility/debug-local.sh",
 		"deploy": "echo 'Starting deploy...'; date; cf deploy mta_archives/cloud-cold-chain-multitenant_0.0.1.mtar -f; echo 'deploy finished'; date",
 		"refreshEnv": "node scripts-utility/get-cap-services-env.js > default-env.json",
 		"upgrade-tenants": "node scripts-utility/upgrade-tenants.js"
