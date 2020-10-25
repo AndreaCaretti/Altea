@@ -13,4 +13,4 @@ echo -e "${GREEN}Preparazione per lancio in debug:${NC}"
 export NODE_OPTIONS='--inspect'
 cd ../../
 echo -e "${GREEN}cds run${NC}"
-cds run
+cds watch
