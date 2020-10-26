@@ -1,31 +1,9 @@
 const cds = require("@sap/cds");
 const Request = require("@sap/cds/lib/srv/Request");
-const { promisify } = require("util");
-const redis = require("redis");
 
-class HandlingUnitMoved extends cds.ApplicationService {
+class ZApplicationService extends cds.ApplicationService {
 	async init() {
-		console.log("Init HandlingUnitMoved.js");
-
-		const redisClient = redis.createClient();
 		await super.init();
-
-		this.after("CREATE", "HandlingUnitsRawMovements", (data, req) => {
-			const record = {
-				movementId: data.ID,
-				user: req.user.id,
-				tenant: req.user.tenant,
-			};
-
-			// Emettendo un throw viene eseguito un rollback sul db
-			// throw "Order amount must not exceed 11";
-			redisClient.rpush("persone", JSON.stringify(record));
-			console.log("Inserito record:", record);
-		});
-
-		this.before("CREATE", "Books", (req) => {
-			this.installCustomEmit(req);
-		});
 	}
 
 	onValidationError(e, req) {
@@ -65,4 +43,4 @@ class HandlingUnitMoved extends cds.ApplicationService {
 	}
 }
 
-module.exports = HandlingUnitMoved;
+module.exports = ZApplicationService;

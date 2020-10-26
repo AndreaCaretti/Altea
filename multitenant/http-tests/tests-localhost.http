@@ -9,7 +9,7 @@ Content-Type: application/json
 
 {
 	"CP_ID": "{{$guid}}",
-    "TE": "2020-10-14T09:01:33.763Z",
+    "TE": "2020-10-14T09:01:33.763Z----------",
 	"TS": "2020-10-14T09:01:34.763Z",
     "SSCC_ID": "123456789012345678",
     "DIR": "B"
@@ -48,6 +48,7 @@ Content-Type: application/json
 
 ### Creazione record Books
 POST http://localhost:4004/handling-unit-moved/Books  HTTP/1.1
+Authorization: Basic Alice:Alice
 Content-Type: application/json
 
 {
