@@ -1,5 +1,7 @@
 const cds = require("@sap/cds");
-const log = require("cf-nodejs-logging-support");
+const logger = require("cf-nodejs-logging-support");
+
+const coldChainLogger = logger.createLogger();
 
 async function checkStatus() {
 	const technicalUser = new cds.User({
@@ -15,26 +17,30 @@ async function checkStatus() {
 
 	const select = SELECT.from(HandlingUnitsRawMovements).columns("ID", "CP_ID");
 
+	coldChainLogger.setTenantId(technicalUser.tenant);
+
 	try {
 		const h = await tx.run(select);
-		console.debug("HandlingUnitsRawMovements", h);
+
+		// coldChainLogger.logMessage("debug", "Data %j", h, { component_id: "sam" });
 		tx.commit();
 	} catch (error) {
-		console.error("🤢", error);
+		coldChainLogger.error(error.toString());
 	}
 
 	setTimeout(checkStatus, 1000);
 }
 
 cds.on("bootstrap", async (app) => {
-	log.setLoggingLevel("debug");
+	coldChainLogger.setLoggingLevel("debug");
+	// coldChainLogger.setLogPattern("{{written_at}} - {{msg}}");
 
-	log.info("🤷‍♂️ Activating my logs... ");
-	app.use(log.logNetwork);
+	coldChainLogger.info("🤷‍♂️ Activating my logs... ");
+	app.use(logger.logNetwork);
 
 	await cds.mtx.in(app); // serve cds-mtx APIs
 
-	log.info("🤷‍♂️ Overriding Default Provisioning... ");
+	coldChainLogger.info("🤷‍♂️ Overriding Default Provisioning... ");
 	const provisioning = await cds.connect.to("ProvisioningService");
 	provisioning.impl(require("./srv/saas-provisioning/provisioning"));
 });
