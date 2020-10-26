@@ -28,7 +28,8 @@
 	},
 	"scripts": {
 		"start": "cds run",
-		"watch": "scripts-utility/watch-local.sh",
+		"watch-local-db": "scripts-utility/watch-local-db.sh",
+		"watch-remote-db": "scripts-utility/watch-remote-db.sh",
 		"build": "scripts-utility/build.sh",
 		"debug": "scripts-utility/debug-local.sh",
 		"debug-on": "scripts-utility/debug-on.sh",
