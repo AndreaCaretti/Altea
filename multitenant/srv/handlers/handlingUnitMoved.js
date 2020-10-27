@@ -3,6 +3,7 @@ const Request = require("@sap/cds/lib/srv/Request");
 const { promisify } = require("util");
 const redis = require("redis");
 
+
 const redisClient = redis.createClient();
 
 module.exports = async function () {
@@ -15,7 +16,7 @@ module.exports = async function () {
 
 		// Emettendo un throw viene eseguito un rollback sul db
 		// throw "Order amount must not exceed 11";
-		redisClient.rpush("persone", JSON.stringify(record));
+		redisClient.rpush("HandlingUnitsRawMovements", JSON.stringify(record));
 		console.log("Inserito record:", record);
 	});
 
