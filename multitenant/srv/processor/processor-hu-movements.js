@@ -1,8 +1,11 @@
+const redis = require("redis");
+
 class ProcessorHuMovements {
 	constructor(logger) {
 		this.logger = logger;
 
 		this.checkStatus = this.checkStatus.bind(this);
+		this.redisClient = redis.createClient();
 	}
 
 	async checkStatus() {
@@ -51,7 +54,7 @@ class ProcessorHuMovements {
 
 	readBLPOP(queue, index) {
 		//queue = "persone";
-		redisClient.BLPOP(queue, 0, (erro, element) => {
+		this.redisClient.BLPOP(queue, 0, (erro, element) => {
 			// '{"CP":"90abe75c-e2c6-4e5f-a12f-fb81aa50d011", "TE":"2020-10-26T11:20:39.007Z", "TS":"2021-11-01T11:20:39.007Z", "SSCC":"123456789012345678","DIR":"B" }'
 			const obj = JSON.parse(element[1]); //element[0] è il nome della coda
 
