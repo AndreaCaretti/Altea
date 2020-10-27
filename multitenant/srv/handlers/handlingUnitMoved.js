@@ -8,7 +8,7 @@ class HandlingUnitMoved extends ZApplicationService {
 
 		console.log("Init HandlingUnitMoved.js");
 
-		const redisClient = redis.createClient();
+		// const redisClient = redis.createClient();
 
 		this.after("CREATE", "HandlingUnitsRawMovements", (data, req) => {
 			const record = {
@@ -17,7 +17,8 @@ class HandlingUnitMoved extends ZApplicationService {
 				tenant: req.user.tenant,
 			};
 
-			redisClient.rpush("persone", JSON.stringify(record));
+			// redisClient.rpush("persone", JSON.stringify(record));
+
 			console.log("Inserito record:", record);
 
 			// Emettendo un throw viene eseguito un rollback sul db
