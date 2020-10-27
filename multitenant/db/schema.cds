@@ -62,9 +62,9 @@ define entity Books : cuid, managed {
 }
 
 define entity HandlingUnitsRawMovements : cuid, managed {
-    CP_ID   : String(36);
-    TE   : String(24);
-    TS   : String(24);
-    SSCC_ID : String(18);
-    DIR  : String(1);
+    CP_ID   : String;
+    TE   : String;
+    TS   : String;
+    SSCC_ID : String;
+    DIR  : String;
 }
