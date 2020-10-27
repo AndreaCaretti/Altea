@@ -48,4 +48,21 @@ module.exports = async function () {
 		});
 		return await dispatch_internal.call(this, req, ...etc);
 	};
+
+	//return blockingPopPromise();	
+	async function blockingPop() {
+		return await this.blockingPopPromise();
+	};
 };
+
+
+function blockingPopPromise() {
+		return new Promise((resolve, reject) => {
+			redisClient.BLPOP(this.listKey, 0, (erro, element) => {
+				resolve(element[1]);
+			});
+		});
+	};
+
+
+

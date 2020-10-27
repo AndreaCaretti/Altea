@@ -1,7 +1,10 @@
 const cds = require("@sap/cds");
 const logger = require("cf-nodejs-logging-support");
+const redis = require("redis");
 
 const coldChainLogger = logger.createLogger();
+const redisClient = redis.createClient();
+
 
 async function checkStatus() {
 	const technicalUser = new cds.User({
@@ -28,7 +31,9 @@ async function checkStatus() {
 		coldChainLogger.error(error.toString());
 	}
 
-	setTimeout(checkStatus, 1000);
+	readBLPOP("persone",0);		//RDS - index 0 - ultimo record inserito con LPUSH
+
+	setTimeout(checkStatus, 10000);
 }
 
 cds.on("bootstrap", async (app) => {
@@ -51,5 +56,14 @@ cds.on("bootstrap", async (app) => {
 cds.on("served", async (app) => {
 	setTimeout(checkStatus, 1000);
 });
+
+function readBLPOP(queue,index){
+	//queue = "persone";
+	redisClient.BLPOP(queue, 0,(erro, element) => {
+		console.log(`record letto(BLPOP_${queue}):`, element);
+	});
+};
+
+
 // Delegate bootstrapping to built-in server.js
 module.exports = cds.server;
