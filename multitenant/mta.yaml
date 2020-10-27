@@ -220,7 +220,7 @@ resources:
       service: xsuaa
       service-plan: application
       path: cloud-foundry/xsuaa/xs-security.json
-      xsuaa-app: ${space}-cloud-cold-chain
+      xsuaa-app: ${org}-${space}-cloud-cold-chain
       config:
         xsappname: ${xsuaa-app}
         tenant-mode: shared
