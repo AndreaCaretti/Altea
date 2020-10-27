@@ -214,3 +214,4 @@ npm install @sap/xssec
 - il servizio cap inserisce il record secco nella tabella senza controlli HandlingUnitMovementsRaw
 - il servizio cap inserisce nella lista Redis il guid del movimento, l'utente e il tenant del cliente
 - process in background che attende messaggi sulla coda e crea i record dei movimenti nella tabella HandlingUnitMovements
+- COMMENTO
