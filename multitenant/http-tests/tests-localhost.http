@@ -9,9 +9,9 @@ Content-Type: application/json
 
 {
 	"CP_ID": "{{$guid}}",
-    "TE": "2020-10-14T09:01:33.763Z",
-	"TS": "2020-10-14T09:01:34.763Z",
-    "SSCC_ID": "123456789012345678",
+    "TE": "1904-10-14T09:01:33.763Z",
+	"TS": "1905-10-14T09:01:34.763Z",
+    "SSCC_ID": "TEST123",
     "DIR": "B"
 }
 
@@ -67,6 +67,3 @@ Content-Type: application/json
 {
 	"ID": "90abe75c-e2c6-4e5f-a12f-fb81aa50d011"
 }
-
-
-
