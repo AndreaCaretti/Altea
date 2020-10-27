@@ -1,5 +1,4 @@
 const ZApplicationService = require("./ZApplicationService");
-const { promisify } = require("util");
 const redis = require("redis");
 
 class HandlingUnitMoved extends ZApplicationService {
