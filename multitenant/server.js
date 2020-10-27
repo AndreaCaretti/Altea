@@ -33,7 +33,10 @@ async function checkStatus() {
 
 cds.on("bootstrap", async (app) => {
 	coldChainLogger.setLoggingLevel("debug");
-	// coldChainLogger.setLogPattern("{{written_at}} - {{msg}}");
+
+	if (process.env.SIMPLE_LOG === "true") {
+		logger.setLogPattern("{{written_at}} - {{response_status}} - {{msg}}");
+	}
 
 	coldChainLogger.info("🤷‍♂️ Activating my logs... ");
 	app.use(logger.logNetwork);
