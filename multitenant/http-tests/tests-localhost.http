@@ -61,6 +61,7 @@ Content-Type: application/json
 
 ### Create ControlPoint
 POST http://localhost:4004/handling-unit-moved/ControlPoints  HTTP/1.1
+Authorization: Basic Alice:Alice
 Content-Type: application/json
 
 {
