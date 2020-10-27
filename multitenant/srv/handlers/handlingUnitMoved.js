@@ -3,6 +3,7 @@ const Request = require("@sap/cds/lib/srv/Request");
 const { promisify } = require("util");
 const redis = require("redis");
 
+
 const redisClient = redis.createClient();
 
 module.exports = async function () {
@@ -15,7 +16,7 @@ module.exports = async function () {
 
 		// Emettendo un throw viene eseguito un rollback sul db
 		// throw "Order amount must not exceed 11";
-		redisClient.rpush("persone", JSON.stringify(record));
+		redisClient.rpush("HandlingUnitsRawMovements", JSON.stringify(record));
 		console.log("Inserito record:", record);
 	});
 
@@ -48,4 +49,21 @@ module.exports = async function () {
 		});
 		return await dispatch_internal.call(this, req, ...etc);
 	};
+
+	//return blockingPopPromise();	
+	async function blockingPop() {
+		return await this.blockingPopPromise();
+	};
 };
+
+
+function blockingPopPromise() {
+		return new Promise((resolve, reject) => {
+			redisClient.BLPOP(this.listKey, 0, (erro, element) => {
+				resolve(element[1]);
+			});
+		});
+	};
+
+
+
