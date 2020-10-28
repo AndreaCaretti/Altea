@@ -22,7 +22,7 @@ class ProcessorHuMovements {
         const request = new cds.Request({ user: technicalUser });
 
         const Books = cds.entities.Books;
-        // const srv = await cds.connect.to("db ");
+
         const tx = cds.transaction(request);
 
         try {
@@ -49,6 +49,7 @@ class ProcessorHuMovements {
 
             console.log("dopo commit", sCommit);
         } catch (error) {
+            console.log("error console: ", error);
             this.logger.error("Errore inserimento record", error.toString());
         }
 
