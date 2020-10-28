@@ -12,7 +12,7 @@ Content-Type: application/json
     "TE": "1904-10-14T09:01:33.763Z",
 	"TS": "1905-10-14T09:01:34.763Z",
     "SSCC_ID": "TEST123",
-    "DIR": "B"
+    "DIR": "T"
 }
 
 
