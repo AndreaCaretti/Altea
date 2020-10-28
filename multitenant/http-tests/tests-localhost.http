@@ -11,8 +11,8 @@ Content-Type: application/json
     "CP_ID": "{{$guid}}",
     "TE": "1904-10-14T09:01:33.763Z",
     "TS": "1905-10-14T09:01:34.763Z",
-    "SSCC_ID": "TEST123",
-    "DIR": "T"
+    "SSCC_ID": "1234",
+    "DIR": "B"
 }
 
 
@@ -66,4 +66,14 @@ Content-Type: application/json
 
 {
     "ID": "90abe75c-e2c6-4e5f-a12f-fb81aa50d011"
+}
+
+
+### Create HandlingUnit
+POST http://localhost:4004/handling-unit-moved/HandlingUnits  HTTP/1.1
+Authorization: Basic Alice:Alice
+Content-Type: application/json
+
+{
+    "ID": "1234"
 }

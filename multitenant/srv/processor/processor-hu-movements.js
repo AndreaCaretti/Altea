@@ -42,7 +42,6 @@ class ProcessorHuMovements {
             for (const result of s) {
                 console.log(result);
             }
-            // const h = await tx.run(s);
 
             console.log("prima di commit");
             // this.logger.logMessage("debug", "Data %j", h);
