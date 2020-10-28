@@ -1,5 +1,5 @@
 const request = require("request");
-const CloudFoundryApi = require("./get-cf-access-token");
+const CloudFoundryApi = require("./cloud-foundry-api");
 
 const region = "eu10";
 

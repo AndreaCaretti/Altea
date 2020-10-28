@@ -28,8 +28,15 @@ class CloudFoundryAPI {
         return await this.execCommand("cf", ["oauth-token"]);
     }
 
-    async getAppGuid() {
-        return await this.execCommand("cf", ["app", "mtt-cap-services", "--guid"]);
+    async getAppGuid(appName) {
+        return await this.execCommand("cf", ["app", appName, "--guid"]);
+    }
+
+    async getAppRouteUrl(appName) {
+        const appGuid = this.getAppGuid(appName);
+        if (!appGuid) {
+            throw `App guid non trovato per app ${appName}`;
+        }
     }
 }
 
