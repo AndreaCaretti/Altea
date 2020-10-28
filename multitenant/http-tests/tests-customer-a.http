@@ -24,3 +24,22 @@ Authorization: Bearer {{token}}
 
 # ## Copiare il code e metterlo in fondo, anche questa chiamata funziona solo da browser perchè gli servono i cookie di sessione
 # GET https://ccp-customera.authentication.eu10.hana.ondemand.com/oauth/token?grant_type=authorization_code&code=XXXXXXXX HTTP/1.1
+
+### Create ControlPoint
+POST https://{{provider-subdomain}}-{{space}}-{{cap-service-url}}.cfapps.eu10.hana.ondemand.com/handling-unit-moved/ControlPoints  HTTP/1.1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "ID": "90abe75c-e2c6-4e5f-a12f-fb81aa50d011"
+}
+
+
+### Create HandlingUnits (SSCC)
+POST https://{{provider-subdomain}}-{{space}}-{{cap-service-url}}.cfapps.eu10.hana.ondemand.com/handling-unit-moved/HandlingUnits  HTTP/1.1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "ID": "TEST123"
+}

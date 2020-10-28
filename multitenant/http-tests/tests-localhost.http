@@ -11,8 +11,8 @@ Content-Type: application/json
     "CP_ID": "{{$guid}}",
     "TE": "1904-10-14T09:01:33.763Z",
     "TS": "1905-10-14T09:01:34.763Z",
-    "SSCC_ID": "TEST123",
-    "DIR": "T"
+    "SSCC_ID": "1234",
+    "DIR": "B"
 }
 
 
@@ -28,7 +28,7 @@ Authorization: Basic sb-dev-cloud-cold-chain!t61773 I4pSt9LZ2ar5djKL7lB518ZWV6s=
 
 
 ### E' possibile collegare il cap locale al db hana in cloud! esempio get
-GET http://localhost:4004/handling-unit-moved/HandlingUnitsRawMovements HTTP/1.1
+GET http://localhost:4004/handling-unit-moved/HandlingUnitsRawMovements/$count HTTP/1.1
 Authorization: Bearer {{token}}
 
 ### Create HandlingUnitsRawMovements nel db hana in cloud
@@ -37,7 +37,7 @@ Authorization: Bearer {{token}}
 Content-Type: application/json
  
 {
-    "CP_ID": "{{$guid}}",
+    "CP_ID": "90abe75c-e2c6-4e5f-a12f-fb81aa50d011",
     "TE": "2020-10-14T09:01:33.763Z",
     "TS": "2020-10-14T09:01:34.763Z",
     "SSCC_ID": "123456789012345678",
@@ -55,7 +55,7 @@ Content-Type: application/json
     "CP_ID": "90abe75c-e2c6-4e5f-a12f-fb81aa50d011",
     "TE": "2020-10-14T09:01:33.763Z",
     "TS": "2020-10-14T09:01:34.763Z",
-    "SSCC_ID": "123456789012345678",
+    "SSCC_ID": "TEST1234",
     "DIR": "B"
 }
 
@@ -66,4 +66,46 @@ Content-Type: application/json
 
 {
     "ID": "90abe75c-e2c6-4e5f-a12f-fb81aa50d011"
+}
+
+
+### Create HandlingUnit
+POST http://localhost:4004/handling-unit-moved/HandlingUnits  HTTP/1.1
+Authorization: Basic Alice:Alice
+Content-Type: application/json
+
+{
+    "ID": "TEST1234"
+}
+
+
+### Create ControlPoint REMOTE
+POST http://localhost:4004/handling-unit-moved/ControlPoints  HTTP/1.1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "ID": "90abe75c-e2c6-4e5f-a12f-fb81aa50d011"
+}
+
+### Create HandlingUnit
+POST http://localhost:4004/handling-unit-moved/HandlingUnits  HTTP/1.1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "ID": "TEST1234"
+}
+
+### Creazione record Books REMOTE
+POST http://localhost:4004/handling-unit-moved/Books  HTTP/1.1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "CP_ID": "90abe75c-e2c6-4e5f-a12f-fb81aa50d011",
+    "TE": "2020-10-14T09:01:33.763Z",
+    "TS": "2020-10-14T09:01:34.763Z",
+    "SSCC_ID": "TEST1234",
+    "DIR": "B"
 }
