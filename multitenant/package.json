@@ -37,7 +37,8 @@
 		"deploy": "echo 'Starting deploy...'; date; cf deploy mta_archives/cloud-cold-chain-multitenant_0.0.1.mtar -f; echo 'deploy finished'; date",
 		"deploy-cap": "scripts-utility/deploy-cap.sh",
 		"refreshEnv": "node scripts-utility/get-cap-services-env.js > default-env.json",
-		"update-db-tenants": "node scripts-utility/update-db-tenants.js"
+		"update-db-tenants": "node scripts-utility/update-db-tenants.js",
+		"start-local-redis": "scripts-utility/start-local-redis.sh"
 	},
 	"cds": {
 		"hana": {
