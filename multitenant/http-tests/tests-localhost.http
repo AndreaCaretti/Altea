@@ -35,7 +35,7 @@ Authorization: Bearer {{token}}
 POST http://localhost:4004/handling-unit-moved/HandlingUnitsRawMovements HTTP/1.1
 Authorization: Bearer {{token}}
 Content-Type: application/json
-
+ 
 {
 	"CP_ID": "{{$guid}}",
     "TE": "2020-10-14T09:01:33.763Z",

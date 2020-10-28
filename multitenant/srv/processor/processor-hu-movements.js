@@ -22,7 +22,7 @@ class ProcessorHuMovements {
     const request = new cds.Request({ user: technicalUser });
 
     const Books = cds.entities.Books;
-    // const srv = await cds.connect.to("db");
+    // const srv = await cds.connect.to("db ");
     const tx = cds.transaction(request);
 
     try {
