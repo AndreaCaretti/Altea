@@ -1,3 +1,4 @@
+using { cloudcoldchain.SSCC } from '../../db/global_types';
 using {
     cloudcoldchain,
     cloudcoldchain.HandlingUnits
@@ -12,6 +13,6 @@ using {
 service handlingUnitMoved {
     @insertonly entity Books         as projection on cloudcoldchain.Books;
     entity ControlPoints as projection on cloudcoldchain.ControlPoints;
-    @readonly entity HandlingUnits as projection on cloudcoldchain.HandlingUnits;
+    entity HandlingUnits as projection on cloudcoldchain.HandlingUnits;
     entity HandlingUnitsRawMovements as projection on cloudcoldchain.HandlingUnitsRawMovements;
 }
