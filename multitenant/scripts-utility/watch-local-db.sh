@@ -12,8 +12,12 @@ export SIMPLE_LOG=true
 
 echo -e "${GREEN}Configurazione approuter per test in locale:${NC}"
 cp cloud-foundry/approuter/xs-app-local.json cloud-foundry/approuter/xs-app.json -v
-cds watch
+
 cd cloud-foundry/approuter/
-npm start
+npm start &
 
 echo -e "${GREEN}Apri il browser all'indirizzo http://localhost:5000${NC}"
+
+cd ../..
+
+cds watch
