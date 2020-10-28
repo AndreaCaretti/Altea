@@ -1,0 +1,10 @@
+{
+  "generator-easy-ui5-extra": {
+    "namespace": "cloudcoldchain",
+    "appname": "controlpoints",
+    "entitynameplural": "ControlPoints",
+    "entitynamesingolar": "ControlPoint",
+    "newdir": true,
+    "namespaceURI": "cloudcoldchain"
+  }
+}

@@ -43,6 +43,8 @@ define entity Customers : cuid, managed {
     gs1_company_prefix : String(10)
 }
 
+@cds.odata.valuelist
+@UI.Identification : [{Value : name}]
 define entity ControlPoints : cuid, managed {
     name        : String(50);
     description : String(200);
