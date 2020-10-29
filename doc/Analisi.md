@@ -134,18 +134,42 @@ Riceve le notifiche di alert di basso livello del cliente, esempio segnalazioni 
 
 ?
 
-# Tabelle configurazione piattaforma
+# Tabelle centrali di piattaforma
 
-Tabelle centrali per parametrizzare la piattaforma
+Tabelle centrali di piattaforma - DB Single Tenant
 
 ## Tabella CustomerCategories
 
 Categorie di clienti
 
-| _ID_ | _name_       | description   |
-| ---- | ------------ | ------------- |
-| GUID | MarketHolder | Market Holder |
-| GUID | Carrier      | Carrier       |
+| _ID_ | _name_        | description   |
+| ---- | ------------- | ------------- |
+| GUID | Produttore    | Market Holder |
+| GUID | Trasportatore | Trasportatore |
+| GUID | Depositario   | Depositario   |
+
+## Tabella Customers
+
+Dati anagrafici clienti
+
+| _ID_   | name (50)  | category (CustomerCategories) | gs1CompanyPrefix (9) | tenantGUID                           |
+| ------ | ---------- | ----------------------------- | -------------------- | ------------------------------------ |
+| *GUID* | Customer A | Produttore                    | 123456789            | a1d03e7f-53e4-414b-aca0-c4d44157f2a0 |
+| *GUID* | Customer B | Trasportatore                 | 234567890            | dfea1d03e7f-53e4-414b-aca0-c4d4334ff |
+| *GUID* | Customer C | Depositario                   | 567891234            | e34s1d03e7f-53e4-414b-aca0-ddde3322a |
+
+# Tabelle configurazione piattaforma
+
+Tabelle per parametrizzare la piattaforma - DB Multitenant
+
+## Tabella CustomerCategories
+
+Categorie di clienti
+
+| _ID_ | _name_        | description   |
+| ---- | ------------- | ------------- |
+| GUID | Produttore    | Market Holder |
+| GUID | Trasportatore | Trasportatore |
 
 ## Tabella AreaCategories
 
@@ -167,17 +191,31 @@ Categorie di control points
 | *GUID* | Gate RFID           |
 | *GUID* | Gate RFID on Truck  |
 
+## Tabella TemperatureRanges
+
+Range di temperature
+
+| _ID_   | _name_ (25) | min | max | warningMin | warningMax |
+| ------ | ----------- | --- | --- | ---------- | ---------- |
+| *GUID* | 6-10        | 6   | 10  | 8          | 9          |
+| *GUID* | 12-18       | 12  | 18  | 14         | 16         |
+
+* min         temperatura minima in °C per calcolare TOR
+* max         temperatura massima in °C per calcolare TOR
+* warningMin  temperatura minima in °C per far scattare il warning
+* warningMax  temperatura massima in °C  per far scattare il warning
+
 # Tabelle parametriche/customizing singolo cliente
 
 Tabelle per parametrizzare/customizzare la soluzione per il singolo cliente, tabelle 
 
 ## Tabella Customers
 
-Dati anagrafici clienti, siccome i dati dei clienti sono separati a livello di tenant ci aspettiamo un solo record per tenant.
+Dati anagrafici clienti, siccome i dati dei clienti sono separati a livello di tenant ci aspettiamo un solo record per tenant
 
-| _ID_   | name (50)         | category (CustomerCategories) | gs1CompanyPrefix (9) |
-| ------ | ----------------- | ----------------------------- | -------------------- |
-| *GUID* | Customer A S.p.A. | MarketHolder                  | 123456789            |
+| _ID_   | name (50)  | category (CustomerCategories) | gs1CompanyPrefix (9) |
+| ------ | ---------- | ----------------------------- | -------------------- |
+| *GUID* | Customer A | Produttore                    | 123456789            |
 
 ## Tabella Locations
 
@@ -187,24 +225,59 @@ Dati anagrafici clienti, siccome i dati dei clienti sono separati a livello di t
 
 ## Tabella Areas
 
-| _ID_   | name               | category (AreaCategories) | location (Locations) | ID IoT |
-| ------ | ------------------ | ------------------------- | -------------------- | ------ |
-| *GUID* | Produzione Plant A | No Temperature            | PlantA               |        |
-| *GUID* | Stoccaggio         | Cold Room                 | PlantA               |        |
-| *GUID* | Uscita merci       | No Temperature            | PlantA               |        |
-| *GUID* | Piazzale esterno   | No Temperature            | PlantA               |        |
-| *GUID* | Truck Targa ABCD   | Refrigerator Truck        | Mobile               |        |
+### Produttore
+
+| _ID_   | name               | category (AreaCategories) | location (Locations) | ID Device IoT |
+| ------ | ------------------ | ------------------------- | -------------------- | ------------- |
+| *GUID* | Produzione Plant A | No Temperature            | PlantA               |               |
+| *GUID* | Stoccaggio         | Cold Room                 | PlantA               | XXXXXXXXXX    |
+| *GUID* | Uscita merci       | No Temperature            | PlantA               |               |
+| *GUID* | Piazzale esterno   | No Temperature            | PlantA               |               |
 
 -   Mappare le aree non a temperatura controllata è utile anche ai fini statistici. Grafici che indicano le aree non controllate a maggior permanenza.
 
+### Trasportatore
+
+| _ID_   | name      | category (AreaCategories) | location (Locations) | ID Device IoT |
+| ------ | --------- | ------------------------- | -------------------- | ------------- |
+| *GUID* | Targa ABC | Refrigerator Truck        | Mobile               | 11111         |
+| *GUID* | Targa 123 | Refrigerator Truck        | Mobile               | 22222         |
+| *GUID* | Targa ZXY | Refrigerator Truck        | Mobile               | 33333         |
+
+### Depositario
+
+| _ID_   | name             | category (AreaCategories) | location (Locations) | ID Device IoT |
+| ------ | ---------------- | ------------------------- | -------------------- | ------------- |
+| *GUID* | Entrata merci    | No Temperature            | PlantA               |               |
+| *GUID* | Stoccaggio       | Cold Room                 | PlantA               | 5555          |
+| *GUID* | Uscita merci     | No Temperature            | PlantA               |               |
+| *GUID* | Piazzale esterno | No Temperature            | PlantA               |               |
+
 ## Tabella ControlPoints
+
+### Produttore
 
 | _ID_   | name             | category (ControlPointsCategories) |
 | ------ | ---------------- | ---------------------------------- |
 | *GUID* | Etichettatrice A | Etichettatrice RFID                |
 | *GUID* | Stoccaggio       | Gate RFID                          |
 | *GUID* | Uscita A         | Gate RFID                          |
-| *GUID* | (PortaTruckABCD) | Gate RFID on Truck                 |
+
+### Trasportatore
+
+| _ID_   | name      | category (ControlPointsCategories) |
+| ------ | --------- | ---------------------------------- |
+| *GUID* | Targa ABC | Gate RFID                          |
+| *GUID* | Targa 123 | Gate RFID                          |
+| *GUID* | Targa ZXY | Gate RFID                          |
+
+### Produttore
+
+| _ID_   | name           | category (ControlPointsCategories) |
+| ------ | -------------- | ---------------------------------- |
+| *GUID* | Entrate Merci  | Gate RFID                          |
+| *GUID* | Stoccaggio     | Gate RFID                          |
+| *GUID* | Uscita Merci A | Gate RFID                          |
 
 # Tabelle anagrafiche
 
@@ -212,9 +285,9 @@ Tabelle anagrafiche con dati specifici di un singolo cliente, i dati dei clienti
 
 ## Tabella Products
 
-| _ID_   | _gtin_ (GTIN) | denomination (100) | max_tor |
-| ------ | ------------- | ------------------ | ------- |
-| *GUID* | 1234567890123 | Sacca di sangue    | 200     |
+| _ID_   | _gtin_ (GTIN) | denomination (100) | max_tor | temperatureRange |
+| ------ | ------------- | ------------------ | ------- | ---------------- |
+| *GUID* | 1234567890123 | Sacca di sangue    | 200     | 12-18            |
 
 GTIN:   
   * 01-09 Prefisso aziendale GS1  
@@ -225,14 +298,18 @@ GTIN:
 
 ## Tabella Percorsi
 
+Produttore
+
 | _ID_   | prodotto      | passo | controlPoint     | direzione | destinationArea (Locations) |
 | ------ | ------------- | ----- | ---------------- | --------- | --------------------------- |
 | *GUID* | 1234567890123 | 1     | Etichettatrice A | F         | Produzione Plant A          |
 | *GUID* | 1234567890123 | 2     | Stoccaggio       | F         | Cold Room                   |
 | *GUID* | 1234567890123 | 3     | Stoccaggio       | B         | Uscita merci                |
 | *GUID* | 1234567890123 | 4     | Uscita A         | F         | Piazzale esterno            |
-
-
+| *GUID* | 1234567890123 | 5     | Trasportatore    | F         | Truck                       |
+| *GUID* | 1234567890123 | 6     | Trasportatore    | B         | Piazzale esterno            |
+| *GUID* | 1234567890123 | 7     | Depositario      | F         | Depositario                 |
+| *GUID* | 1234567890123 | 8     | Depositario      | B         | Depositario                 |
 
 ## Tabella Lots
 
