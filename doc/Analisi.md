@@ -150,7 +150,7 @@ Categorie di clienti
 
 ## Tabella Customers
 
-Dati anagrafici clienti
+Dati anagrafici soggetti
 
 | _ID_   | name (50)  | category (CustomerCategories) | gs1CompanyPrefix (9) | tenantGUID                           |
 | ------ | ---------- | ----------------------------- | -------------------- | ------------------------------------ |
@@ -190,6 +190,8 @@ Categorie di control points
 | *GUID* | Etichettatrice RFID |
 | *GUID* | Gate RFID           |
 | *GUID* | Gate RFID on Truck  |
+| *GUID* | Trasportatore       |
+| *GUID* | Depositario         |
 
 ## Tabella TemperatureRanges
 
@@ -207,11 +209,11 @@ Range di temperature
 
 # Tabelle parametriche/customizing singolo cliente
 
-Tabelle per parametrizzare/customizzare la soluzione per il singolo cliente, tabelle 
+Tabelle per parametrizzare/customizzare la soluzione per il singolo cliente, DB Multitenant
 
 ## Tabella Customers
 
-Dati anagrafici clienti, siccome i dati dei clienti sono separati a livello di tenant ci aspettiamo un solo record per tenant
+Dati anagrafici cliente, siccome i dati dei clienti sono separati a livello di tenant ci aspettiamo un solo record per tenant
 
 | _ID_   | name (50)  | category (CustomerCategories) | gs1CompanyPrefix (9) |
 | ------ | ---------- | ----------------------------- | -------------------- |
@@ -222,6 +224,7 @@ Dati anagrafici clienti, siccome i dati dei clienti sono separati a livello di t
 | _ID_   | name   |
 | ------ | ------ |
 | *GUID* | PlantA |
+| *GUID* | PlantB |
 
 ## Tabella Areas
 
@@ -230,7 +233,7 @@ Dati anagrafici clienti, siccome i dati dei clienti sono separati a livello di t
 | _ID_   | name               | category (AreaCategories) | location (Locations) | ID Device IoT |
 | ------ | ------------------ | ------------------------- | -------------------- | ------------- |
 | *GUID* | Produzione Plant A | No Temperature            | PlantA               |               |
-| *GUID* | Stoccaggio         | Cold Room                 | PlantA               | XXXXXXXXXX    |
+| *GUID* | Stoccaggio         | Cold Room                 | PlantA               | 99999         |
 | *GUID* | Uscita merci       | No Temperature            | PlantA               |               |
 | *GUID* | Piazzale esterno   | No Temperature            | PlantA               |               |
 
@@ -262,6 +265,10 @@ Dati anagrafici clienti, siccome i dati dei clienti sono separati a livello di t
 | *GUID* | Etichettatrice A | Etichettatrice RFID                |
 | *GUID* | Stoccaggio       | Gate RFID                          |
 | *GUID* | Uscita A         | Gate RFID                          |
+| *GUID* | Trasportatore 1  | Trasportatore                      |
+| *GUID* | Trasportatore n  | Trasportatore                      |
+| *GUID* | Depositario 1    | Depositario                        |
+| *GUID* | Depositario n    | Depositario                        |
 
 ### Trasportatore
 
@@ -285,9 +292,9 @@ Tabelle anagrafiche con dati specifici di un singolo cliente, i dati dei clienti
 
 ## Tabella Products
 
-| _ID_   | _gtin_ (GTIN) | denomination (100) | max_tor | temperatureRange |
-| ------ | ------------- | ------------------ | ------- | ---------------- |
-| *GUID* | 1234567890123 | Sacca di sangue    | 200     | 12-18            |
+| _ID_   | _gtin_ (GTIN) | erpProductCode (50) | denomination (100) | max_tor | temperatureRange |
+| ------ | ------------- | ------------------- | ------------------ | ------- | ---------------- |
+| *GUID* | 1234567890123 | PROD-001            | Sacca di sangue    | 200     | 12-18            |
 
 GTIN:   
   * 01-09 Prefisso aziendale GS1  
@@ -298,7 +305,7 @@ GTIN:
 
 ## Tabella Percorsi
 
-Produttore
+Records solo nel DB del produttore
 
 | _ID_   | prodotto      | passo | controlPoint     | direzione | destinationArea (Locations) |
 | ------ | ------------- | ----- | ---------------- | --------- | --------------------------- |
@@ -313,17 +320,15 @@ Produttore
 
 ## Tabella Lots
 
-| _ID_   | _name_  (20) | erpProductCode (50) | productionDate (Date) | expirationDate (Date) |
-| ------ | ------------ | ------------------- | --------------------- | --------------------- |
-| *GUID* | LOT-XYZ      | PROD-001            | 06.07.2020            | 06.07.2022            |
+| _ID_   | _name_  (20) | productionDate (Date) | expirationDate (Date) | gtin          |
+| ------ | ------------ | --------------------- | --------------------- | ------------- |
+| *GUID* | LOT-XYZ      | 06.07.2020            | 06.07.2022            | 1234567890123 |
 
 ## Tabella HandlingUnits
 
 | _sscc_ (SSCC)      | lot     | lastKnownArea    | inAreaBusinessTime (Timestamp) | jsonSummary (LargeString)             | blockchainHash (100)                                 |
 | ------------------ | ------- | ---------------- | ------------------------------ | ------------------------------------- | ---------------------------------------------------- |
 | 123456789012345678 | LOT-XYZ | Uscita magazzino | 2020-10-14T09:01:33.763Z       | { HandlingUnit: "HandlingUnitA", etc} | adb24ba2f2ef33d73d79e60b9d47f7fb97c69013eb6c8f37c... |
-
-(potrebbe essere necessario creare una tabella nel sistema centrale con il mapping tra il prefisso aziendale GS1 e il tenant del cliente collegato)
 
 * il campo lastKnowArea indica l'ultima posizione conosciuta dell'SSCC
 * il campo inAreaBusinessTime indica il momento in cui è stato rilevato l'ultimo spostamento
@@ -336,7 +341,7 @@ SSCC:
 
 # Tabelle transazionali
 
-Tabella contenenti dati transazionali - fact tables
+Tabella contenenti dati transazionali
 
 ## Tabella HandlingUnitsRawMovements
 
@@ -353,26 +358,28 @@ Passaggi Handling Unit da Control Point
 | *GUID* | 90abe75c-e2c6-4e5f-a12f-fb81aa50d011 | 123456789012345678 | 2020-10-14T09:07:33.763Z | 2020-10-14T09:07:33.763Z | B              |
 | *GUID* | 90abe75c-e2c6-4e5f-a12f-fb81aa50d011 | 123456789012345678 | 2020-10-14T09:08:33.763Z | 2020-10-14T09:08:33.763Z | F              |
 
-* source area e destination area vengo determinati al momento dell'arrivo dell'evento in CCP e salvati, modifiche al customizing non hanno conseguenze sui dati salvati
-* elaborationTime indica in quale momento il movimento è stato elaborato dalla routine che gestisce gli spostamenti cioè che aggiorna il campo lastKnowArea nella tabella HandlingUnits
-  e aggiorna la tabella HandlingUnitsResidenceTime
+* CP_ID      GUID del control point definito in CCP       
+* TE         Momento dell'evento                          
+* TS         Momento dell'invio del messaggio             
+* SSCC_ID    Codice SSCC dell'handling unit               
+* DIR        Valori possibili: F -> Forward, B -> Backward
 
 ## Tabella HandlingUnitsMovements
 
 Passaggi Handling Unit da Control Point
 
-| _ID_   | sscc (SSCC)        | businessTime (Timestamp) | controlPoint           | direction | sourceArea       | destinationArea                  | elaborationTime (Timestamp) |
-| ------ | ------------------ | ------------------------ | ---------------------- | --------- | ---------------- | -------------------------------- | --------------------------- |
-| *GUID* | 123456789012345678 | 2020-10-14T09:01:33.763Z | Etichettatrice A       | Forward   |                  | Produzione                       | 2020-10-14T09:01:33.763Z    |
-| *GUID* | 123456789012345678 | 2020-10-14T09:02:33.763Z | Ingresso Stoccaggio    | Forward   | Produzione       | Stoccaggio                       |                             |
-| *GUID* | 123456789012345678 | 2020-10-14T09:03:33.763Z | Uscita Stoccaggio      | Forward   | Stoccaggio       | Spedizione                       |                             |
-| *GUID* | 123456789012345678 | 2020-10-14T09:04:33.763Z | Uscita Stoccaggio      | Backward  | Spedizione       | Stoccaggio                       |                             |
-| *GUID* | 123456789012345678 | 2020-10-14T09:05:33.763Z | Ingresso spedizione    | Forward   | Stoccaggio       | Spedizione                       |                             |
-| *GUID* | 123456789012345678 | 2020-10-14T09:06:33.763Z | Uscita area spedizione | Forward   | Spedizione       | Uscita magazzino                 |                             |
-| *GUID* | 123456789012345678 | 2020-10-14T09:07:33.763Z | PortaTruckABCD         | Forward   | Uscita magazzino | Truck Targa ABCD                 |                             |
-| *GUID* | 123456789012345678 | 2020-10-14T09:08:33.763Z | PortaTruckABCD         | Backward  | Truck Targa ABCD | **Come capire la destinazione?** |                             |
+| _ID_   | sscc (SSCC)        | businessTime (Timestamp) | controlPoint           | direction | destinationArea                  | elaborationTime (Timestamp) |
+| ------ | ------------------ | ------------------------ | ---------------------- | --------- | -------------------------------- | --------------------------- |
+| *GUID* | 123456789012345678 | 2020-10-14T09:01:33.763Z | Etichettatrice A       | Forward   | Produzione                       | 2020-10-14T09:01:33.763Z    |
+| *GUID* | 123456789012345678 | 2020-10-14T09:02:33.763Z | Ingresso Stoccaggio    | Forward   | Stoccaggio                       |                             |
+| *GUID* | 123456789012345678 | 2020-10-14T09:03:33.763Z | Uscita Stoccaggio      | Forward   | Spedizione                       |                             |
+| *GUID* | 123456789012345678 | 2020-10-14T09:04:33.763Z | Uscita Stoccaggio      | Backward  | Stoccaggio                       |                             |
+| *GUID* | 123456789012345678 | 2020-10-14T09:05:33.763Z | Ingresso spedizione    | Forward   | Spedizione                       |                             |
+| *GUID* | 123456789012345678 | 2020-10-14T09:06:33.763Z | Uscita area spedizione | Forward   | Uscita magazzino                 |                             |
+| *GUID* | 123456789012345678 | 2020-10-14T09:07:33.763Z | PortaTruckABCD         | Forward   | Truck Targa ABCD                 |                             |
+| *GUID* | 123456789012345678 | 2020-10-14T09:08:33.763Z | PortaTruckABCD         | Backward  | **Come capire la destinazione?** |                             |
 
-* source area e destination area vengo determinati al momento dell'arrivo dell'evento in CCP e salvati, modifiche al customizing non hanno conseguenze sui dati salvati
+* destination area viene determinata dalla tabella percorsi al momento dell'arrivo dell'evento nella piattaforma, modifiche alla tabella percorsi non ha conseguenze sui dati salvati
 * elaborationTime indica in quale momento il movimento è stato elaborato dalla routine che gestisce gli spostamenti cioè che aggiorna il campo lastKnowArea nella tabella HandlingUnits
   e aggiorna la tabella HandlingUnitsResidenceTime
 
@@ -380,20 +387,24 @@ Passaggi Handling Unit da Control Point
 
 Permanenza Handling Unit in area
 
-| _ID_   | sscc (SSCC)        | area             | inBusinessTime           | outBusinessTime          | residenceTime (Integer) | tor | tmin  | tmax  | elaborationTime (Timestamp) |
-| ------ | ------------------ | ---------------- | ------------------------ | ------------------------ | ----------------------- | --- | :---: | :---: | --------------------------- |
-| *GUID* | 123456789012345678 | Produzione       | 2020-10-14T09:01:33.763Z | 2020-10-14T09:01:33.763Z | 1600                    | 0   |       |       | 2020-10-14T09:01:33.763Z    |
-| *GUID* | 123456789012345678 | Stoccaggio       | 2020-10-14T09:01:33.763Z | 2020-10-14T09:01:33.763Z | 3600                    | 30  |   4   |  20   | 2020-10-14T09:01:33.763Z    |
-| *GUID* | 123456789012345678 | Spedizione       | 2020-10-14T09:01:33.763Z | 2020-10-14T09:01:33.763Z | 1600                    |     |       |       |                             |
-| *GUID* | 123456789012345678 | Stoccaggio       | 2020-10-14T09:01:33.763Z | 2020-10-14T09:01:33.763Z | 1600                    |     |       |       |                             |
-| *GUID* | 123456789012345678 | Spedizione       | 2020-10-14T09:01:33.763Z | 2020-10-14T09:01:33.763Z | 1600                    |     |       |       |                             |
-| *GUID* | 123456789012345678 | Uscita magazzino | 2020-10-14T09:01:33.763Z | 2020-10-14T09:01:33.763Z | 2000                    |     |       |       |                             |
-| *GUID* | 123456789012345678 | Truck Targa ABCD | 2020-10-14T09:01:33.763Z | 2020-10-14T09:01:33.763Z | 20                      |     |       |       |                             |
+| _ID_   | sscc (SSCC)        | area             | inBusinessTime           | outBusinessTime          | residenceTime (Integer) | tor | tmin  | tmax  | elaborationTimeTor (Timestamp) |
+| ------ | ------------------ | ---------------- | ------------------------ | ------------------------ | ----------------------- | --- | :---: | :---: | ------------------------------ |
+| *GUID* | 123456789012345678 | Produzione       | 2020-10-14T09:01:33.763Z | 2020-10-14T09:01:33.763Z | 1600                    | 0   |       |       | 2020-10-14T09:01:33.763Z       |
+| *GUID* | 123456789012345678 | Stoccaggio       | 2020-10-14T09:01:33.763Z | 2020-10-14T09:01:33.763Z | 3600                    | 30  |   4   |  20   | 2020-10-14T09:01:33.763Z       |
+| *GUID* | 123456789012345678 | Spedizione       | 2020-10-14T09:01:33.763Z | 2020-10-14T09:01:33.763Z | 1600                    |     |       |       |                                |
+| *GUID* | 123456789012345678 | Uscita magazzino | 2020-10-14T09:01:33.763Z | 2020-10-14T09:01:33.763Z | 2000                    |     |       |       |                                |
+| *GUID* | 123456789012345678 | Trasportatore    | 2020-10-14T09:01:33.763Z | 2020-10-14T09:01:33.763Z | 20                      |     |       |       |                                |
+| *GUID* | 123456789012345678 | Depositario      | 2020-10-14T09:01:33.763Z | 2020-10-14T09:01:33.763Z | 20                      |     |       |       |                                |
 
 * inBusinessTime è l'ora di ingresso dell'handling unit nell'area
 * outBusinessTime è l'ora di uscita dell'handling unit dall'area
 * ResidenceTime è il numero di minuti di permanenza dell'handling unit nell'area
 * TOR è il numero di minuti di permanenza nell'area con temperatura fuori range
+* tmin
+* tman
+* elaborationTimeTor momento in cui sono stati recuperati di dati di temperatura e calcolo TOR
+
+(per recuperare i range di temperatura dei soggetti esterni verrà esposto un servizio esterno alla piattaforma)
 
 ## Tabella temperatura monitorata in area
 
