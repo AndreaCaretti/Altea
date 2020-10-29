@@ -175,39 +175,36 @@ Tabelle per parametrizzare/customizzare la soluzione per il singolo cliente, tab
 
 Dati anagrafici clienti, siccome i dati dei clienti sono separati a livello di tenant ci aspettiamo un solo record per tenant.
 
-| _ID_   | _name_ (50)       | category (CustomerCategories) | gs1CompanyPrefix (9) |
+| _ID_   | name (50)         | category (CustomerCategories) | gs1CompanyPrefix (9) |
 | ------ | ----------------- | ----------------------------- | -------------------- |
 | *GUID* | Customer A S.p.A. | MarketHolder                  | 123456789            |
 
 ## Tabella Locations
 
-| _ID_   | _name_ |
+| _ID_   | name   |
 | ------ | ------ |
 | *GUID* | PlantA |
 
 ## Tabella Areas
 
-| _ID_   | _name_             | category (AreaCategories) | location (Locations) |
-| ------ | ------------------ | ------------------------- | -------------------- |
-| *GUID* | Produzione Plant A | No Temperature            | PlantA               |
-| *GUID* | Stoccaggio         | Cold Room                 | PlantA               |
-| *GUID* | Corridoio          | No Temperature            | PlantA               |
-| *GUID* | Spedizione         | Cold Room                 | PlantA               |
-| *GUID* | Uscita magazzino   | No Temperature            | PlantA               |
-| *GUID* | Truck Targa ABCD   | Refrigerator Truck        | Mobile               |
+| _ID_   | name               | category (AreaCategories) | location (Locations) | ID IoT |
+| ------ | ------------------ | ------------------------- | -------------------- | ------ |
+| *GUID* | Produzione Plant A | No Temperature            | PlantA               |        |
+| *GUID* | Stoccaggio         | Cold Room                 | PlantA               |        |
+| *GUID* | Uscita merci       | No Temperature            | PlantA               |        |
+| *GUID* | Piazzale esterno   | No Temperature            | PlantA               |        |
+| *GUID* | Truck Targa ABCD   | Refrigerator Truck        | Mobile               |        |
 
 -   Mappare le aree non a temperatura controllata è utile anche ai fini statistici. Grafici che indicano le aree non controllate a maggior permanenza.
 
 ## Tabella ControlPoints
 
-| _ID_   | _name_                 | category (ControlPointsCategories) | sourceArea (Locations) | destinationArea (Locations) |
-| ------ | ---------------------- | ---------------------------------- | ---------------------- | --------------------------- |
-| *GUID* | Etichettatrice A       | Etichettatrice RFID                |                        | Produzione                  |
-| *GUID* | Ingresso Stoccaggio    | Gate RFID                          | Produzione             | Stoccaggio                  |
-| *GUID* | Uscita Stoccaggio      | Gate RFID                          | Stoccaggio             | Corridoio                   |
-| *GUID* | Ingresso spedizione    | Gate RFID                          | Corridoio              | Spedizione                  |
-| *GUID* | Uscita area spedizione | Gate RFID                          | Spedizione             | Uscita magazzino            |
-| *GUID* | PortaTruckABCD         | Gate RFID on Truck                 | Uscita magazzino       | Truck Targa ABCD            |
+| _ID_   | name             | category (ControlPointsCategories) |
+| ------ | ---------------- | ---------------------------------- |
+| *GUID* | Etichettatrice A | Etichettatrice RFID                |
+| *GUID* | Stoccaggio       | Gate RFID                          |
+| *GUID* | Uscita A         | Gate RFID                          |
+| *GUID* | (PortaTruckABCD) | Gate RFID on Truck                 |
 
 # Tabelle anagrafiche
 
@@ -225,6 +222,17 @@ GTIN:
   * 13    Cifra di controllo  
 
 * max_tor è il numero di minuti massimo fuori dal range di temperatura
+
+## Tabella Percorsi
+
+| _ID_   | prodotto      | passo | controlPoint     | direzione | destinationArea (Locations) |
+| ------ | ------------- | ----- | ---------------- | --------- | --------------------------- |
+| *GUID* | 1234567890123 | 1     | Etichettatrice A | F         | Produzione Plant A          |
+| *GUID* | 1234567890123 | 2     | Stoccaggio       | F         | Cold Room                   |
+| *GUID* | 1234567890123 | 3     | Stoccaggio       | B         | Uscita merci                |
+| *GUID* | 1234567890123 | 4     | Uscita A         | F         | Piazzale esterno            |
+
+
 
 ## Tabella Lots
 
