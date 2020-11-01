@@ -20,10 +20,7 @@ class HandlingUnitMoved extends ZApplicationService {
                 tenant: req.user.tenant,
             };
 
-            redisClient.rpush(
-                "HandlingUnitsRawMovements",
-                JSON.stringify(record)
-            );
+            redisClient.rpush("HandlingUnitsRawMovements", JSON.stringify(record));
 
             console.log("Inserito record:", record);
 
