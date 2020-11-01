@@ -44,7 +44,9 @@ Content-Type: application/json
     "DIR": "B"
 }
 
-
+### Recupera books
+GET http://localhost:4004/handling-unit-moved/Books  HTTP/1.1
+Authorization: Basic Alice:Alice
 
 ### Creazione record Books
 POST http://localhost:4004/handling-unit-moved/Books  HTTP/1.1
@@ -57,6 +59,20 @@ Content-Type: application/json
     "TS": "2020-10-14T09:01:34.763Z",
     "SSCC_ID": "TEST1234",
     "DIR": "B"
+}
+
+### Aggionamento Book con etag
+PATCH http://localhost:4004/handling-unit-moved/Books(ID=c6d90577-3f1b-438e-95a1-f02bfbffafad)  HTTP/1.1
+Authorization: Basic Alice:Alice
+Content-Type: application/json
+If-Match: "2020-11-01T15:48:57.600Z"
+
+{
+    "CP_ID": "a0abe75c-e2c6-4e5f-a12f-fb81aa50d011",
+    "TE": "2020-10-14T09:01:33.763Z",
+    "TS": "2020-10-14T09:01:34.763Z",
+    "SSCC_ID": "TEST1234",
+    "DIR": "F"
 }
 
 ### Create ControlPoint

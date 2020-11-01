@@ -63,6 +63,8 @@ define entity Books : cuid, managed {
     DIR  : String(1) @assert.range enum { F; B; };
 }
 
+annotate Books with { modifiedAt @odata.etag } 
+
 define entity HandlingUnitsRawMovements : cuid, managed {
     CP_ID   : String;
     TE   : String;

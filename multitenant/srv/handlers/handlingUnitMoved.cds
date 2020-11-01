@@ -11,7 +11,7 @@ using {
 
 @(requires : 'authenticated-user')
 service handlingUnitMoved {
-    @insertonly
+
     entity Books                     as projection on cloudcoldchain.Books;
 
     entity ControlPoints             as projection on cloudcoldchain.ControlPoints;
