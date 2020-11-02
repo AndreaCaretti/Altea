@@ -1,0 +1,52 @@
+{
+	"name": "generator-easy-ui5-extra",
+	"version": "1.3.7",
+	"description": "Extra version of the Generator for SAPUI5-based web-apps",
+	"main": "generators/app/index.js",
+	"files": [
+		"generators",
+		"app",
+		"newview",
+		"newcontrol",
+		"newcomponentusage",
+		"newmodel"
+	],
+	"scripts": {
+		"test": "mocha",
+		"lint": "eslint ."
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/sbarzaghialteaup/generator-easy-ui5.git"
+	},
+	"keywords": [
+		"yeoman-generator",
+		"sap",
+		"sapui5",
+		"openui5",
+		"sapcloudplatform",
+		"cloudplatform",
+		"generator",
+		"scaffold",
+		"extra"
+	],
+	"author": "sbarzaghi@alteanet.com",
+	"license": "Apache-2.0",
+	"bugs": {
+		"url": "https://github.com/sbarzaghialteaup/generator-easy-ui5/issues"
+	},
+	"homepage": "https://github.com/sbarzaghialteaup/generator-easy-ui5#readme",
+	"dependencies": {
+		"glob": "^7.1.6",
+		"stringify-object": "^3.3.0",
+		"yaml": "^1.7.2",
+		"yeoman-generator": "^4.2.0"
+	},
+	"devDependencies": {
+		"eslint": "^6.8.0",
+		"execa": "^3.4.0",
+		"mocha": "^6.2.2",
+		"yeoman-assert": "^3.1.1",
+		"yeoman-test": "^2.0.0"
+	}
+}
