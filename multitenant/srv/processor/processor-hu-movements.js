@@ -61,12 +61,12 @@ class ProcessorHuMovements {
             await tx.rollback();
         }
 
-        setTimeout(this.checkStatus, 1000);
+        setImmediate(this.checkStatus);
     }
 
     async start() {
         console.log(`Avvio Handling Unit Movements Processor...`);
-        setTimeout(this.checkStatus, 1000);
+        setImmediate(this.checkStatus);
     }
 
     readBLPOP(queue, _index) {
