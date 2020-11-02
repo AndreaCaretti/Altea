@@ -4,44 +4,54 @@ using Services from '../../srv/services';
 //
 //	ControlPoints List Page
 //
-annotate Services.ControlPoints with @(
-	UI: {
-		SelectionFields: [ name ],
-		LineItem: [
-			{Value: name}
-		]
-	}
-);
+annotate Services.ControlPoints with @(UI : {
+    SelectionFields : [
+    name,
+    description
+    ],
+    LineItem        : [
+    {Value : name},
+    {Value : description}
+    ]
+});
 
 ////////////////////////////////////////////////////////////////////////////
 //
 //	ControlPoints Object Page
 //
-annotate Services.ControlPoints with @(
-	UI: {
-		Identification: [
-			{Value: name}
-		],
-		HeaderInfo: {
-			TypeName: 'ControlPoint',
-			TypeNamePlural: 'ControlPoints',
-			Title: {Value: name},
-		},
-		HeaderFacets: [
-			// {$Type: 'UI.ReferenceFacet', Label: 'Identification', Target: '@UI.FieldGroup@Header'},
-		],
-		Facets: [
-			{$Type: 'UI.ReferenceFacet', Label: '{i18n>General}', Target: '@UI.FieldGroup#General'},
-		],
-		FieldGroup#Header: {
-			Data: [
-				// {Value: name}
-			]
-		},
-		FieldGroup#General: {
-			Data: [
-				// {Value: name}
-			]
-		}
-	}
-);
+annotate Services.ControlPoints with @(UI : {
+    Identification                      : [{Value : name}],
+    HeaderInfo                          : {
+        TypeName       : 'ControlPoint',
+        TypeNamePlural : 'ControlPoints',
+        Title          : {Value : name},
+        Description    : {Value : description},
+    },
+    HeaderFacets                        : [{
+        $Type  : 'UI.ReferenceFacet',
+        Label  : 'Category',
+        Target : '@UI.FieldGroup#ControlPointsCategories'
+    }, ],
+    Facets                              : [{
+        $Type  : 'UI.ReferenceFacet',
+        Label  : '{i18n>General}',
+        Target : '@UI.FieldGroup#Admin'
+    }, ],
+    FieldGroup #Header                  : {Data : [
+                                                   // {Value: name}
+                                                  ]},
+
+    FieldGroup #ControlPointsCategories : {Data : [{Value : category_ID,
+                                                                         //Label : '{i18n>category}'	//se non presente, lo recupera dallo SCHEMA.CDS
+                                                            }],
+
+    },
+
+
+    FieldGroup #Admin                   : {Data : [
+    {Value : createdBy},
+    {Value : createdAt},
+    {Value : modifiedBy},
+    {Value : modifiedAt}
+    ]}
+});
