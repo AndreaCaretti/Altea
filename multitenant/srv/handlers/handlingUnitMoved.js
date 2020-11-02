@@ -33,19 +33,11 @@ class HandlingUnitMoved extends ZApplicationService {
                 throw "Errore inserimento record nella lista Redis, rollback";
             }
         });
-
-        this.before(["CREATE", "UPDATE"], "Books", (req) => {
-            this.onCommitFailed(req, this.onCommitError);
-        });
     }
 
     onValidationError(e, _req) {
         console.log("🤢 Validation error\n", e);
         // console.log("🤢 Validation error - ", req.errors ? req.errors : e);
-    }
-
-    onCommitError(e, _req) {
-        console.log("🤢 Database COMMIT error\n", e);
     }
 }
 
