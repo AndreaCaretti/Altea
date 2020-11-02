@@ -31,3 +31,11 @@ annotate cloudcoldchain.Areas with {
 annotate cloudcoldchain.Locations with {
     ID @Core.Computed;
 }
+
+annotate cloudcoldchain.Products with {
+    ID @Core.Computed;
+}
+
+annotate cloudcoldchain.TemperatureRanges with {
+    ID @Core.Computed;
+}

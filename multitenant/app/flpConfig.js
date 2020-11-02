@@ -80,6 +80,24 @@ window["sap-ushell-config"] = {
             applicationType: "URL",
             url: "./cloudcoldchain.areas/webapp",
             navigationMode: "embedded"
+        },
+        "TemperatureRanges-manage": {
+            title: "Manage TemperatureRanges",
+            description: "TemperatureRanges Maintenance",
+            icon: "sap-icon://add",
+            additionalInformation: "SAPUI5.Component=cloudcoldchain.temperatureranges",
+            applicationType: "URL",
+            url: "./cloudcoldchain.temperatureranges/webapp",
+            navigationMode: "embedded"
+        },
+        "Products-manage": {
+            title: "Manage Products",
+            description: "Products Maintenance",
+            icon: "sap-icon://add",
+            additionalInformation: "SAPUI5.Component=cloudcoldchain.products",
+            applicationType: "URL",
+            url: "./cloudcoldchain.products/webapp",
+            navigationMode: "embedded"
         }
     }
 }

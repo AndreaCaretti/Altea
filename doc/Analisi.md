@@ -303,7 +303,7 @@ GTIN:
 
 * max_tor è il numero di minuti massimo fuori dal range di temperatura
 
-## Tabella Percorsi
+## Tabella Percorsi (ROUTES)
 
 Records solo nel DB del produttore
 
@@ -320,9 +320,9 @@ Records solo nel DB del produttore
 
 ## Tabella Lots
 
-| _ID_   | _name_  (20) | productionDate (Date) | expirationDate (Date) | gtin          |
-| ------ | ------------ | --------------------- | --------------------- | ------------- |
-| *GUID* | LOT-XYZ      | 06.07.2020            | 06.07.2022            | 1234567890123 |
+| _ID_   | _name_  (20) | productionDate (Date) | expirationDate (Date) | Products (association) |
+| ------ | ------------ | --------------------- | --------------------- | ---------------------- |
+| *GUID* | LOT-XYZ      | 06.07.2020            | 06.07.2022            | prod567890123          |
 
 ## Tabella HandlingUnits
 

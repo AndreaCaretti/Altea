@@ -31,3 +31,11 @@ annotate cloudcoldchain.Areas with {
 annotate cloudcoldchain.Locations with {
     ID @UI.Hidden;
 }
+
+annotate cloudcoldchain.Products with {
+    ID @UI.Hidden;
+}
+
+annotate cloudcoldchain.TemperatureRanges with {
+    ID @UI.Hidden;
+}

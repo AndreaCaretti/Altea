@@ -107,6 +107,31 @@ define entity Locations : cuid, managed {
 }
 
 
+@cds.autoexpose
+@cds.odata.valuelist
+@UI.Identification : [{Value : name}]
+define entity TemperatureRanges : cuid, managed {
+    @title : 'Ranges'
+    name       : String(25);
+    min        : Decimal;
+    max        : Decimal;
+    warningMin : Decimal;
+    warningMax : Decimal
+}
+
+@cds.odata.valuelist
+@UI.Identification : [{Value : name}]
+define entity Products : cuid, managed {
+    gtin             : cloudcoldchain.GTIN;
+    @title : 'Product'
+    name             : String(100);
+     erpProductCode   : String(50);
+    @title : 'Max TOR'
+    maxTor           : Integer;
+    temperatureRange : Association to one TemperatureRanges;
+}
+
+
 define entity HandlingUnits : managed {
     key ID          : cloudcoldchain.SSCC;
         description : String(200);

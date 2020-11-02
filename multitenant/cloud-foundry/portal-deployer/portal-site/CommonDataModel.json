@@ -69,6 +69,21 @@
               "id": "areas",
               "appId": "cloudcoldchain.areas",
               "vizId": "Areas-manage"
+            },
+            {
+              "id": "temperatureranges",
+              "appId": "cloudcoldchain.temperatureranges",
+              "vizId": "TemperatureRanges-manage"
+            },
+            {
+              "id": "products",
+              "appId": ".products",
+              "vizId": "Products-manage"
+            },
+            {
+              "id": "products",
+              "appId": "cloudcoldchain.products",
+              "vizId": "Products-manage"
             }
           ]
         }

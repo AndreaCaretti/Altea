@@ -177,6 +177,29 @@ modules:
           commands:
               - npm run build
           supported-platforms: []
+          build-result:
+              dist
+
+              #
+    - name: ui_products
+      type: html5
+      path: app/cloudcoldchain.products
+      build-parameters:
+          builder: custom
+          commands:
+              - npm run build
+          supported-platforms: []
+          build-result:
+              dist
+              #
+    - name: ui_temperatureranges
+      type: html5
+      path: app/cloudcoldchain.temperatureranges
+      build-parameters:
+          builder: custom
+          commands:
+              - npm run build
+          supported-platforms: []
           build-result: dist
     #
     #   ╔═══════════════════════════════════════╗   #
@@ -230,6 +253,16 @@ modules:
                 target-path: resources/
                 #
               - name: ui_locations
+                artifacts:
+                    - ./uimodule*.zip
+                target-path: resources/
+              #
+              - name: ui_products
+                artifacts:
+                    - ./uimodule*.zip
+                target-path: resources/
+              #
+              - name: ui_temperatureranges
                 artifacts:
                     - ./uimodule*.zip
                 target-path: resources/
