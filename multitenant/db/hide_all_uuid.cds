@@ -23,3 +23,7 @@ annotate cloudcoldchain.ControlPointsCategories with {
 annotate cloudcoldchain.AreaCategories with {
     ID @UI.Hidden;
 }
+
+annotate cloudcoldchain.Locations with {
+    ID @UI.Hidden;
+}

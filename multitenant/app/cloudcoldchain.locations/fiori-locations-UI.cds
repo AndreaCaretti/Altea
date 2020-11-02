@@ -2,26 +2,26 @@ using Services from '../../srv/services';
 
 ////////////////////////////////////////////////////////////////////////////
 //
-//	ControlPointsCategories List Page
+//	Locations List Page
 //
-annotate Services.ControlPointsCategories with @(UI : {
+annotate Services.Locations with @(UI : {
     SelectionFields : [name],
     LineItem        : [{Value : name}]
 });
 
 ////////////////////////////////////////////////////////////////////////////
 //
-//	ControlPointsCategories Object Page
+//	Locations Object Page
 //
-annotate Services.ControlPointsCategories with @(UI : {
+annotate Services.Locations with @(UI : {
     Identification      : [{Value : name}],
     HeaderInfo          : {
-        TypeName       : 'ControlPointsCategory',
-        TypeNamePlural : 'ControlPointsCategories',
+        TypeName       : 'Location',
+        TypeNamePlural : 'Locations',
         Title          : {Value : name},
         Description    : {
             Value : description,
-            Label : '{i18n>controlPointCategoryDescr}'
+            Label : '{i18n>locationDescr}'
         },
     },
     HeaderFacets        : [
@@ -35,14 +35,13 @@ annotate Services.ControlPointsCategories with @(UI : {
     FieldGroup #Header  : {Data : [
                                    // {Value: name}
                                   ]},
+    FieldGroup #General : {Data : [
+                                   // {Value: name}
+                                  ]},
     FieldGroup #Admin   : {Data : [
     {Value : createdBy},
     {Value : createdAt},
     {Value : modifiedBy},
     {Value : modifiedAt}
-    ]},
-    FieldGroup #General : {Data : [
-                                   // {Value: name}
-                                  ]}
-
+    ]}
 });

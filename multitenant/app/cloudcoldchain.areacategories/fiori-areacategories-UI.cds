@@ -18,16 +18,22 @@ annotate Services.AreaCategories with @(UI : {
     HeaderInfo          : {
         TypeName       : 'AreaCategory',
         TypeNamePlural : 'AreaCategories',
-        Title          : {Value : name, Label : '{i18n>areaCategory}'},
-        Description    : {Value : description, Label : '{i18n>areaCategoryDescr}'},
+        Title          : {
+            Value : name,
+            Label : '{i18n>areaCategory}'
+        },
+        Description    : {
+            Value : description,
+            Label : '{i18n>areaCategoryDescr}'
+        },
     },
     HeaderFacets        : [
                            // {$Type: 'UI.ReferenceFacet', Label: 'Identification', Target: '@UI.FieldGroup@Header'},
                           ],
     Facets              : [{
         $Type  : 'UI.ReferenceFacet',
-        Label  : '{i18n>General}',
-        Target : '@UI.FieldGroup#General'
+        Label  : '{i18n>Admin}',
+        Target : '@UI.FieldGroup#Admin'
     }, ],
     FieldGroup #Header  : {Data : [
                                    // {Value: name}

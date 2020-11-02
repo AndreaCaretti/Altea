@@ -59,6 +59,11 @@
               "id": "areacategories",
               "appId": "cloudcoldchain.areacategories",
               "vizId": "AreaCategories-manage"
+            },
+            {
+              "id": "locations",
+              "appId": "cloudcoldchain.locations",
+              "vizId": "Locations-manage"
             }
           ]
         }

@@ -23,3 +23,7 @@ annotate cloudcoldchain.ControlPointsCategories with {
 annotate cloudcoldchain.AreaCategories with {
     ID @Core.Computed;
 }
+
+annotate cloudcoldchain.Locations with {
+    ID @Core.Computed;
+}

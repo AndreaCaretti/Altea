@@ -156,6 +156,17 @@ modules:
           commands:
               - npm run build
           supported-platforms: []
+          build-result:
+              dist
+              #
+    - name: ui_locations
+      type: html5
+      path: app/cloudcoldchain.locations
+      build-parameters:
+          builder: custom
+          commands:
+              - npm run build
+          supported-platforms: []
           build-result: dist
     #
     #   ╔═══════════════════════════════════════╗   #
@@ -202,6 +213,12 @@ modules:
                 artifacts:
                     - ./uimodule*.zip
                 target-path: resources/
+                #
+              - name: ui_locations
+                artifacts:
+                    - ./uimodule*.zip
+                target-path: resources/
+
     #
     #   ╔═══════════════════════════════════════╗   #
     #   ║            PORTAL DEPLOYER            ║   #
