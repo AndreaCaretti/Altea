@@ -46,6 +46,7 @@ modules:
           - name: mtt-service-manager
           - name: mtt-saas
           - name: mtt-application-logging
+          - name: mtt-redis
       provides:
           - name: mtt-cap-services-api
             properties:
@@ -146,7 +147,6 @@ modules:
               - npm run build
           supported-platforms: []
           build-result: dist
-    #
     #   ╔═══════════════════════════════════════╗   #
     #   ║            HTML5 DEPLOYER             ║   #
     #   ╚═══════════════════════════════════════╝   #
@@ -186,7 +186,6 @@ modules:
                 artifacts:
                     - ./uimodule*.zip
                 target-path: resources/
-
     #
     #   ╔═══════════════════════════════════════╗   #
     #   ║            PORTAL DEPLOYER            ║   #
@@ -319,4 +318,14 @@ resources:
       type: org.cloudfoundry.managed-service
       parameters:
           service: application-logs
+          service-plan: lite
+    #
+    #   ┌─────────────────────────────────────┐   #
+    #   │                REDIS                │   #
+    #   └─────────────────────────────────────┘   #
+    #
+    - name: mtt-redis
+      type: org.cloudfoundry.managed-service
+      parameters:
+          service: redis-cache-standard
           service-plan: lite
