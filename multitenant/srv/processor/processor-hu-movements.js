@@ -17,14 +17,14 @@ class ProcessorHuMovements {
     }
 
     async checkStatus() {
+        let obj = await this.readBLPOP("HandlingUnitsRawMovements", 0);
+
         const technicalUser = new cds.User({
-            id: "sbarzaghi@alteanet.it",
-            tenant: "a1d03e7f-53e4-414b-aca0-c4d44157f2a0",
+            id: obj.user,
+            tenant: obj.tenant,
         });
 
         this.logger.setTenantId(technicalUser.tenant);
-
-        let obj = await this.readBLPOP("HandlingUnitsRawMovements", 0);
 
         const request = new cds.Request({ user: technicalUser });
 
