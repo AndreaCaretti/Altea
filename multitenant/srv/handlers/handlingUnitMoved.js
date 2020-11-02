@@ -12,6 +12,7 @@ class HandlingUnitMoved extends ZApplicationService {
 
         var redisCredentials = xsenv.serviceCredentials({ tag: "cache" });
 
+        console.log("REDIS URL: " + redisCredentials.uri);
         const redisClient = redis.createClient(redisCredentials.uri);
 
         this.after("CREATE", "HandlingUnitsRawMovements", (data, req) => {
