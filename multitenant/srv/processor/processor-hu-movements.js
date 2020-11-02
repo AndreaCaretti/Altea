@@ -58,6 +58,7 @@ class ProcessorHuMovements {
         } catch (error) {
             console.log("error console: ", error);
             this.logger.error("Errore inserimento record", error.toString());
+            await tx.rollback();
         }
 
         setTimeout(this.checkStatus, 1000);
