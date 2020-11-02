@@ -1,4 +1,4 @@
-const inputValidation = require("@sap/cds-runtime/lib/common/generic/inputValidation");
+const inputValidation = require("@sap/cds-runtime/lib/common/generic/input");
 const redis = require("redis");
 const xsenv = require("@sap/xsenv");
 
