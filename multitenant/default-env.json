@@ -106,7 +106,7 @@
         "redis-cache": [
             {
                 "credentials": {
-                    "uri": "rediss://no-user-name-for-redis:GaJoFOorxmiPONZjZPabLYQLlcmgzAGU@127.0.0.1:6379"
+                    "uri": "redis://127.0.0.1:6379"
                 },
                 "tags": ["cache"]
             }
