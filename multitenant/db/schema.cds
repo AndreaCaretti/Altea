@@ -48,6 +48,23 @@ define entity Customers : cuid, managed {
 define entity ControlPoints : cuid, managed {
     name        : String(50);
     description : String(200);
+    @title       : '{i18n>category}'
+    @description : '{i18n>category}'
+    @Common      : {
+        Text            : category.name,
+        TextArrangement : #TextOnly
+    }
+    category    : Association to one ControlPointsCategories;
+}
+
+
+@cds.autoexpose
+@cds.odata.valuelist
+@UI.Identification : [{Value : name}]
+define entity ControlPointsCategories : cuid, managed {
+    @title : 'ControlPoints Category'
+    name        : String(50);
+    description : localized String(200);
 }
 
 define entity HandlingUnits : managed {
@@ -60,15 +77,20 @@ define entity Books : cuid, managed {
     TE   : Timestamp;
     TS   : Timestamp;
     SSCC : Association to one HandlingUnits;
-    DIR  : String(1) @assert.range enum { F; B; };
+    DIR  : String(1)@assert.range enum {
+        F;
+        B;
+    };
 }
 
-annotate Books with { modifiedAt @odata.etag } 
+annotate Books with {
+    modifiedAt @odata.etag
+}
 
 define entity HandlingUnitsRawMovements : cuid, managed {
     CP_ID   : String;
-    TE   : String;
-    TS   : String;
+    TE      : String;
+    TS      : String;
     SSCC_ID : String;
-    DIR  : String;
+    DIR     : String;
 }
