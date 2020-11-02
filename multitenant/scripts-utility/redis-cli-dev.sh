@@ -11,5 +11,5 @@ echo 'Start tunnel'
 sudo service stunnel4 start
 
 echo -e "${GREEN}Adesso lancio il portforwarding, lascia questa finestra aperta e in un altra finestra wsl lancia:${NC}"
-echo -e "${GREEN}redis-cli -p 6380 -a wZeclLFPfCuMPYSbsjPODyrlHYAnjZCR${NC}"
-cf ssh -L 6666:clustercfg.rg-6e1d7a7c-d381-4c1b-99e9-d3b8974de85c.iroxbd.euc1.cache.amazonaws.com:1199 mtt-cap-services
+echo -e "${GREEN}redis-cli -p 6380 -a GaJoFOorxmiPONZjZPabLYQLlcmgzAGU${NC}"
+cf ssh -L 6666:clustercfg.rg-b1d65754-56bd-4059-bfc2-e113c2bad9e0.iroxbd.euc1.cache.amazonaws.com:1205 mtt-cap-services
