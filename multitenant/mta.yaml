@@ -138,6 +138,15 @@ modules:
           supported-platforms: []
           build-result: dist
     #
+    - name: ui_controlpointscategories
+      type: html5
+      path: app/cloudcoldchain.controlpointscategories
+      build-parameters:
+          builder: custom
+          commands:
+              - npm run build
+          supported-platforms: []
+          build-result: dist
     #   ╔═══════════════════════════════════════╗   #
     #   ║            HTML5 DEPLOYER             ║   #
     #   ╚═══════════════════════════════════════╝   #
@@ -169,6 +178,11 @@ modules:
                 target-path: resources/
               #
               - name: ui_controlpoints
+                artifacts:
+                    - ./uimodule*.zip
+                target-path: resources/
+                #
+              - name: ui_controlpointscategories
                 artifacts:
                     - ./uimodule*.zip
                 target-path: resources/

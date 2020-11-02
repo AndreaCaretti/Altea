@@ -2,11 +2,11 @@ window["sap-ushell-config"] = {
     defaultRenderer: "fiori2",
     bootstrapPlugins: {
         KeyUserPlugin: {
-            component: "sap.ushell.plugins.rta",
+            component: "sap.ushell.plugins.rta"
         },
         PersonalizePlugin: {
-            component: "sap.ushell.plugins.rta-personalize",
-        },
+            component: "sap.ushell.plugins.rta-personalize"
+        }
     },
     applications: {
         "AccessRights-manage": {
@@ -16,7 +16,7 @@ window["sap-ushell-config"] = {
             additionalInformation: "SAPUI5.Component=com.alteaup.solutions.accessrights",
             applicationType: "URL",
             url: "./com.alteaup.solutions.accessrights/webapp",
-            navigationMode: "embedded",
+            navigationMode: "embedded"
         },
         "CustomerCategories-manage": {
             title: "Manage CustomerCategories",
@@ -25,7 +25,7 @@ window["sap-ushell-config"] = {
             additionalInformation: "SAPUI5.Component=cloudcoldchain.customercategories",
             applicationType: "URL",
             url: "./cloudcoldchain.customercategories/webapp",
-            navigationMode: "embedded",
+            navigationMode: "embedded"
         },
         "Customers-manage": {
             title: "Manage Customers",
@@ -34,7 +34,7 @@ window["sap-ushell-config"] = {
             additionalInformation: "SAPUI5.Component=cloudcoldchain.customers",
             applicationType: "URL",
             url: "./cloudcoldchain.customers/webapp",
-            navigationMode: "embedded",
+            navigationMode: "embedded"
         },
         "ControlPoints-manage": {
             title: "Manage ControlPoints",
@@ -43,7 +43,16 @@ window["sap-ushell-config"] = {
             additionalInformation: "SAPUI5.Component=cloudcoldchain.controlpoints",
             applicationType: "URL",
             url: "./cloudcoldchain.controlpoints/webapp",
-            navigationMode: "embedded",
+            navigationMode: "embedded"
         },
-    },
-};
+        "ControlPointsCategories-manage": {
+            title: "Manage ControlPointsCategories",
+            description: "ControlPointsCategories Maintenance",
+            icon: "sap-icon://add",
+            additionalInformation: "SAPUI5.Component=cloudcoldchain.controlpointscategories",
+            applicationType: "URL",
+            url: "./cloudcoldchain.controlpointscategories/webapp",
+            navigationMode: "embedded"
+        }
+    }
+}
