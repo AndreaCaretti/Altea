@@ -25,12 +25,12 @@ class HandlingUnitMoved extends ZApplicationService {
                 tenant: req.user.tenant,
             };
 
-            redisClient.rpush("HandlingUnitsRawMovements", JSON.stringify(record));
-
-            console.log("Inserito record:", record);
-
-            // Emettendo un throw viene eseguito un rollback sul db
-            // throw "Errore inserimento record nella lista Redis, rollback";
+            if (redisClient.rpush("HandlingUnitsRawMovements", JSON.stringify(record))) {
+                console.log("Inserito record in REDIS:", record);
+            } else {
+                console.log("Errore inserimento record in REDIS:", record);
+                throw "Errore inserimento record nella lista Redis, rollback";
+            }
         });
 
         this.before(["CREATE", "UPDATE"], "Books", (req) => {
