@@ -61,8 +61,8 @@ class ProcessorHuMovements {
         setTimeout(this.checkStatus, 1000);
     }
 
-    readBLPOP(queue, index) {
-        return new Promise((resolve, reject) => {
+    readBLPOP(queue, _index) {
+        return new Promise((resolve, _reject) => {
             this.redisClient.BLPOP(queue, 0, (erro, element) => {
                 const obj = JSON.parse(element[1]); //element[0] è il nome della coda
                 console.log("record letto(BLPOP):", obj);

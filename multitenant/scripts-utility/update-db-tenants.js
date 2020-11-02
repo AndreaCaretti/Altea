@@ -99,7 +99,7 @@ async function main(capServiceAppName) {
         },
         5000,
         jobID,
-        token,
+        token
     );
 }
 

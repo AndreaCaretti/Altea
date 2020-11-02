@@ -20,10 +20,7 @@ class HandlingUnitMoved extends ZApplicationService {
                 tenant: req.user.tenant,
             };
 
-            redisClient.rpush(
-                "HandlingUnitsRawMovements",
-                JSON.stringify(record)
-            );
+            redisClient.rpush("HandlingUnitsRawMovements", JSON.stringify(record));
 
             console.log("Inserito record:", record);
 
@@ -31,17 +28,17 @@ class HandlingUnitMoved extends ZApplicationService {
             // throw "Errore inserimento record nella lista Redis, rollback";
         });
 
-        this.before("CREATE", "Books", (req) => {
+        this.before(["CREATE", "UPDATE"], "Books", (req) => {
             this.onCommitFailed(req, this.onCommitError);
         });
     }
 
-    onValidationError(e, req) {
+    onValidationError(e, _req) {
         console.log("🤢 Validation error\n", e);
         // console.log("🤢 Validation error - ", req.errors ? req.errors : e);
     }
 
-    onCommitError(e, req) {
+    onCommitError(e, _req) {
         console.log("🤢 Database COMMIT error\n", e);
     }
 }
