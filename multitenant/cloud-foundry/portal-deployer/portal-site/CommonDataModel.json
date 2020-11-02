@@ -54,6 +54,11 @@
               "id": "controlpointscategories",
               "appId": "cloudcoldchain.controlpointscategories",
               "vizId": "ControlPointsCategories-manage"
+            },
+            {
+              "id": "areacategories",
+              "appId": "cloudcoldchain.areacategories",
+              "vizId": "AreaCategories-manage"
             }
           ]
         }

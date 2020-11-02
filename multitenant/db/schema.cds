@@ -67,6 +67,16 @@ define entity ControlPointsCategories : cuid, managed {
     description : localized String(200);
 }
 
+@cds.autoexpose
+@cds.odata.valuelist
+@UI.Identification : [{Value : name}]
+define entity AreaCategories : cuid, managed {
+    @title : 'Area Category'
+    name        : String(50);
+    description : localized String(200);
+}
+
+
 define entity HandlingUnits : managed {
     key ID          : cloudcoldchain.SSCC;
         description : String(200);

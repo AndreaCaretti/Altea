@@ -147,6 +147,16 @@ modules:
           supported-platforms: []
           build-result: dist
     #
+    - name: ui_areacategories
+      type: html5
+      path: app/cloudcoldchain.areacategories
+      build-parameters:
+          builder: custom
+          commands:
+              - npm run build
+          supported-platforms: []
+          build-result: dist
+    #
     #   ╔═══════════════════════════════════════╗   #
     #   ║            HTML5 DEPLOYER             ║   #
     #   ╚═══════════════════════════════════════╝   #
@@ -186,7 +196,11 @@ modules:
                 artifacts:
                     - ./uimodule*.zip
                 target-path: resources/
-
+                #
+              - name: ui_areacategories
+                artifacts:
+                    - ./uimodule*.zip
+                target-path: resources/
     #
     #   ╔═══════════════════════════════════════╗   #
     #   ║            PORTAL DEPLOYER            ║   #
