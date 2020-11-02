@@ -1,5 +1,6 @@
 const ZApplicationService = require("./ZApplicationService");
 const redis = require("redis");
+const xsenv = require("@sap/xsenv");
 
 class HandlingUnitMoved extends ZApplicationService {
     async init() {
@@ -7,7 +8,11 @@ class HandlingUnitMoved extends ZApplicationService {
 
         console.log("Init HandlingUnitMoved.js");
 
-        const redisClient = redis.createClient();
+        xsenv.loadEnv();
+
+        var redisCredentials = xsenv.serviceCredentials({ tag: "cache" });
+
+        const redisClient = redis.createClient(redisCredentials.uri);
 
         this.after("CREATE", "HandlingUnitsRawMovements", (data, req) => {
             const record = {

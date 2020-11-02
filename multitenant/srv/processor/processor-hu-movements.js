@@ -1,12 +1,19 @@
 const inputValidation = require("@sap/cds-runtime/lib/common/generic/inputValidation");
 const redis = require("redis");
+const xsenv = require("@sap/xsenv");
 
 class ProcessorHuMovements {
     constructor(logger) {
         this.logger = logger;
 
+        xsenv.loadEnv();
+
+        const redisCredentials = xsenv.serviceCredentials({ tag: "cache" });
+
+        console.log(redisCredentials.uri);
+
         this.checkStatus = this.checkStatus.bind(this);
-        this.redisClient = redis.createClient();
+        this.redisClient = redis.createClient(redisCredentials.uri);
     }
 
     async checkStatus() {
