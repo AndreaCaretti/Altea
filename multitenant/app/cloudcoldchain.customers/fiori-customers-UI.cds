@@ -5,12 +5,10 @@ using Services from '../../srv/services';
 //	Customers List Page
 //
 annotate Services.Customers with
-@(UI :
-{
-    SelectionFields : [
-    name,
-    category
-    ],
+@(UI : {
+    SelectionFields : [name,
+                             //category
+                      ],
     LineItem        : [
     {Value : name},
     {
@@ -26,16 +24,12 @@ annotate Services.Customers with
 //	Customers Object Page
 //
 annotate Services.Customers with
-@(UI :
-{
-    Identification      : [
-    {Value : name}],
-    HeaderInfo          :
-    {
+@(UI : {
+    Identification      : [{Value : name}],
+    HeaderInfo          : {
         TypeName       : 'Customer',
         TypeNamePlural : 'Customers',
-        Title          :
-        {Value : name},
+        Title          : {Value : name},
     },
     HeaderFacets        : [
                            // {$Type: 'UI.ReferenceFacet', Label: 'Identification', Target: '@UI.FieldGroup@Header'},
@@ -52,18 +46,15 @@ annotate Services.Customers with
         Target : '@UI.FieldGroup#Admin'
     },
     ],
-    FieldGroup #Header  :
-    {Data : [
-             // {Value: name}
-            ]},
-    FieldGroup #General :
-    {Data : [
+    FieldGroup #Header  : {Data : [
+                                   // {Value: name}
+                                  ]},
+    FieldGroup #General : {Data : [
     {Value : category_ID},
     {Value : gs1_company_prefix}
     ]},
 
-    FieldGroup #Admin   :
-    {Data : [
+    FieldGroup #Admin   : {Data : [
     {Value : createdBy},
     {Value : createdAt},
     {Value : modifiedBy},

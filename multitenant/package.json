@@ -1,107 +1,120 @@
 {
-	"name": "cap-template",
-	"version": "1.0.0",
-	"description": "A simple CAP project create from sbarzaghi template.",
-	"repository": "<Add your repository here>",
-	"license": "UNLICENSED",
-	"private": true,
-	"dependencies": {
-		"@sap/audit-logging": "^3",
-		"@sap/cds": "^4",
-		"@sap/cds-mtx": "^1",
-		"@sap/hana-client": "^2",
-		"@sap/hdi-deploy": "^3.11.4",
-		"@sap/instance-manager": "^2",
-		"@sap/xsenv": "^3",
-		"@sap/xssec": "^2.1.16",
-		"cf-nodejs-logging-support": "^6.5.1",
-		"express": "^4",
-		"passport": "^0",
-		"redis": "^3.0.2",
-		"request": "^2"
-	},
-	"devDependencies": {
-		"sqlite3": "^5"
-	},
-	"engines": {
-		"node": "12.18.3",
-		"npm": "6.14.6"
-	},
-	"scripts": {
-		"start": "cds run",
-		"watch-local-db": "scripts-utility/watch-local-db.sh",
-		"watch-remote-db": "scripts-utility/watch-remote-db.sh",
-		"build": "scripts-utility/build.sh",
-		"debug": "scripts-utility/debug-local.sh",
-		"debug-on": "scripts-utility/debug-on.sh",
-		"deploy": "echo 'Starting deploy...'; date; cf deploy mta_archives/cloud-cold-chain-multitenant_0.0.1.mtar -f; echo 'deploy finished'; date",
-		"deploy-cap": "scripts-utility/deploy-cap.sh",
-		"refreshEnv": "node scripts-utility/get-cap-services-env.js > default-env.json",
-		"update-db-tenants": "node scripts-utility/update-db-tenants.js"
-	},
-	"cds": {
-		"hana": {
-			"deploy-format": "hdbtable"
-		},
-		"requires": {
-			"uaa": {
-				"kind": "xsuaa"
-			}
-		},
-		"[development]": {
-			"comment": "Anything defined inside of [development] will overrided prior values.",
-			"requires": {
-				"db": {
-					"kind": "sqlite",
-					"credentials": {
-						"database": "local-test-data.db"
-					}
-				}
-			}
-		},
-		"[production]": {
-			"comment": "Anything defined inside of [production] will overrided prior values.",
-			"requires": {
-				"db": {
-					"kind": "hana",
-					"multiTenant": true,
-					"vcap": {
-						"label": "service-manager"
-					}
-				}
-			}
-		},
-		"build": {
-			"target": "gen",
-			"tasks": [
-				{
-					"src": "db",
-					"for": "hana",
-					"options": {
-						"model": [
-							"db",
-							"srv",
-							"app"
-						]
-					}
-				},
-				{
-					"src": "srv",
-					"for": "node-cf",
-					"options": {
-						"model": [
-							"db",
-							"srv",
-							"app"
-						]
-					}
-				},
-				{
-					"src": ".",
-					"for": "mtx",
-					"dest": "srv"
-				}
-			]
-		}
-	}
+    "name": "cap-template",
+    "version": "1.0.0",
+    "description": "A simple CAP project create from sbarzaghi template.",
+    "repository": "<Add your repository here>",
+    "license": "UNLICENSED",
+    "private": true,
+    "dependencies": {
+        "@sap/audit-logging": "^3",
+        "@sap/cds": "^4",
+        "@sap/cds-mtx": "^1",
+        "@sap/hana-client": "^2",
+        "@sap/hdi-deploy": "^3.11.4",
+        "@sap/instance-manager": "^2",
+        "@sap/xsenv": "^3",
+        "@sap/xssec": "^2.1.16",
+        "cf-nodejs-logging-support": "^6.5.1",
+        "express": "^4",
+        "passport": "^0",
+        "redis": "^3.0.2",
+        "request": "^2"
+    },
+    "devDependencies": {
+        "eslint": "^7.12.1",
+        "eslint-config-prettier": "^6.15.0",
+        "eslint-plugin-prettier": "^3.1.4",
+        "husky": "^4.3.0",
+        "prettier": "^2.1.2",
+        "sqlite3": "^5"
+    },
+    "engines": {
+        "node": "12.18.3",
+        "npm": "6.14.6"
+    },
+    "scripts": {
+        "start": "cds run",
+        "watch-local-db": "scripts-utility/watch-local-db.sh",
+        "watch-remote-db": "scripts-utility/watch-remote-db.sh",
+        "build": "scripts-utility/build.sh",
+        "debug": "scripts-utility/debug-local.sh",
+        "debug-on": "scripts-utility/debug-on.sh",
+        "deploy": "echo 'Starting deploy...'; date; cf deploy mta_archives/cloud-cold-chain-multitenant_0.0.1.mtar -f; echo 'deploy finished'; date",
+        "deploy-cap": "scripts-utility/deploy-cap.sh",
+        "refreshEnv": "node scripts-utility/get-cap-services-env.js > default-env.json",
+        "update-db-tenants": "node scripts-utility/update-db-tenants.js",
+        "start-local-redis": "scripts-utility/start-local-redis.sh",
+        "lint": "eslint srv",
+        "postlint": "echo ✅ lint valid"
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "npm run lint"
+        }
+    },
+    "cds": {
+        "hana": {
+            "deploy-format": "hdbtable"
+        },
+        "requires": {
+            "uaa": {
+                "kind": "xsuaa"
+            }
+        },
+        "[development]": {
+            "comment": "Anything defined inside of [development] will overrided prior values.",
+            "requires": {
+                "db": {
+                    "kind": "sqlite",
+                    "credentials": {
+                        "database": "local-test-data.db"
+                    }
+                }
+            }
+        },
+        "[production]": {
+            "comment": "Anything defined inside of [production] will overrided prior values.",
+            "requires": {
+                "db": {
+                    "kind": "hana",
+                    "multiTenant": true,
+                    "vcap": {
+                        "label": "service-manager"
+                    }
+                }
+            }
+        },
+        "build": {
+            "target": "gen",
+            "tasks": [
+                {
+                    "src": "db",
+                    "for": "hana",
+                    "options": {
+                        "model": [
+                            "db",
+                            "srv",
+                            "app"
+                        ]
+                    }
+                },
+                {
+                    "src": "srv",
+                    "for": "node-cf",
+                    "options": {
+                        "model": [
+                            "db",
+                            "srv",
+                            "app"
+                        ]
+                    }
+                },
+                {
+                    "src": ".",
+                    "for": "mtx",
+                    "dest": "srv"
+                }
+            ]
+        }
+    }
 }

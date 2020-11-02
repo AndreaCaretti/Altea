@@ -11,3 +11,7 @@ annotate cloudcoldchain.CustomerCategories with {
 annotate cloudcoldchain.Customers with {
     ID @UI.Hidden;
 }
+
+annotate cloudcoldchain.ControlPoints with {
+    ID @UI.Hidden;
+}

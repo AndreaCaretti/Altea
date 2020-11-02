@@ -1,5 +1,5 @@
 {
-    "extends": "eslint:recommended",
+    "extends": ["eslint:recommended", "plugin:prettier/recommended"],
     "env": {
         "node": true,
         "es6": true,
@@ -19,6 +19,17 @@
     },
     "rules": {
         "no-console": "off",
-        "require-atomic-updates": "off"
-    }
+        "require-atomic-updates": "off",
+        "prettier/prettier": "error",
+        "no-unused-vars": [
+            "error",
+            {
+                "vars": "all",
+                "args": "after-used",
+                "ignoreRestSiblings": false,
+                "argsIgnorePattern": "^_"
+            }
+        ]
+    },
+    "plugins": ["prettier"]
 }
