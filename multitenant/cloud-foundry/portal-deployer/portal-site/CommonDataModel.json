@@ -84,6 +84,11 @@
               "id": "products",
               "appId": "cloudcoldchain.products",
               "vizId": "Products-manage"
+            },
+            {
+              "id": "lots",
+              "appId": "cloudcoldchain.lots",
+              "vizId": "Lots-manage"
             }
           ]
         }

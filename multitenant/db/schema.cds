@@ -125,12 +125,22 @@ define entity Products : cuid, managed {
     gtin             : cloudcoldchain.GTIN;
     @title : 'Product'
     name             : String(100);
-     erpProductCode   : String(50);
+    erpProductCode   : String(50);
     @title : 'Max TOR'
     maxTor           : Integer;
     temperatureRange : Association to one TemperatureRanges;
 }
 
+@cds.autoexpose
+@cds.odata.valuelist
+@UI.Identification : [{Value : name}]
+define entity Lots : cuid, managed {
+    @title : 'Lots'
+    name           : String(50);
+    productionDate : Timestamp;
+    expirationDate : Timestamp;
+    products       : Association to many Products;
+}
 
 define entity HandlingUnits : managed {
     key ID          : cloudcoldchain.SSCC;

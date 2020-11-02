@@ -37,4 +37,7 @@ service Services {
     @odata.draft.enabled
     entity TemperatureRanges       as projection on cloudcoldchain.TemperatureRanges;
 
+    @odata.draft.enabled
+    entity Lots                    as projection on cloudcoldchain.Lots;
+
 }

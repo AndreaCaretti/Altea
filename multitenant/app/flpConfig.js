@@ -98,6 +98,15 @@ window["sap-ushell-config"] = {
             applicationType: "URL",
             url: "./cloudcoldchain.products/webapp",
             navigationMode: "embedded"
+        },
+        "Lots-manage": {
+            title: "Manage Lots",
+            description: "Lots Maintenance",
+            icon: "sap-icon://add",
+            additionalInformation: "SAPUI5.Component=cloudcoldchain.lots",
+            applicationType: "URL",
+            url: "./cloudcoldchain.lots/webapp",
+            navigationMode: "embedded"
         }
     }
 }

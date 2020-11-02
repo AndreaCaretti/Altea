@@ -200,6 +200,18 @@ modules:
           commands:
               - npm run build
           supported-platforms: []
+          build-result:
+              dist
+
+              #
+    - name: ui_lots
+      type: html5
+      path: app/cloudcoldchain.lots
+      build-parameters:
+          builder: custom
+          commands:
+              - npm run build
+          supported-platforms: []
           build-result: dist
     #
     #   ╔═══════════════════════════════════════╗   #
@@ -263,6 +275,11 @@ modules:
                 target-path: resources/
               #
               - name: ui_temperatureranges
+                artifacts:
+                    - ./uimodule*.zip
+                target-path: resources/
+              #
+              - name: ui_lots
                 artifacts:
                     - ./uimodule*.zip
                 target-path: resources/

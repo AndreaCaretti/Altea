@@ -2,38 +2,23 @@ using Services from '../../srv/services';
 
 ////////////////////////////////////////////////////////////////////////////
 //
-//	Products List Page
+//	Lots List Page
 //
-annotate Services.Products with @(UI : {
-    SelectionFields : [gtin],
-    LineItem        : [
-    {Value : name},
-    {
-        Value : erpProductCode,
-        Label : 'erpProductCode'
-    },
-    {
-        Value : maxTor,
-        Label : 'Max Tor'
-    },
-    {
-        Value : temperatureRange_ID,
-        Label : 'Temperature Range'
-    },
-    ]
+annotate Services.Lots with @(UI : {
+    SelectionFields : [name],
+    LineItem        : [{Value : name}]
 });
 
 ////////////////////////////////////////////////////////////////////////////
 //
-//	Products Object Page
+//	Lots Object Page
 //
-annotate Services.Products with @(UI : {
-    Identification      : [{Value : gtin}],
+annotate Services.Lots with @(UI : {
+    Identification      : [{Value : name}],
     HeaderInfo          : {
-        TypeName       : 'Product',
-        TypeNamePlural : 'Products',
+        TypeName       : 'Lot',
+        TypeNamePlural : 'Lots',
         Title          : {Value : name},
-        Description    : {Value : gtin}
     },
     HeaderFacets        : [
                            // {$Type: 'UI.ReferenceFacet', Label: 'Identification', Target: '@UI.FieldGroup@Header'},
@@ -54,16 +39,10 @@ annotate Services.Products with @(UI : {
                                    // {Value: name}
                                   ]},
     FieldGroup #General : {Data : [
-    {
-        Value : erpProductCode,
-        Label : 'ERP Code'
-    },
-    {Value : maxTor},
-    {
-        Value : temperatureRange_ID,
-        Label : 'Temperature Range'
-    }
-    ]},
+                                   {Value: productionDate, Label:'Production Date'},
+								   {Value: expirationDate, Label:'Expiration Date'},
+								   {Value : products_ID, Label:'Products'},
+                                  ]},
     FieldGroup #Admin   : {Data : [
     {Value : createdBy},
     {Value : createdAt},

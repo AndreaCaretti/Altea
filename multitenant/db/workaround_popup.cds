@@ -39,3 +39,7 @@ annotate cloudcoldchain.Products with {
 annotate cloudcoldchain.TemperatureRanges with {
     ID @Core.Computed;
 }
+
+annotate cloudcoldchain.Lots with {
+    ID @Core.Computed;
+}
