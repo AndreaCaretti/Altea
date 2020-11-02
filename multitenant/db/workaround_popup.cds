@@ -24,6 +24,10 @@ annotate cloudcoldchain.AreaCategories with {
     ID @Core.Computed;
 }
 
+annotate cloudcoldchain.Areas with {
+    ID @Core.Computed;
+}
+
 annotate cloudcoldchain.Locations with {
     ID @Core.Computed;
 }

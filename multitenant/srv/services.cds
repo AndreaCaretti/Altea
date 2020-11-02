@@ -26,6 +26,9 @@ service Services {
     entity AreaCategories          as projection on cloudcoldchain.AreaCategories;
 
     @odata.draft.enabled
+    entity Areas                   as projection on cloudcoldchain.Areas;
+
+    @odata.draft.enabled
     entity Locations               as projection on cloudcoldchain.Locations;
 
 }

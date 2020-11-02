@@ -76,6 +76,27 @@ define entity AreaCategories : cuid, managed {
     description : localized String(200);
 }
 
+@cds.odata.valuelist
+@UI.Identification : [{Value : name}]
+define entity Areas : cuid, managed {
+    @title  : 'Areas'
+    name         : String(50);
+    @title  : 'Category'
+    @Common : {
+        Text            : category.name,
+        TextArrangement : #TextOnly
+    }
+    category     : Association to one AreaCategories;
+    @title  : 'Location'
+    @Common : {
+        Text            : location.name,
+        TextArrangement : #TextOnly
+    }
+    location     : Association to one Locations;
+    @title  : 'ID Device IoT'
+    ID_DeviceIoT : String
+}
+
 @cds.autoexpose
 @cds.odata.valuelist
 @UI.Identification : [{Value : name}]

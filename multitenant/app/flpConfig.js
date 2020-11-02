@@ -71,6 +71,15 @@ window["sap-ushell-config"] = {
             applicationType: "URL",
             url: "./cloudcoldchain.locations/webapp",
             navigationMode: "embedded"
+        },
+        "Areas-manage": {
+            title: "Manage Areas",
+            description: "Areas Maintenance",
+            icon: "sap-icon://add",
+            additionalInformation: "SAPUI5.Component=cloudcoldchain.areas",
+            applicationType: "URL",
+            url: "./cloudcoldchain.areas/webapp",
+            navigationMode: "embedded"
         }
     }
 }

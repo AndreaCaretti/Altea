@@ -156,6 +156,16 @@ modules:
           commands:
               - npm run build
           supported-platforms: []
+          build-result: dist
+    #
+    - name: ui_areas
+      type: html5
+      path: app/cloudcoldchain.areas
+      build-parameters:
+          builder: custom
+          commands:
+              - npm run build
+          supported-platforms: []
           build-result:
               dist
               #
@@ -210,6 +220,11 @@ modules:
                 target-path: resources/
                 #
               - name: ui_areacategories
+                artifacts:
+                    - ./uimodule*.zip
+                target-path: resources/
+                #
+              - name: ui_areas
                 artifacts:
                     - ./uimodule*.zip
                 target-path: resources/
