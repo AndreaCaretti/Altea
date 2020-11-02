@@ -33,12 +33,12 @@ class HandlingUnitMoved extends ZApplicationService {
         });
     }
 
-    onValidationError(e, req) {
+    onValidationError(e, _req) {
         console.log("🤢 Validation error\n", e);
         // console.log("🤢 Validation error - ", req.errors ? req.errors : e);
     }
 
-    onCommitError(e, req) {
+    onCommitError(e, _req) {
         console.log("🤢 Database COMMIT error\n", e);
     }
 }
