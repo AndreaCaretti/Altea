@@ -304,3 +304,13 @@ resources:
     parameters:
       service: application-logs
       service-plan: lite
+  #
+  #   ┌─────────────────────────────────────┐   #
+  #   │                REDIS                │   #
+  #   └─────────────────────────────────────┘   #
+  #
+  - name: mtt-redis
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: redis-cache-standard
+      service-plan: lite
