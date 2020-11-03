@@ -43,3 +43,7 @@ annotate cloudcoldchain.TemperatureRanges with {
 annotate cloudcoldchain.Lots with {
     ID @UI.Hidden;
 }
+
+annotate cloudcoldchain.Routes with {
+    ID @UI.Hidden;
+}

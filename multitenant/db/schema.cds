@@ -120,7 +120,7 @@ define entity TemperatureRanges : cuid, managed {
 }
 
 @cds.odata.valuelist
-@UI.Identification : [{Value : name}]
+@UI.Identification : [{Value : gtin}]
 define entity Products : cuid, managed {
     gtin             : cloudcoldchain.GTIN;
     @title : 'Product'
@@ -141,6 +141,22 @@ define entity Lots : cuid, managed {
     expirationDate : Timestamp;
     products       : Association to many Products;
 }
+
+//ROUTES
+// | _ID_   | prodotto (Products) | step | controlPoint (controlPoints) | direction | destinationArea (Locations) |
+@cds.autoexpose
+@cds.odata.valuelist
+@UI.Identification : [{Value : name}]
+define entity Routes : cuid, managed {
+    name            : String(50);
+    @title : 'Product'
+    product         : Association to one Products;
+    step            : Integer;
+    controlPoint    : Association to one ControlPoints;
+    direction       : cloudcoldchain.direction;
+    destinationArea : Association to one Locations;
+}
+
 
 define entity HandlingUnits : managed {
     key ID          : cloudcoldchain.SSCC;

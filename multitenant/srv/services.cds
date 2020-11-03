@@ -40,4 +40,7 @@ service Services {
     @odata.draft.enabled
     entity Lots                    as projection on cloudcoldchain.Lots;
 
+    @odata.draft.enabled
+    entity Routes                  as projection on cloudcoldchain.Routes;
+
 }

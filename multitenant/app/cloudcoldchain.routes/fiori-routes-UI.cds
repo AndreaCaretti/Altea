@@ -2,37 +2,33 @@ using Services from '../../srv/services';
 
 ////////////////////////////////////////////////////////////////////////////
 //
-//	Areas List Page
+//	Routes List Page
 //
-annotate Services.Areas with @(UI : {
+annotate Services.Routes with @(UI : {
     SelectionFields : [name],
     LineItem        : [
     {Value : name},
-    {
-        Value : category.name,
-        Label : 'Category'
-    },
-    {
-        Value : location.name,
-        Label : 'Location'
-    },
-    {
-        Value : ID_DeviceIoT,
-        Label : 'ID Device IoT'
-    }
+    //product
+    {Value : product.name},
+    {Value : step},
+    //controlPoint
+    {Value : controlPoint.name},
+    {Value : direction},
+    //destinationArea
+    {Value : destinationArea.name},
     ]
 });
 
 ////////////////////////////////////////////////////////////////////////////
 //
-//	Areas Object Page
+//	Routes Object Page
 //
-annotate Services.Areas with @(UI : {
+annotate Services.Routes with @(UI : {
     Identification      : [{Value : name}],
     HeaderInfo          : {
-        TypeName       : 'Area',
-        TypeNamePlural : 'Areas',
-        Title          : {Value : name}
+        TypeName       : 'Route',
+        TypeNamePlural : 'Routes',
+        Title          : {Value : name},
     },
     HeaderFacets        : [
                            // {$Type: 'UI.ReferenceFacet', Label: 'Identification', Target: '@UI.FieldGroup@Header'},
@@ -53,10 +49,22 @@ annotate Services.Areas with @(UI : {
                                    // {Value: name}
                                   ]},
     FieldGroup #General : {Data : [
-    {Value : category.name},
-    {Value : location.name},
-    {Value : ID_DeviceIoT}
+    {Value : product_ID},
+    {
+        Value : step,
+        Label : 'Step'
+    },
+    {
+        Value : controlPoint_ID,
+        Label : 'ControlPoint'
+    },
+    {Value : direction},
+    {
+        Value : destinationArea_ID,
+        Label : 'DestinationArea'
+    },
     ]},
+
     FieldGroup #Admin   : {Data : [
     {Value : createdBy},
     {Value : createdAt},

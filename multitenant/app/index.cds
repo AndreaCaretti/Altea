@@ -13,3 +13,4 @@ using from './cloudcoldchain.areas/fiori-areas-UI';
 using from './cloudcoldchain.temperatureranges/fiori-temperatureranges-UI';
 using from './cloudcoldchain.products/fiori-products-UI';
 using from './cloudcoldchain.lots/fiori-lots-UI';
+using from './cloudcoldchain.routes/fiori-routes-UI';

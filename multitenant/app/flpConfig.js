@@ -107,6 +107,15 @@ window["sap-ushell-config"] = {
             applicationType: "URL",
             url: "./cloudcoldchain.lots/webapp",
             navigationMode: "embedded"
+        },
+        "Routes-manage": {
+            title: "Manage Routes",
+            description: "Routes Maintenance",
+            icon: "sap-icon://add",
+            additionalInformation: "SAPUI5.Component=cloudcoldchain.routes",
+            applicationType: "URL",
+            url: "./cloudcoldchain.routes/webapp",
+            navigationMode: "embedded"
         }
     }
 }

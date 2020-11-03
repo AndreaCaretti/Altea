@@ -89,6 +89,11 @@
               "id": "lots",
               "appId": "cloudcoldchain.lots",
               "vizId": "Lots-manage"
+            },
+            {
+              "id": "routes",
+              "appId": "cloudcoldchain.routes",
+              "vizId": "Routes-manage"
             }
           ]
         }

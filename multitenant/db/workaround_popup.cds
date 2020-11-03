@@ -43,3 +43,7 @@ annotate cloudcoldchain.TemperatureRanges with {
 annotate cloudcoldchain.Lots with {
     ID @Core.Computed;
 }
+
+annotate cloudcoldchain.Routes with {
+    ID @Core.Computed;
+}

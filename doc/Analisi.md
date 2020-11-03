@@ -307,16 +307,16 @@ GTIN:
 
 Records solo nel DB del produttore
 
-| _ID_   | prodotto      | passo | controlPoint     | direzione | destinationArea (Locations) |
-| ------ | ------------- | ----- | ---------------- | --------- | --------------------------- |
-| *GUID* | 1234567890123 | 1     | Etichettatrice A | F         | Produzione Plant A          |
-| *GUID* | 1234567890123 | 2     | Stoccaggio       | F         | Cold Room                   |
-| *GUID* | 1234567890123 | 3     | Stoccaggio       | B         | Uscita merci                |
-| *GUID* | 1234567890123 | 4     | Uscita A         | F         | Piazzale esterno            |
-| *GUID* | 1234567890123 | 5     | Trasportatore    | F         | Truck                       |
-| *GUID* | 1234567890123 | 6     | Trasportatore    | B         | Piazzale esterno            |
-| *GUID* | 1234567890123 | 7     | Depositario      | F         | Depositario                 |
-| *GUID* | 1234567890123 | 8     | Depositario      | B         | Depositario                 |
+| _ID_   | prodotto (Products) | step | controlPoint (controlPoints) | direction | destinationArea (Locations) |
+| ------ | ------------------- | ---- | ---------------------------- | --------- | --------------------------- |
+| *GUID* | 1234567890123       | 1    | Etichettatrice A             | F         | Produzione Plant A          |
+| *GUID* | 1234567890123       | 2    | Stoccaggio                   | F         | Cold Room                   |
+| *GUID* | 1234567890123       | 3    | Stoccaggio                   | B         | Uscita merci                |
+| *GUID* | 1234567890123       | 4    | Uscita A                     | F         | Piazzale esterno            |
+| *GUID* | 1234567890123       | 5    | Trasportatore                | F         | Truck                       |
+| *GUID* | 1234567890123       | 6    | Trasportatore                | B         | Piazzale esterno            |
+| *GUID* | 1234567890123       | 7    | Depositario                  | F         | Depositario                 |
+| *GUID* | 1234567890123       | 8    | Depositario                  | B         | Depositario                 |
 
 ## Tabella Lots
 
