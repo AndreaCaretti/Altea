@@ -8,18 +8,11 @@ annotate Services.Products with @(UI : {
     SelectionFields : [gtin],
     LineItem        : [
     {Value : name},
-    {
-        Value : erpProductCode,
-        Label : 'erpProductCode'
-    },
-    {
-        Value : maxTor,
-        Label : 'Max Tor'
-    },
-    {
-        Value : temperatureRange_ID,
-        Label : 'Temperature Range'
-    },
+    {Value : erpProductCode},
+    {Value : maxTor, },
+    {Value : temperatureRange_ID, },
+    {Value : route_ID, },
+
     ]
 });
 
@@ -62,6 +55,10 @@ annotate Services.Products with @(UI : {
     {
         Value : temperatureRange_ID,
         Label : 'Temperature Range'
+    },
+    {
+        Value : route_ID,
+        Label : 'Route'
     }
     ]},
     FieldGroup #Admin   : {Data : [

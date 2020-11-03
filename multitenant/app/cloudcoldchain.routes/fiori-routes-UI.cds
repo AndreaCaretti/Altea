@@ -8,14 +8,10 @@ annotate Services.Routes with @(UI : {
     SelectionFields : [name],
     LineItem        : [
     {Value : name},
-    //product
-    {Value : product.name},
-    {Value : step},
-    //controlPoint
-    {Value : controlPoint.name},
-    {Value : direction},
-    //destinationArea
-    {Value : destinationArea.name},
+    {Value : steps.controlPoint.description},
+    {Value : steps.destinationArea.name},
+    {Value : steps.direction},
+
     ]
 });
 
@@ -41,6 +37,11 @@ annotate Services.Routes with @(UI : {
     },
     {
         $Type  : 'UI.ReferenceFacet',
+        Label  : '{i18n>Steps}',
+        Target : '@UI.FieldGroup#Steps'
+    },
+    {
+        $Type  : 'UI.ReferenceFacet',
         Label  : '{i18n>Admin}',
         Target : '@UI.FieldGroup#Admin'
     },
@@ -49,19 +50,21 @@ annotate Services.Routes with @(UI : {
                                    // {Value: name}
                                   ]},
     FieldGroup #General : {Data : [
-    {Value : product_ID},
+                                   // {Value: name}
+                                  ]},
+
+    FieldGroup #Steps   : {Data : [
     {
-        Value : step,
-        Label : 'Step'
-    },
-    {
-        Value : controlPoint_ID,
+        Value : steps.controlPoint_ID,
         Label : 'ControlPoint'
     },
-    {Value : direction},
     {
-        Value : destinationArea_ID,
-        Label : 'DestinationArea'
+        Value : steps.destinationArea_ID,
+        Label : 'Destination Area'
+    },
+    {
+        Value : steps.direction,
+        Label : 'Direction'
     },
     ]},
 
