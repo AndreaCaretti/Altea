@@ -426,10 +426,10 @@ I dati di temperatura sono salvati nel Data Lake IoT, la tabella viene riportata
 
 Tabelle di alert applicativi rilevati dalla piattaforma da segnalare / segnalati agli utenti:
 
-| _ID_   | _alertBusinessTime_      | sender | messaggio                                  | level |
-| ------ | ------------------------ | ------ | ------------------------------------------ | ----- |
-| _GUID_ | 2020-10-14T09:01:33.763Z |        | RFID XXX già esistente                     | Grave |
-| _GUID_ | 2020-10-14T09:01:33.763Z |        | Temperatura cella fuori range da 20 minuti | Alert |
+| _ID_   | _alertBusinessTime_      | sender(?) | message (String)                           | level (alertLevel) |
+| ------ | ------------------------ | --------- | ------------------------------------------ | ------------------ |
+| _GUID_ | 2020-10-14T09:01:33.763Z |           | RFID XXX già esistente                     | Grave              |
+| _GUID_ | 2020-10-14T09:01:33.763Z |           | Temperatura cella fuori range da 20 minuti | Alert              |
 
 # Tabella Audits
 

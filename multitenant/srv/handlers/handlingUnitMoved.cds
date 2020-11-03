@@ -12,7 +12,7 @@ using {
 @(requires : 'authenticated-user')
 service handlingUnitMoved {
 
-    entity Books                     as projection on cloudcoldchain.Books;
+    entity HandlingUnitsMovements                     as projection on cloudcoldchain.HandlingUnitsMovements;
 
     entity ControlPoints             as projection on cloudcoldchain.ControlPoints;
     entity HandlingUnits             as projection on cloudcoldchain.HandlingUnits;

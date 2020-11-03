@@ -126,9 +126,10 @@ define entity Products : cuid, managed {
     @title : 'Product'
     name             : String(100);
     erpProductCode   : String(50);
-    @title : 'Max TOR'
+    @title : 'Max TOR (min)'
     maxTor           : Integer;
     temperatureRange : Association to one TemperatureRanges;
+    route            : Association to one Routes;
 }
 
 @cds.autoexpose
@@ -139,8 +140,7 @@ define entity Lots : cuid, managed {
     name           : String(50);
     productionDate : Timestamp;
     expirationDate : Timestamp;
-    products       : Association to many Products
-                         on name;
+    product        : Association to one Products;
 }
 
 //ROUTES
@@ -149,20 +149,23 @@ define entity Lots : cuid, managed {
 @cds.odata.valuelist
 @UI.Identification : [{Value : name}]
 define entity Routes : cuid, managed {
-    name            : String(50);
-    @title : 'Product'
-    product         : Association to one Products;
-    step            : Integer;
-    controlPoint    : Association to one ControlPoints;
-    direction       : cloudcoldchain.direction;
-    destinationArea : Association to one Locations;
+    name  : String(50);
+    steps : Composition of many RouteSteps
+                on steps.parent = $self;
 }
 
+define entity RouteSteps : cuid {
+    parent          : Association to Routes;
+    controlPoint    : Association to one ControlPoints;
+    direction       : cloudcoldchain.direction;
+    destinationArea : Association to one Areas;
+}
+
+
 //| _sscc_ (SSCC)      | lot     | lastKnownArea(Locations)    | inAreaBusinessTime (Timestamp) | jsonSummary (LargeString)             | blockchainHash (100)
-@UI.Identification : [{Value : description}]
-define entity HandlingUnits :cuid, managed {
-     SSCC                 : cloudcoldchain.SSCC;
-        description        : String(200);
+@UI.Identification : [{Value : ID}]
+define entity HandlingUnits : managed {
+    key ID                 : cloudcoldchain.SSCC;
         lot                : Association to one Lots;
         lastKnownArea      : Association to one Locations;
         inAreaBusinessTime : Timestamp;
@@ -170,7 +173,7 @@ define entity HandlingUnits :cuid, managed {
         blockchainHash     : String(100);
 }
 
-define entity Books : cuid, managed {
+define entity HandlingUnitsMovements : cuid, managed {
     CP   : Association to one ControlPoints;
     TE   : Timestamp;
     TS   : Timestamp;
@@ -188,4 +191,28 @@ define entity HandlingUnitsRawMovements : cuid, managed {
     TS      : String;
     SSCC_ID : String;
     DIR     : String;
+}
+
+//ResidenceTime
+//| _ID_ | sscc (SSCC) | (area) | inBusinessTime | outBusinessTime | residenceTime (Integer) | tor | tmin  | tmax | elaborationTimeTor (Timestamp)
+define entity ResidenceTime : cuid, managed {
+    SSCC               : cloudcoldchain.SSCC;
+    area               : Association to one Areas;
+    inBusinessTime     : Timestamp;
+    outBusinessTime    : Timestamp;
+    residenceTime      : Integer;
+    tor                : Integer;
+    tmin               : Decimal;
+    tmax               : Decimal;
+    elaborationTimeTor : Timestamp;
+}
+
+
+//ALERTS
+//| _ID_   | _alertBusinessTime_  | sender | messaggio  | level |
+define entity Alerts : cuid, managed {
+    alertBusinessTime : Timestamp;
+    sender            : Association to one Areas;
+    message           : String;
+    level             : cloudcoldchain.alertLevel;
 }

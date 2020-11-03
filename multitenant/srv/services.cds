@@ -19,8 +19,8 @@ service Services {
     @odata.draft.enabled
     entity ControlPointsCategories as projection on cloudcoldchain.ControlPointsCategories;
 
-    @odata.draft.enabled
-    entity HandlingUnits           as projection on cloudcoldchain.HandlingUnits;
+    //@odata.draft.enabled
+    //entity HandlingUnits           as projection on cloudcoldchain.HandlingUnits;
 
     @odata.draft.enabled
     entity AreaCategories          as projection on cloudcoldchain.AreaCategories;
@@ -42,5 +42,7 @@ service Services {
 
     @odata.draft.enabled
     entity Routes                  as projection on cloudcoldchain.Routes;
+
+    
 
 }
