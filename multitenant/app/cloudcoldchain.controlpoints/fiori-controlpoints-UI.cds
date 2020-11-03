@@ -24,8 +24,14 @@ annotate Services.ControlPoints with @(UI : {
     HeaderInfo                          : {
         TypeName       : 'ControlPoint',
         TypeNamePlural : 'ControlPoints',
-        Title          : {Value : name},
-        Description    : {Value : description},
+        Title          : {
+            Value : name,
+            Label : 'Control Point'
+        },
+        Description    : {
+            Value : description,
+            Label : 'Description'
+        },
     },
     HeaderFacets                        : [{
         $Type  : 'UI.ReferenceFacet',

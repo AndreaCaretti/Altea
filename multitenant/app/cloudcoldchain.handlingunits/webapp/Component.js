@@ -1,5 +1,5 @@
 sap.ui.define(["sap/fe/core/AppComponent"], (ac) =>
-    ac.extend("cloudcoldchain.handlingunit.Component", {
+    ac.extend("cloudcoldchain.handlingunits.Component", {
         metadata: { manifest: "json" },
     }),
 );

@@ -47,7 +47,3 @@ annotate cloudcoldchain.Lots with {
 annotate cloudcoldchain.Routes with {
     ID @Core.Computed;
 }
-
-annotate cloudcoldchain.HandlingUnits with {
-    ID @UI.Hidden;
-}

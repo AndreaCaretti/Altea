@@ -156,9 +156,19 @@ define entity Routes : cuid, managed {
 
 define entity RouteSteps : cuid {
     parent          : Association to Routes;
+    stepNr          : Integer;
+    @Common : {
+        Text            : controlPoint.name,
+        TextArrangement : #TextOnly
+    }
     controlPoint    : Association to one ControlPoints;
     direction       : cloudcoldchain.direction;
+    @Common : {
+        Text            : destinationArea.name,
+        TextArrangement : #TextOnly
+    }
     destinationArea : Association to one Areas;
+
 }
 
 
@@ -193,8 +203,7 @@ define entity HandlingUnitsRawMovements : cuid, managed {
     DIR     : String;
 }
 
-//ResidenceTime
-//| _ID_ | sscc (SSCC) | (area) | inBusinessTime | outBusinessTime | residenceTime (Integer) | tor | tmin  | tmax | elaborationTimeTor (Timestamp)
+
 define entity ResidenceTime : cuid, managed {
     SSCC               : cloudcoldchain.SSCC;
     area               : Association to one Areas;
@@ -208,8 +217,6 @@ define entity ResidenceTime : cuid, managed {
 }
 
 
-//ALERTS
-//| _ID_   | _alertBusinessTime_  | sender | messaggio  | level |
 define entity Alerts : cuid, managed {
     alertBusinessTime : Timestamp;
     sender            : Association to one Areas;

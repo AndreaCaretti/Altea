@@ -6,13 +6,7 @@ using Services from '../../srv/services';
 //
 annotate Services.Routes with @(UI : {
     SelectionFields : [name],
-    LineItem        : [
-    {Value : name},
-    {Value : steps.controlPoint.description},
-    {Value : steps.destinationArea.name},
-    {Value : steps.direction},
-
-    ]
+    LineItem        : [{Value : name}]
 });
 
 ////////////////////////////////////////////////////////////////////////////
@@ -38,7 +32,7 @@ annotate Services.Routes with @(UI : {
     {
         $Type  : 'UI.ReferenceFacet',
         Label  : '{i18n>Steps}',
-        Target : '@UI.FieldGroup#Steps'
+        Target : 'steps/@UI.LineItem',
     },
     {
         $Type  : 'UI.ReferenceFacet',
@@ -76,4 +70,26 @@ annotate Services.Routes with @(UI : {
     ]}
 
 
-});
+}
+
+);
+
+annotate Services.RouteSteps with @(UI : {LineItem : [
+{
+    Value : stepNr,
+    Label : 'Step Nr.'
+},
+{
+    Value : controlPoint_ID,
+    Label : 'Control Point'
+    
+},{
+    Value : direction,
+    Label : 'Direction'
+},
+{
+    Value : destinationArea_ID,
+    Label : 'Destination Area'
+},
+
+]}, );

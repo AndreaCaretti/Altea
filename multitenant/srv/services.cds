@@ -43,6 +43,12 @@ service Services {
     @odata.draft.enabled
     entity Routes                  as projection on cloudcoldchain.Routes;
 
-    
+    @odata.draft.enabled
+    entity Alerts                  as projection on cloudcoldchain.Alerts;
+
+    @odata.draft.enabled
+    entity ResidenceTime           as projection on cloudcoldchain.ResidenceTime;
+
+    entity HandlingUnits           as projection on cloudcoldchain.HandlingUnits;
 
 }

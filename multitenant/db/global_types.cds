@@ -11,6 +11,7 @@ define type direction : String(1)@title : 'Direction'  @assert.range enum {
 
 //alertLevel
 define type alertLevel : String(1)@title : 'Alert Level'  @assert.range enum {
+    VeryHigh;
     High;
     Medium;
     Low;
