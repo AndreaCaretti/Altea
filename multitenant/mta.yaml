@@ -425,5 +425,5 @@ resources:
     - name: mtt-redis
       type: org.cloudfoundry.managed-service
       parameters:
-          service: redis-cache-standard
-          service-plan: lite
+          service: redis-cache
+          service-plan: standard

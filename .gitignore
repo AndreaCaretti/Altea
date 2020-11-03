@@ -2,7 +2,6 @@
 _out
 *.db
 connection.properties
-/multitenant/default-env.json
 gen/
 node_modules/
 target/

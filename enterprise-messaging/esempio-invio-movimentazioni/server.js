@@ -58,7 +58,7 @@ async function main(params) {
 			const now = new Date().toJSON();
 
 			const message = JSON.stringify({
-				CP_ID: "90abe75c-e2c6-4e5f-a12f-fb81aa50d011",
+				CP_ID: "e6bbede3-5b6a-472d-8ba6-41abbb89edf2",
 				TE: now,
 				TS: now,
 				SSCC_ID: "123456789012345678",
