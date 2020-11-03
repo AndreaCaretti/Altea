@@ -212,12 +212,21 @@ modules:
           commands:
               - npm run build
           supported-platforms: []
-          build-result:
-              dist
-              #
+          build-result: dist
+    #
     - name: ui_routes
       type: html5
       path: app/cloudcoldchain.routes
+      build-parameters:
+          builder: custom
+          commands:
+              - npm run build
+          supported-platforms: []
+          build-result: dist
+    #
+    - name: ui_handlingunits
+      type: html5
+      path: app/cloudcoldchain.handlingunits
       build-parameters:
           builder: custom
           commands:
@@ -296,6 +305,11 @@ modules:
                 target-path: resources/
               #
               - name: ui_routes
+                artifacts:
+                    - ./uimodule*.zip
+                target-path: resources/
+              #
+              - name: ui_handlingunits
                 artifacts:
                     - ./uimodule*.zip
                 target-path: resources/

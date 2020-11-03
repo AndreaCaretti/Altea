@@ -94,6 +94,11 @@
               "id": "routes",
               "appId": "cloudcoldchain.routes",
               "vizId": "Routes-manage"
+            },
+            {
+              "id": "handlingunit",
+              "appId": "cloudcoldchain.handlingunit",
+              "vizId": "HandlingUnits-manage"
             }
           ]
         }

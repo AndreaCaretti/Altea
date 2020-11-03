@@ -139,7 +139,8 @@ define entity Lots : cuid, managed {
     name           : String(50);
     productionDate : Timestamp;
     expirationDate : Timestamp;
-    products       : Association to many Products;
+    products       : Association to many Products
+                         on name;
 }
 
 //ROUTES
@@ -157,10 +158,16 @@ define entity Routes : cuid, managed {
     destinationArea : Association to one Locations;
 }
 
-
-define entity HandlingUnits : managed {
-    key ID          : cloudcoldchain.SSCC;
-        description : String(200);
+//| _sscc_ (SSCC)      | lot     | lastKnownArea(Locations)    | inAreaBusinessTime (Timestamp) | jsonSummary (LargeString)             | blockchainHash (100)
+@UI.Identification : [{Value : description}]
+define entity HandlingUnits :cuid, managed {
+     SSCC                 : cloudcoldchain.SSCC;
+        description        : String(200);
+        lot                : Association to one Lots;
+        lastKnownArea      : Association to one Locations;
+        inAreaBusinessTime : Timestamp;
+        jsonSummary        : LargeString;
+        blockchainHash     : String(100);
 }
 
 define entity Books : cuid, managed {
@@ -168,10 +175,7 @@ define entity Books : cuid, managed {
     TE   : Timestamp;
     TS   : Timestamp;
     SSCC : Association to one HandlingUnits;
-    DIR  : String(1)@assert.range enum {
-        F;
-        B;
-    };
+    DIR  : cloudcoldchain.direction;
 }
 
 annotate Books with {

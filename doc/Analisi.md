@@ -326,9 +326,9 @@ Records solo nel DB del produttore
 
 ## Tabella HandlingUnits
 
-| _sscc_ (SSCC)      | lot     | lastKnownArea    | inAreaBusinessTime (Timestamp) | jsonSummary (LargeString)             | blockchainHash (100)                                 |
-| ------------------ | ------- | ---------------- | ------------------------------ | ------------------------------------- | ---------------------------------------------------- |
-| 123456789012345678 | LOT-XYZ | Uscita magazzino | 2020-10-14T09:01:33.763Z       | { HandlingUnit: "HandlingUnitA", etc} | adb24ba2f2ef33d73d79e60b9d47f7fb97c69013eb6c8f37c... |
+| _sscc_ (SSCC)      | lot     | lastKnownArea(Locations) | inAreaBusinessTime (Timestamp) | jsonSummary (LargeString)             | blockchainHash (100)                                 |
+| ------------------ | ------- | ------------------------ | ------------------------------ | ------------------------------------- | ---------------------------------------------------- |
+| 123456789012345678 | LOT-XYZ | Uscita magazzino         | 2020-10-14T09:01:33.763Z       | { HandlingUnit: "HandlingUnitA", etc} | adb24ba2f2ef33d73d79e60b9d47f7fb97c69013eb6c8f37c... |
 
 * il campo lastKnowArea indica l'ultima posizione conosciuta dell'SSCC
 * il campo inAreaBusinessTime indica il momento in cui è stato rilevato l'ultimo spostamento

@@ -116,6 +116,15 @@ window["sap-ushell-config"] = {
             applicationType: "URL",
             url: "./cloudcoldchain.routes/webapp",
             navigationMode: "embedded"
+        },
+        "HandlingUnits-manage": {
+            title: "Manage HandlingUnits",
+            description: "HandlingUnits Maintenance",
+            icon: "sap-icon://add",
+            additionalInformation: "SAPUI5.Component=cloudcoldchain.handlingunit",
+            applicationType: "URL",
+            url: "./cloudcoldchain.handlingunit/webapp",
+            navigationMode: "embedded"
         }
     }
 }
