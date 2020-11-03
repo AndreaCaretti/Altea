@@ -19,3 +19,31 @@ annotate cloudcoldchain.ControlPoints with {
 annotate cloudcoldchain.ControlPointsCategories with {
     ID @UI.Hidden;
 }
+
+annotate cloudcoldchain.AreaCategories with {
+    ID @UI.Hidden;
+}
+
+annotate cloudcoldchain.Areas with {
+    ID @UI.Hidden;
+}
+
+annotate cloudcoldchain.Locations with {
+    ID @UI.Hidden;
+}
+
+annotate cloudcoldchain.Products with {
+    ID @UI.Hidden;
+}
+
+annotate cloudcoldchain.TemperatureRanges with {
+    ID @UI.Hidden;
+}
+
+annotate cloudcoldchain.Lots with {
+    ID @UI.Hidden;
+}
+
+annotate cloudcoldchain.Routes with {
+    ID @UI.Hidden;
+}

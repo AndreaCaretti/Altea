@@ -1,0 +1,10 @@
+{
+  "generator-easy-ui5-extra": {
+    "namespace": "cloudcoldchain",
+    "appname": "routes",
+    "entitynameplural": "Routes",
+    "entitynamesingolar": "Route",
+    "newdir": true,
+    "namespaceURI": "cloudcoldchain"
+  }
+}

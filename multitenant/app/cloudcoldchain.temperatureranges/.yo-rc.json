@@ -1,0 +1,10 @@
+{
+  "generator-easy-ui5-extra": {
+    "namespace": "cloudcoldchain",
+    "appname": "temperatureranges",
+    "entitynameplural": "TemperatureRanges",
+    "entitynamesingolar": "TemperatureRange",
+    "newdir": true,
+    "namespaceURI": "cloudcoldchain"
+  }
+}

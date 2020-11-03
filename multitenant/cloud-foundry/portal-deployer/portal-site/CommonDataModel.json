@@ -54,6 +54,51 @@
               "id": "controlpointscategories",
               "appId": "cloudcoldchain.controlpointscategories",
               "vizId": "ControlPointsCategories-manage"
+            },
+            {
+              "id": "areacategories",
+              "appId": "cloudcoldchain.areacategories",
+              "vizId": "AreaCategories-manage"
+            },
+            {
+              "id": "locations",
+              "appId": "cloudcoldchain.locations",
+              "vizId": "Locations-manage"
+            },
+            {
+              "id": "areas",
+              "appId": "cloudcoldchain.areas",
+              "vizId": "Areas-manage"
+            },
+            {
+              "id": "temperatureranges",
+              "appId": "cloudcoldchain.temperatureranges",
+              "vizId": "TemperatureRanges-manage"
+            },
+            {
+              "id": "products",
+              "appId": ".products",
+              "vizId": "Products-manage"
+            },
+            {
+              "id": "products",
+              "appId": "cloudcoldchain.products",
+              "vizId": "Products-manage"
+            },
+            {
+              "id": "lots",
+              "appId": "cloudcoldchain.lots",
+              "vizId": "Lots-manage"
+            },
+            {
+              "id": "routes",
+              "appId": "cloudcoldchain.routes",
+              "vizId": "Routes-manage"
+            },
+            {
+              "id": "handlingunits",
+              "appId": "cloudcoldchain.handlingunits",
+              "vizId": "HandlingUnits-manage"
             }
           ]
         }
