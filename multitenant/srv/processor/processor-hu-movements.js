@@ -12,11 +12,11 @@ class ProcessorHuMovements {
 
         console.log(redisCredentials.uri);
 
-        this.checkStatus = this.checkStatus.bind(this);
+        this.checkStatus = this.tick.bind(this);
         this.redisClient = redis.createClient(redisCredentials.uri);
     }
 
-    async checkStatus() {
+    async tick() {
         let obj = await this.BRPOPLPUSH(
             "HandlingUnitsRawMovements",
             "HandlingUnitsRawMovements-RUNNING"
@@ -66,12 +66,12 @@ class ProcessorHuMovements {
         }
         this.LREM("HandlingUnitsRawMovements-RUNNING", JSON.stringify(obj));
 
-        setImmediate(this.checkStatus);
+        setImmediate(this.tick);
     }
 
     async start() {
         console.log(`Avvio Handling Unit Movements Processor...`);
-        setImmediate(this.checkStatus);
+        setImmediate(this.tick);
     }
 
     LREM(queue, obj) {
