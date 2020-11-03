@@ -1,23 +1,30 @@
-const inputValidation = require("@sap/cds-runtime/lib/common/generic/inputValidation");
+const inputValidation = require("@sap/cds-runtime/lib/common/generic/input");
 const redis = require("redis");
+const xsenv = require("@sap/xsenv");
 
 class ProcessorHuMovements {
     constructor(logger) {
         this.logger = logger;
 
+        xsenv.loadEnv();
+
+        const redisCredentials = xsenv.serviceCredentials({ tag: "cache" });
+
+        console.log(redisCredentials.uri);
+
         this.checkStatus = this.checkStatus.bind(this);
-        this.redisClient = redis.createClient();
+        this.redisClient = redis.createClient(redisCredentials.uri);
     }
 
     async checkStatus() {
+        let obj = await this.readBLPOP("HandlingUnitsRawMovements", 0);
+
         const technicalUser = new cds.User({
-            id: "sbarzaghi@alteanet.it",
-            tenant: "a1d03e7f-53e4-414b-aca0-c4d44157f2a0",
+            id: obj.user,
+            tenant: obj.tenant,
         });
 
         this.logger.setTenantId(technicalUser.tenant);
-
-        let obj = await this.readBLPOP("HandlingUnitsRawMovements", 0);
 
         const request = new cds.Request({ user: technicalUser });
 
@@ -51,14 +58,15 @@ class ProcessorHuMovements {
         } catch (error) {
             console.log("error console: ", error);
             this.logger.error("Errore inserimento record", error.toString());
+            await tx.rollback();
         }
 
-        setTimeout(this.checkStatus, 1000);
+        setImmediate(this.checkStatus);
     }
 
     async start() {
         console.log(`Avvio Handling Unit Movements Processor...`);
-        setTimeout(this.checkStatus, 1000);
+        setImmediate(this.checkStatus);
     }
 
     readBLPOP(queue, _index) {

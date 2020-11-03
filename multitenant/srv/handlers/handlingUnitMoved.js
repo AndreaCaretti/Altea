@@ -1,5 +1,6 @@
 const ZApplicationService = require("./ZApplicationService");
 const redis = require("redis");
+const xsenv = require("@sap/xsenv");
 
 class HandlingUnitMoved extends ZApplicationService {
     async init() {
@@ -7,7 +8,12 @@ class HandlingUnitMoved extends ZApplicationService {
 
         console.log("Init HandlingUnitMoved.js");
 
-        const redisClient = redis.createClient();
+        xsenv.loadEnv();
+
+        var redisCredentials = xsenv.serviceCredentials({ tag: "cache" });
+
+        console.log("REDIS URL: " + redisCredentials.uri);
+        const redisClient = redis.createClient(redisCredentials.uri);
 
         this.after("CREATE", "HandlingUnitsRawMovements", (data, req) => {
             const record = {
@@ -20,26 +26,18 @@ class HandlingUnitMoved extends ZApplicationService {
                 tenant: req.user.tenant,
             };
 
-            redisClient.rpush("HandlingUnitsRawMovements", JSON.stringify(record));
-
-            console.log("Inserito record:", record);
-
-            // Emettendo un throw viene eseguito un rollback sul db
-            // throw "Errore inserimento record nella lista Redis, rollback";
-        });
-
-        this.before(["CREATE", "UPDATE"], "Books", (req) => {
-            this.onCommitFailed(req, this.onCommitError);
+            if (redisClient.rpush("HandlingUnitsRawMovements", JSON.stringify(record))) {
+                console.log("Inserito record in REDIS:", record);
+            } else {
+                console.log("Errore inserimento record in REDIS:", record);
+                throw "Errore inserimento record nella lista Redis, rollback";
+            }
         });
     }
 
     onValidationError(e, _req) {
         console.log("🤢 Validation error\n", e);
         // console.log("🤢 Validation error - ", req.errors ? req.errors : e);
-    }
-
-    onCommitError(e, _req) {
-        console.log("🤢 Database COMMIT error\n", e);
     }
 }
 
