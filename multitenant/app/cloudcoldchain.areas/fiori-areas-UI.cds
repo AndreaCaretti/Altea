@@ -53,8 +53,8 @@ annotate Services.Areas with @(UI : {
                                    // {Value: name}
                                   ]},
     FieldGroup #General : {Data : [
-    {Value : category.name},
-    {Value : location.name},
+    {Value : category_ID},
+    {Value : location_ID},
     {Value : ID_DeviceIoT}
     ]},
     FieldGroup #Admin   : {Data : [
