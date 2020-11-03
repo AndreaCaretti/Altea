@@ -208,10 +208,10 @@ npm install @sap/xssec
 # Documentazione
 
 # Ingestion dati movimentazione handling unit
-- gate rfid invia enterprise messaging in mqtt nel suo topic
+- gate rfid invia enterprise messaging in mqtt nel topic specifico del cliente
 - enterprise messaging sottoscrive il topic e aggiunge ad una coda
-- la coda è collegato al webhook del cap con autenticazione OAuth2, viene richiesto il token al subaccount del cliente, il token staccato determina il tenant del client
+- la coda è collegata ad un webhook che punto al servizio odata del cap con autenticazione OAuth2, viene richiesto il token al subaccount del cliente, il token staccato determina il tenant del client
 - il servizio cap inserisce il record secco nella tabella senza controlli HandlingUnitMovementsRaw
-- il servizio cap inserisce nella lista Redis il guid del movimento, l'utente e il tenant del cliente
+- il servizio cap inserisce nella lista Redis i dati del movimento, l'utente e il tenant del cliente
 - process in background che attende messaggi sulla coda e crea i record dei movimenti nella tabella HandlingUnitMovements
 - COMMENTO
