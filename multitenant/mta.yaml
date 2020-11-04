@@ -147,6 +147,93 @@ modules:
               - npm run build
           supported-platforms: []
           build-result: dist
+    #
+    - name: ui_areacategories
+      type: html5
+      path: app/cloudcoldchain.areacategories
+      build-parameters:
+          builder: custom
+          commands:
+              - npm run build
+          supported-platforms: []
+          build-result: dist
+    #
+    - name: ui_areas
+      type: html5
+      path: app/cloudcoldchain.areas
+      build-parameters:
+          builder: custom
+          commands:
+              - npm run build
+          supported-platforms: []
+          build-result:
+              dist
+              #
+    - name: ui_locations
+      type: html5
+      path: app/cloudcoldchain.locations
+      build-parameters:
+          builder: custom
+          commands:
+              - npm run build
+          supported-platforms: []
+          build-result:
+              dist
+
+              #
+    - name: ui_products
+      type: html5
+      path: app/cloudcoldchain.products
+      build-parameters:
+          builder: custom
+          commands:
+              - npm run build
+          supported-platforms: []
+          build-result:
+              dist
+              #
+    - name: ui_temperatureranges
+      type: html5
+      path: app/cloudcoldchain.temperatureranges
+      build-parameters:
+          builder: custom
+          commands:
+              - npm run build
+          supported-platforms: []
+          build-result:
+              dist
+
+              #
+    - name: ui_lots
+      type: html5
+      path: app/cloudcoldchain.lots
+      build-parameters:
+          builder: custom
+          commands:
+              - npm run build
+          supported-platforms: []
+          build-result: dist
+    #
+    - name: ui_routes
+      type: html5
+      path: app/cloudcoldchain.routes
+      build-parameters:
+          builder: custom
+          commands:
+              - npm run build
+          supported-platforms: []
+          build-result: dist
+    #
+    - name: ui_handlingunits
+      type: html5
+      path: app/cloudcoldchain.handlingunits
+      build-parameters:
+          builder: custom
+          commands:
+              - npm run build
+          supported-platforms: []
+          build-result: dist
+    #
     #   ╔═══════════════════════════════════════╗   #
     #   ║            HTML5 DEPLOYER             ║   #
     #   ╚═══════════════════════════════════════╝   #
@@ -186,6 +273,47 @@ modules:
                 artifacts:
                     - ./uimodule*.zip
                 target-path: resources/
+                #
+              - name: ui_areacategories
+                artifacts:
+                    - ./uimodule*.zip
+                target-path: resources/
+                #
+              - name: ui_areas
+                artifacts:
+                    - ./uimodule*.zip
+                target-path: resources/
+                #
+              - name: ui_locations
+                artifacts:
+                    - ./uimodule*.zip
+                target-path: resources/
+              #
+              - name: ui_products
+                artifacts:
+                    - ./uimodule*.zip
+                target-path: resources/
+              #
+              - name: ui_temperatureranges
+                artifacts:
+                    - ./uimodule*.zip
+                target-path: resources/
+              #
+              - name: ui_lots
+                artifacts:
+                    - ./uimodule*.zip
+                target-path: resources/
+              #
+              - name: ui_routes
+                artifacts:
+                    - ./uimodule*.zip
+                target-path: resources/
+              #
+              - name: ui_handlingunits
+                artifacts:
+                    - ./uimodule*.zip
+                target-path: resources/
+
     #
     #   ╔═══════════════════════════════════════╗   #
     #   ║            PORTAL DEPLOYER            ║   #

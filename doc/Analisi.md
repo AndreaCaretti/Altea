@@ -303,32 +303,32 @@ GTIN:
 
 * max_tor è il numero di minuti massimo fuori dal range di temperatura
 
-## Tabella Percorsi
+## Tabella Percorsi (ROUTES)
 
 Records solo nel DB del produttore
 
-| _ID_   | prodotto      | passo | controlPoint     | direzione | destinationArea (Locations) |
-| ------ | ------------- | ----- | ---------------- | --------- | --------------------------- |
-| *GUID* | 1234567890123 | 1     | Etichettatrice A | F         | Produzione Plant A          |
-| *GUID* | 1234567890123 | 2     | Stoccaggio       | F         | Cold Room                   |
-| *GUID* | 1234567890123 | 3     | Stoccaggio       | B         | Uscita merci                |
-| *GUID* | 1234567890123 | 4     | Uscita A         | F         | Piazzale esterno            |
-| *GUID* | 1234567890123 | 5     | Trasportatore    | F         | Truck                       |
-| *GUID* | 1234567890123 | 6     | Trasportatore    | B         | Piazzale esterno            |
-| *GUID* | 1234567890123 | 7     | Depositario      | F         | Depositario                 |
-| *GUID* | 1234567890123 | 8     | Depositario      | B         | Depositario                 |
+| _ID_   | prodotto (Products) | step | controlPoint (controlPoints) | direction | destinationArea (Locations) |
+| ------ | ------------------- | ---- | ---------------------------- | --------- | --------------------------- |
+| *GUID* | 1234567890123       | 1    | Etichettatrice A             | F         | Produzione Plant A          |
+| *GUID* | 1234567890123       | 2    | Stoccaggio                   | F         | Cold Room                   |
+| *GUID* | 1234567890123       | 3    | Stoccaggio                   | B         | Uscita merci                |
+| *GUID* | 1234567890123       | 4    | Uscita A                     | F         | Piazzale esterno            |
+| *GUID* | 1234567890123       | 5    | Trasportatore                | F         | Truck                       |
+| *GUID* | 1234567890123       | 6    | Trasportatore                | B         | Piazzale esterno            |
+| *GUID* | 1234567890123       | 7    | Depositario                  | F         | Depositario                 |
+| *GUID* | 1234567890123       | 8    | Depositario                  | B         | Depositario                 |
 
 ## Tabella Lots
 
-| _ID_   | _name_  (20) | productionDate (Date) | expirationDate (Date) | gtin          |
-| ------ | ------------ | --------------------- | --------------------- | ------------- |
-| *GUID* | LOT-XYZ      | 06.07.2020            | 06.07.2022            | 1234567890123 |
+| _ID_   | _name_  (20) | productionDate (Date) | expirationDate (Date) | Products (association) |
+| ------ | ------------ | --------------------- | --------------------- | ---------------------- |
+| *GUID* | LOT-XYZ      | 06.07.2020            | 06.07.2022            | prod567890123          |
 
 ## Tabella HandlingUnits
 
-| _sscc_ (SSCC)      | lot     | lastKnownArea    | inAreaBusinessTime (Timestamp) | jsonSummary (LargeString)             | blockchainHash (100)                                 |
-| ------------------ | ------- | ---------------- | ------------------------------ | ------------------------------------- | ---------------------------------------------------- |
-| 123456789012345678 | LOT-XYZ | Uscita magazzino | 2020-10-14T09:01:33.763Z       | { HandlingUnit: "HandlingUnitA", etc} | adb24ba2f2ef33d73d79e60b9d47f7fb97c69013eb6c8f37c... |
+| _sscc_ (SSCC)      | lot     | lastKnownArea(Locations) | inAreaBusinessTime (Timestamp) | jsonSummary (LargeString)             | blockchainHash (100)                                 |
+| ------------------ | ------- | ------------------------ | ------------------------------ | ------------------------------------- | ---------------------------------------------------- |
+| 123456789012345678 | LOT-XYZ | Uscita magazzino         | 2020-10-14T09:01:33.763Z       | { HandlingUnit: "HandlingUnitA", etc} | adb24ba2f2ef33d73d79e60b9d47f7fb97c69013eb6c8f37c... |
 
 * il campo lastKnowArea indica l'ultima posizione conosciuta dell'SSCC
 * il campo inAreaBusinessTime indica il momento in cui è stato rilevato l'ultimo spostamento
@@ -426,10 +426,10 @@ I dati di temperatura sono salvati nel Data Lake IoT, la tabella viene riportata
 
 Tabelle di alert applicativi rilevati dalla piattaforma da segnalare / segnalati agli utenti:
 
-| _ID_   | _alertBusinessTime_      | sender | messaggio                                  | level |
-| ------ | ------------------------ | ------ | ------------------------------------------ | ----- |
-| _GUID_ | 2020-10-14T09:01:33.763Z |        | RFID XXX già esistente                     | Grave |
-| _GUID_ | 2020-10-14T09:01:33.763Z |        | Temperatura cella fuori range da 20 minuti | Alert |
+| _ID_   | _alertBusinessTime_      | sender(?) | message (String)                           | level (alertLevel) |
+| ------ | ------------------------ | --------- | ------------------------------------------ | ------------------ |
+| _GUID_ | 2020-10-14T09:01:33.763Z |           | RFID XXX già esistente                     | Grave              |
+| _GUID_ | 2020-10-14T09:01:33.763Z |           | Temperatura cella fuori range da 20 minuti | Alert              |
 
 # Tabella Audits
 

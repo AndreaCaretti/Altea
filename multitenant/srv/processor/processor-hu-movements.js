@@ -12,12 +12,15 @@ class ProcessorHuMovements {
 
         console.log(redisCredentials.uri);
 
-        this.checkStatus = this.checkStatus.bind(this);
+        this.tick = this.tick.bind(this);
         this.redisClient = redis.createClient(redisCredentials.uri);
     }
 
-    async checkStatus() {
-        let obj = await this.readBLPOP("HandlingUnitsRawMovements", 0);
+    async tick() {
+        let obj = await this.BRPOPLPUSH(
+            "HandlingUnitsRawMovements",
+            "HandlingUnitsRawMovements-RUNNING"
+        );
 
         const technicalUser = new cds.User({
             id: obj.user,
@@ -59,21 +62,32 @@ class ProcessorHuMovements {
             console.log("error console: ", error);
             this.logger.error("Errore inserimento record", error.toString());
             await tx.rollback();
+            await this.redisClient.rpush("HandlingUnitsRawMovements-ERRORS", JSON.stringify(obj));
         }
+        this.LREM("HandlingUnitsRawMovements-RUNNING", JSON.stringify(obj));
 
-        setImmediate(this.checkStatus);
+        setImmediate(this.tick);
     }
 
     async start() {
         console.log(`Avvio Handling Unit Movements Processor...`);
-        setImmediate(this.checkStatus);
+        setImmediate(this.tick);
     }
 
-    readBLPOP(queue, _index) {
+    LREM(queue, obj) {
         return new Promise((resolve, _reject) => {
-            this.redisClient.BLPOP(queue, 0, (erro, element) => {
-                const obj = JSON.parse(element[1]); //element[0] è il nome della coda
-                console.log("record letto(BLPOP):", obj);
+            this.redisClient.LREM(queue, 1, obj, (_vuoto, number) => {
+                console.log("record tolti(LREM):", number);
+                resolve(obj);
+            });
+        });
+    }
+
+    BRPOPLPUSH(fromQueue, toQueue) {
+        return new Promise((resolve, _reject) => {
+            this.redisClient.BRPOPLPUSH(fromQueue, toQueue, 0, (erro, element) => {
+                const obj = JSON.parse(element); //element[0] è il nome della coda
+                console.log("record letto(BRPOPLPUSH) e spostato nella coda:", obj);
                 resolve(obj);
             });
         });

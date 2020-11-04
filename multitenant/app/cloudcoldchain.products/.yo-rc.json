@@ -1,0 +1,10 @@
+{
+  "generator-easy-ui5-extra": {
+    "namespace": "cloudcoldchain",
+    "appname": "products",
+    "entitynameplural": "Products",
+    "entitynamesingolar": "Product",
+    "newdir": true,
+    "namespaceURI": "cloudcoldchain"
+  }
+}

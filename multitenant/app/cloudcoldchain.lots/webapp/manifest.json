@@ -1,0 +1,135 @@
+{
+	"_version": "1.12.0",
+	"sap.app": {
+		"id": "cloudcoldchain.lots",
+		"type": "application",
+		"i18n": "i18n/i18n.properties",
+		"applicationVersion": {
+			"version": "1.0.0"
+		},
+		"dataSources": {
+			"CAP_Services": {
+				"uri": "/srv_api/services/",
+				"type": "OData",
+				"settings": {
+					"odataVersion": "4.0"
+				}
+			}
+		},
+		"title": "Manage Lots",
+		"description": "Lots Maintenance",
+		"crossNavigation": {
+			"inbounds": {
+				"intent1": {
+					"signature": {
+						"parameters": {},
+						"additionalParameters": "allowed"
+					},
+					"semanticObject": "Lots",
+					"action": "manage",
+					"title": "Manage Lots",
+					"description": "Lots Maintenance",
+					"icon": "sap-icon://add"
+				}
+			}
+		}
+	},
+	"sap.ui": {
+		"technology": "UI5",
+		"fullWidth": false,
+		"icons": {
+			"icon": "",
+			"favIcon": "",
+			"phone": "",
+			"phone@2": "",
+			"tablet": "",
+			"tablet@2": ""
+		},
+		"deviceTypes": {
+			"desktop": true,
+			"tablet": true,
+			"phone": true
+		}
+	},
+	"sap.fiori": {
+		"registrationIds": [],
+		"archeType": "transactional"
+	},
+	"sap.ui5": {
+		"dependencies": {
+			"minUI5Version": "1.78.0",
+			"libs": {
+				"sap.fe.templates": {}
+			}
+		},
+		"contentDensities": {
+			"compact": true,
+			"cozy": true
+		},
+		"models": {
+			"i18n": {
+				"type": "sap.ui.model.resource.ResourceModel",
+				"settings": {
+					"bundleName": "cloudcoldchain.lots.i18n.i18n"
+				}
+			},
+			"": {
+				"dataSource": "CAP_Services",
+				"settings": {
+					"synchronizationMode": "None",
+					"operationMode": "Server",
+					"autoExpandSelect": true,
+					"earlyRequests": true,
+					"groupProperties": {
+						"default": {
+							"submit": "Auto"
+						}
+					}
+				}
+			}
+		},
+		"routing": {
+			"routes": [
+				{
+					"pattern": ":?query:",
+					"name": "LotsList",
+					"target": "LotsList"
+				},
+				{
+					"pattern": "Lots({key}):?query:",
+					"name": "LotDetails",
+					"target": "LotDetails"
+				}
+			],
+			"targets": {
+				"LotsList": {
+					"type": "Component",
+					"id": "LotsList",
+					"name": "sap.fe.templates.ListReport",
+					"options": {
+						"settings": {
+							"entitySet": "Lots",
+							"navigation": {
+								"Lots": {
+									"detail": {
+										"route": "LotDetails"
+									}
+								}
+							}
+						}
+					}
+				},
+				"LotDetails": {
+					"type": "Component",
+					"id": "LotDetails",
+					"name": "sap.fe.templates.ObjectPage",
+					"options": {
+						"settings": {
+							"entitySet": "Lots"
+						}
+					}
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,10 @@
+{
+  "generator-easy-ui5-extra": {
+    "namespace": "cloudcoldchain",
+    "appname": "lots",
+    "entitynameplural": "Lots",
+    "entitynamesingolar": "Lot",
+    "newdir": true,
+    "namespaceURI": "cloudcoldchain"
+  }
+}
