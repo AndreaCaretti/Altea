@@ -12,7 +12,7 @@ class ProcessorHuMovements {
 
         console.log(redisCredentials.uri);
 
-        this.checkStatus = this.tick.bind(this);
+        this.tick = this.tick.bind(this);
         this.redisClient = redis.createClient(redisCredentials.uri);
     }
 
