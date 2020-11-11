@@ -30,15 +30,14 @@ class ProcessorHuMovements {
 
         const request = new cds.Request({ user: technicalUser });
 
-        const Books = cds.entities.Books;
+        const HandlingUnitsMovements = cds.entities.HandlingUnitsMovements;
 
         const tx = cds.transaction(request);
 
         try {
             inputValidation.call(tx, request); //serve per far partire la validazione sul campo, non di integritá del db
 
-            console.log("Prima di insert");
-            const s = await tx.create(Books).entries({
+            const s = await tx.create(HandlingUnitsMovements).entries({
                 CP_ID: movement.CP_ID,
                 TE: movement.TE,
                 TS: movement.TS,
@@ -53,7 +52,7 @@ class ProcessorHuMovements {
             }
 
             console.log("prima di commit");
-            // this.logger.logMessage("debug", "Data %j", h);
+
             const sCommit = await tx.commit();
 
             console.log("dopo commit", sCommit);
