@@ -1,24 +1,38 @@
 const ProcessorHuMovements = require("./processor/processor-hu-movements");
+const Queues = require("./queues/internal/queues");
 
 class CloudColdChain {
+    /*
+        Prepara i componenti senza avviarli
+    */
     async bootstrap(cds, app) {
-        // CDS
-        this.cds = cds;
-
         // Express app
         this.app = app;
+
+        // CDS
+        this.cds = cds;
 
         // Logger
         this.logger = this.initLogger(this.app);
 
-        // Multitenant Provisioning
-        this.initMultitenantProvisioning(this.logger);
+        // Queues
+        this.queues = new Queues(this.logger);
 
         // Handling Units Movements Processor
         this.processorHuMovements = new ProcessorHuMovements(this.logger);
+
+        // Multitenant Provisioning
+        this.initMultitenantProvisioning(this.logger);
     }
 
+    /*
+        Avvia i componenti
+    */
     async start() {
+        // Queues
+        this.queues.start();
+
+        // Handling units movements processor
         this.processorHuMovements.start();
     }
 

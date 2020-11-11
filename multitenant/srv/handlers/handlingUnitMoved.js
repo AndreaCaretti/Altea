@@ -1,6 +1,6 @@
 const ZApplicationService = require("./ZApplicationService");
-const redis = require("redis");
-const xsenv = require("@sap/xsenv");
+
+const QueueHandlingUnitsRawMovements = require("../queues/queue-hu-raw-movements");
 
 class HandlingUnitMoved extends ZApplicationService {
     async init() {
@@ -8,12 +8,7 @@ class HandlingUnitMoved extends ZApplicationService {
 
         console.log("Init HandlingUnitMoved.js");
 
-        xsenv.loadEnv();
-
-        var redisCredentials = xsenv.serviceCredentials({ tag: "cache" });
-
-        console.log("REDIS URL: " + redisCredentials.uri);
-        const redisClient = redis.createClient(redisCredentials.uri);
+        const queue = new QueueHandlingUnitsRawMovements();
 
         this.after("CREATE", "HandlingUnitsRawMovements", (data, req) => {
             const record = {
@@ -26,8 +21,9 @@ class HandlingUnitMoved extends ZApplicationService {
                 tenant: req.user.tenant,
             };
 
-            if (redisClient.rpush("HandlingUnitsRawMovements", JSON.stringify(record))) {
-                console.log("Inserito record in REDIS:", record);
+            let r = queue.pushToWaiting(record);
+            if (r) {
+                console.log("Inserito record in REDIS:", record, r);
             } else {
                 console.log("Errore inserimento record in REDIS:", record);
                 throw "Errore inserimento record nella lista Redis, rollback";
@@ -37,7 +33,6 @@ class HandlingUnitMoved extends ZApplicationService {
 
     onValidationError(e, _req) {
         console.log("🤢 Validation error\n", e);
-        // console.log("🤢 Validation error - ", req.errors ? req.errors : e);
     }
 }
 
