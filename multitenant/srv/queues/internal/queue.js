@@ -3,7 +3,8 @@ const Queues = require("./queues");
 class Queue {
     constructor() {
         this.queueName = "QUEUE_NAME_NOT_DEFINED";
-        this.queues = Queues.getInstance();
+        this.queues = new Queues();
+        this.queues.start();
     }
 
     async pushToWaiting(element) {

@@ -26,13 +26,12 @@ class Queues {
 
     push(queueName, element) {
         console.log("Push", element);
-        // return new Promise((resolve, _reject) => {
-        //     this.redisClient.RPUSH(queueName, JSON.stringify(element), (_err, number) => {
-        //         console.log("Resolve", number);
-        //         resolve(number);
-        //     });
-        // });
-        return this.redisClient.RPUSH(queueName, JSON.stringify(element));
+        return new Promise((resolve, _reject) => {
+            this.redisClient.RPUSH(queueName, JSON.stringify(element), (_err, number) => {
+                console.log("Resolve", number);
+                resolve(number);
+            });
+        });
     }
 
     remove(queueName, element) {

@@ -10,7 +10,7 @@ class HandlingUnitMoved extends ZApplicationService {
 
         const queue = new QueueHandlingUnitsRawMovements();
 
-        this.after("CREATE", "HandlingUnitsRawMovements", (data, req) => {
+        this.after("CREATE", "HandlingUnitsRawMovements", async (data, req) => {
             const record = {
                 CP_ID: data.CP_ID,
                 TE: data.TE,
@@ -21,9 +21,8 @@ class HandlingUnitMoved extends ZApplicationService {
                 tenant: req.user.tenant,
             };
 
-            let r = queue.pushToWaiting(record);
-            if (r) {
-                console.log("Inserito record in REDIS:", record, r);
+            if ((await queue.pushToWaiting(record)) > 0) {
+                console.log("Inserito record in REDIS:", record);
             } else {
                 console.log("Errore inserimento record in REDIS:", record);
                 throw "Errore inserimento record nella lista Redis, rollback";
