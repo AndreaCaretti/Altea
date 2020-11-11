@@ -9,9 +9,9 @@ Content-Type: application/json
 
 {
     "CP_ID": "90abe75c-e2c6-4e5f-a12f-fb81aa50d011",
-    "TE": "1904-10-14T09:01:33.763Z",
+    "TE": "1905-10-14T09:01:33.763Z",
     "TS": "1905-10-14T09:01:34.763Z",
-    "SSCC_ID": "1234",
+    "SSCC_ID": "TEST1234",
     "DIR": "B"
 }
 

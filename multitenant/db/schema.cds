@@ -1,6 +1,9 @@
 namespace cloudcoldchain;
 
-using {cloudcoldchain.SSCC} from './global_types';
+using {
+    cloudcoldchain.SSCC,
+    cloudcoldchain.RouteStepNr
+} from './global_types';
 
 using {
     Currency,
@@ -156,7 +159,7 @@ define entity Routes : cuid, managed {
 
 define entity RouteSteps : cuid {
     parent          : Association to Routes;
-    stepNr          : Integer;
+    stepNr          : RouteStepNr;
     @Common : {
         Text            : controlPoint.name,
         TextArrangement : #TextOnly
@@ -206,6 +209,7 @@ define entity HandlingUnitsRawMovements : cuid, managed {
 
 define entity ResidenceTime : cuid, managed {
     SSCC               : cloudcoldchain.SSCC;
+    stepNr             : RouteStepNr;
     area               : Association to one Areas;
     inBusinessTime     : Timestamp;
     outBusinessTime    : Timestamp;
@@ -213,7 +217,7 @@ define entity ResidenceTime : cuid, managed {
     tor                : Integer;
     tmin               : Decimal;
     tmax               : Decimal;
-    elaborationTimeTor : Timestamp;
+    torElaborationTime : Timestamp;
 }
 
 

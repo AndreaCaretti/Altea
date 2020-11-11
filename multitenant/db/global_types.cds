@@ -16,3 +16,5 @@ define type alertLevel : String(1)@title : 'Alert Level'  @assert.range enum {
     Medium;
     Low;
 };
+
+define type RouteStepNr : Integer @title: 'Step Number';
