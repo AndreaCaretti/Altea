@@ -1,5 +1,4 @@
 const ProcessorHuMovements = require("./processor/processor-hu-movements");
-const Queues = require("./queues/internal/queues");
 
 class CloudColdChain {
     /*
@@ -15,9 +14,6 @@ class CloudColdChain {
         // Logger
         this.logger = this.initLogger(this.app);
 
-        // Queues
-        this.queues = new Queues(this.logger);
-
         // Handling Units Movements Processor
         this.processorHuMovements = new ProcessorHuMovements(this.logger);
 
@@ -29,9 +25,6 @@ class CloudColdChain {
         Avvia i componenti
     */
     async start() {
-        // Queues
-        this.queues.start();
-
         // Handling units movements processor
         this.processorHuMovements.start();
     }

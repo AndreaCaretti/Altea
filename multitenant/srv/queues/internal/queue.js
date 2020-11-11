@@ -1,9 +1,12 @@
 const Queues = require("./queues");
 
 class Queue {
-    constructor() {
-        this.queueName = "QUEUE_NAME_NOT_DEFINED";
-        this.queues = new Queues();
+    constructor(queueName) {
+        this.queueName = queueName;
+        this.queues = new Queues(this.queueName);
+    }
+
+    start() {
         this.queues.start();
     }
 

@@ -64,6 +64,7 @@ class ProcessorHuMovements {
 
     async start() {
         console.log(`Avvio Handling Unit Movements Processor...`);
+        this.queue.start();
         setImmediate(this.tick);
     }
 }
