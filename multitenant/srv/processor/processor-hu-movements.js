@@ -12,9 +12,15 @@ class ProcessorHuMovements {
     }
 
     async tick() {
-        let movement = await this.queue.getAndSetToProcessing();
+        let movement;
+        try {
+            movement = await this.queue.getAndSetToProcessing();
+        } catch (error) {
+            console.log("Connessione redis caduta, mi rimetto in attesa");
+            setImmediate(this.tick);
+            return;
+        }
 
-        console.log("Record from queue" + this.queue.queueName, movement);
         const technicalUser = new cds.User({
             id: movement.user,
             tenant: movement.tenant,
