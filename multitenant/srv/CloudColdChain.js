@@ -1,4 +1,7 @@
-const ProcessorHuMovements = require("./processor/processor-hu-movements");
+const Logger = require("cf-nodejs-logging-support");
+
+const ProcessorHuMovements = require("./processors/processor-hu-movements");
+const ProcessorInsertResidenceTime = require("./processors/processor-insert-residence-time");
 
 class CloudColdChain {
     /*
@@ -17,6 +20,9 @@ class CloudColdChain {
         // Handling Units Movements Processor
         this.processorHuMovements = new ProcessorHuMovements(this.logger);
 
+        // Handling Units Movements Processor
+        this.processorInsertResidenceTime = new ProcessorInsertResidenceTime(this.logger);
+
         // Multitenant Provisioning
         this.initMultitenantProvisioning(this.logger);
     }
@@ -27,10 +33,13 @@ class CloudColdChain {
     async start() {
         // Handling units movements processor
         this.processorHuMovements.start();
+
+        // Insert Residence Time processor
+        this.processorInsertResidenceTime.start();
     }
 
+    // eslint-disable-next-line class-methods-use-this
     initLogger(app) {
-        const Logger = require("cf-nodejs-logging-support");
         const logger = Logger.createLogger();
 
         logger.setLoggingLevel("debug");
@@ -56,11 +65,11 @@ class CloudColdChain {
         provisioning.impl(this.provisioning);
     }
 
-    provisioning(service) {
+    static provisioning(service) {
         service.on("UPDATE", "tenant", async (req, next) => {
-            await next(); // first call default implementation which is doing the HDI container creation
-            let url = `https://${req.data.subscribedSubdomain}-dev-cap-template-approuter.cfapps.us10.hana.ondemand.com`;
-            console.log("[INFO ][ON_UPDATE_TENANT] " + "Application URL is " + url);
+            await next(); // default implementation which is doing the HDI container creation
+            const url = `https://${req.data.subscribedSubdomain}-dev-cap-template-approuter.cfapps.us10.hana.ondemand.com`;
+            console.log(`[INFO ][ON_UPDATE_TENANT] Application URL is ${url}`);
             return url;
         });
     }

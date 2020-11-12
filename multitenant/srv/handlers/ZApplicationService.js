@@ -6,6 +6,7 @@ class ZApplicationService extends cds.ApplicationService {
         req.on("failed", (e) => {
             this.onValidationError(e, req);
         });
+        // eslint-disable-next-line no-return-await
         return await super.dispatch(req, ...etc);
     }
 }
