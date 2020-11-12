@@ -10,12 +10,12 @@ class Queues {
 
         this.redisCredentials = xsenv.serviceCredentials({ tag: "cache" });
 
-        console.log("REDIS URL: " + this.redisCredentials.uri);
+        console.log(`REDIS URL: ${this.redisCredentials.uri}`);
     }
 
     start() {
-        let connectionOptions = {
-            retry_strategy: function (options) {
+        const connectionOptions = {
+            retry_strategy(options) {
                 // if (options.error && options.error.code === "ECONNREFUSED") {
                 //     // End reconnecting on a specific error and flush all commands with
                 //     // a individual error
@@ -37,18 +37,18 @@ class Queues {
                 const randomWait = Math.floor(Math.random() * 1000);
 
                 const wait = Math.min(options.attempt * 1000 + randomWait, maxMilliseconds);
-                console.log(" Reconnecting after " + wait + " milliseconds");
+                console.log(` Reconnecting after ${wait} milliseconds`);
                 return wait;
             },
         };
 
         this.redisClient = redis.createClient(this.redisCredentials.uri, connectionOptions);
 
-        this.redisClient.on("ready", () => console.log(this.queueName + " ready"));
-        this.redisClient.on("connect", () => console.log(this.queueName + " connect"));
-        this.redisClient.on("reconnecting", () => console.log(this.queueName + " reconnecting"));
-        this.redisClient.on("end", () => console.log(this.queueName + " end"));
-        this.redisClient.on("warning", () => console.log(this.queueName + " warning"));
+        this.redisClient.on("ready", () => console.log(`${this.queueName} ready`));
+        this.redisClient.on("connect", () => console.log(`${this.queueName} connect`));
+        this.redisClient.on("reconnecting", () => console.log(`${this.queueName} reconnecting`));
+        this.redisClient.on("end", () => console.log(`${this.queueName} end`));
+        this.redisClient.on("warning", () => console.log(`${this.queueName} warning`));
     }
 
     push(queueName, element) {
@@ -78,7 +78,7 @@ class Queues {
                     return;
                 }
                 console.log("Record from ", fromQueueName, element);
-                const obj = JSON.parse(element); //element[0] è il nome della coda
+                const obj = JSON.parse(element); // element[0] è il nome della coda
                 resolve(obj);
             });
         });
