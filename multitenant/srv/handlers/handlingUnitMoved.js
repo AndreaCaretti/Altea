@@ -24,7 +24,7 @@ class HandlingUnitMoved extends ZApplicationService {
 
             if (!(await queue.pushToWaiting(record))) {
                 console.log("Errore inserimento record in REDIS:", record);
-                throw Error("Errore inserimento record nella lista Redis, rollback");
+                throw new Error("Errore inserimento record nella lista Redis, rollback");
             }
         });
     }
