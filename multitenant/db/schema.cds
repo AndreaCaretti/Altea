@@ -58,7 +58,7 @@ define entity ControlPoints : cuid, managed {
 }
 
 
-@cds.autoexpose
+@cds.autoexpose 
 @cds.odata.valuelist
 @UI.Identification : [{Value : name}]
 define entity ControlPointsCategories : cuid, managed {
@@ -222,4 +222,11 @@ define entity Alerts : cuid, managed {
     sender            : Association to one Areas;
     message           : String;
     level             : cloudcoldchain.alertLevel;
+}
+
+
+define entity outOfRange : cuid, managed {
+    sender          : Association to one Areas;
+    startEventTS    : Timestamp;
+    endEventTS      : Timestamp;
 }

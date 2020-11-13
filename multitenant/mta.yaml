@@ -234,6 +234,16 @@ modules:
           supported-platforms: []
           build-result: dist
     #
+    - name: ui_outOfRange
+      type: html5
+      path: app/cloudcoldchain.outOfRange
+      build-parameters:
+          builder: custom
+          commands:
+              - npm run build
+          supported-platforms: []
+          build-result: dist
+    #
     #   ╔═══════════════════════════════════════╗   #
     #   ║            HTML5 DEPLOYER             ║   #
     #   ╚═══════════════════════════════════════╝   #
@@ -310,6 +320,11 @@ modules:
                 target-path: resources/
               #
               - name: ui_handlingunits
+                artifacts:
+                    - ./uimodule*.zip
+                target-path: resources/
+                #
+              - name: ui_outOfRange
                 artifacts:
                     - ./uimodule*.zip
                 target-path: resources/

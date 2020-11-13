@@ -15,3 +15,4 @@ using from './cloudcoldchain.products/fiori-products-UI';
 using from './cloudcoldchain.lots/fiori-lots-UI';
 using from './cloudcoldchain.routes/fiori-routes-UI';
 using from './cloudcoldchain.handlingunits/fiori-handlingunits-UI';
+using from './cloudcoldchain.outOfRange/fiori-outOfRange-UI';

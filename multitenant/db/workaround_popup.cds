@@ -47,3 +47,7 @@ annotate cloudcoldchain.Lots with {
 annotate cloudcoldchain.Routes with {
     ID @Core.Computed;
 }
+
+annotate cloudcoldchain.outOfRange with {
+    ID @Core.Computed;
+}

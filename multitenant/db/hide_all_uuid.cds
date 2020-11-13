@@ -47,3 +47,7 @@ annotate cloudcoldchain.Lots with {
 annotate cloudcoldchain.Routes with {
     ID @UI.Hidden;
 }
+
+annotate cloudcoldchain.outOfRange with {
+    ID @UI.Hidden;
+}
