@@ -825,6 +825,15 @@ Solo sottoscrizione alla cloud cold chain e portale, CF non attivato
 - se l'area è a temperatura controlla scrive nella coda waiting dei record che devono recuperare da IoT i dati della cella e calcolo del TOR
 - finito il check per il cliente viene impostata l'ora in cui verrà rifatto il controllo per il cliente
 
+## Ingestion dati temperatura IoT
+- cella invia i dati a scp iot via mqtt
+- rule `outOfRange` di tipo streaming rule cloud toggle che determina se la temperatura è in range
+- rule `inRange` di tipo streaming rule cloud toggle che determina se la temperatura è in range
+- in iot c'è configurato un segment che parte con la rule `outOfRange` e finisce con la rule `inRange`
+- il segment invia i dati in enterprise messaging
+- enterprise messaging invia i dati al webhook che punta al servizio cap
+- il servizio cap aggiorna la tabella `OutOfRange`
+
 # Appunti costi piattaforma
 
 # IoT
