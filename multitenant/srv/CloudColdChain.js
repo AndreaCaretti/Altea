@@ -1,5 +1,5 @@
 const Logger = require("cf-nodejs-logging-support");
-const bodyParser = require("body-parser");
+// const bodyParser = require("body-parser");
 
 const ProcessorHuMovements = require("./processors/processor-hu-movements");
 const ProcessorInsertResidenceTime = require("./processors/processor-insert-residence-time");
@@ -12,7 +12,7 @@ class CloudColdChain {
         // Express app
         this.app = app;
 
-        this.app.use(bodyParser.json());
+        // this.app.use(bodyParser.json());
 
         // CDS
         this.cds = cds;

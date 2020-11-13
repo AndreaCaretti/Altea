@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
 const inputValidation = require("@sap/cds-runtime/lib/common/generic/input");
 
 const QueueHandlingUnitsRawMovements = require("../queues/queue-hu-raw-movements");

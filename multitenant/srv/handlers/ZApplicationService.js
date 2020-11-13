@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
 const cds = require("@sap/cds");
 
 class ZApplicationService extends cds.ApplicationService {

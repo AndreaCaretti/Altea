@@ -231,7 +231,11 @@ define entity Alerts : cuid, managed {
 
 
 define entity outOfRange : cuid, managed {
-    sender       : Association to one Areas;
+    @title : 'ID Device IoT'
+    ID_DeviceIoT : String;
     startEventTS : Timestamp;
     endEventTS   : Timestamp;
+    status       : String;
+    segmentId    : String;
 }
+/*  */
