@@ -1,6 +1,9 @@
 namespace cloudcoldchain;
 
-using {cloudcoldchain.SSCC} from './global_types';
+using {
+    cloudcoldchain.SSCC,
+    cloudcoldchain.RouteStepNr
+} from './global_types';
 
 using {
     Currency,
@@ -58,7 +61,7 @@ define entity ControlPoints : cuid, managed {
 }
 
 
-@cds.autoexpose 
+@cds.autoexpose
 @cds.odata.valuelist
 @UI.Identification : [{Value : name}]
 define entity ControlPointsCategories : cuid, managed {
@@ -156,7 +159,7 @@ define entity Routes : cuid, managed {
 
 define entity RouteSteps : cuid {
     parent          : Association to Routes;
-    stepNr          : Integer;
+    stepNr          : RouteStepNr;
     @Common : {
         Text            : controlPoint.name,
         TextArrangement : #TextOnly
@@ -184,11 +187,12 @@ define entity HandlingUnits : managed {
 }
 
 define entity HandlingUnitsMovements : cuid, managed {
-    CP   : Association to one ControlPoints;
-    TE   : Timestamp;
-    TS   : Timestamp;
-    SSCC : Association to one HandlingUnits;
-    DIR  : cloudcoldchain.direction;
+    CP     : Association to one ControlPoints;
+    TE     : Timestamp;
+    TS     : Timestamp;
+    SSCC   : Association to one HandlingUnits;
+    DIR    : cloudcoldchain.direction;
+    STATUS : Boolean;
 }
 
 annotate Books with {
@@ -206,6 +210,7 @@ define entity HandlingUnitsRawMovements : cuid, managed {
 
 define entity ResidenceTime : cuid, managed {
     SSCC               : cloudcoldchain.SSCC;
+    stepNr             : RouteStepNr;
     area               : Association to one Areas;
     inBusinessTime     : Timestamp;
     outBusinessTime    : Timestamp;
@@ -213,7 +218,7 @@ define entity ResidenceTime : cuid, managed {
     tor                : Integer;
     tmin               : Decimal;
     tmax               : Decimal;
-    elaborationTimeTor : Timestamp;
+    torElaborationTime : Timestamp;
 }
 
 
@@ -226,7 +231,7 @@ define entity Alerts : cuid, managed {
 
 
 define entity outOfRange : cuid, managed {
-    sender          : Association to one Areas;
-    startEventTS    : Timestamp;
-    endEventTS      : Timestamp;
+    sender       : Association to one Areas;
+    startEventTS : Timestamp;
+    endEventTS   : Timestamp;
 }

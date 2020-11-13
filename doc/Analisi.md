@@ -88,6 +88,7 @@ Nel frattempo la piattaforma tiene monitorate le connessioni con i gateway edge.
 
 Per calcolare il TOR durante la permanenza in area a temperatura anomala vengono sommati tutti i minuti in cui l'handling unit era in una area con anomalia di temperatura:
 
+<<<<<<< HEAD
 | Caso |          |        | INIZIO ANOMALIA |          |     |        | FINE ANOMALIA |          |        |
 | :--: | :------: | :----: | :-------------: | :------: | :-: | :----: | :-----------: | :------: | :----: |
 |  1°  | INGRESSO | USCITA |                 |          |     |        |               |          |        |
@@ -103,6 +104,23 @@ Per calcolare il TOR durante la permanenza in area a temperatura anomala vengono
 | INGRESSO >= START USCITA <= END                 | 3            | INGRESSO        | USCITA        |
 | INGRESSO >= START INGRESSO <= END USCITA <= END | 4            | INGRESSO        | END           |
 | INGRESSO <= START USCITA => END                 | 6            | START           | END           |
+=======
+| Caso  |    T0    |   T1   | T2 INIZIO ANOMALIA |    T3    |  T4   |   T5   | T6 FINE ANOMALIA |    T7    |   T8   |
+| :---: | :------: | :----: | :----------------: | :------: | :---: | :----: | :--------------: | :------: | :----: |
+|  1°   | INGRESSO | USCITA |                    |          |       |        |                  |          |        |
+|  2°   | INGRESSO |        |                    |          |       | USCITA |                  |          |        |
+|  3°   |          |        |                    | INGRESSO |       | USCITA |                  |          |        |
+|  4°   |          |        |                    | INGRESSO |       |        |                  |          | USCITA |
+|  5°   |          |        |                    |          |       |        |                  | INGRESSO | USCITA |
+|  6°   | INGRESSO |        |                    |          |       |        |                  |          | USCITA |
+
+| Regola                                              | Caso coperto | Inizio TOR | Fine TOR |
+| --------------------------------------------------- | ------------ | ---------- | -------- |
+| INGRESSO <= T2 AND (USCITA => T2 OR USCITA <= T6)   | 2            | T2         | T5       |
+| INGRESSO >= T2 AND USCITA <= T6                     | 3            | T3         | T5       |
+| (INGRESSO >= T2 OR INGRESSO) <= T6 AND USCITA <= T6 | 4            | T3         | T6       |
+| INGRESSO <= T2 AND USCITA => T6                     | 6            | T2         | T6       |
+>>>>>>> origin/SBARZAGHI
 
 # Alternative:
 
@@ -293,11 +311,17 @@ Tabelle anagrafiche con dati specifici di un singolo cliente, i dati dei clienti
 
 ## Tabella Products
 
+<<<<<<< HEAD
 | _ID_   | _gtin_ (GTIN) | erpProductCode (50) | denomination (100) | max_tor | temperatureRange |
 | ------ | ------------- | ------------------- | ------------------ | ------- | ---------------- |
 | _GUID_ | 1234567890123 | PROD-001            | Sacca di sangue    | 200     | 12-18            |
 
 GTIN:
+=======
+| _ID_   | _gtin_ (GTIN) | erpProductCode (50) | denomination (100) | max_tor | temperatureRange | route  |
+| ------ | ------------- | ------------------- | ------------------ | ------- | ---------------- | ------ |
+| *GUID* | 1234567890123 | PROD-001            | Sacca di sangue    | 200     | 12-18            | *GUID* |
+>>>>>>> origin/SBARZAGHI
 
 -   01-09 Prefisso aziendale GS1
 -   10-12 Codide prodotto
@@ -305,10 +329,11 @@ GTIN:
 
 -   max_tor è il numero di minuti massimo fuori dal range di temperatura
 
-## Tabella Percorsi (ROUTES)
+## Tabella Routes
 
 Records solo nel DB del produttore
 
+<<<<<<< HEAD
 | _ID_   | prodotto (Products) | step | controlPoint (controlPoints) | direction | destinationArea (Locations) |
 | ------ | ------------------- | ---- | ---------------------------- | --------- | --------------------------- |
 | _GUID_ | 1234567890123       | 1    | Etichettatrice A             | F         | Produzione Plant A          |
@@ -319,6 +344,17 @@ Records solo nel DB del produttore
 | _GUID_ | 1234567890123       | 6    | Trasportatore                | B         | Piazzale esterno            |
 | _GUID_ | 1234567890123       | 7    | Depositario                  | F         | Depositario                 |
 | _GUID_ | 1234567890123       | 8    | Depositario                  | B         | Depositario                 |
+=======
+| _ID_   | step | controlPoint (controlPoints) | direction | destinationArea (Locations)  |
+| ------ | ---- | ---------------------------- | --------- | ---------------------------- |
+| *GUID* | 1    | Etichettatrice A             | F         | Produzione Plant A           |
+| *GUID* | 2    | Stoccaggio                   | F         | Cold Room                    |
+| *GUID* | 3    | Stoccaggio                   | B         | Uscita merci                 |
+| *GUID* | 4    | Uscita A                     | F         | Piazzale esterno             |
+| *GUID* | 5    | Trasportatore                | F         | Truck                        |
+| *GUID* | 6    | Trasportatore                | B         | Piazzale esterno depositario |
+| *GUID* | 7    | Depositario                  | F         | Depositario                  |
+>>>>>>> origin/SBARZAGHI
 
 ## Tabella Lots
 
@@ -390,6 +426,7 @@ Passaggi Handling Unit da Control Point
 
 Permanenza Handling Unit in area
 
+<<<<<<< HEAD
 | _ID_   | sscc (SSCC)        | area             | inBusinessTime           | outBusinessTime          | residenceTime (Integer) | tor | tmin | tmax | elaborationTimeTor (Timestamp) |
 | ------ | ------------------ | ---------------- | ------------------------ | ------------------------ | ----------------------- | --- | :--: | :--: | ------------------------------ |
 | _GUID_ | 123456789012345678 | Produzione       | 2020-10-14T09:01:33.763Z | 2020-10-14T09:01:33.763Z | 1600                    | 0   |      |      | 2020-10-14T09:01:33.763Z       |
@@ -406,6 +443,27 @@ Permanenza Handling Unit in area
 -   tmin
 -   tman
 -   elaborationTimeTor momento in cui sono stati recuperati di dati di temperatura e calcolo TOR
+=======
+| _ID_   | sscc (SSCC)        | step | area                         | inBusinessTime           | outBusinessTime          | residenceTime (Integer) | tor  | failureIn | failureOut | totalTor | tmin  | tmax  | torElaborationTime (Timestamp) |
+| ------ | ------------------ | ---- | ---------------------------- | ------------------------ | ------------------------ | ----------------------- | ---- | --------- | ---------- | -------- | :---: | :---: | ------------------------------ |
+| *GUID* | 123456789012345678 | 1    | Produzione Plant A           | 2020-10-14T09:01:33.763Z | 2020-10-14T09:02:33.763Z | 1600                    | 1600 |           |            |          |       |       | 2020-10-14T09:01:33.763Z       |
+| *GUID* | 123456789012345678 | 2    | Cold Room                    | 2020-10-14T09:02:33.763Z | 2020-10-14T09:03:33.763Z | 3600                    | 30   |           |            |          |   4   |  20   | 2020-10-14T09:01:33.763Z       |
+| *GUID* | 123456789012345678 | 3    | Uscita merci                 | 2020-10-14T09:03:33.763Z | 2020-10-14T09:04:33.763Z | 1600                    | 1600 |           |            |          |       |       | 2020-10-14T09:01:33.763Z       |
+| *GUID* | 123456789012345678 | 2    | Cold Room                    | 2020-10-14T09:04:33.763Z | 2020-10-14T09:05:33.763Z | 3600                    | 30   |           |            |          |   4   |  20   | 2020-10-14T09:01:33.763Z       |
+| *GUID* | 123456789012345678 | 3    | Uscita merci                 | 2020-10-14T09:05:33.763Z | 2020-10-14T09:06:33.763Z | 1600                    |      |           |            |          |       |       |                                |
+| *GUID* | 123456789012345678 | 4    | Piazzale esterno             | 2020-10-14T09:06:33.763Z | 2020-10-14T09:07:33.763Z | 2000                    | 2000 |           |            |          |       |       |                                |
+| *GUID* | 123456789012345678 | 5    | Truck                        | 2020-10-14T09:07:33.763Z | 2020-10-14T09:08:33.763Z | 20                      |      |           |            |          |       |       |                                |
+| *GUID* | 123456789012345678 | 6    | Piazzale esterno depositario | 2020-10-14T09:08:33.763Z | 2020-10-14T09:09:33.763Z | 20                      |      |           |            |          |       |       |                                |
+| *GUID* | 123456789012345678 | 7    | Depositario                  | 2020-10-14T09:09:33.763Z |                          | 20                      |      |           |            |          |       |       |                                |
+
+* inBusinessTime è l'ora di ingresso dell'handling unit nell'area
+* outBusinessTime è l'ora di uscita dell'handling unit dall'area
+* ResidenceTime è il numero di minuti di permanenza dell'handling unit nell'area
+* TOR è il numero di minuti di permanenza nell'area con temperatura fuori range
+* tmin
+* tman
+* elaborationTimeTor momento in cui sono stati recuperati di dati di temperatura e calcolo TOR
+>>>>>>> origin/SBARZAGHI
 
 (per recuperare i range di temperatura dei soggetti esterni verrà esposto un servizio esterno alla piattaforma)
 
@@ -561,10 +619,10 @@ Esempio:
 ```
 {
 	"CP_ID": "90abe75c-e2c6-4e5f-a12f-fb81aa50d011",
+    "DIR": "F"
+    "SSCC_ID": "123456789012345678",
     "TE": "2020-10-14T09:01:33.763Z",
 	"TS": "2020-10-14T09:01:34.763Z",
-    "SSCC_ID": "123456789012345678",
-    "DIR": "F"
 }
 ```
 
@@ -813,9 +871,74 @@ Cloud Cold Chain Development Customer 1
 
 Solo sottoscrizione alla cloud cold chain e portale, CF non attivato
 
+<<<<<<< HEAD
 # Aggiornamento tabella HandlingUnitsResidenceTime
 
 Quando arriva un messaggio che scrive nell'HandlingUnitsMovements il servizio cap richiama un servizio centrale di bilanciamento passandogli tenantid e guid del messaggio.
 Il servizio centrale di bilanciamento mantiene in memoria i dati arrivati.
 Un ulteriore servizio in pooling estra dalla coda il guid, fa logon al servizio cap con l'utenza collegata al tenant e richiama il servizio sincrono per aggiornare la tabella HandlingUnitsResidenceTime, se va in errore riaccoda il guid.
 Mettendo un coda redis si toglie la parte di pooling e si usano le locking queue.
+=======
+# Documentazione
+
+## Ingestion dati movimentazione handling unit
+- gate rfid invia a enterprise messaging in mqtt nel topic specifico del cliente *aggiungere esempio del topic*
+- enterprise messaging sottoscrive il topic e aggiunge ad una coda
+- la coda è collegata ad un webhook che punto al servizio odata del cap con autenticazione OAuth2, viene richiesto il token al subaccount del cliente, il token staccato determina il tenant del client
+- il servizio cap inserisce il record secco nella tabella senza controlli HandlingUnitMovementsRaw
+- il servizio cap inserisce nella lista Redis i dati del movimento, l'utente e il tenant del cliente
+- processo in background che attende il messaggio sulla coda redis e crea il record del movimento nella tabella HandlingUnitMovements
+- scrive nella coda redis `RESIDENCE_TIME:WAITING` i dati del movimento
+- processo in background che attende il messaggio sulla coda redis `RESIDENCE_TIME:WAITING`, quando riceve un messaggio:
+  - ricerca il lotto collegato all'SSCC nella tabella `HandlingUnits`
+  - ricerca il prodotto collegato al lotto nella tabella `Lots`
+  - ricerca nella tabella `Products` le route collegate
+  - ricerca nella tabella `Routes` con controlPoint e direction per determinare l'area di destinazione della scatola
+  - inserisce nella tabella `HandlingUnitsResidenceTime` un record con: `sscc`, `step`, `area`, `inBusinessTime` con il t del movimento
+  - aggiorna il campo `ResidenceTimeStatus` della tabella `HandlingUnitMovements` a `OK`
+  - se il t del movimento è maggiore di `HandlingUnits-inAreaBusinessTime` aggiorna `lastKnowArea` e `inAreaBusinessTime`
+
+## Determinazione HandlingUnitsResidenceTime-outBusinessTime e residenceTime
+- ogni n minuti random tra parte un processo per un singolo cliente
+- processo che ricerca tutti i record in `HandlingUnitsResidenceTime` senza `outBusinessTime`
+- per ogni record cerca un record con T > del T movimento e con step = step del record + 1 oppure step del record - 1
+- se lo trova aggiorna il campo `outBusinessTime` con `inBusinessTime` del record trovato
+- calcola la differenza in minuti arrotondando per eccesso di `outBusinessTime` - `inBusinessTime`
+- se l'area è l'area in cui è in questo momento la handling unit (capibile leggendo la tabella `HandlingUnits`) aggiorna il campo residenceTime = current time - inBusinessTime
+- se l'area non è a temperatura controllata riporta il campo `residenceTime` nel campo `tot` e impostato il `torElaborationTime`
+- se l'area è a temperatura controlla scrive nella coda waiting dei record che devono recuperare da IoT i dati della cella e calcolo del TOR
+- finito il check per il cliente viene impostata l'ora in cui verrà rifatto il controllo per il cliente
+
+## Ingestion dati temperatura IoT
+- cella invia i dati a scp iot via mqtt
+- rule `outOfRange` di tipo streaming rule cloud toggle che determina se la temperatura è in range
+- rule `inRange` di tipo streaming rule cloud toggle che determina se la temperatura è in range
+- in iot c'è configurato un segment che parte con la rule `outOfRange` e finisce con la rule `inRange`
+- il segment invia i dati in enterprise messaging
+- enterprise messaging invia i dati al webhook che punta al servizio cap
+- il servizio cap aggiorna la tabella `OutOfRange`
+
+# Appunti costi piattaforma
+
+# IoT
+
+## Calcolatore
+https://sap-iot-noah-live-estimator-ui.cfapps.eu10.hana.ondemand.com/estimator-ui/index.html
+
+## Esempio 1
+450€:
+
+- 100 celle che inviano temperatura ogni minuto
+- backend che ogni 5 minuti interroga IoT per avere i dati sulla temperatura di ogni cella
+- 12 mesi di dati caldi
+- 3 mesi warm
+- 24 mesi cold
+
+Feature	Capacity Units
+- SAP  IoT, connectivity	37
+- SAP  IoT, business services	63
+- SAP  IoT, aggregate store	23
+- SAP  IoT, time series & event store	19
+- SAP  IoT, time series archive	1
+- Total	425
+>>>>>>> origin/SBARZAGHI
