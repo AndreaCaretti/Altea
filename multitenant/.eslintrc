@@ -1,5 +1,5 @@
 {
-    "extends": ["eslint:recommended", "plugin:prettier/recommended"],
+    "extends": ["eslint:recommended", "plugin:prettier/recommended", "airbnb-base"],
     "env": {
         "node": true,
         "es6": true,
@@ -18,9 +18,13 @@
         "cds": true
     },
     "rules": {
+        "allowForLoopAfterthoughts": "off",
+        "indent": ["error", 4],
+        "quotes": "off",
         "no-console": "off",
         "require-atomic-updates": "off",
         "prettier/prettier": "error",
+        "comma-dangle": ["error", { "arrays": "always-multiline", "objects": "always-multiline" }],
         "no-unused-vars": [
             "error",
             {
