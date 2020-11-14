@@ -209,7 +209,7 @@ define entity HandlingUnitsRawMovements : cuid, managed {
 
 
 define entity ResidenceTime : cuid, managed {
-    SSCC               : cloudcoldchain.SSCC;
+    handlingUnit       : Association to one HandlingUnits;
     stepNr             : RouteStepNr;
     area               : Association to one Areas;
     inBusinessTime     : Timestamp;
