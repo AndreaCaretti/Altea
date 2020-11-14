@@ -1,4 +1,11 @@
-// Select one field from table
+/**
+ * Select a single record and return a single field
+ * @param {String} tableName Table name
+ * @param {String} fieldName Field name
+ * @param {String} idValue Value of the key field with name "ID"
+ * @param {*} tx CDS Transaction
+ * @param {*} logger Logger
+ */
 async function selectOneField(tableName, fieldName, idValue, tx, logger) {
     const fieldValue = await tx.run(
         SELECT.one(tableName).columns(fieldName).where({ ID: idValue })
@@ -23,21 +30,35 @@ async function selectOneField(tableName, fieldName, idValue, tx, logger) {
     return fieldValue[fieldName];
 }
 
-// Select all records from table reading with parent
-async function selectAllWithParent(tableName, idValue, tx, logger) {
-    const records = await tx.run(SELECT.from(tableName).where({ parent_ID: idValue }));
+/**
+ * Select all records from a table filtering by parent
+ * @param {String} tableName
+ * @param {String} Value of the key field with name "ID"
+ * @param {*} tx
+ * @param {*} logger
+ */
+async function selectAllWithParent(tableName, parentIdValue, tx, logger) {
+    const records = await tx.run(SELECT.from(tableName).where({ parent_ID: parentIdValue }));
 
     if (!records.length) {
-        logger.error(`SelectAll: ${tableName}/${idValue}`);
+        logger.error(`SelectAll: ${tableName}/${parentIdValue}`);
 
-        throw Error(`Records not found: ${tableName}/${idValue}`);
+        throw Error(`Records not found: ${tableName}/${parentIdValue}`);
     }
-    logger.debug(`SelectAll: ${tableName}/${idValue} -> ${records.length}`);
+    logger.debug(`SelectAll: ${tableName}/${parentIdValue} -> ${records.length}`);
 
     return records;
 }
 
-// Update single field
+/**
+ * Update a single field of single record a table
+ * @param {*} tableName
+ * @param {*} idRecord
+ * @param {*} fieldName
+ * @param {*} fieldValue
+ * @param {*} tx
+ * @param {*} logger
+ */
 async function updateSingleField(tableName, idRecord, fieldName, fieldValue, tx, logger) {
     const records = await tx.run(
         UPDATE(tableName)
