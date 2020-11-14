@@ -11,8 +11,10 @@ NC='\033[0m'
 
 # Stop processo cds già attivo in ascolto sulla porta 4004
 cds_process=$(lsof -t -i:4004)
-cds_node_process=$(ppid $cds_process)
 if [ $? -eq 0 ]; then
+    
+    cds_node_process=$(ppid $cds_process)
+
     echo -e "${GREEN}Kill CDS già in esecuzione $cds_process${NC}"
     kill -9 $cds_process $cds_node_process
 fi
