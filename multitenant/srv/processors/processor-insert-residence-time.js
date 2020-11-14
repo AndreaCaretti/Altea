@@ -79,12 +79,13 @@ class ProcessorInsertResidenceTime {
         const product = await this.getProductFromLot(lot, tx);
         const route = await this.getRouteFromProduct(product, tx);
         const routeSteps = await this.getRouteStepsFromRoute(route, tx);
-        // const routeStep = routeSteps.find(
-        //     (step) => step.controlPoint === movement.CP_ID && step.direction === movement.DIR
-        // );
+
+        const routeStep = routeSteps.find(
+            (step) => step.controlPoint_ID === movement.CP_ID && step.direction === movement.DIR
+        );
 
         return {
-            routeStep: routeSteps[0],
+            routeStep,
         };
     }
 
