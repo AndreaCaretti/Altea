@@ -41,7 +41,7 @@ annotate Services.Lots with @(UI : {
     FieldGroup #General : {Data : [
                                    {Value: productionDate, Label:'Production Date'},
 								   {Value: expirationDate, Label:'Expiration Date'},
-								   {Value : product_ID, Label:'Products'},
+								   {Value : product_ID, Label:'Product'},
                                   ]},
     FieldGroup #Admin   : {Data : [
     {Value : createdBy},
