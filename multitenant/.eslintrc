@@ -21,7 +21,7 @@
         "allowForLoopAfterthoughts": "off",
         "indent": ["error", 4],
         "quotes": "off",
-        "no-console": "off",
+        "no-console": "warn",
         "require-atomic-updates": "off",
         "prettier/prettier": "error",
         "comma-dangle": ["error", { "arrays": "always-multiline", "objects": "always-multiline" }],
