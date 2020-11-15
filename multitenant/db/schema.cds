@@ -144,6 +144,8 @@ define entity Lots : cuid, managed {
     productionDate : Timestamp;
     expirationDate : Timestamp;
     product        : Association to one Products;
+    handlingUnits  : Association to many HandlingUnits
+                         on handlingUnits.lot = $self;
 }
 
 //ROUTES
