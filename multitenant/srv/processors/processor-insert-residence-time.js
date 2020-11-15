@@ -39,7 +39,13 @@ class ProcessorInsertResidenceTime {
 
             await this.updateMovementStatus(movement, tx);
 
-            await this.updateHandlingUnitLastArea(movement, info, tx);
+            // FIXME: Se ci sono più istanze dell'app CAP può essere che il campo TE
+            // dell'handling unit sia già stato aggiornato da un altro processo con
+            // un valore più alto e noi per errore mettiamo un movimento vecchio
+            // Inserire una gestione dei lock sull'handling unit
+            if (movement.TE > info.handlingUnit.inAreaBusinessTime) {
+                await this.updateHandlingUnitLastArea(movement, info, tx);
+            }
 
             await tx.commit();
 
