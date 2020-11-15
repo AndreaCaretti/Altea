@@ -53,4 +53,5 @@ service Services {
     
     entity outOfRange              as projection on cloudcoldchain.outOfRange;
 
+    entity HandlingUnitsMovements as projection on cloudcoldchain.HandlingUnitsMovements;
 }

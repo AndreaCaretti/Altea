@@ -180,8 +180,9 @@ define entity RouteSteps : cuid {
 define entity HandlingUnits : managed {
     key ID                 : cloudcoldchain.SSCC;
         lot                : Association to one Lots;
-        lastKnownArea      : Association to one Locations;
+        lastKnownArea      : Association to one Areas;
         inAreaBusinessTime : Timestamp;
+        lastMovement       : Association to one HandlingUnitsMovements;
         jsonSummary        : LargeString;
         blockchainHash     : String(100);
 }

@@ -1,8 +1,5 @@
 // const inputValidation = require("@sap/cds-runtime/lib/common/generic/input");
-const { selectOneField } = require("../db_utilities");
-const { selectAllWithParent } = require("../db_utilities");
-const { updateSingleField } = require("../db_utilities");
-
+const DB = require("../db_utilities");
 const QueueResidenceTime = require("../queues/queue-residence-time");
 
 class ProcessorInsertResidenceTime {
@@ -38,32 +35,23 @@ class ProcessorInsertResidenceTime {
         try {
             const info = await this.getNecessaryInfo(movement, tx);
 
-            await tx.create("ResidenceTime").entries({
-                handlingUnit_ID: movement.SSCC_ID,
-                stepNr: info.routeStep.stepNr,
-                inBusinessTime: movement.TE,
-            });
+            await this.createRecordResidentTime(movement, info, tx);
 
-            await updateSingleField(
-                "HandlingUnitsMovements",
-                movement.ID,
-                "STATUS",
-                true,
-                tx,
-                this.logger
-            );
+            await this.updateMovementStatus(movement, tx);
+
+            await this.updateHandlingUnitLastArea(movement, info, tx);
 
             await tx.commit();
 
             await this.queueResidenceTime.moveToComplete(movement);
         } catch (error) {
-            this.logger.error(error.toString(), error.stack);
+            this.logger.error(error.stack);
 
-            updateSingleField(
+            DB.updateSingleField(
                 "HandlingUnitsMovements",
                 movement.ID,
                 "STATUS",
-                true,
+                false,
                 tx,
                 this.logger
             );
@@ -75,38 +63,56 @@ class ProcessorInsertResidenceTime {
     }
 
     async getNecessaryInfo(movement, tx) {
-        const lot = await this.getLotfromSSCC(movement.SSCC_ID, tx);
-        const product = await this.getProductFromLot(lot, tx);
+        const handlingUnit = await this.getHandlingUnitInfo(movement.SSCC_ID, tx);
+        const product = await this.getProductFromLot(handlingUnit.lot_ID, tx);
         const route = await this.getRouteFromProduct(product, tx);
         const routeSteps = await this.getRouteStepsFromRoute(route, tx);
-
-        const routeStep = routeSteps.find(
-            (step) => step.controlPoint_ID === movement.CP_ID && step.direction === movement.DIR
+        const routeStep = this.getRouteStepFromControlPoint(
+            routeSteps,
+            movement.CP_ID,
+            movement.DIR
         );
 
         return {
+            handlingUnit,
             routeStep,
         };
     }
 
-    async getLotfromSSCC(SSCC_ID, tx) {
-        this.logger.debug("getLotfromSSCC: ", SSCC_ID);
-        return selectOneField("HandlingUnits", "lot_ID", SSCC_ID, tx, this.logger);
+    getRouteStepFromControlPoint(routeSteps, CP_ID, DIR) {
+        const routeStep = routeSteps.find(
+            (step) => step.controlPoint_ID === CP_ID && step.direction === DIR
+        );
+
+        if (!routeStep) {
+            throw Error(`Route step non trovata: ${CP_ID}/${DIR}`);
+        }
+
+        this.logger.debug(
+            `getRouteStepFromControlPoint: ${CP_ID}/${DIR} -> ${JSON.stringify(routeStep)}`
+        );
+
+        return routeStep;
+    }
+
+    async getHandlingUnitInfo(SSCC_ID, tx) {
+        this.logger.debug("getHandlingUnitInfo: ", SSCC_ID);
+        return DB.selectOneRecord("HandlingUnits", SSCC_ID, tx, this.logger);
     }
 
     async getProductFromLot(lot, tx) {
         this.logger.debug("getProductFromLot: ", lot);
-        return selectOneField("Lots", "product_ID", lot, tx, this.logger);
+        return DB.selectOneField("Lots", "product_ID", lot, tx, this.logger);
     }
 
     async getRouteFromProduct(product, tx) {
         this.logger.debug("getRouteFromProduct: ", product);
-        return selectOneField("Products", "route_ID", product, tx, this.logger);
+        return DB.selectOneField("Products", "route_ID", product, tx, this.logger);
     }
 
     async getRouteStepsFromRoute(route, tx) {
         this.logger.debug("getRouteStepsFromRoute: ", route);
-        return selectAllWithParent("RouteSteps", route, tx, this.logger);
+        return DB.selectAllWithParent("RouteSteps", route, tx, this.logger);
     }
 
     async start() {
@@ -115,6 +121,36 @@ class ProcessorInsertResidenceTime {
         this.queueResidenceTime.start();
 
         setImmediate(this.tick);
+    }
+
+    async createRecordResidentTime(movement, info, tx) {
+        this.logger.debug(`Create record resident time ${JSON.stringify(info)}`);
+
+        await tx.create("ResidenceTime").entries({
+            handlingUnit_ID: movement.SSCC_ID,
+            stepNr: info.routeStep.stepNr,
+            inBusinessTime: movement.TE,
+        });
+    }
+
+    async updateMovementStatus(movement, tx) {
+        await DB.updateSingleField(
+            "HandlingUnitsMovements",
+            movement.ID,
+            "STATUS",
+            true,
+            tx,
+            this.logger
+        );
+    }
+
+    async updateHandlingUnitLastArea(movement, info, tx) {
+        const values = {
+            lastKnownArea_ID: info.routeStep.destinationArea_ID,
+            inAreaBusinessTime: movement.TE,
+            lastMovement_ID: movement.ID,
+        };
+        await DB.updateSomeFields("HandlingUnits", info.handlingUnit.ID, values, tx, this.logger);
     }
 }
 
