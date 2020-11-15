@@ -325,12 +325,13 @@ Records solo nel DB del produttore
 
 ## Tabella HandlingUnits
 
-| _sscc_ (SSCC)      | lot     | lastKnownArea(Locations) | inAreaBusinessTime (Timestamp) | jsonSummary (LargeString)             | blockchainHash (100)                                 |
-| ------------------ | ------- | ------------------------ | ------------------------------ | ------------------------------------- | ---------------------------------------------------- |
-| 123456789012345678 | LOT-XYZ | Uscita magazzino         | 2020-10-14T09:01:33.763Z       | { HandlingUnit: "HandlingUnitA", etc} | adb24ba2f2ef33d73d79e60b9d47f7fb97c69013eb6c8f37c... |
+| _sscc_ (SSCC)      | lot     | lastKnownArea(Areas) | inAreaBusinessTime (Timestamp) | lastMovement (HandlingUnitsMovements) | jsonSummary (LargeString)             | blockchainHash (100)                                 |
+| ------------------ | ------- | -------------------- | ------------------------------ | ------------------------------------- | ------------------------------------- | ---------------------------------------------------- |
+| 123456789012345678 | LOT-XYZ | Uscita magazzino     | 2020-10-14T09:01:33.763Z       | _GUID_                                | { HandlingUnit: "HandlingUnitA", etc} | adb24ba2f2ef33d73d79e60b9d47f7fb97c69013eb6c8f37c... |
 
--   il campo lastKnowArea indica l'ultima posizione conosciuta dell'SSCC
--   il campo inAreaBusinessTime indica il momento in cui è stato rilevato l'ultimo spostamento
+-   `lastKnowArea`:  ultima posizione conosciuta dell'SSCC
+-   `inAreaBusinessTime`:  momento in cui è stato rilevato l'ultimo spostamento
+-   `lastMovement`:  guid dell'ultimo movimento
 
 SSCC:
 
@@ -383,21 +384,21 @@ Passaggi Handling Unit da Control Point
 -   elaborationTime indica in quale momento il movimento è stato elaborato dalla routine che gestisce gli spostamenti cioè che aggiorna il campo lastKnowArea nella tabella HandlingUnits
     e aggiorna la tabella HandlingUnitsResidenceTime
 
-## Tabella HandlingUnitsResidenceTime
+## Tabella ResidenceTime
 
 Permanenza Handling Unit in area
 
-| _ID_   | sscc (SSCC)        | step | area                         | inBusinessTime           | outBusinessTime          | residenceTime (Integer) | tor  | failureIn | failureOut | totalTor | tmin  | tmax  | torElaborationTime (Timestamp) |
-| ------ | ------------------ | ---- | ---------------------------- | ------------------------ | ------------------------ | ----------------------- | ---- | --------- | ---------- | -------- | :---: | :---: | ------------------------------ |
-| *GUID* | 123456789012345678 | 1    | Produzione Plant A           | 2020-10-14T09:01:33.763Z | 2020-10-14T09:02:33.763Z | 1600                    | 1600 |           |            |          |       |       | 2020-10-14T09:01:33.763Z       |
-| *GUID* | 123456789012345678 | 2    | Cold Room                    | 2020-10-14T09:02:33.763Z | 2020-10-14T09:03:33.763Z | 3600                    | 30   |           |            |          |   4   |  20   | 2020-10-14T09:01:33.763Z       |
-| *GUID* | 123456789012345678 | 3    | Uscita merci                 | 2020-10-14T09:03:33.763Z | 2020-10-14T09:04:33.763Z | 1600                    | 1600 |           |            |          |       |       | 2020-10-14T09:01:33.763Z       |
-| *GUID* | 123456789012345678 | 2    | Cold Room                    | 2020-10-14T09:04:33.763Z | 2020-10-14T09:05:33.763Z | 3600                    | 30   |           |            |          |   4   |  20   | 2020-10-14T09:01:33.763Z       |
-| *GUID* | 123456789012345678 | 3    | Uscita merci                 | 2020-10-14T09:05:33.763Z | 2020-10-14T09:06:33.763Z | 1600                    |      |           |            |          |       |       |                                |
-| *GUID* | 123456789012345678 | 4    | Piazzale esterno             | 2020-10-14T09:06:33.763Z | 2020-10-14T09:07:33.763Z | 2000                    | 2000 |           |            |          |       |       |                                |
-| *GUID* | 123456789012345678 | 5    | Truck                        | 2020-10-14T09:07:33.763Z | 2020-10-14T09:08:33.763Z | 20                      |      |           |            |          |       |       |                                |
-| *GUID* | 123456789012345678 | 6    | Piazzale esterno depositario | 2020-10-14T09:08:33.763Z | 2020-10-14T09:09:33.763Z | 20                      |      |           |            |          |       |       |                                |
-| *GUID* | 123456789012345678 | 7    | Depositario                  | 2020-10-14T09:09:33.763Z |                          | 20                      |      |           |            |          |       |       |                                |
+| _ID_   | HandlingUnit (HandlingUnits) | step | area (Area)                  | inBusinessTime           | outBusinessTime          | residenceTime (Integer) | tor  | failureIn | failureOut | totalTor | tmin  | tmax  | torElaborationTime (Timestamp) |
+| ------ | ---------------------------- | ---- | ---------------------------- | ------------------------ | ------------------------ | ----------------------- | ---- | --------- | ---------- | -------- | :---: | :---: | ------------------------------ |
+| *GUID* | 123456789012345678           | 1    | Produzione Plant A           | 2020-10-14T09:01:33.763Z | 2020-10-14T09:02:33.763Z | 1600                    | 1600 |           |            |          |       |       | 2020-10-14T09:01:33.763Z       |
+| *GUID* | 123456789012345678           | 2    | Cold Room                    | 2020-10-14T09:02:33.763Z | 2020-10-14T09:03:33.763Z | 3600                    | 30   |           |            |          |   4   |  20   | 2020-10-14T09:01:33.763Z       |
+| *GUID* | 123456789012345678           | 3    | Uscita merci                 | 2020-10-14T09:03:33.763Z | 2020-10-14T09:04:33.763Z | 1600                    | 1600 |           |            |          |       |       | 2020-10-14T09:01:33.763Z       |
+| *GUID* | 123456789012345678           | 2    | Cold Room                    | 2020-10-14T09:04:33.763Z | 2020-10-14T09:05:33.763Z | 3600                    | 30   |           |            |          |   4   |  20   | 2020-10-14T09:01:33.763Z       |
+| *GUID* | 123456789012345678           | 3    | Uscita merci                 | 2020-10-14T09:05:33.763Z | 2020-10-14T09:06:33.763Z | 1600                    |      |           |            |          |       |       |                                |
+| *GUID* | 123456789012345678           | 4    | Piazzale esterno             | 2020-10-14T09:06:33.763Z | 2020-10-14T09:07:33.763Z | 2000                    | 2000 |           |            |          |       |       |                                |
+| *GUID* | 123456789012345678           | 5    | Truck                        | 2020-10-14T09:07:33.763Z | 2020-10-14T09:08:33.763Z | 20                      |      |           |            |          |       |       |                                |
+| *GUID* | 123456789012345678           | 6    | Piazzale esterno depositario | 2020-10-14T09:08:33.763Z | 2020-10-14T09:09:33.763Z | 20                      |      |           |            |          |       |       |                                |
+| *GUID* | 123456789012345678           | 7    | Depositario                  | 2020-10-14T09:09:33.763Z |                          | 20                      |      |           |            |          |       |       |                                |
 
 * inBusinessTime è l'ora di ingresso dell'handling unit nell'area
 * outBusinessTime è l'ora di uscita dell'handling unit dall'area
