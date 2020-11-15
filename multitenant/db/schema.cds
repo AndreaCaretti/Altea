@@ -188,12 +188,12 @@ define entity HandlingUnits : managed {
 }
 
 define entity HandlingUnitsMovements : cuid, managed {
-    CP     : Association to one ControlPoints;
-    TE     : Timestamp;
-    TS     : Timestamp;
-    SSCC   : Association to one HandlingUnits;
-    DIR    : cloudcoldchain.direction;
-    STATUS : Boolean;
+    controlPoint : Association to one ControlPoints;
+    TE           : Timestamp;
+    TS           : Timestamp;
+    SSCC         : Association to one HandlingUnits;
+    DIR          : cloudcoldchain.direction;
+    STATUS       : Boolean;
 }
 
 annotate Books with {

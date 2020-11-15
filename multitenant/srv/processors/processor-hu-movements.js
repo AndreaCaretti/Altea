@@ -42,7 +42,7 @@ class ProcessorHuMovements {
             inputValidation.call(tx, request);
 
             const s = await tx.create(HandlingUnitsMovements).entries({
-                CP_ID: movement.CP_ID,
+                controlPoint_ID: movement.CP_ID,
                 TE: movement.TE,
                 TS: movement.TS,
                 SSCC_ID: movement.SSCC_ID,
