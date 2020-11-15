@@ -191,7 +191,7 @@ define entity HandlingUnitsMovements : cuid, managed {
     controlPoint : Association to one ControlPoints;
     TE           : Timestamp;
     TS           : Timestamp;
-    SSCC         : Association to one HandlingUnits;
+    handlingUnit : Association to one HandlingUnits;
     DIR          : cloudcoldchain.direction;
     STATUS       : Boolean;
 }

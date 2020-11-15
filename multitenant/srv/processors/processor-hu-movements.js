@@ -45,7 +45,7 @@ class ProcessorHuMovements {
                 controlPoint_ID: movement.CP_ID,
                 TE: movement.TE,
                 TS: movement.TS,
-                SSCC_ID: movement.SSCC_ID,
+                handlingUnit_ID: movement.SSCC_ID,
                 DIR: movement.DIR,
             });
 
