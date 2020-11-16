@@ -69,16 +69,16 @@ class Queues {
         });
     }
 
-    move(fromQueueName, toQueueName) {
+    move(fromQueueName, _toQueueName) {
         return new Promise((resolve, reject) => {
-            this.redisClient.BRPOPLPUSH(fromQueueName, toQueueName, 0, (error, element) => {
+            this.redisClient.BRPOP(fromQueueName, 0, (error, element) => {
                 if (error) {
                     console.error("ERRORE REDIS BRPOPLPUSH:", error);
                     reject(error); // Reject fa crashare nodejs, da gestire
                     return;
                 }
                 console.log("Record from ", fromQueueName, element);
-                const obj = JSON.parse(element); // element[0] è il nome della coda
+                const obj = JSON.parse(element[1]); // element[0] è il nome della coda
                 resolve(obj);
             });
         });
