@@ -1,115 +1,137 @@
 {
-    "VCAP_SERVICES": {
-        "xsuaa": [
-            {
-                "label": "xsuaa",
-                "provider": null,
-                "plan": "application",
-                "name": "mtt-xsuaa",
-                "tags": ["xsuaa"],
-                "instance_name": "mtt-xsuaa",
-                "binding_name": null,
-                "credentials": {
-                    "tenantmode": "shared",
-                    "sburl": "https://internal-xsuaa.authentication.eu10.hana.ondemand.com",
-                    "subaccountid": "8da3ba0a-5a8a-436a-bfe7-fb7eb40a3b6e",
-                    "clientid": "sb-dev-cloud-cold-chain!t61773",
-                    "xsappname": "dev-cloud-cold-chain!t61773",
-                    "clientsecret": "I4pSt9LZ2ar5djKL7lB518ZWV6s=",
-                    "url": "https://ccp-provider-dev-qas.authentication.eu10.hana.ondemand.com",
-                    "uaadomain": "authentication.eu10.hana.ondemand.com",
-                    "verificationkey": "-----BEGIN PUBLIC KEY-----MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAq7WZ6XNkzobHEY7s+HY8XTCfLJekHS5HnnU8m2BUVM58f4d6VotrFYoKgZSlJeLFKMpIASYnwNcbbWHCRm4sDtn/ZhpNfd1QuBxxfq7cW3K2zZt3hx8FGffYWDyzVX9vg1PxX0oH/cA1Cg6AAOBX4c4vN0CxScU+KLw3/NvwTMVjxgAY8c/2jSqXslvPaXURzl1zHENkYna0FnqgvEwPVtpLcjycFxboO8wGu1eabdkeNglPVE5i1Gvsxg70qmmGIPHvmsfFdaedBRMIQa8MRwUQ7ek/4qrGTJNr2uLZDKUwyqObkloNeEwt3onSVhcbiw8ODeoNSEzpCz8tKZjRQwIDAQAB-----END PUBLIC KEY-----",
-                    "apiurl": "https://api.authentication.eu10.hana.ondemand.com",
-                    "identityzone": "ccp-provider-dev-qas",
-                    "identityzoneid": "8da3ba0a-5a8a-436a-bfe7-fb7eb40a3b6e",
-                    "tenantid": "8da3ba0a-5a8a-436a-bfe7-fb7eb40a3b6e",
-                    "zoneid": "8da3ba0a-5a8a-436a-bfe7-fb7eb40a3b6e"
-                },
-                "syslog_drain_url": null,
-                "volume_mounts": []
-            }
+  "VCAP_SERVICES": {
+    "redis-cache": [
+      {
+        "label": "redis-cache",
+        "provider": null,
+        "plan": "standard",
+        "name": "mtt-redis",
+        "tags": [
+          "cache"
         ],
-        "saas-registry": [
-            {
-                "label": "saas-registry",
-                "provider": null,
-                "plan": "application",
-                "name": "mtt-saas",
-                "tags": ["SaaS"],
-                "instance_name": "mtt-saas",
-                "binding_name": null,
-                "credentials": {
-                    "tenantmode": "dedicated",
-                    "sburl": "https://internal-xsuaa.authentication.eu10.hana.ondemand.com",
-                    "subaccountid": "8da3ba0a-5a8a-436a-bfe7-fb7eb40a3b6e",
-                    "clientid": "sb-dev-cloud-cold-chain-clone!b61773|lps-registry-broker!b14",
-                    "xsappname": "dev-cloud-cold-chain",
-                    "appName": "dev-cloud-cold-chain",
-                    "clientsecret": "OvIMDnSGrQ+kdK52mF0b1nMcWsQ=",
-                    "tenant_onboarding_url": "https://saas-manager.cfapps.eu10.hana.ondemand.com",
-                    "saas_registry_url": "https://saas-manager.cfapps.eu10.hana.ondemand.com",
-                    "appUrls": "{\"getDependencies\":\"https://ccp-provider-dev-qas-dev-mtt-approuter.cfapps.eu10.hana.ondemand.com/provisioning/mtx/v1/provisioning/dependencies\",\"onSubscription\":\"https://ccp-provider-dev-qas-dev-mtt-cap-services.cfapps.eu10.hana.ondemand.com/mtx/v1/provisioning/tenant/{tenantId}\",\"onSubscriptionAsync\":false,\"onUnSubscriptionAsync\":false,\"callbackTimeoutMillis\":0}",
-                    "description": "https://ccp-provider-dev-qas-dev-mtt-approuter.cfapps.eu10.hana.ondemand.com/provisioning/mtx/v1/provisioning/dependencies",
-                    "display_name": "Cloud Cold Chain",
-                    "url": "https://ccp-provider-dev-qas.authentication.eu10.hana.ondemand.com",
-                    "uaadomain": "authentication.eu10.hana.ondemand.com",
-                    "verificationkey": "-----BEGIN PUBLIC KEY-----MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAq7WZ6XNkzobHEY7s+HY8XTCfLJekHS5HnnU8m2BUVM58f4d6VotrFYoKgZSlJeLFKMpIASYnwNcbbWHCRm4sDtn/ZhpNfd1QuBxxfq7cW3K2zZt3hx8FGffYWDyzVX9vg1PxX0oH/cA1Cg6AAOBX4c4vN0CxScU+KLw3/NvwTMVjxgAY8c/2jSqXslvPaXURzl1zHENkYna0FnqgvEwPVtpLcjycFxboO8wGu1eabdkeNglPVE5i1Gvsxg70qmmGIPHvmsfFdaedBRMIQa8MRwUQ7ek/4qrGTJNr2uLZDKUwyqObkloNeEwt3onSVhcbiw8ODeoNSEzpCz8tKZjRQwIDAQAB-----END PUBLIC KEY-----",
-                    "apiurl": "https://api.authentication.eu10.hana.ondemand.com",
-                    "identityzone": "ccp-provider-dev-qas",
-                    "identityzoneid": "8da3ba0a-5a8a-436a-bfe7-fb7eb40a3b6e",
-                    "tenantid": "8da3ba0a-5a8a-436a-bfe7-fb7eb40a3b6e",
-                    "zoneid": "8da3ba0a-5a8a-436a-bfe7-fb7eb40a3b6e",
-                    "category": "Cloud Cold Chain"
-                },
-                "syslog_drain_url": null,
-                "volume_mounts": []
-            }
+        "instance_name": "mtt-redis",
+        "binding_name": null,
+        "credentials": {
+          "password": "GaJoFOorxmiPONZjZPabLYQLlcmgzAGU",
+          "hostname": "clustercfg.rg-b1d65754-56bd-4059-bfc2-e113c2bad9e0.iroxbd.euc1.cache.amazonaws.com",
+          "port": 1205,
+          "uri": "rediss://no-user-name-for-redis:GaJoFOorxmiPONZjZPabLYQLlcmgzAGU@clustercfg.rg-b1d65754-56bd-4059-bfc2-e113c2bad9e0.iroxbd.euc1.cache.amazonaws.com:1205",
+          "cluster_mode": true,
+          "tls": {
+            "host": "clustercfg.rg-b1d65754-56bd-4059-bfc2-e113c2bad9e0.iroxbd.euc1.cache.amazonaws.com",
+            "port": 1205
+          }
+        },
+        "syslog_drain_url": null,
+        "volume_mounts": []
+      }
+    ],
+    "saas-registry": [
+      {
+        "label": "saas-registry",
+        "provider": null,
+        "plan": "application",
+        "name": "mtt-saas",
+        "tags": [
+          "SaaS"
         ],
-        "application-logs": [
-            {
-                "label": "application-logs",
-                "provider": null,
-                "plan": "lite",
-                "name": "mtt-application-logging",
-                "tags": [],
-                "instance_name": "mtt-application-logging",
-                "binding_name": null,
-                "credentials": {
-                    "metrics_collector_url": "https://metrics-collector.cf.eu10.hana.ondemand.com/",
-                    "metrics_collector_client_id": "e1b8f884-47a5-4bd1-8f1c-8fe17848a196",
-                    "metrics_collector_client_secret": "OTAyZDY4YjUtMTRkZC00NDRiLTkyZmQtMGE2Yzg2ZjMzMjMzL210dC1jYXAtc2VydmljZXMvNjhlYzkxZjYtM2IyNi00ZmNhLThiOGQtOWMwMzA4NWFiNDU4L2Rldi9kODI3NzNjMy01YjQwLTRkZWItOWU5Zi0xNWM4Y2UxYjY3OTkvY2NwLXByb3ZpZGVyLWRldi1xYXMvMDVjMmM2NDctZWI2MC00MGI0LWI4YmItNjUxMmEwZWZkNjYyL2FwcGxpY2F0aW9uLWxvZ3MvM2U0NjZmYzYtODMzZS00MzBhLWE1YTEtYjlhYTIzMTk1MGM4L2xpdGUvY2JkNWQxZWQtMzY3Ny00ZGQwLTlhOTUtZjk0MjBkNjVjOWQzL210dC1hcHBsaWNhdGlvbi1sb2dnaW5nLzFhNjY2NGNlMzllOGZiMTRlMWE0ZWM3ZmU4YzlhMmFjODY3MWQ1YjczNWFiMTUxNmE0OWQ3ZGEzNGUxZDAyMmY"
-                },
-                "syslog_drain_url": null,
-                "volume_mounts": []
-            }
+        "instance_name": "mtt-saas",
+        "binding_name": null,
+        "credentials": {
+          "tenantmode": "dedicated",
+          "sburl": "https://internal-xsuaa.authentication.eu10.hana.ondemand.com",
+          "subaccountid": "8da3ba0a-5a8a-436a-bfe7-fb7eb40a3b6e",
+          "clientid": "sb-ccp-provider-dev-qas-dev-cloud-cold-chain-clone!b61773|lps-registry-broker!b14",
+          "xsappname": "ccp-provider-dev-qas-dev-cloud-cold-chain",
+          "appName": "ccp-provider-dev-qas-dev-cloud-cold-chain",
+          "clientsecret": "64A5jd6qye6ejP4D+GaVzRXrikQ=",
+          "tenant_onboarding_url": "https://saas-manager.cfapps.eu10.hana.ondemand.com",
+          "saas_registry_url": "https://saas-manager.cfapps.eu10.hana.ondemand.com",
+          "appUrls": "{\"getDependencies\":\"https://ccp-provider-dev-qas-dev-mtt-approuter.cfapps.eu10.hana.ondemand.com/provisioning/mtx/v1/provisioning/dependencies\",\"onSubscription\":\"https://ccp-provider-dev-qas-dev-mtt-cap-services.cfapps.eu10.hana.ondemand.com/mtx/v1/provisioning/tenant/{tenantId}\",\"onSubscriptionAsync\":false,\"onUnSubscriptionAsync\":false,\"callbackTimeoutMillis\":0}",
+          "description": "https://ccp-provider-dev-qas-dev-mtt-approuter.cfapps.eu10.hana.ondemand.com/provisioning/mtx/v1/provisioning/dependencies",
+          "display_name": "Cloud Cold Chain",
+          "url": "https://ccp-provider-dev-qas.authentication.eu10.hana.ondemand.com",
+          "uaadomain": "authentication.eu10.hana.ondemand.com",
+          "verificationkey": "-----BEGIN PUBLIC KEY-----MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAq7WZ6XNkzobHEY7s+HY8XTCfLJekHS5HnnU8m2BUVM58f4d6VotrFYoKgZSlJeLFKMpIASYnwNcbbWHCRm4sDtn/ZhpNfd1QuBxxfq7cW3K2zZt3hx8FGffYWDyzVX9vg1PxX0oH/cA1Cg6AAOBX4c4vN0CxScU+KLw3/NvwTMVjxgAY8c/2jSqXslvPaXURzl1zHENkYna0FnqgvEwPVtpLcjycFxboO8wGu1eabdkeNglPVE5i1Gvsxg70qmmGIPHvmsfFdaedBRMIQa8MRwUQ7ek/4qrGTJNr2uLZDKUwyqObkloNeEwt3onSVhcbiw8ODeoNSEzpCz8tKZjRQwIDAQAB-----END PUBLIC KEY-----",
+          "apiurl": "https://api.authentication.eu10.hana.ondemand.com",
+          "identityzone": "ccp-provider-dev-qas",
+          "identityzoneid": "8da3ba0a-5a8a-436a-bfe7-fb7eb40a3b6e",
+          "tenantid": "8da3ba0a-5a8a-436a-bfe7-fb7eb40a3b6e",
+          "zoneid": "8da3ba0a-5a8a-436a-bfe7-fb7eb40a3b6e",
+          "category": "Cloud Cold Chain"
+        },
+        "syslog_drain_url": null,
+        "volume_mounts": []
+      }
+    ],
+    "xsuaa": [
+      {
+        "label": "xsuaa",
+        "provider": null,
+        "plan": "application",
+        "name": "mtt-xsuaa",
+        "tags": [
+          "xsuaa"
         ],
-        "service-manager": [
-            {
-                "label": "service-manager",
-                "provider": null,
-                "plan": "container",
-                "name": "mtt-service-manager",
-                "tags": [],
-                "instance_name": "mtt-service-manager",
-                "binding_name": null,
-                "credentials": {
-                    "sm_url": "https://service-manager.cfapps.eu10.hana.ondemand.com",
-                    "url": "https://ccp-provider-dev-qas.authentication.eu10.hana.ondemand.com",
-                    "clientid": "sb-0ea73bb5-b956-4904-a169-c3a4a210f29a!b61773|service-manager!b8989",
-                    "clientsecret": "ulsfiY+/7h2mZVPhQW44H0usbs4=",
-                    "xsappname": "0ea73bb5-b956-4904-a169-c3a4a210f29a!b61773|service-manager!b8989"
-                },
-                "syslog_drain_url": null,
-                "volume_mounts": []
-            }
-        ],
-        "redis-cache": [
-            {
-                "credentials": {
-                    "uri": "redis://127.0.0.1:6379"
-                },
-                "tags": ["cache"]
-            }
-        ]
-    }
+        "instance_name": "mtt-xsuaa",
+        "binding_name": null,
+        "credentials": {
+          "tenantmode": "shared",
+          "sburl": "https://internal-xsuaa.authentication.eu10.hana.ondemand.com",
+          "subaccountid": "8da3ba0a-5a8a-436a-bfe7-fb7eb40a3b6e",
+          "clientid": "sb-ccp-provider-dev-qas-dev-cloud-cold-chain!t61773",
+          "xsappname": "ccp-provider-dev-qas-dev-cloud-cold-chain!t61773",
+          "clientsecret": "oEPmeoq3s9kvPuGZsd89POK9Eo8=",
+          "url": "https://ccp-provider-dev-qas.authentication.eu10.hana.ondemand.com",
+          "uaadomain": "authentication.eu10.hana.ondemand.com",
+          "verificationkey": "-----BEGIN PUBLIC KEY-----MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAq7WZ6XNkzobHEY7s+HY8XTCfLJekHS5HnnU8m2BUVM58f4d6VotrFYoKgZSlJeLFKMpIASYnwNcbbWHCRm4sDtn/ZhpNfd1QuBxxfq7cW3K2zZt3hx8FGffYWDyzVX9vg1PxX0oH/cA1Cg6AAOBX4c4vN0CxScU+KLw3/NvwTMVjxgAY8c/2jSqXslvPaXURzl1zHENkYna0FnqgvEwPVtpLcjycFxboO8wGu1eabdkeNglPVE5i1Gvsxg70qmmGIPHvmsfFdaedBRMIQa8MRwUQ7ek/4qrGTJNr2uLZDKUwyqObkloNeEwt3onSVhcbiw8ODeoNSEzpCz8tKZjRQwIDAQAB-----END PUBLIC KEY-----",
+          "apiurl": "https://api.authentication.eu10.hana.ondemand.com",
+          "identityzone": "ccp-provider-dev-qas",
+          "identityzoneid": "8da3ba0a-5a8a-436a-bfe7-fb7eb40a3b6e",
+          "tenantid": "8da3ba0a-5a8a-436a-bfe7-fb7eb40a3b6e",
+          "zoneid": "8da3ba0a-5a8a-436a-bfe7-fb7eb40a3b6e"
+        },
+        "syslog_drain_url": null,
+        "volume_mounts": []
+      }
+    ],
+    "service-manager": [
+      {
+        "label": "service-manager",
+        "provider": null,
+        "plan": "container",
+        "name": "mtt-service-manager",
+        "tags": [],
+        "instance_name": "mtt-service-manager",
+        "binding_name": null,
+        "credentials": {
+          "sm_url": "https://service-manager.cfapps.eu10.hana.ondemand.com",
+          "url": "https://ccp-provider-dev-qas.authentication.eu10.hana.ondemand.com",
+          "clientid": "sb-beb3268a-52b1-45d5-aeff-670892b5fa16!b61773|service-manager!b8989",
+          "clientsecret": "3+A6de11GqnZ1A9kazEjPUOy3/w=",
+          "xsappname": "beb3268a-52b1-45d5-aeff-670892b5fa16!b61773|service-manager!b8989"
+        },
+        "syslog_drain_url": null,
+        "volume_mounts": []
+      }
+    ],
+    "application-logs": [
+      {
+        "label": "application-logs",
+        "provider": null,
+        "plan": "lite",
+        "name": "mtt-application-logging",
+        "tags": [],
+        "instance_name": "mtt-application-logging",
+        "binding_name": null,
+        "credentials": {
+          "metrics_collector_url": "https://metrics-collector.cf.eu10.hana.ondemand.com/",
+          "metrics_collector_client_id": "a3c05507-82dd-468b-9557-401e7126fd6f",
+          "metrics_collector_client_secret": "OWFkZDUwYmItMTRhNS00Y2Q3LTk2OGItYmQyN2FiODIzNDhmL210dC1jYXAtc2VydmljZXMvNjhlYzkxZjYtM2IyNi00ZmNhLThiOGQtOWMwMzA4NWFiNDU4L2Rldi9kODI3NzNjMy01YjQwLTRkZWItOWU5Zi0xNWM4Y2UxYjY3OTkvY2NwLXByb3ZpZGVyLWRldi1xYXMvMDVjMmM2NDctZWI2MC00MGI0LWI4YmItNjUxMmEwZWZkNjYyL2FwcGxpY2F0aW9uLWxvZ3MvM2U0NjZmYzYtODMzZS00MzBhLWE1YTEtYjlhYTIzMTk1MGM4L2xpdGUvYTJmMDQ0NjMtOWRmZS00NjlmLWJjZjctMjhkYzAwMWJkOWY4L210dC1hcHBsaWNhdGlvbi1sb2dnaW5nLzVlMzExZWNhM2RkNjQxMTM4ZDM4NzU2NzhiMmIyODBlZjg1OWRjODM0Mzc1NDM4MDNkYzI1Y2U0ZWNmODJlMmQ"
+        },
+        "syslog_drain_url": null,
+        "volume_mounts": []
+      }
+    ]
+  }
 }
