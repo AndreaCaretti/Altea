@@ -48,7 +48,8 @@
         "update-db-tenants": "node scripts-utility/update-db-tenants.js",
         "start-local-redis": "scripts-utility/start-local-redis.sh",
         "lint": "eslint srv",
-        "postlint": "echo ✅ lint valid"
+        "postlint": "echo ✅ lint valid",
+        "export-db-to-csv": "scripts-utility/export-db-to-csv.sh"
     },
     "husky": {
         "hooks": {
