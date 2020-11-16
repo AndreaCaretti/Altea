@@ -179,8 +179,8 @@ define entity RouteSteps : cuid {
 
 //| _sscc_ (SSCC)      | lot     | lastKnownArea(Locations)    | inAreaBusinessTime (Timestamp) | jsonSummary (LargeString)             | blockchainHash (100)
 @UI.Identification : [{Value : ID}]
-define entity HandlingUnits : managed {
-    key ID                 : cloudcoldchain.SSCC;
+define entity HandlingUnits : cuid, managed {
+    key SSCC               : cloudcoldchain.SSCC;
         lot                : Association to one Lots;
         lastKnownArea      : Association to one Areas;
         inAreaBusinessTime : Timestamp;

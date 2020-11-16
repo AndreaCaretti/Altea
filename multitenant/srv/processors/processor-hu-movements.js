@@ -1,5 +1,6 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 const inputValidation = require("@sap/cds-runtime/lib/common/generic/input");
+const DB = require("../db_utilities");
 
 const QueueHandlingUnitsRawMovements = require("../queues/queue-hu-raw-movements");
 const QueueResidenceTime = require("../queues/queue-residence-time");
@@ -41,11 +42,13 @@ class ProcessorHuMovements {
             // serve per far partire la validazione sul campo, non di integritá del db
             inputValidation.call(tx, request);
 
+            movement.handlingUnitID = await this.getHandlingUnitFromSSCC(movement.SSCC_ID, tx);
+
             const s = await tx.create(HandlingUnitsMovements).entries({
                 controlPoint_ID: movement.CP_ID,
                 TE: movement.TE,
                 TS: movement.TS,
-                handlingUnit_ID: movement.SSCC_ID,
+                handlingUnit_ID: movement.handlingUnitID,
                 DIR: movement.DIR,
             });
 
@@ -81,6 +84,11 @@ class ProcessorHuMovements {
         this.queueResidenceTime.start();
 
         setImmediate(this.tick);
+    }
+
+    async getHandlingUnitFromSSCC(SSCC, tx) {
+        this.logger.debug("getHandlingUnitFromSSCC: ", SSCC);
+        return DB.selectOneFieldWhere("HandlingUnits", "ID", { SSCC }, tx, this.logger);
     }
 }
 

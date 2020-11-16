@@ -33,6 +33,40 @@ class DB {
     /**
      *
      * @param {*} tableName
+     * @param {*} fieldName
+     * @param {*} where
+     * @param {*} tx
+     * @param {*} logger
+     */
+    static async selectOneFieldWhere(tableName, fieldName, where, tx, logger) {
+        const fieldValue = await tx.run(SELECT.one(tableName).columns(fieldName).where(where));
+
+        if (!fieldValue) {
+            throw Error(
+                `selectOneFieldWhere - Record not found: ${tableName}/${JSON.stringify(where)}`
+            );
+        }
+
+        if (!fieldValue[fieldName]) {
+            throw Error(
+                `selectOneFieldWhere - Empty field: ${tableName}/${JSON.stringify(
+                    where
+                )}/${fieldName}`
+            );
+        }
+
+        logger.debug(
+            `selectOneFieldWhere: ${tableName}/${JSON.stringify(where)}/${fieldName} -> '${
+                fieldValue[fieldName]
+            }'`
+        );
+
+        return fieldValue[fieldName];
+    }
+
+    /**
+     *
+     * @param {*} tableName
      * @param {*} idValue
      * @param {*} tx
      * @param {*} logger

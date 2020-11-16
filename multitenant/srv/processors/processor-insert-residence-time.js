@@ -13,6 +13,7 @@ class ProcessorInsertResidenceTime {
 
     async tick() {
         let movement;
+
         try {
             movement = await this.queueResidenceTime.getAndSetToProcessing();
         } catch (error) {
@@ -51,7 +52,11 @@ class ProcessorInsertResidenceTime {
 
             await this.queueResidenceTime.moveToComplete(movement);
         } catch (error) {
-            this.logger.error(error.stack);
+            if (error.stack !== "not available") {
+                this.logger.error(error.stack);
+            } else {
+                this.logger.error(JSON.stringify(error));
+            }
 
             DB.updateSingleField(
                 "HandlingUnitsMovements",
@@ -69,7 +74,7 @@ class ProcessorInsertResidenceTime {
     }
 
     async getNecessaryInfo(movement, tx) {
-        const handlingUnit = await this.getHandlingUnitInfo(movement.SSCC_ID, tx);
+        const handlingUnit = await this.getHandlingUnitInfo(movement.handlingUnitID, tx);
         const product = await this.getProductFromLot(handlingUnit.lot_ID, tx);
         const route = await this.getRouteFromProduct(product, tx);
         const routeSteps = await this.getRouteStepsFromRoute(route, tx);
@@ -101,9 +106,9 @@ class ProcessorInsertResidenceTime {
         return routeStep;
     }
 
-    async getHandlingUnitInfo(SSCC_ID, tx) {
-        this.logger.debug("getHandlingUnitInfo: ", SSCC_ID);
-        return DB.selectOneRecord("HandlingUnits", SSCC_ID, tx, this.logger);
+    async getHandlingUnitInfo(handlingUnitID, tx) {
+        this.logger.debug("getHandlingUnitInfo: ", handlingUnitID);
+        return DB.selectOneRecord("HandlingUnits", handlingUnitID, tx, this.logger);
     }
 
     async getProductFromLot(lot, tx) {
@@ -133,7 +138,7 @@ class ProcessorInsertResidenceTime {
         this.logger.debug(`Create record resident time ${JSON.stringify(info)}`);
 
         await tx.create("ResidenceTime").entries({
-            handlingUnit_ID: movement.SSCC_ID,
+            handlingUnit_ID: movement.handlingUnitID,
             stepNr: info.routeStep.stepNr,
             inBusinessTime: movement.TE,
         });
