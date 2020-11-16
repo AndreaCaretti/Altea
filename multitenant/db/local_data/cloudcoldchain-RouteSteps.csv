@@ -1,2 +1,2 @@
-parent_ID;stepNr;controlPoint_ID;direction;destinationArea_ID
-49b7fb1b-5576-4213-8716-5d77bf9d30e1;1;90abe75c-e2c6-4e5f-a12f-fb81aa50d011;F;00ff1f4e-9292-4743-9573-678a9663272e
+ID,parent_ID,stepNr,controlPoint_ID,direction,destinationArea_ID
+34b2e0e8-1ab8-47b9-94fc-cad4fa7310c9,49b7fb1b-5576-4213-8716-5d77bf9d30e1,1,90abe75c-e2c6-4e5f-a12f-fb81aa50d011,F,00ff1f4e-9292-4743-9573-678a9663272e
