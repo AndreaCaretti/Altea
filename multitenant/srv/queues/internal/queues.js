@@ -54,7 +54,7 @@ class Queues {
     push(queueName, element) {
         console.log("Push", queueName, element);
         return new Promise((resolve, _reject) => {
-            this.redisClient.RPUSH(queueName, JSON.stringify(element), (_err, number) => {
+            this.redisClient.LPUSH(queueName, JSON.stringify(element), (_err, number) => {
                 console.log("Resolve", number);
                 resolve(number);
             });
