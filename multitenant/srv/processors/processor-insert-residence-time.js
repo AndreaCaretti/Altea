@@ -44,7 +44,10 @@ class ProcessorInsertResidenceTime {
             // dell'handling unit sia già stato aggiornato da un altro processo con
             // un valore più alto e noi per errore mettiamo un movimento vecchio
             // Inserire una gestione dei lock sull'handling unit
-            if (movement.TE > info.handlingUnit.inAreaBusinessTime) {
+            if (
+                !info.handlingUnit.inAreaBusinessTime ||
+                movement.TE > info.handlingUnit.inAreaBusinessTime
+            ) {
                 await this.updateHandlingUnitLastArea(movement, info, tx);
             }
 
