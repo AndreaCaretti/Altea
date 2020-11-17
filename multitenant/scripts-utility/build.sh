@@ -32,23 +32,30 @@ function checkGitPush() {
     fi
 }
 
-function createReleaseFile() {
-    echo -e "BUILD `date` `whoami`@`hostname`\n" >  srv/release.info
-    git status >> srv/release.info
-    echo -e "\nGit Commit:">> srv/release.info
-    git show-ref | grep origin/main >> srv/release.info
-}
-
 function updateRelease() {
     GITCOMMIT=`git show-ref | grep origin/main | cut -f 1 -d ' '`
+    MAJOR_VERSION=`head mta.yaml | grep ^version | cut -f 1-2 -d '.'`
+    MINOR_VERSION=$((`head mta.yaml | grep ^version | cut -f 3 -d '.' | cut -f1 -d '-'`+1))
 
     SOPRA=`head mta.yaml -n 8`
     SOTTO=`tail mta.yaml -n +10`
-    VERSION="version: 0.0.1-$GITCOMMIT"
+    VERSION="$MAJOR_VERSION.$MINOR_VERSION-$GITCOMMIT"
+
+    echo -e "${GREEN}Versione MTA [$VERSION${NC}]\n"
 
     echo -e "$SOPRA" > mta.yaml
     echo -e "$VERSION" >> mta.yaml
     echo -e "$SOTTO"  >> mta.yaml
+
+}
+
+function createReleaseFile() {
+    echo -e "BUILD `date` `whoami`@`hostname`\n" >  srv/release.info
+    echo -e "VERSIONE MTA $VERSION\n" >>  srv/release.info
+
+    git status >> srv/release.info
+    echo -e "\nGit Commit:">> srv/release.info
+    git show-ref | grep origin/main >> srv/release.info
 }
 
 function preparaFilename() {
@@ -56,7 +63,7 @@ function preparaFilename() {
     DATA=`date --iso-8601=seconds`
     FILENAME="ccp-$DATA-$GITCOMMIT"
 
-    echo -e  "${GREEN}Creazione file $FILENAME${NC}\n"
+    echo -e "${GREEN}Creazione file $FILENAME${NC}\n"
 }
 
 function build() {
@@ -80,8 +87,8 @@ function main() {
 
     set -o errexit
 
-    createReleaseFile
     updateRelease
+    createReleaseFile
     preparaFilename
     commit
 
