@@ -883,7 +883,7 @@ Feature Capacity Units
 -   SAP IoT, time series archive 1
 -   Total 425
 
-## CONNESSIONE WEBHOOK - CAP (SCP)
+## CONNESSIONE WEBHOOK - CAP per invio segmenti IoT(SCP)
 
 webhookURL: https://ccp-provider-dev-qas-dev-mtt-cap-services.cfapps.eu10.hana.ondemand.com/iot/segment
 Default Content-type: application/json
