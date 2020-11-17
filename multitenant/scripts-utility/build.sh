@@ -24,18 +24,17 @@ function checkGitStatus() {
 }
 
 function checkGitPush() {
-    CHANGED_FILES=`git status | grep 'Your branch'`
+    UPTODATE=`git status | grep "Your branch is up to date with 'origin/main'"`
 
-    if [ $CHANGED_FILES > 0 ]; then
-        echo -e "${RED}Ci sono dei file non committati, prima committare tutto:${NC}"
-        git status -s
-        echo -e "\n"
-        exit 2
+    if [ -z $UPTODATE -z ]; then
+        echo -e "${RED}Prima fare il push delle comodifiche nella branch 'origin/main'${NC}\n"
+        exit 3
     fi
 }
 
 checkGitBranch
 checkGitStatus
+checkGitPush
 
 echo -e "${GREEN}Rinomina precedente mtar:${NC}"
 mv -v mta_archives/cloud-cold-chain-multitenant_0.0.1.mtar mta_archives/cloud-cold-chain-multitenant_0.0.1.mtar_old
