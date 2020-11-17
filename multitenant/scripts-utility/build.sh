@@ -16,10 +16,22 @@ function checkGitStatus() {
     CHANGED_FILES=`git status -s | wc -l`
 
     if [ $CHANGED_FILES > 0 ]; then
-        echo -e "${RED}Ci sono dei file non committati:${NC}"
+        echo -e "${RED}Ci sono dei file non committati, prima committare tutto:${NC}"
+        git status -s
+        echo -e "\n"
         exit 2
     fi
+}
 
+function checkGitPush() {
+    CHANGED_FILES=`git status | grep 'Your branch'`
+
+    if [ $CHANGED_FILES > 0 ]; then
+        echo -e "${RED}Ci sono dei file non committati, prima committare tutto:${NC}"
+        git status -s
+        echo -e "\n"
+        exit 2
+    fi
 }
 
 checkGitBranch
