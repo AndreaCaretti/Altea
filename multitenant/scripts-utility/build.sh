@@ -15,7 +15,7 @@ function checkGitBranch() {
 function checkGitStatus() {
     CHANGED_FILES=`git status -s | wc -l`
 
-    if [ $CHANGED_FILES > 0 ]; then
+    if [ $CHANGED_FILES -gt 0 ]; then
         echo -e "${RED}Ci sono dei file non committati, prima committare tutto:${NC}"
         git status -s
         echo -e "\n"
@@ -26,7 +26,7 @@ function checkGitStatus() {
 function checkGitPush() {
     UPTODATE=`git status | grep "Your branch is up to date with 'origin/main'"`
 
-    if [ -z $UPTODATE -z ]; then
+    if [ -z $UPTODATE ]; then
         echo -e "${RED}Prima fare il push delle comodifiche nella branch 'origin/main'${NC}\n"
         exit 3
     fi
