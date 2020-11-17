@@ -32,9 +32,15 @@ function checkGitPush() {
     fi
 }
 
+function createReleaseFile() {
+    git status   >  srv/release.info
+    git show-ref >> srv/release.info
+}
+
 checkGitBranch
 checkGitStatus
 checkGitPush
+createReleaseFile
 
 echo -e "${GREEN}Rinomina precedente mtar:${NC}"
 mv -v mta_archives/cloud-cold-chain-multitenant_0.0.1.mtar mta_archives/cloud-cold-chain-multitenant_0.0.1.mtar_old
