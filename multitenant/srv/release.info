@@ -1,7 +1,8 @@
-BUILD Wed Nov 18 00:11:46 CET 2020 sbarzaghi@N2008
+BUILD Wed Nov 18 00:12:10 CET 2020 sbarzaghi@N2008
 
 On branch main
-Your branch is up to date with 'origin/main'.
+Your branch is ahead of 'origin/main' by 1 commit.
+  (use "git push" to publish your local commits)
 
 Changes not staged for commit:
   (use "git add <file>..." to update what will be committed)
