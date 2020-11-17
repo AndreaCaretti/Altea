@@ -60,21 +60,53 @@ class Queues {
                 this.redisClient = new Redis(this.redisCredentials.uri);
             } else {
                 //  CLOUD - utilizzo il cluster
+                /*
                 this.redisClient = new Redis.Cluster([
                     {
-                        port: 6379,
-                        host: "127.0.0.1",
+                        port: this.redisCredentials.port,
+                        host: this.redisCredentials.hostname,
+                    },
+                    {
+                        slotsRefreshTimeout: 2000,
+                        redisOptions: {
+                            tls: {},
+                            password: this.redisCredentials.password,
+                        },
                     },
                 ]);
+                */
+
+                this.redisClient = new Redis.Cluster(
+                    [
+                        {
+                            host: this.redisCredentials.hostname,
+                            port: this.redisCredentials.port,
+                        },
+                    ],
+                    {
+                        slotsRefreshTimeout: 2500,
+                        dnsLookup: (address, callback) => callback(null, address),
+                        redisOptions: {
+                            tls: {},
+                            password: this.redisCredentials.password,
+                        },
+                    }
+                );
+
+                console.log("cluster: ", this.redisClient);
             }
         } catch (error) {
             console.error("errore creazione cluster", error);
         }
 
+        // this.redisClient.on("connect", () => {
+        // console.log("REDIS : ", this.redisClient);
         // console.log("ClusterNodes: ", this.redisClient.nodes());
-        this.redisClient.on("connect", () => {
-            // console.log("REDIS : ", this.redisClient);
-            // console.log("ClusterNodes: ", this.redisClient.nodes());
+        // });
+
+        this.redisClient.on("error", (err) => {
+            console.log(`REDIS CONNECT error ${err}`);
+            console.log("node error", err.lastNodeError);
         });
     }
 
