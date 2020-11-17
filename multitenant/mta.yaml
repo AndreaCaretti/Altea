@@ -6,7 +6,7 @@
 ID: cloud-cold-chain-multitenant
 _schema-version: 3.2.0
 description: Cloud Cold Chain - Multitenant
-version: 0.0.1-8ad5fc778965a2b6dd0b535e0658cd36e5c1bd39
+version: 0.0.1-949e493e75759964b239d17d6c3db0cf40d10c63
 parameters:
     enable-parallel-deployments: true
     keep-existing-routes: true
