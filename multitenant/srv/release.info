@@ -1,16 +1,14 @@
-BUILD Wed Nov 18 00:12:10 CET 2020 sbarzaghi@N2008
+BUILD Wed Nov 18 00:19:14 CET 2020 sbarzaghi@N2008
 
 On branch main
-Your branch is ahead of 'origin/main' by 1 commit.
-  (use "git push" to publish your local commits)
+Your branch is up to date with 'origin/main'.
 
 Changes not staged for commit:
   (use "git add <file>..." to update what will be committed)
   (use "git restore <file>..." to discard changes in working directory)
-	modified:   scripts-utility/build.sh
 	modified:   srv/release.info
 
 no changes added to commit (use "git add" and/or "git commit -a")
 
 Git Commit:
-805d6f94709668b5b98f8020f4bbda67f4fd6c19 refs/remotes/origin/main
+8ad5fc778965a2b6dd0b535e0658cd36e5c1bd39 refs/remotes/origin/main
