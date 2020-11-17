@@ -74,11 +74,12 @@ function commit() {
 
 function main() {
 
-    set -o errexit
-
     checkGitBranch
     checkGitStatus
     checkGitPush
+
+    set -o errexit
+
     createReleaseFile
     updateRelease
     preparaFilename
