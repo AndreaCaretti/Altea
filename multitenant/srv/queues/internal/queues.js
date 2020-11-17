@@ -53,17 +53,20 @@ class Queues {
         this.redisClient.on("warning", () => console.log(`${this.queueName} warning`));
 */
 
-        //    this.redisClient = new redis.Cluster(this.redisCredentials.uri);
         try {
-            this.redisClient = new Redis(this.redisCredentials.uri);
-            /*
-            this.redisClient = new Redis.Cluster([
-                {
-                    port: 6379,
-                    host: "127.0.0.1",
-                },
-            ]);
-            */
+            const cfIp = process.env.CF_INSTANCE_INTERNAL_IP;
+            if (cfIp === undefined) {
+                // LOCALE - non posso utilizzare il cluster
+                this.redisClient = new Redis(this.redisCredentials.uri);
+            } else {
+                //  CLOUD - utilizzo il cluster
+                this.redisClient = new Redis.Cluster([
+                    {
+                        port: 6379,
+                        host: "127.0.0.1",
+                    },
+                ]);
+            }
         } catch (error) {
             console.error("errore creazione cluster", error);
         }
