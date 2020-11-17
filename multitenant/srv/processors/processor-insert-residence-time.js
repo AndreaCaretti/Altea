@@ -17,7 +17,7 @@ class ProcessorInsertResidenceTime {
         try {
             movement = await this.queueResidenceTime.getAndSetToProcessing();
         } catch (error) {
-            this.logger.error("Connessione redis caduta, mi rimetto in attesa");
+            this.logger.error("Connessione redis caduta, mi rimetto in attesa", error);
             setImmediate(this.tick);
             return;
         }

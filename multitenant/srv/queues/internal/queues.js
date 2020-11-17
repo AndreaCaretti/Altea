@@ -1,4 +1,5 @@
-const redis = require("redis");
+// const redis = require("redis");
+const Redis = require("ioredis");
 const xsenv = require("@sap/xsenv");
 
 class Queues {
@@ -14,6 +15,7 @@ class Queues {
     }
 
     start() {
+        /*
         const connectionOptions = {
             retry_strategy(options) {
                 // if (options.error && options.error.code === "ECONNREFUSED") {
@@ -49,12 +51,69 @@ class Queues {
         this.redisClient.on("reconnecting", () => console.log(`${this.queueName} reconnecting`));
         this.redisClient.on("end", () => console.log(`${this.queueName} end`));
         this.redisClient.on("warning", () => console.log(`${this.queueName} warning`));
+*/
+
+        try {
+            const cfIp = process.env.CF_INSTANCE_INTERNAL_IP;
+            if (cfIp === undefined) {
+                // LOCALE - non posso utilizzare il cluster
+                this.redisClient = new Redis(this.redisCredentials.uri);
+            } else {
+                //  CLOUD - utilizzo il cluster
+                /*
+                this.redisClient = new Redis.Cluster([
+                    {
+                        port: this.redisCredentials.port,
+                        host: this.redisCredentials.hostname,
+                    },
+                    {
+                        slotsRefreshTimeout: 2000,
+                        redisOptions: {
+                            tls: {},
+                            password: this.redisCredentials.password,
+                        },
+                    },
+                ]);
+                */
+
+                this.redisClient = new Redis.Cluster(
+                    [
+                        {
+                            host: this.redisCredentials.hostname,
+                            port: this.redisCredentials.port,
+                        },
+                    ],
+                    {
+                        slotsRefreshTimeout: 2500,
+                        dnsLookup: (address, callback) => callback(null, address),
+                        redisOptions: {
+                            tls: {},
+                            password: this.redisCredentials.password,
+                        },
+                    }
+                );
+
+                console.log("cluster: ", this.redisClient);
+            }
+        } catch (error) {
+            console.error("errore creazione cluster", error);
+        }
+
+        // this.redisClient.on("connect", () => {
+        // console.log("REDIS : ", this.redisClient);
+        // console.log("ClusterNodes: ", this.redisClient.nodes());
+        // });
+
+        this.redisClient.on("error", (err) => {
+            console.log(`REDIS CONNECT error ${err}`);
+            console.log("node error", err.lastNodeError);
+        });
     }
 
     push(queueName, element) {
         console.log("Push", queueName, element);
         return new Promise((resolve, _reject) => {
-            this.redisClient.LPUSH(queueName, JSON.stringify(element), (_err, number) => {
+            this.redisClient.lpush(queueName, JSON.stringify(element), (_err, number) => {
                 console.log("Resolve", number);
                 resolve(number);
             });
@@ -63,7 +122,7 @@ class Queues {
 
     remove(queueName, element) {
         return new Promise((resolve, _reject) => {
-            this.redisClient.LREM(queueName, 1, JSON.stringify(element), (_err, number) => {
+            this.redisClient.lrem(queueName, 1, JSON.stringify(element), (_err, number) => {
                 resolve(number);
             });
         });
@@ -71,9 +130,9 @@ class Queues {
 
     move(fromQueueName, _toQueueName) {
         return new Promise((resolve, reject) => {
-            this.redisClient.BRPOP(fromQueueName, 0, (error, element) => {
+            this.redisClient.brpop(fromQueueName, 0, (error, element) => {
                 if (error) {
-                    console.error("ERRORE REDIS BRPOPLPUSH:", error);
+                    console.error("ERRORE REDIS BRPOP:", error);
                     reject(error); // Reject fa crashare nodejs, da gestire
                     return;
                 }
