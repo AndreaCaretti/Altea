@@ -1,6 +1,29 @@
 #!/bin/bash
 GREEN='\033[0;32m'
+RED='\033[0;31m'
 NC='\033[0m'
+
+function checkGitBranch() {
+    CURRENT_BRANCH=`git branch --show-current`
+
+    if [ $CURRENT_BRANCH != 'main' ]; then
+        echo -e "${RED}------- Bisogna essere nella branch 'main' -------${NC}\n"
+        exit 1
+    fi
+}
+
+function checkGitStatus() {
+    CHANGED_FILES=`git status -s | wc -l`
+
+    if [ $CHANGED_FILES > 0 ]; then
+        echo -e "${RED}Ci sono dei file non committati:${NC}"
+        exit 2
+    fi
+
+}
+
+checkGitBranch
+checkGitStatus
 
 echo -e "${GREEN}Rinomina precedente mtar:${NC}"
 mv -v mta_archives/cloud-cold-chain-multitenant_0.0.1.mtar mta_archives/cloud-cold-chain-multitenant_0.0.1.mtar_old
