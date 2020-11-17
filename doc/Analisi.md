@@ -814,11 +814,11 @@ Cloud Cold Chain Development Customer 1
 
 Solo sottoscrizione alla cloud cold chain e portale, CF non attivato
 
-# Documentazione
+# Documentazione tecnica flussi
 
 ## Ingestion dati movimentazione handling unit
 
--   gate rfid invia a enterprise messaging in mqtt nel topic specifico del cliente _aggiungere esempio del topic_
+-   gate rfid invia a enterprise messaging in mqtt nel topic specifico del cliente TODO: _aggiungere esempio del topic_
 -   enterprise messaging sottoscrive il topic e aggiunge ad una coda
 -   la coda è collegata ad un webhook che punto al servizio odata del cap con autenticazione OAuth2, viene richiesto il token al subaccount del cliente, il token staccato determina il tenant del client
 -   il servizio cap inserisce il record secco nella tabella senza controlli HandlingUnitMovementsRaw
@@ -832,11 +832,11 @@ Solo sottoscrizione alla cloud cold chain e portale, CF non attivato
     -   ricerca nella tabella `Routes` con controlPoint e direction per determinare l'area di destinazione della scatola
     -   inserisce nella tabella `HandlingUnitsResidenceTime` un record con: `sscc`, `step`, `area`, `inBusinessTime` con il t del movimento
     -   aggiorna il campo `ResidenceTimeStatus` della tabella `HandlingUnitMovements` a `OK`
-    -   se il t del movimento è maggiore di `HandlingUnits-inAreaBusinessTime` aggiorna `lastKnowArea` e `inAreaBusinessTime`
+    -   se il TE del movimento è maggiore di `HandlingUnits-inAreaBusinessTime` aggiorna `lastKnowArea` e `inAreaBusinessTime`
 
 ## Determinazione HandlingUnitsResidenceTime-outBusinessTime e residenceTime
 
--   ogni n minuti random tra parte un processo per un singolo cliente
+-   ogni n minuti random parte un processo per un singolo cliente
 -   processo che ricerca tutti i record in `HandlingUnitsResidenceTime` senza `outBusinessTime`
 -   per ogni record cerca un record con T > del T movimento e con step = step del record + 1 oppure step del record - 1
 -   se lo trova aggiorna il campo `outBusinessTime` con `inBusinessTime` del record trovato
