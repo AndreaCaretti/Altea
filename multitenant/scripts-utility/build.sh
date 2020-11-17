@@ -7,7 +7,7 @@ function checkGitBranch() {
     CURRENT_BRANCH=`git branch --show-current`
 
     if [ $CURRENT_BRANCH != 'main' ]; then
-        echo -e "${RED}------- Bisogna essere nella branch 'main' -------${NC}\n"
+        echo -e "${RED}Bisogna essere nella branch 'main'${NC}\n"
         exit 1
     fi
 }
@@ -27,7 +27,7 @@ function checkGitPush() {
     UPTODATE=`git status | grep "Your branch is up to date with 'origin/main'"`
 
     if [ -z $UPTODATE ]; then
-        echo -e "${RED}Prima fare il push delle comodifiche nella branch 'origin/main'${NC}\n"
+        echo -e "${RED}Prima fare il push delle modifiche nella branch 'origin/main'${NC}\n"
         exit 3
     fi
 }
