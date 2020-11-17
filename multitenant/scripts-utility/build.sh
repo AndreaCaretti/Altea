@@ -33,27 +33,73 @@ function checkGitPush() {
 }
 
 function createReleaseFile() {
-    git status   >  srv/release.info
-    git show-ref >> srv/release.info
+    echo -e "BUILD `date` `whoami`@`hostname`\n" >  srv/release.info
+    git status >> srv/release.info
+    echo -e "\nGit Commit:">> srv/release.info
+    git show-ref | grep origin/main >> srv/release.info
 }
 
-checkGitBranch
-checkGitStatus
-checkGitPush
-createReleaseFile
+function updateRelease() {
+    GITCOMMIT=`git show-ref | grep origin/main | cut -f 1 -d ' '`
 
-echo -e "${GREEN}Rinomina precedente mtar:${NC}"
-mv -v mta_archives/cloud-cold-chain-multitenant_0.0.1.mtar mta_archives/cloud-cold-chain-multitenant_0.0.1.mtar_old
+    SOPRA=`head mta.yaml -n 8`
+    SOTTO=`tail mta.yaml -n +10`
+    VERSION="version: 0.0.1-$GITCOMMIT"
 
-echo -e "${GREEN}Cancellazione makefile rimasti appesi:${NC}"
-rm -v Makefile*
+    echo -e "$SOPRA" > mta.yaml
+    echo -e "$VERSION" >> mta.yaml
+    echo -e "$SOTTO"  >> mta.yaml
+}
 
-echo -e "${GREEN}Move db/data in db/local_data${NC}"
-mv -v db/data db/local_data
+function preparaFilename() {
+    GITCOMMIT=`git show-ref | grep origin/main | cut -f 1 -d ' ' | cut -c -7`
+    DATA=`date --iso-8601=seconds`
+    FILENAME="ccp-$DATA-$GITCOMMIT"
 
-set -o errexit
+    echo -e  "${GREEN}Creazione file $FILENAME${NC}\n"
+}
 
-echo -e "${GREEN}Configurazione approuter per SCP:${NC}"
-cp cloud-foundry/approuter/xs-app-cloud.json cloud-foundry/approuter/xs-app.json -v
-echo -e "\n"
-mbt build
+function build() {
+    echo $FILENAME
+    mbt build --mtar $FILENAME
+}
+
+function commit() {
+    git add srv/release.info
+    git add mta.yaml
+    git commit -m "Build MTA $FILENAME"
+    echo "Push su github della build..."
+    git push
+}
+
+function main() {
+
+    set -o errexit
+
+    checkGitBranch
+    checkGitStatus
+    checkGitPush
+    createReleaseFile
+    updateRelease
+    preparaFilename
+    commit
+
+    set +o errexit
+
+    echo -e "${GREEN}Cancellazione makefile rimasti appesi:${NC}"
+    rm -v Makefile*
+
+    echo -e "${GREEN}Move db/data in db/local_data${NC}"
+    mv -v db/data db/local_data
+
+    set -o errexit
+
+    echo -e "${GREEN}Configurazione approuter per SCP:${NC}"
+    cp cloud-foundry/approuter/xs-app-cloud.json cloud-foundry/approuter/xs-app.json -v
+    echo -e "\n"
+
+    build
+
+}
+
+main
