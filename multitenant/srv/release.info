@@ -1,6 +1,6 @@
-BUILD Wed Nov 18 00:46:34 CET 2020 sbarzaghi@N2008
+BUILD Wed Nov 18 00:47:41 CET 2020 sbarzaghi@N2008
 
-VERSIONE MTA version: 0.0.4-0695fcc454276a091d509a8c5b8ee73b341cbc8b
+VERSIONE MTA version: 0.0.5-b17bb6f960050fa97aa36c0bac8ce2df32f4f628
 
 On branch main
 Your branch is up to date with 'origin/main'.
@@ -9,11 +9,9 @@ Changes not staged for commit:
   (use "git add <file>..." to update what will be committed)
   (use "git restore <file>..." to discard changes in working directory)
 	modified:   mta.yaml
-	modified:   scripts-utility/build.sh
-	modified:   scripts-utility/deploy.sh
 	modified:   srv/release.info
 
 no changes added to commit (use "git add" and/or "git commit -a")
 
 Git Commit:
-0695fcc454276a091d509a8c5b8ee73b341cbc8b refs/remotes/origin/main
+b17bb6f960050fa97aa36c0bac8ce2df32f4f628 refs/remotes/origin/main
