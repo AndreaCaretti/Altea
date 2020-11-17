@@ -14,10 +14,11 @@
         "@sap/instance-manager": "^2",
         "@sap/xsenv": "^3.1.0",
         "@sap/xssec": "^2.1.16",
+        "body-parser": "^1.19.0",
         "cf-nodejs-logging-support": "^6.5.3",
         "express": "^4",
+        "ioredis": "^4.19.2",
         "passport": "^0",
-        "redis": "^3.0.2",
         "request": "^2"
     },
     "devDependencies": {
@@ -35,7 +36,7 @@
         "npm": "6.14.6"
     },
     "scripts": {
-        "start": "cds run",
+        "start": "export NODE_OPTIONS=--inspect;cds run",
         "watch-local-db": "scripts-utility/watch-local-db.sh",
         "watch-remote-db": "scripts-utility/watch-remote-db.sh",
         "build": "scripts-utility/build.sh",
@@ -47,7 +48,8 @@
         "update-db-tenants": "node scripts-utility/update-db-tenants.js",
         "start-local-redis": "scripts-utility/start-local-redis.sh",
         "lint": "eslint srv",
-        "postlint": "echo ✅ lint valid"
+        "postlint": "echo ✅ lint valid",
+        "export-db-to-csv": "scripts-utility/export-db-to-csv.sh"
     },
     "husky": {
         "hooks": {

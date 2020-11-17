@@ -25,10 +25,11 @@ E' possibile immagazzinare anche temporaneamente dei prodotti, cioè inserisco t
 # Processo
 
 Caricamento manuale in CCP della configurazione del tenant del cliente:
-- dati anagrafici
-- elenco plant
-- elenco aree
-- elenco prodotti
+
+-   dati anagrafici
+-   elenco plant
+-   elenco aree
+-   elenco prodotti
 
 In ERP viene creato il lotto, il lotto viene caricato manulmente in CCP.
 
@@ -154,9 +155,9 @@ Dati anagrafici soggetti
 
 | _ID_   | name (50)  | category (CustomerCategories) | gs1CompanyPrefix (9) | tenantGUID                           |
 | ------ | ---------- | ----------------------------- | -------------------- | ------------------------------------ |
-| *GUID* | Customer A | Produttore                    | 123456789            | a1d03e7f-53e4-414b-aca0-c4d44157f2a0 |
-| *GUID* | Customer B | Trasportatore                 | 234567890            | dfea1d03e7f-53e4-414b-aca0-c4d4334ff |
-| *GUID* | Customer C | Depositario                   | 567891234            | e34s1d03e7f-53e4-414b-aca0-ddde3322a |
+| _GUID_ | Customer A | Produttore                    | 123456789            | a1d03e7f-53e4-414b-aca0-c4d44157f2a0 |
+| _GUID_ | Customer B | Trasportatore                 | 234567890            | dfea1d03e7f-53e4-414b-aca0-c4d4334ff |
+| _GUID_ | Customer C | Depositario                   | 567891234            | e34s1d03e7f-53e4-414b-aca0-ddde3322a |
 
 # Tabelle configurazione piattaforma
 
@@ -187,11 +188,11 @@ Categorie di control points
 
 | _ID_   | _name_ (25)         |
 | ------ | ------------------- |
-| *GUID* | Etichettatrice RFID |
-| *GUID* | Gate RFID           |
-| *GUID* | Gate RFID on Truck  |
-| *GUID* | Trasportatore       |
-| *GUID* | Depositario         |
+| _GUID_ | Etichettatrice RFID |
+| _GUID_ | Gate RFID           |
+| _GUID_ | Gate RFID on Truck  |
+| _GUID_ | Trasportatore       |
+| _GUID_ | Depositario         |
 
 ## Tabella TemperatureRanges
 
@@ -199,13 +200,13 @@ Range di temperature
 
 | _ID_   | _name_ (25) | min | max | warningMin | warningMax |
 | ------ | ----------- | --- | --- | ---------- | ---------- |
-| *GUID* | 6-10        | 6   | 10  | 8          | 9          |
-| *GUID* | 12-18       | 12  | 18  | 14         | 16         |
+| _GUID_ | 6-10        | 6   | 10  | 8          | 9          |
+| _GUID_ | 12-18       | 12  | 18  | 14         | 16         |
 
-* min         temperatura minima in °C per calcolare TOR
-* max         temperatura massima in °C per calcolare TOR
-* warningMin  temperatura minima in °C per far scattare il warning
-* warningMax  temperatura massima in °C  per far scattare il warning
+-   min temperatura minima in °C per calcolare TOR
+-   max temperatura massima in °C per calcolare TOR
+-   warningMin temperatura minima in °C per far scattare il warning
+-   warningMax temperatura massima in °C per far scattare il warning
 
 # Tabelle parametriche/customizing singolo cliente
 
@@ -217,14 +218,14 @@ Dati anagrafici cliente, siccome i dati dei clienti sono separati a livello di t
 
 | _ID_   | name (50)  | category (CustomerCategories) | gs1CompanyPrefix (9) |
 | ------ | ---------- | ----------------------------- | -------------------- |
-| *GUID* | Customer A | Produttore                    | 123456789            |
+| _GUID_ | Customer A | Produttore                    | 123456789            |
 
 ## Tabella Locations
 
 | _ID_   | name   |
 | ------ | ------ |
-| *GUID* | PlantA |
-| *GUID* | PlantB |
+| _GUID_ | PlantA |
+| _GUID_ | PlantB |
 
 ## Tabella Areas
 
@@ -232,10 +233,10 @@ Dati anagrafici cliente, siccome i dati dei clienti sono separati a livello di t
 
 | _ID_   | name               | category (AreaCategories) | location (Locations) | ID Device IoT |
 | ------ | ------------------ | ------------------------- | -------------------- | ------------- |
-| *GUID* | Produzione Plant A | No Temperature            | PlantA               |               |
-| *GUID* | Stoccaggio         | Cold Room                 | PlantA               | 99999         |
-| *GUID* | Uscita merci       | No Temperature            | PlantA               |               |
-| *GUID* | Piazzale esterno   | No Temperature            | PlantA               |               |
+| _GUID_ | Produzione Plant A | No Temperature            | PlantA               |               |
+| _GUID_ | Stoccaggio         | Cold Room                 | PlantA               | 99999         |
+| _GUID_ | Uscita merci       | No Temperature            | PlantA               |               |
+| _GUID_ | Piazzale esterno   | No Temperature            | PlantA               |               |
 
 -   Mappare le aree non a temperatura controllata è utile anche ai fini statistici. Grafici che indicano le aree non controllate a maggior permanenza.
 
@@ -243,18 +244,18 @@ Dati anagrafici cliente, siccome i dati dei clienti sono separati a livello di t
 
 | _ID_   | name      | category (AreaCategories) | location (Locations) | ID Device IoT |
 | ------ | --------- | ------------------------- | -------------------- | ------------- |
-| *GUID* | Targa ABC | Refrigerator Truck        | Mobile               | 11111         |
-| *GUID* | Targa 123 | Refrigerator Truck        | Mobile               | 22222         |
-| *GUID* | Targa ZXY | Refrigerator Truck        | Mobile               | 33333         |
+| _GUID_ | Targa ABC | Refrigerator Truck        | Mobile               | 11111         |
+| _GUID_ | Targa 123 | Refrigerator Truck        | Mobile               | 22222         |
+| _GUID_ | Targa ZXY | Refrigerator Truck        | Mobile               | 33333         |
 
 ### Depositario
 
 | _ID_   | name             | category (AreaCategories) | location (Locations) | ID Device IoT |
 | ------ | ---------------- | ------------------------- | -------------------- | ------------- |
-| *GUID* | Entrata merci    | No Temperature            | PlantA               |               |
-| *GUID* | Stoccaggio       | Cold Room                 | PlantA               | 5555          |
-| *GUID* | Uscita merci     | No Temperature            | PlantA               |               |
-| *GUID* | Piazzale esterno | No Temperature            | PlantA               |               |
+| _GUID_ | Entrata merci    | No Temperature            | PlantA               |               |
+| _GUID_ | Stoccaggio       | Cold Room                 | PlantA               | 5555          |
+| _GUID_ | Uscita merci     | No Temperature            | PlantA               |               |
+| _GUID_ | Piazzale esterno | No Temperature            | PlantA               |               |
 
 ## Tabella ControlPoints
 
@@ -262,29 +263,29 @@ Dati anagrafici cliente, siccome i dati dei clienti sono separati a livello di t
 
 | _ID_   | name             | category (ControlPointsCategories) |
 | ------ | ---------------- | ---------------------------------- |
-| *GUID* | Etichettatrice A | Etichettatrice RFID                |
-| *GUID* | Stoccaggio       | Gate RFID                          |
-| *GUID* | Uscita A         | Gate RFID                          |
-| *GUID* | Trasportatore 1  | Trasportatore                      |
-| *GUID* | Trasportatore n  | Trasportatore                      |
-| *GUID* | Depositario 1    | Depositario                        |
-| *GUID* | Depositario n    | Depositario                        |
+| _GUID_ | Etichettatrice A | Etichettatrice RFID                |
+| _GUID_ | Stoccaggio       | Gate RFID                          |
+| _GUID_ | Uscita A         | Gate RFID                          |
+| _GUID_ | Trasportatore 1  | Trasportatore                      |
+| _GUID_ | Trasportatore n  | Trasportatore                      |
+| _GUID_ | Depositario 1    | Depositario                        |
+| _GUID_ | Depositario n    | Depositario                        |
 
 ### Trasportatore
 
 | _ID_   | name      | category (ControlPointsCategories) |
 | ------ | --------- | ---------------------------------- |
-| *GUID* | Targa ABC | Gate RFID                          |
-| *GUID* | Targa 123 | Gate RFID                          |
-| *GUID* | Targa ZXY | Gate RFID                          |
+| _GUID_ | Targa ABC | Gate RFID                          |
+| _GUID_ | Targa 123 | Gate RFID                          |
+| _GUID_ | Targa ZXY | Gate RFID                          |
 
 ### Produttore
 
 | _ID_   | name           | category (ControlPointsCategories) |
 | ------ | -------------- | ---------------------------------- |
-| *GUID* | Entrate Merci  | Gate RFID                          |
-| *GUID* | Stoccaggio     | Gate RFID                          |
-| *GUID* | Uscita Merci A | Gate RFID                          |
+| _GUID_ | Entrate Merci  | Gate RFID                          |
+| _GUID_ | Stoccaggio     | Gate RFID                          |
+| _GUID_ | Uscita Merci A | Gate RFID                          |
 
 # Tabelle anagrafiche
 
@@ -294,14 +295,13 @@ Tabelle anagrafiche con dati specifici di un singolo cliente, i dati dei clienti
 
 | _ID_   | _gtin_ (GTIN) | erpProductCode (50) | denomination (100) | max_tor | temperatureRange | route  |
 | ------ | ------------- | ------------------- | ------------------ | ------- | ---------------- | ------ |
-| *GUID* | 1234567890123 | PROD-001            | Sacca di sangue    | 200     | 12-18            | *GUID* |
+| _GUID_ | 1234567890123 | PROD-001            | Sacca di sangue    | 200     | 12-18            | _GUID_ |
 
-GTIN:   
-  * 01-09 Prefisso aziendale GS1  
-  * 10-12 Codide prodotto  
-  * 13    Cifra di controllo  
+-   01-09 Prefisso aziendale GS1
+-   10-12 Codide prodotto
+-   13 Cifra di controllo
 
-* max_tor è il numero di minuti massimo fuori dal range di temperatura
+-   max_tor è il numero di minuti massimo fuori dal range di temperatura
 
 ## Tabella Routes
 
@@ -309,34 +309,36 @@ Records solo nel DB del produttore
 
 | _ID_   | step | controlPoint (controlPoints) | direction | destinationArea (Locations)  |
 | ------ | ---- | ---------------------------- | --------- | ---------------------------- |
-| *GUID* | 1    | Etichettatrice A             | F         | Produzione Plant A           |
-| *GUID* | 2    | Stoccaggio                   | F         | Cold Room                    |
-| *GUID* | 3    | Stoccaggio                   | B         | Uscita merci                 |
-| *GUID* | 4    | Uscita A                     | F         | Piazzale esterno             |
-| *GUID* | 5    | Trasportatore                | F         | Truck                        |
-| *GUID* | 6    | Trasportatore                | B         | Piazzale esterno depositario |
-| *GUID* | 7    | Depositario                  | F         | Depositario                  |
+| _GUID_ | 1    | Etichettatrice A             | F         | Produzione Plant A           |
+| _GUID_ | 2    | Stoccaggio                   | F         | Cold Room                    |
+| _GUID_ | 3    | Stoccaggio                   | B         | Uscita merci                 |
+| _GUID_ | 4    | Uscita A                     | F         | Piazzale esterno             |
+| _GUID_ | 5    | Trasportatore                | F         | Truck                        |
+| _GUID_ | 6    | Trasportatore                | B         | Piazzale esterno depositario |
+| _GUID_ | 7    | Depositario                  | F         | Depositario                  |
 
 ## Tabella Lots
 
-| _ID_   | _name_  (20) | productionDate (Date) | expirationDate (Date) | Products (association) |
-| ------ | ------------ | --------------------- | --------------------- | ---------------------- |
-| *GUID* | LOT-XYZ      | 06.07.2020            | 06.07.2022            | prod567890123          |
+| _ID_   | _name_ (20) | productionDate (Date) | expirationDate (Date) | Product (association) |
+| ------ | ----------- | --------------------- | --------------------- | --------------------- |
+| _GUID_ | LOT-XYZ     | 06.07.2020            | 06.07.2022            | prod567890123         |
 
 ## Tabella HandlingUnits
 
-| _sscc_ (SSCC)      | lot     | lastKnownArea(Locations) | inAreaBusinessTime (Timestamp) | jsonSummary (LargeString)             | blockchainHash (100)                                 |
-| ------------------ | ------- | ------------------------ | ------------------------------ | ------------------------------------- | ---------------------------------------------------- |
-| 123456789012345678 | LOT-XYZ | Uscita magazzino         | 2020-10-14T09:01:33.763Z       | { HandlingUnit: "HandlingUnitA", etc} | adb24ba2f2ef33d73d79e60b9d47f7fb97c69013eb6c8f37c... |
+| _sscc_ (SSCC)      | lot     | lastKnownArea(Areas) | inAreaBusinessTime (Timestamp) | lastMovement (HandlingUnitsMovements) | jsonSummary (LargeString)             | blockchainHash (100)                                 |
+| ------------------ | ------- | -------------------- | ------------------------------ | ------------------------------------- | ------------------------------------- | ---------------------------------------------------- |
+| 123456789012345678 | LOT-XYZ | Uscita magazzino     | 2020-10-14T09:01:33.763Z       | _GUID_                                | { HandlingUnit: "HandlingUnitA", etc} | adb24ba2f2ef33d73d79e60b9d47f7fb97c69013eb6c8f37c... |
 
-* il campo lastKnowArea indica l'ultima posizione conosciuta dell'SSCC
-* il campo inAreaBusinessTime indica il momento in cui è stato rilevato l'ultimo spostamento
+-   `lastKnowArea`: ultima posizione conosciuta dell'SSCC
+-   `inAreaBusinessTime`: momento in cui è stato rilevato l'ultimo spostamento
+-   `lastMovement`: guid dell'ultimo movimento
 
-SSCC:   
-  * 01    Cifra di estensione, identifica il tipo di collo: pallet, cartone, scatola
-  * 02-10 Prefisso aziendale GS1
-  * 11-17 Numero seriale unità logistica
-  * 18    Cifra di controllo
+SSCC:
+
+-   01 Cifra di estensione, identifica il tipo di collo: pallet, cartone, scatola
+-   02-10 Prefisso aziendale GS1
+-   11-17 Numero seriale unità logistica
+-   18 Cifra di controllo
 
 # Tabelle transazionali
 
@@ -348,20 +350,20 @@ Passaggi Handling Unit da Control Point
 
 | _ID_   | CP_ID (String 36)                    | SSCC_ID (SSCC)     | TE (String 24)           | TS (String 24)           | DIR (String 1) |
 | ------ | ------------------------------------ | ------------------ | ------------------------ | ------------------------ | -------------- |
-| *GUID* | 90abe75c-e2c6-4e5f-a12f-fb81aa50d011 | 123456789012345678 | 2020-10-14T09:01:33.763Z | 2020-10-14T09:01:33.763Z | F              |
-| *GUID* | 90abe75c-e2c6-4e5f-a12f-fb81aa50d011 | 123456789012345678 | 2020-10-14T09:02:33.763Z | 2020-10-14T09:02:33.763Z | F              |
-| *GUID* | 90abe75c-e2c6-4e5f-a12f-fb81aa50d011 | 123456789012345678 | 2020-10-14T09:03:33.763Z | 2020-10-14T09:03:33.763Z | F              |
-| *GUID* | 90abe75c-e2c6-4e5f-a12f-fb81aa50d011 | 123456789012345678 | 2020-10-14T09:04:33.763Z | 2020-10-14T09:04:33.763Z | F              |
-| *GUID* | 90abe75c-e2c6-4e5f-a12f-fb81aa50d011 | 123456789012345678 | 2020-10-14T09:05:33.763Z | 2020-10-14T09:05:33.763Z | B              |
-| *GUID* | 90abe75c-e2c6-4e5f-a12f-fb81aa50d011 | 123456789012345678 | 2020-10-14T09:06:33.763Z | 2020-10-14T09:06:33.763Z | F              |
-| *GUID* | 90abe75c-e2c6-4e5f-a12f-fb81aa50d011 | 123456789012345678 | 2020-10-14T09:07:33.763Z | 2020-10-14T09:07:33.763Z | B              |
-| *GUID* | 90abe75c-e2c6-4e5f-a12f-fb81aa50d011 | 123456789012345678 | 2020-10-14T09:08:33.763Z | 2020-10-14T09:08:33.763Z | F              |
+| _GUID_ | 90abe75c-e2c6-4e5f-a12f-fb81aa50d011 | 123456789012345678 | 2020-10-14T09:01:33.763Z | 2020-10-14T09:01:33.763Z | F              |
+| _GUID_ | 90abe75c-e2c6-4e5f-a12f-fb81aa50d011 | 123456789012345678 | 2020-10-14T09:02:33.763Z | 2020-10-14T09:02:33.763Z | F              |
+| _GUID_ | 90abe75c-e2c6-4e5f-a12f-fb81aa50d011 | 123456789012345678 | 2020-10-14T09:03:33.763Z | 2020-10-14T09:03:33.763Z | F              |
+| _GUID_ | 90abe75c-e2c6-4e5f-a12f-fb81aa50d011 | 123456789012345678 | 2020-10-14T09:04:33.763Z | 2020-10-14T09:04:33.763Z | F              |
+| _GUID_ | 90abe75c-e2c6-4e5f-a12f-fb81aa50d011 | 123456789012345678 | 2020-10-14T09:05:33.763Z | 2020-10-14T09:05:33.763Z | B              |
+| _GUID_ | 90abe75c-e2c6-4e5f-a12f-fb81aa50d011 | 123456789012345678 | 2020-10-14T09:06:33.763Z | 2020-10-14T09:06:33.763Z | F              |
+| _GUID_ | 90abe75c-e2c6-4e5f-a12f-fb81aa50d011 | 123456789012345678 | 2020-10-14T09:07:33.763Z | 2020-10-14T09:07:33.763Z | B              |
+| _GUID_ | 90abe75c-e2c6-4e5f-a12f-fb81aa50d011 | 123456789012345678 | 2020-10-14T09:08:33.763Z | 2020-10-14T09:08:33.763Z | F              |
 
-* CP_ID      GUID del control point definito in CCP       
-* TE         Momento dell'evento                          
-* TS         Momento dell'invio del messaggio             
-* SSCC_ID    Codice SSCC dell'handling unit               
-* DIR        Valori possibili: F -> Forward, B -> Backward
+-   CP_ID GUID del control point definito in CCP
+-   TE Momento dell'evento
+-   TS Momento dell'invio del messaggio
+-   SSCC_ID Codice SSCC dell'handling unit
+-   DIR Valori possibili: F -> Forward, B -> Backward
 
 ## Tabella HandlingUnitsMovements
 
@@ -369,42 +371,42 @@ Passaggi Handling Unit da Control Point
 
 | _ID_   | sscc (SSCC)        | businessTime (Timestamp) | controlPoint           | direction | destinationArea                  | elaborationTime (Timestamp) |
 | ------ | ------------------ | ------------------------ | ---------------------- | --------- | -------------------------------- | --------------------------- |
-| *GUID* | 123456789012345678 | 2020-10-14T09:01:33.763Z | Etichettatrice A       | Forward   | Produzione                       | 2020-10-14T09:01:33.763Z    |
-| *GUID* | 123456789012345678 | 2020-10-14T09:02:33.763Z | Ingresso Stoccaggio    | Forward   | Stoccaggio                       |                             |
-| *GUID* | 123456789012345678 | 2020-10-14T09:03:33.763Z | Uscita Stoccaggio      | Forward   | Spedizione                       |                             |
-| *GUID* | 123456789012345678 | 2020-10-14T09:04:33.763Z | Uscita Stoccaggio      | Backward  | Stoccaggio                       |                             |
-| *GUID* | 123456789012345678 | 2020-10-14T09:05:33.763Z | Ingresso spedizione    | Forward   | Spedizione                       |                             |
-| *GUID* | 123456789012345678 | 2020-10-14T09:06:33.763Z | Uscita area spedizione | Forward   | Uscita magazzino                 |                             |
-| *GUID* | 123456789012345678 | 2020-10-14T09:07:33.763Z | PortaTruckABCD         | Forward   | Truck Targa ABCD                 |                             |
-| *GUID* | 123456789012345678 | 2020-10-14T09:08:33.763Z | PortaTruckABCD         | Backward  | **Come capire la destinazione?** |                             |
+| _GUID_ | 123456789012345678 | 2020-10-14T09:01:33.763Z | Etichettatrice A       | Forward   | Produzione                       | 2020-10-14T09:01:33.763Z    |
+| _GUID_ | 123456789012345678 | 2020-10-14T09:02:33.763Z | Ingresso Stoccaggio    | Forward   | Stoccaggio                       |                             |
+| _GUID_ | 123456789012345678 | 2020-10-14T09:03:33.763Z | Uscita Stoccaggio      | Forward   | Spedizione                       |                             |
+| _GUID_ | 123456789012345678 | 2020-10-14T09:04:33.763Z | Uscita Stoccaggio      | Backward  | Stoccaggio                       |                             |
+| _GUID_ | 123456789012345678 | 2020-10-14T09:05:33.763Z | Ingresso spedizione    | Forward   | Spedizione                       |                             |
+| _GUID_ | 123456789012345678 | 2020-10-14T09:06:33.763Z | Uscita area spedizione | Forward   | Uscita magazzino                 |                             |
+| _GUID_ | 123456789012345678 | 2020-10-14T09:07:33.763Z | PortaTruckABCD         | Forward   | Truck Targa ABCD                 |                             |
+| _GUID_ | 123456789012345678 | 2020-10-14T09:08:33.763Z | PortaTruckABCD         | Backward  | **Come capire la destinazione?** |                             |
 
-* destination area viene determinata dalla tabella percorsi al momento dell'arrivo dell'evento nella piattaforma, modifiche alla tabella percorsi non ha conseguenze sui dati salvati
-* elaborationTime indica in quale momento il movimento è stato elaborato dalla routine che gestisce gli spostamenti cioè che aggiorna il campo lastKnowArea nella tabella HandlingUnits
-  e aggiorna la tabella HandlingUnitsResidenceTime
+-   destination area viene determinata dalla tabella percorsi al momento dell'arrivo dell'evento nella piattaforma, modifiche alla tabella percorsi non ha conseguenze sui dati salvati
+-   elaborationTime indica in quale momento il movimento è stato elaborato dalla routine che gestisce gli spostamenti cioè che aggiorna il campo lastKnowArea nella tabella HandlingUnits
+    e aggiorna la tabella HandlingUnitsResidenceTime
 
-## Tabella HandlingUnitsResidenceTime
+## Tabella ResidenceTime
 
 Permanenza Handling Unit in area
 
-| _ID_   | sscc (SSCC)        | step | area                         | inBusinessTime           | outBusinessTime          | residenceTime (Integer) | tor  | failureIn | failureOut | totalTor | tmin  | tmax  | torElaborationTime (Timestamp) |
-| ------ | ------------------ | ---- | ---------------------------- | ------------------------ | ------------------------ | ----------------------- | ---- | --------- | ---------- | -------- | :---: | :---: | ------------------------------ |
-| *GUID* | 123456789012345678 | 1    | Produzione Plant A           | 2020-10-14T09:01:33.763Z | 2020-10-14T09:02:33.763Z | 1600                    | 1600 |           |            |          |       |       | 2020-10-14T09:01:33.763Z       |
-| *GUID* | 123456789012345678 | 2    | Cold Room                    | 2020-10-14T09:02:33.763Z | 2020-10-14T09:03:33.763Z | 3600                    | 30   |           |            |          |   4   |  20   | 2020-10-14T09:01:33.763Z       |
-| *GUID* | 123456789012345678 | 3    | Uscita merci                 | 2020-10-14T09:03:33.763Z | 2020-10-14T09:04:33.763Z | 1600                    | 1600 |           |            |          |       |       | 2020-10-14T09:01:33.763Z       |
-| *GUID* | 123456789012345678 | 2    | Cold Room                    | 2020-10-14T09:04:33.763Z | 2020-10-14T09:05:33.763Z | 3600                    | 30   |           |            |          |   4   |  20   | 2020-10-14T09:01:33.763Z       |
-| *GUID* | 123456789012345678 | 3    | Uscita merci                 | 2020-10-14T09:05:33.763Z | 2020-10-14T09:06:33.763Z | 1600                    |      |           |            |          |       |       |                                |
-| *GUID* | 123456789012345678 | 4    | Piazzale esterno             | 2020-10-14T09:06:33.763Z | 2020-10-14T09:07:33.763Z | 2000                    | 2000 |           |            |          |       |       |                                |
-| *GUID* | 123456789012345678 | 5    | Truck                        | 2020-10-14T09:07:33.763Z | 2020-10-14T09:08:33.763Z | 20                      |      |           |            |          |       |       |                                |
-| *GUID* | 123456789012345678 | 6    | Piazzale esterno depositario | 2020-10-14T09:08:33.763Z | 2020-10-14T09:09:33.763Z | 20                      |      |           |            |          |       |       |                                |
-| *GUID* | 123456789012345678 | 7    | Depositario                  | 2020-10-14T09:09:33.763Z |                          | 20                      |      |           |            |          |       |       |                                |
+| _ID_   | HandlingUnit (HandlingUnits) | step | area (Area)                  | inBusinessTime           | outBusinessTime          | residenceTime (Integer) | tor  | failureIn | failureOut | totalTor | tmin  | tmax  | torElaborationTime (Timestamp) |
+| ------ | ---------------------------- | ---- | ---------------------------- | ------------------------ | ------------------------ | ----------------------- | ---- | --------- | ---------- | -------- | :---: | :---: | ------------------------------ |
+| _GUID_ | 123456789012345678           | 1    | Produzione Plant A           | 2020-10-14T09:01:33.763Z | 2020-10-14T09:02:33.763Z | 1600                    | 1600 |           |            |          |       |       | 2020-10-14T09:01:33.763Z       |
+| _GUID_ | 123456789012345678           | 2    | Cold Room                    | 2020-10-14T09:02:33.763Z | 2020-10-14T09:03:33.763Z | 3600                    | 30   |           |            |          |   4   |  20   | 2020-10-14T09:01:33.763Z       |
+| _GUID_ | 123456789012345678           | 3    | Uscita merci                 | 2020-10-14T09:03:33.763Z | 2020-10-14T09:04:33.763Z | 1600                    | 1600 |           |            |          |       |       | 2020-10-14T09:01:33.763Z       |
+| _GUID_ | 123456789012345678           | 2    | Cold Room                    | 2020-10-14T09:04:33.763Z | 2020-10-14T09:05:33.763Z | 3600                    | 30   |           |            |          |   4   |  20   | 2020-10-14T09:01:33.763Z       |
+| _GUID_ | 123456789012345678           | 3    | Uscita merci                 | 2020-10-14T09:05:33.763Z | 2020-10-14T09:06:33.763Z | 1600                    |      |           |            |          |       |       |                                |
+| _GUID_ | 123456789012345678           | 4    | Piazzale esterno             | 2020-10-14T09:06:33.763Z | 2020-10-14T09:07:33.763Z | 2000                    | 2000 |           |            |          |       |       |                                |
+| _GUID_ | 123456789012345678           | 5    | Truck                        | 2020-10-14T09:07:33.763Z | 2020-10-14T09:08:33.763Z | 20                      |      |           |            |          |       |       |                                |
+| _GUID_ | 123456789012345678           | 6    | Piazzale esterno depositario | 2020-10-14T09:08:33.763Z | 2020-10-14T09:09:33.763Z | 20                      |      |           |            |          |       |       |                                |
+| _GUID_ | 123456789012345678           | 7    | Depositario                  | 2020-10-14T09:09:33.763Z |                          | 20                      |      |           |            |          |       |       |                                |
 
-* inBusinessTime è l'ora di ingresso dell'handling unit nell'area
-* outBusinessTime è l'ora di uscita dell'handling unit dall'area
-* ResidenceTime è il numero di minuti di permanenza dell'handling unit nell'area
-* TOR è il numero di minuti di permanenza nell'area con temperatura fuori range
-* tmin
-* tman
-* elaborationTimeTor momento in cui sono stati recuperati di dati di temperatura e calcolo TOR
+-   inBusinessTime è l'ora di ingresso dell'handling unit nell'area
+-   outBusinessTime è l'ora di uscita dell'handling unit dall'area
+-   ResidenceTime è il numero di minuti di permanenza dell'handling unit nell'area
+-   TOR è il numero di minuti di permanenza nell'area con temperatura fuori range
+-   tmin
+-   tman
+-   elaborationTimeTor momento in cui sono stati recuperati di dati di temperatura e calcolo TOR
 
 (per recuperare i range di temperatura dei soggetti esterni verrà esposto un servizio esterno alla piattaforma)
 
@@ -442,6 +444,16 @@ Tabelle di auditing della configurazione della piattaforma:
 | 2020-10-14T09:01:33.763Z | Products | PROD-001 | CREATE |              |          |          | SBARZAGHI |
 | 2020-10-14T09:01:33.763Z | Products | PROD-001 | UPDATE | TOR          | 18       | 20       | SBARZAGHI |
 | 2020-10-14T09:01:33.763Z | Products | PROD-001 | UPDATE | DESCRIZIONE  | aaaa     | AAAA     | SBARZAGHI |
+
+# Tabella outOfRange
+
+Tabelle di log per le segnalazioni ricevute dal iot per alert di temperatura out of range e calcolo del TOR
+
+| ID_DeviceIot | startEventTS             | endEventTS               | TOR |
+| ------------ | ------------------------ | ------------------------ | --- |
+| cella1       | 2020-10-14T09:01:33.763Z | 2020-11-14T09:01:33.763Z | 120 |
+| cella2       | 2020-10-14T09:01:33.763Z | 2020-10-19T09:01:33.763Z | 190 |
+| cella3       | 2020-10-14T09:01:33.763Z |                          | 250 |
 
 # Log piattaforma
 
@@ -525,12 +537,13 @@ Applicazioni di dashboarding e analitiche, dipendono dalla tipologia di cliente?
 Control Point ---> Plant Gateway ---> Topic SCP EM ---> Queue SCP EM ---> CAP Service ---> SAP DB HANA Customer Tenant
 
 Note:
-* ogni gateway del cliente avrà il suo clientid e clientsecret con cui autenticarsi (OAuth2 client_credentials)
-* ogni gateway del cliente avrà un suo specifico topic su cui scrivere
-* ogni gateway del cliente sarà autorizzato a pubblicare solo sul suo topic
-* ogni topic sarà collegato ad una specifica queue in cui verranno salvati i suoi messaggi verso il CAP, ci permette di monitorare i messaggi del singolo cliente
-* tutti i webhook punteranno al sevizio CAP multitenant, autenticazione con clientid, clientsecret, il clientid identifica il tenant del cliente
-* il servizio CAP Service sarà scalabili aumentanto ram e aumentando le istanze
+
+-   ogni gateway del cliente avrà il suo clientid e clientsecret con cui autenticarsi (OAuth2 client_credentials)
+-   ogni gateway del cliente avrà un suo specifico topic su cui scrivere
+-   ogni gateway del cliente sarà autorizzato a pubblicare solo sul suo topic
+-   ogni topic sarà collegato ad una specifica queue in cui verranno salvati i suoi messaggi verso il CAP, ci permette di monitorare i messaggi del singolo cliente
+-   tutti i webhook punteranno al sevizio CAP multitenant, autenticazione con clientid, clientsecret, il clientid identifica il tenant del cliente
+-   il servizio CAP Service sarà scalabili aumentanto ram e aumentando le istanze
 
 Protocolli e autenticazione:
 
@@ -545,6 +558,7 @@ Protocolli e autenticazione:
 Il formato del payload del messaggio di passaggio dell'handling unit da control point è pensato per limitare il consumo di banda tra i componenti, per maggiore facilità di lettura il formato del payload è pretty print, in produzione sarà "linearized".
 
 Esempio:
+
 ```
 {
 	"CP_ID": "90abe75c-e2c6-4e5f-a12f-fb81aa50d011",
@@ -563,7 +577,7 @@ Esempio:
 | SSCC_ID    | Serialized shipping container code | Codice SSCC dell'handling unit                | GS1 SSCC               | 123456789012345678                   |
 | DIR        | Direction                          | Valori possibili: F -> Forward, B -> Backward | CHAR 1                 | F                                    |
 
-### Comunicazione dati temperatura da cella frigorifera_
+### Comunicazione dati temperatura da cella frigorifera\_
 
 T° Data Logger ---> Plant Gateway ---> SCP Internet of Things ---> SCP IoT DataLake
 
@@ -616,7 +630,7 @@ L'ora verrà sincronizzata rispetto al server centrale XXX
 
 # Versioning
 
-Un solo enorme repository GIT suddiviso in sottocartelle, una sottocartella per ogni modulo così da poter gestire le dipendenze tra moduli. 
+Un solo enorme repository GIT suddiviso in sottocartelle, una sottocartella per ogni modulo così da poter gestire le dipendenze tra moduli.
 Esempio possiamo gestire un nuovo campo aggiunto nell'entity CAP e la sua gestione nel webhook di ingestion dei dati transazionali, tutto con un solo commit.
 
 Repository github/alteaup/cloudcoldchain
@@ -712,7 +726,6 @@ https://help.sap.com/viewer/bf82e6b26456494cbdd197057c09979f/Cloud/en-US/ac83090
 -   Dimensioni singolo messaggio ~200 Byte (135 Byte effettivi + 50% overhead e contigency)
 -   Numero messaggi al GB di banda => ( 1.073.741.824 Byte / 200 Byte / 2 ) - 10% contigency = 2.250.000 messaggi
 
-
 # Struttura Repository
 
 | File / Folder                                                            | Purpose                                                                                  |
@@ -747,26 +760,30 @@ https://help.sap.com/viewer/bf82e6b26456494cbdd197057c09979f/Cloud/en-US/ac83090
 Central Objects Development
 
 Space:
-- dev
+
+-   dev
 
 Contiene gli oggetti central utilizzati da più subaccount anche non cloud cold chain, pensato per il nostro CPEA con un solo DB
-- SAP HANA Cloud
-- Job Schedule per schedulazione accensioni e spegnimento
+
+-   SAP HANA Cloud
+-   Job Schedule per schedulazione accensioni e spegnimento
 
 ## Subaccount ccp-provider
 
 Cold Chain Platform - Development - Provider
 
 Spaces:
-- dev
-- qas
+
+-   dev
+-   qas
 
 Contiene:
-- cap application
-- approuter
-- logs
-- saas
-- html5 repository
+
+-   cap application
+-   approuter
+-   logs
+-   saas
+-   html5 repository
 
 ## Subaccount ccc-dev-customer1
 
@@ -779,72 +796,99 @@ Solo sottoscrizione alla cloud cold chain e portale, CF non attivato
 Cloud Cold Chain Provider Production
 
 Spaces:
-- prd
+
+-   prd
 
 Contiene:
-- SAP HANA Cloud
-- cap application
-- approuter
-- logs
-- saas
-- html5 repository
-  
+
+-   SAP HANA Cloud
+-   cap application
+-   approuter
+-   logs
+-   saas
+-   html5 repository
+
 ## Subaccount ccc-prd-[nomecliente]
 
 Cloud Cold Chain Development Customer 1
 
 Solo sottoscrizione alla cloud cold chain e portale, CF non attivato
 
-# Documentazione
+# Documentazione tecnica flussi
 
 ## Ingestion dati movimentazione handling unit
-- gate rfid invia a enterprise messaging in mqtt nel topic specifico del cliente *aggiungere esempio del topic*
-- enterprise messaging sottoscrive il topic e aggiunge ad una coda
-- la coda è collegata ad un webhook che punto al servizio odata del cap con autenticazione OAuth2, viene richiesto il token al subaccount del cliente, il token staccato determina il tenant del client
-- il servizio cap inserisce il record secco nella tabella senza controlli HandlingUnitMovementsRaw
-- il servizio cap inserisce nella lista Redis i dati del movimento, l'utente e il tenant del cliente
-- processo in background che attende il messaggio sulla coda redis e crea il record del movimento nella tabella HandlingUnitMovements
-- scrive nella coda redis `RESIDENCE_TIME:WAITING` i dati del movimento
-- processo in background che attende il messaggio sulla coda redis `RESIDENCE_TIME:WAITING`, quando riceve un messaggio:
-  - ricerca il lotto collegato all'SSCC nella tabella `HandlingUnits`
-  - ricerca il prodotto collegato al lotto nella tabella `Lots`
-  - ricerca nella tabella `Products` le route collegate
-  - ricerca nella tabella `Routes` con controlPoint e direction per determinare l'area di destinazione della scatola
-  - inserisce nella tabella `HandlingUnitsResidenceTime` un record con: `sscc`, `step`, `area`, `inBusinessTime` con il t del movimento
-  - aggiorna il campo `ResidenceTimeStatus` della tabella `HandlingUnitMovements` a `OK`
-  - se il t del movimento è maggiore di `HandlingUnits-inAreaBusinessTime` aggiorna `lastKnowArea` e `inAreaBusinessTime`
+
+-   gate rfid invia a enterprise messaging in mqtt nel topic specifico del cliente TODO: _aggiungere esempio del topic_
+-   enterprise messaging sottoscrive il topic e aggiunge ad una coda
+-   la coda è collegata ad un webhook che punto al servizio odata del cap con autenticazione OAuth2, viene richiesto il token al subaccount del cliente, il token staccato determina il tenant del client
+-   il servizio cap inserisce il record secco nella tabella senza controlli HandlingUnitMovementsRaw
+-   il servizio cap inserisce nella lista Redis i dati del movimento, l'utente e il tenant del cliente
+-   processo in background che attende il messaggio sulla coda redis e crea il record del movimento nella tabella HandlingUnitMovements
+-   scrive nella coda redis `RESIDENCE_TIME:WAITING` i dati del movimento
+-   processo in background che attende il messaggio sulla coda redis `RESIDENCE_TIME:WAITING`, quando riceve un messaggio:
+    -   ricerca il lotto collegato all'SSCC nella tabella `HandlingUnits`
+    -   ricerca il prodotto collegato al lotto nella tabella `Lots`
+    -   ricerca nella tabella `Products` le route collegate
+    -   ricerca nella tabella `Routes` con controlPoint e direction per determinare l'area di destinazione della scatola
+    -   inserisce nella tabella `HandlingUnitsResidenceTime` un record con: `sscc`, `step`, `area`, `inBusinessTime` con il t del movimento
+    -   aggiorna il campo `ResidenceTimeStatus` della tabella `HandlingUnitMovements` a `OK`
+    -   se il TE del movimento è maggiore di `HandlingUnits-inAreaBusinessTime` aggiorna `lastKnowArea` e `inAreaBusinessTime`
 
 ## Determinazione HandlingUnitsResidenceTime-outBusinessTime e residenceTime
-- ogni n minuti random tra parte un processo per un singolo cliente
-- processo che ricerca tutti i record in `HandlingUnitsResidenceTime` senza `outBusinessTime`
-- per ogni record cerca un record con T > del T movimento e con step = step del record + 1 oppure step del record - 1
-- se lo trova aggiorna il campo `outBusinessTime` con `inBusinessTime` del record trovato
-- calcola la differenza in minuti arrotondando per eccesso di `outBusinessTime` - `inBusinessTime`
-- se l'area è l'area in cui è in questo momento la handling unit (capibile leggendo la tabella `HandlingUnits`) aggiorna il campo residenceTime = current time - inBusinessTime
-- se l'area non è a temperatura controllata riporta il campo `residenceTime` nel campo `tot` e impostato il `torElaborationTime`
-- se l'area è a temperatura controlla scrive nella coda waiting dei record che devono recuperare da IoT i dati della cella e calcolo del TOR
-- finito il check per il cliente viene impostata l'ora in cui verrà rifatto il controllo per il cliente
+
+-   ogni n minuti random parte un processo per un singolo cliente
+-   processo che ricerca tutti i record in `HandlingUnitsResidenceTime` senza `outBusinessTime`
+-   per ogni record cerca un record con T > del T movimento e con step = step del record + 1 oppure step del record - 1
+-   se lo trova aggiorna il campo `outBusinessTime` con `inBusinessTime` del record trovato
+-   calcola la differenza in minuti arrotondando per eccesso di `outBusinessTime` - `inBusinessTime`
+-   se l'area è l'area in cui è in questo momento la handling unit (capibile leggendo la tabella `HandlingUnits`) aggiorna il campo residenceTime = current time - inBusinessTime
+-   se l'area non è a temperatura controllata riporta il campo `residenceTime` nel campo `tot` e impostato il `torElaborationTime`
+-   se l'area è a temperatura controlla scrive nella coda waiting dei record che devono recuperare da IoT i dati della cella e calcolo del TOR
+-   finito il check per il cliente viene impostata l'ora in cui verrà rifatto il controllo per il cliente
+
+## Ingestion dati temperatura IoT
+
+-   cella invia i dati a scp iot via mqtt
+-   in iot c'è configurato un segment che parte con la rule `outOfRange` e finisce con la rule `inRange`
+-   rule `outOfRange` di tipo streaming rule cloud toggle che determina se la temperatura è out of range
+-   rule `inRange` di tipo streaming rule cloud toggle che determina se la temperatura è in range
+-   il segment invia i dati in enterprise messaging nel topic fisso deciso da SAP `sap/liot/svc/segments`
+-   enterprise messaging ha la coda `sap/liot/svc/TemperatureRange` (TODO: meglio rinominarla in `sap/liot/svc/segments`) con subscription su `sap/liot/svc/segments`
+-   enterprise messaging invia i dati al webhook che punta al servizio cap `/iot/segment`
+-   il servizio cap aggiorna la tabella `OutOfRange`
 
 # Appunti costi piattaforma
 
 # IoT
 
 ## Calcolatore
+
 https://sap-iot-noah-live-estimator-ui.cfapps.eu10.hana.ondemand.com/estimator-ui/index.html
 
 ## Esempio 1
+
 450€:
 
-- 100 celle che inviano temperatura ogni minuto
-- backend che ogni 5 minuti interroga IoT per avere i dati sulla temperatura di ogni cella
-- 12 mesi di dati caldi
-- 3 mesi warm
-- 24 mesi cold
+-   100 celle che inviano temperatura ogni minuto
+-   backend che ogni 5 minuti interroga IoT per avere i dati sulla temperatura di ogni cella
+-   12 mesi di dati caldi
+-   3 mesi warm
+-   24 mesi cold
 
-Feature	Capacity Units
-- SAP  IoT, connectivity	37
-- SAP  IoT, business services	63
-- SAP  IoT, aggregate store	23
-- SAP  IoT, time series & event store	19
-- SAP  IoT, time series archive	1
-- Total	425
+Feature Capacity Units
+
+-   SAP IoT, connectivity 37
+-   SAP IoT, business services 63
+-   SAP IoT, aggregate store 23
+-   SAP IoT, time series & event store 19
+-   SAP IoT, time series archive 1
+-   Total 425
+
+## CONNESSIONE WEBHOOK - CAP per invio segmenti IoT(SCP)
+
+webhookURL: https://ccp-provider-dev-qas-dev-mtt-cap-services.cfapps.eu10.hana.ondemand.com/iot/segment
+Default Content-type: application/json
+Authentication: OAuth2ClientCredentials
+ClientID: sb-ccp-provider-dev-qas-dev-cloud-cold-chain!t61773
+ClientSecret: oEPmeoq3s9kvPuGZsd89POK9Eo8=
+TokenURL: https://ccp-customera.authentication.eu10.hana.ondemand.com/oauth/token

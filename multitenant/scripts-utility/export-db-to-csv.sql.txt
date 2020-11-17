@@ -1,0 +1,58 @@
+.header on
+.mode csv
+
+.once db/local_data/cloudcoldchain-TemperatureRanges.csv
+SELECT ID
+FROM cloudcoldchain_TemperatureRanges;
+
+.once db/local_data/cloudcoldchain-ControlPointsCategories.csv
+SELECT ID
+FROM cloudcoldchain_ControlPointsCategories;
+
+.once db/local_data/cloudcoldchain-Areas.csv
+SELECT ID,name,location_ID
+FROM cloudcoldchain_Areas;
+
+.once db/local_data/cloudcoldchain-ControlPoints.csv
+SELECT ID
+FROM cloudcoldchain_ControlPoints;
+
+.once db/local_data/cloudcoldchain-HandlingUnits.csv
+SELECT ID,SSCC,lot_ID,inAreaBusinessTime,lastKnownArea_ID,lastMovement_ID
+FROM cloudcoldchain_HandlingUnits;
+
+.once db/local_data/cloudcoldchain-Locations.csv
+SELECT ID,name
+FROM cloudcoldchain_Locations;
+
+.once db/local_data/cloudcoldchain-Lots.csv
+SELECT ID,name,product_ID
+FROM cloudcoldchain_Lots;
+
+.once db/local_data/cloudcoldchain-Products.csv
+SELECT ID,gtin,route_ID
+FROM cloudcoldchain_Products;
+
+.once db/local_data/cloudcoldchain-Routes.csv
+SELECT ID
+FROM cloudcoldchain_Routes;
+
+.once db/local_data/cloudcoldchain-RouteSteps.csv
+SELECT ID,parent_ID,stepNr,controlPoint_ID,direction,destinationArea_ID
+FROM cloudcoldchain_RouteSteps;
+
+.once db/local_data/cloudcoldchain-HandlingUnitsRawMovements.csv
+SELECT *
+FROM cloudcoldchain_HandlingUnitsRawMovements;
+
+.once db/local_data/cloudcoldchain-HandlingUnitsMovements.csv
+SELECT *
+FROM cloudcoldchain_HandlingUnitsMovements;
+
+.once db/local_data/cloudcoldchain-ResidenceTime.csv
+SELECT *
+FROM cloudcoldchain_ResidenceTime;
+
+.once db/local_data/cloudcoldchain-outOfRange.csv
+SELECT *
+FROM cloudcoldchain_outOfRange;

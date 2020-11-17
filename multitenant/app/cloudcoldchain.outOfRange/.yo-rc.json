@@ -1,0 +1,10 @@
+{
+  "generator-easy-ui5-extra": {
+    "namespace": "cloudcoldchain",
+    "appname": "outOfRange",
+    "entitynameplural": "outOfRanges",
+    "entitynamesingolar": "outOfRange",
+    "newdir": true,
+    "namespaceURI": "cloudcoldchain"
+  }
+}

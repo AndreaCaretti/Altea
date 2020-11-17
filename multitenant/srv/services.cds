@@ -50,5 +50,8 @@ service Services {
     entity ResidenceTime           as projection on cloudcoldchain.ResidenceTime;
 
     entity HandlingUnits           as projection on cloudcoldchain.HandlingUnits;
+    
+    entity outOfRange              as projection on cloudcoldchain.outOfRange;
 
+    entity HandlingUnitsMovements as projection on cloudcoldchain.HandlingUnitsMovements;
 }

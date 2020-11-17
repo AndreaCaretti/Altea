@@ -77,11 +77,6 @@
             },
             {
               "id": "products",
-              "appId": ".products",
-              "vizId": "Products-manage"
-            },
-            {
-              "id": "products",
               "appId": "cloudcoldchain.products",
               "vizId": "Products-manage"
             },
@@ -99,6 +94,11 @@
               "id": "handlingunits",
               "appId": "cloudcoldchain.handlingunits",
               "vizId": "HandlingUnits-manage"
+            },
+            {
+              "id": "outOfRange",
+              "appId": "cloudcoldchain.outOfRange",
+              "vizId": "outOfRanges-manage"
             }
           ]
         }

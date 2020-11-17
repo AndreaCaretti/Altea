@@ -1,6 +1,62 @@
-@customera-subdomain = ccp-customera
+### Create ControlPoint
+POST http://localhost:4004/handling-unit-moved/ControlPoints  HTTP/1.1
+Authorization: Basic Alice:Alice
+Content-Type: application/json
 
-@token = {{getToken.response.body.$.access_token}}
+{
+    "ID": "90abe75c-e2c6-4e5f-a12f-fb81aa50d011"
+}
+
+
+
+### Create ControlPoint REMOTE
+POST http://localhost:4004/handling-unit-moved/ControlPoints  HTTP/1.1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "ID": "90abe75c-e2c6-4e5f-a12f-fb81aa50d011"
+}
+
+### Create HandlingUnit
+POST http://localhost:4004/handling-unit-moved/HandlingUnits  HTTP/1.1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "ID": "TEST1234"
+}
+
+### Create Product
+POST http://localhost:4004/services/Products  HTTP/1.1
+Authorization: Basic Alice:Alice
+Content-Type: application/json
+
+{
+    "ID": "105c5d53-9123-4775-b836-ddf8e6951bd1",
+    "gtin": "1234567890123"
+}
+
+### Create Lot
+POST http://localhost:4004/services/Lots  HTTP/1.1
+Authorization: Basic Alice:Alice
+Content-Type: application/json
+
+{
+    "ID": "728985ee-301e-45be-bffa-e8b2eb7a3683",
+    "name": "lotto1",
+    "product_ID": "105c5d53-9123-4775-b836-ddf8e6951bd1"
+}
+
+### Create HandlingUnit
+POST http://localhost:4004/services/HandlingUnits  HTTP/1.1
+Authorization: Basic Alice:Alice
+Content-Type: application/json
+
+{
+	"ID": "123456789012345678",
+	"lot_ID": "e2e97c3d-0425-4876-b173-4fdef29a118c"
+}
 
 ### Create HandlingUnitsRawMovements
 POST http://localhost:4004/handling-unit-moved/HandlingUnitsRawMovements HTTP/1.1
@@ -11,8 +67,8 @@ Content-Type: application/json
     "CP_ID": "90abe75c-e2c6-4e5f-a12f-fb81aa50d011",
     "TE": "1905-10-14T09:01:33.763Z",
     "TS": "1905-10-14T09:01:34.763Z",
-    "SSCC_ID": "TEST1234",
-    "DIR": "B"
+    "SSCC_ID": "123456789012345678",
+    "DIR": "F"
 }
 
 
@@ -20,6 +76,16 @@ Content-Type: application/json
 GET http://localhost:4004/handling-unit-moved/HandlingUnitsRawMovements HTTP/1.1
 Authorization: Basic Alice:Alice
 
+
+# --------------------------------------------------------------------
+# --------------------------------------------------------------------
+# --------------------------------------------------------------------
+# --------------------------------------------------------------------
+
+
+@customera-subdomain = ccp-customera
+
+@token = {{getToken.response.body.$.access_token}}
 
 ### Get bearer token
 # @name getToken
@@ -73,55 +139,4 @@ If-Match: "2020-11-01T15:48:57.600Z"
     "TS": "2020-10-14T09:01:34.763Z",
     "SSCC_ID": "TEST1234",
     "DIR": "F"
-}
-
-### Create ControlPoint
-POST http://localhost:4004/handling-unit-moved/ControlPoints  HTTP/1.1
-Authorization: Basic Alice:Alice
-Content-Type: application/json
-
-{
-    "ID": "90abe75c-e2c6-4e5f-a12f-fb81aa50d011"
-}
-
-
-### Create HandlingUnit
-POST http://localhost:4004/handling-unit-moved/HandlingUnits  HTTP/1.1
-Authorization: Basic Alice:Alice
-Content-Type: application/json
-
-{
-    "ID": "TEST1234"
-}
-
-
-### Create ControlPoint REMOTE
-POST http://localhost:4004/handling-unit-moved/ControlPoints  HTTP/1.1
-Authorization: Bearer {{token}}
-Content-Type: application/json
-
-{
-    "ID": "90abe75c-e2c6-4e5f-a12f-fb81aa50d011"
-}
-
-### Create HandlingUnit
-POST http://localhost:4004/handling-unit-moved/HandlingUnits  HTTP/1.1
-Authorization: Bearer {{token}}
-Content-Type: application/json
-
-{
-    "ID": "TEST1234"
-}
-
-### Creazione record Books REMOTE
-POST http://localhost:4004/handling-unit-moved/Books  HTTP/1.1
-Authorization: Bearer {{token}}
-Content-Type: application/json
-
-{
-    "CP_ID": "90abe75c-e2c6-4e5f-a12f-fb81aa50d011",
-    "TE": "2020-10-14T09:01:33.763Z",
-    "TS": "2020-10-14T09:01:34.763Z",
-    "SSCC_ID": "TEST1234",
-    "DIR": "B"
 }

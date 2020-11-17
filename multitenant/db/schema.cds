@@ -144,6 +144,8 @@ define entity Lots : cuid, managed {
     productionDate : Timestamp;
     expirationDate : Timestamp;
     product        : Association to one Products;
+    handlingUnits  : Association to many HandlingUnits
+                         on handlingUnits.lot = $self;
 }
 
 //ROUTES
@@ -177,22 +179,23 @@ define entity RouteSteps : cuid {
 
 //| _sscc_ (SSCC)      | lot     | lastKnownArea(Locations)    | inAreaBusinessTime (Timestamp) | jsonSummary (LargeString)             | blockchainHash (100)
 @UI.Identification : [{Value : ID}]
-define entity HandlingUnits : managed {
-    key ID                 : cloudcoldchain.SSCC;
-        lot                : Association to one Lots;
-        lastKnownArea      : Association to one Locations;
-        inAreaBusinessTime : Timestamp;
-        jsonSummary        : LargeString;
-        blockchainHash     : String(100);
+define entity HandlingUnits : cuid, managed {
+    SSCC               : cloudcoldchain.SSCC;
+    lot                : Association to one Lots;
+    lastKnownArea      : Association to one Areas;
+    inAreaBusinessTime : Timestamp;
+    lastMovement       : Association to one HandlingUnitsMovements;
+    jsonSummary        : LargeString;
+    blockchainHash     : String(100);
 }
 
 define entity HandlingUnitsMovements : cuid, managed {
-    CP     : Association to one ControlPoints;
-    TE     : Timestamp;
-    TS     : Timestamp;
-    SSCC   : Association to one HandlingUnits;
-    DIR    : cloudcoldchain.direction;
-    STATUS : Boolean;
+    controlPoint : Association to one ControlPoints;
+    TE           : Timestamp;
+    TS           : Timestamp;
+    handlingUnit : Association to one HandlingUnits;
+    DIR          : cloudcoldchain.direction;
+    STATUS       : Boolean;
 }
 
 annotate Books with {
@@ -209,7 +212,7 @@ define entity HandlingUnitsRawMovements : cuid, managed {
 
 
 define entity ResidenceTime : cuid, managed {
-    SSCC               : cloudcoldchain.SSCC;
+    handlingUnit       : Association to one HandlingUnits;
     stepNr             : RouteStepNr;
     area               : Association to one Areas;
     inBusinessTime     : Timestamp;
@@ -228,3 +231,14 @@ define entity Alerts : cuid, managed {
     message           : String;
     level             : cloudcoldchain.alertLevel;
 }
+
+
+define entity outOfRange : cuid, managed {
+    @title : 'ID Device IoT'
+    ID_DeviceIoT : String;
+    startEventTS : Timestamp;
+    endEventTS   : Timestamp;
+    status       : String;
+    segmentId    : String;
+}
+/*  */

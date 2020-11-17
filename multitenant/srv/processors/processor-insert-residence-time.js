@@ -1,5 +1,5 @@
 // const inputValidation = require("@sap/cds-runtime/lib/common/generic/input");
-
+const DB = require("../db_utilities");
 const QueueResidenceTime = require("../queues/queue-residence-time");
 
 class ProcessorInsertResidenceTime {
@@ -13,10 +13,11 @@ class ProcessorInsertResidenceTime {
 
     async tick() {
         let movement;
+
         try {
             movement = await this.queueResidenceTime.getAndSetToProcessing();
         } catch (error) {
-            console.log("Connessione redis caduta, mi rimetto in attesa");
+            this.logger.error("Connessione redis caduta, mi rimetto in attesa", error);
             setImmediate(this.tick);
             return;
         }
@@ -33,20 +34,40 @@ class ProcessorInsertResidenceTime {
         const tx = cds.transaction(request);
 
         try {
-            await ProcessorInsertResidenceTime.processMovement(movement, tx);
+            const info = await this.getNecessaryInfo(movement, tx);
 
-            console.log("prima di commit");
-            const sCommit = await tx.commit();
-            console.log("dopo commit", sCommit);
+            await this.createRecordResidentTime(movement, info, tx);
+
+            await this.updateMovementStatus(movement, tx);
+
+            // FIXME: Se ci sono più istanze dell'app CAP può essere che il campo TE
+            // dell'handling unit sia già stato aggiornato da un altro processo con
+            // un valore più alto e noi per errore mettiamo un movimento vecchio
+            // Inserire una gestione dei lock sull'handling unit
+            if (
+                !info.handlingUnit.inAreaBusinessTime ||
+                movement.TE > info.handlingUnit.inAreaBusinessTime
+            ) {
+                await this.updateHandlingUnitLastArea(movement, info, tx);
+            }
+
+            await tx.commit();
 
             await this.queueResidenceTime.moveToComplete(movement);
         } catch (error) {
-            console.log("Error console: ", error);
-            this.logger.error("Errore inserimento record", error.toString());
-            tx.run(
-                UPDATE(cds.entities.HandlingUnitMovements)
-                    .set({ STATUS: true })
-                    .where({ ID: movement.ID })
+            if (error.stack !== "not available") {
+                this.logger.error(error.stack);
+            } else {
+                this.logger.error(JSON.stringify(error));
+            }
+
+            DB.updateSingleField(
+                "HandlingUnitsMovements",
+                movement.ID,
+                "STATUS",
+                false,
+                tx,
+                this.logger
             );
             await tx.commit();
             await this.queueResidenceTime.moveToError(movement);
@@ -55,46 +76,95 @@ class ProcessorInsertResidenceTime {
         setImmediate(this.tick);
     }
 
-    static async processMovement(movement, tx) {
-        const lot = await ProcessorInsertResidenceTime.getLot(movement.SSCC_ID, tx);
-        const product = await ProcessorInsertResidenceTime.getProduct(lot, tx);
-        const route = await ProcessorInsertResidenceTime.getProductRoute(product, tx);
-        // eslint-disable-next-line no-unused-vars
-        const routeSteps = await ProcessorInsertResidenceTime.getRouteSteps(route, tx);
-        // const routeStep = routeSteps.find(
-        //     (step) => step.controlPoint === movement.CP_ID && step.direction === movement.DIR
-        // );
-
-        console.log(lot);
-    }
-
-    static async getLot(SSCC_ID, tx) {
-        const handlingUnit = await tx.run(
-            SELECT.one("HandlingUnits", ["lot_ID"]).where({ ID: SSCC_ID })
+    async getNecessaryInfo(movement, tx) {
+        const handlingUnit = await this.getHandlingUnitInfo(movement.handlingUnitID, tx);
+        const product = await this.getProductFromLot(handlingUnit.lot_ID, tx);
+        const route = await this.getRouteFromProduct(product, tx);
+        const routeSteps = await this.getRouteStepsFromRoute(route, tx);
+        const routeStep = this.getRouteStepFromControlPoint(
+            routeSteps,
+            movement.CP_ID,
+            movement.DIR
         );
 
-        console.log("RECORD: ", handlingUnit);
-        if (!handlingUnit) {
-            throw Error("Handling unit not found");
-        }
-        return handlingUnit.lot;
+        return {
+            handlingUnit,
+            routeStep,
+        };
     }
 
-    // eslint-disable-next-line no-empty-function
-    static async getProduct(_lot, _tx) {}
+    getRouteStepFromControlPoint(routeSteps, CP_ID, DIR) {
+        const routeStep = routeSteps.find(
+            (step) => step.controlPoint_ID === CP_ID && step.direction === DIR
+        );
 
-    // eslint-disable-next-line no-empty-function
-    static async getProductRoute(_product, _tx) {}
+        if (!routeStep) {
+            throw Error(`Route step non trovata: ${CP_ID}/${DIR}`);
+        }
 
-    // eslint-disable-next-line no-empty-function
-    static async getRouteSteps(_route, _tx) {}
+        this.logger.debug(
+            `getRouteStepFromControlPoint: ${CP_ID}/${DIR} -> ${JSON.stringify(routeStep)}`
+        );
+
+        return routeStep;
+    }
+
+    async getHandlingUnitInfo(handlingUnitID, tx) {
+        this.logger.debug("getHandlingUnitInfo: ", handlingUnitID);
+        return DB.selectOneRecord("HandlingUnits", handlingUnitID, tx, this.logger);
+    }
+
+    async getProductFromLot(lot, tx) {
+        this.logger.debug("getProductFromLot: ", lot);
+        return DB.selectOneField("Lots", "product_ID", lot, tx, this.logger);
+    }
+
+    async getRouteFromProduct(product, tx) {
+        this.logger.debug("getRouteFromProduct: ", product);
+        return DB.selectOneField("Products", "route_ID", product, tx, this.logger);
+    }
+
+    async getRouteStepsFromRoute(route, tx) {
+        this.logger.debug("getRouteStepsFromRoute: ", route);
+        return DB.selectAllWithParent("RouteSteps", route, tx, this.logger);
+    }
 
     async start() {
-        console.log(`Avvio InsertResidentTime Processor...`);
+        this.logger.debug(`Avvio InsertResidentTime Processor...`);
 
         this.queueResidenceTime.start();
 
         setImmediate(this.tick);
+    }
+
+    async createRecordResidentTime(movement, info, tx) {
+        this.logger.debug(`Create record resident time ${JSON.stringify(info)}`);
+
+        await tx.create("ResidenceTime").entries({
+            handlingUnit_ID: movement.handlingUnitID,
+            stepNr: info.routeStep.stepNr,
+            inBusinessTime: movement.TE,
+        });
+    }
+
+    async updateMovementStatus(movement, tx) {
+        await DB.updateSingleField(
+            "HandlingUnitsMovements",
+            movement.ID,
+            "STATUS",
+            true,
+            tx,
+            this.logger
+        );
+    }
+
+    async updateHandlingUnitLastArea(movement, info, tx) {
+        const values = {
+            lastKnownArea_ID: info.routeStep.destinationArea_ID,
+            inAreaBusinessTime: movement.TE,
+            lastMovement_ID: movement.ID,
+        };
+        await DB.updateSomeFields("HandlingUnits", info.handlingUnit.ID, values, tx, this.logger);
     }
 }
 

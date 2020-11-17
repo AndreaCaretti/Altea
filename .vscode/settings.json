@@ -1,0 +1,38 @@
+{
+    "sqltools.connections": [
+        {
+            "connectionTimeout": 30,
+            "hanaOptions": {
+                "encrypt": true,
+                "sslValidateCertificate": true,
+                "sslCryptoProvider": "openssl"
+            },
+            "previewLimit": 50,
+            "driver": "SAPHana",
+            "name": "HDB001",
+            "server": "2ce51e68-ca14-479b-b958-220017aced95.hana.trial-us10.hanacloud.ondemand.com",
+            "port": 443,
+            "database": "0DB590ABA3CD495A87BD37141DFF868F",
+            "username": "sb-c00394e0-a586-4b5d-9721-4e5f8e299b43!b13893|service-manager!b1476",
+            "password": "Acl/2SEbYSZeUJXGCgJtftVtK08="
+        },
+        {
+            "name": "mtt-db-mt:bf46abe6-0213-4365-8b68-be09ee8e2621",
+            "group": "SMSI",
+            "dialect": "SAPHana",
+            "driver": "SAPHana",
+            "server": "2ce51e68-ca14-479b-b958-220017aced95.hana.trial-us10.hanacloud.ondemand.com",
+            "port": 443,
+            "database": "ECEE508C95E0487BBCD3CC4BAFD6FA6D",
+            "username": "ECEE508C95E0487BBCD3CC4BAFD6FA6D_A30ENA8ANNFLHHYZMPF64Y0GX_RT",
+            "password": "Tf6Yz7TS6lpvV3_Zd0csZ4MqVw0l9TYKUJkJ-mgiJ7EafR74jzeloT5h.v3IHJsRCskehwAJK61Q_qcDVED9uP-fuiPpYrm0CKlfd5mbFyuX8tLLTOPgzaxzn6UU5xIE",
+            "connectionTimeout": 30,
+            "hanaOptions": {
+                "encrypt": true,
+                "sslValidateCertificate": true,
+                "sslCryptoProvider": "openssl",
+                "sslTrustStore": "-----BEGIN CERTIFICATE-----MIIDrzCCApegAwIBAgIQCDvgVpBCRrGhdWrJWZHHSjANBgkqhkiG9w0BAQUFADBhMQswCQYDVQQGEwJVUzEVMBMGA1UEChMMRGlnaUNlcnQgSW5jMRkwFwYDVQQLExB3d3cuZGlnaWNlcnQuY29tMSAwHgYDVQQDExdEaWdpQ2VydCBHbG9iYWwgUm9vdCBDQTAeFw0wNjExMTAwMDAwMDBaFw0zMTExMTAwMDAwMDBaMGExCzAJBgNVBAYTAlVTMRUwEwYDVQQKEwxEaWdpQ2VydCBJbmMxGTAXBgNVBAsTEHd3dy5kaWdpY2VydC5jb20xIDAeBgNVBAMTF0RpZ2lDZXJ0IEdsb2JhbCBSb290IENBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA4jvhEXLeqKTTo1eqUKKPC3eQyaKl7hLOllsBCSDMAZOnTjC3U/dDxGkAV53ijSLdhwZAAIEJzs4bg7/fzTtxRuLWZscFs3YnFo97nh6Vfe63SKMI2tavegw5BmV/Sl0fvBf4q77uKNd0f3p4mVmFaG5cIzJLv07A6Fpt43C/dxC//AH2hdmoRBBYMql1GNXRor5H4idq9Joz+EkIYIvUX7Q6hL+hqkpMfT7PT19sdl6gSzeRntwi5m3OFBqOasv+zbMUZBfHWymeMr/y7vrTC0LUq7dBMtoM1O/4gdW7jVg/tRvoSSiicNoxBN33shbyTApOB6jtSj1etX+jkMOvJwIDAQABo2MwYTAOBgNVHQ8BAf8EBAMCAYYwDwYDVR0TAQH/BAUwAwEB/zAdBgNVHQ4EFgQUA95QNVbRTLtm8KPiGxvDl7I90VUwHwYDVR0jBBgwFoAUA95QNVbRTLtm8KPiGxvDl7I90VUwDQYJKoZIhvcNAQEFBQADggEBAMucN6pIExIK+t1EnE9SsPTfrgT1eXkIoyQY/EsrhMAtudXH/vTBH1jLuG2cenTnmCmrEbXjcKChzUyImZOMkXDiqw8cvpOp/2PV5Adg06O/nVsJ8dWO41P0jmP6P6fbtGbfYmbW0W5BjfIttep3Sp+dWOIrWcBAI+0tKIJFPnlUkiaY4IBIqDfv8NZ5YBberOgOzW6sRBc4L0na4UU+Krk2U886UAb3LujEV0lsYSEY1QSteDwsOoBrp+uvFRTp2InBuThs4pFsiv9kuXclVzDAGySj4dzp30d8tbQkCAUw7C29C79Fv1C5qfPrmAESrciIxpg0X40KPMbp1ZWVbd4=-----END CERTIFICATE-----"
+            }
+        }
+    ]
+}
