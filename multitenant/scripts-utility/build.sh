@@ -21,6 +21,8 @@ function checkGitStatus() {
         echo -e "\n"
         exit 2
     fi
+
+    GIT_STATUS=`git status`
 }
 
 function checkGitPush() {
@@ -53,7 +55,7 @@ function createReleaseFile() {
     echo -e "BUILD `date` `whoami`@`hostname`\n" >  srv/release.info
     echo -e "VERSIONE MTA $VERSION\n" >>  srv/release.info
 
-    git status >> srv/release.info
+    echo -e "$GIT_STATUS" >> srv/release.info
     echo -e "\nGit Commit:">> srv/release.info
     git show-ref | grep origin/main >> srv/release.info
 }
