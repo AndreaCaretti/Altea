@@ -25,7 +25,6 @@
             "database": "local-test-data.db"
         }
     ],
-    "files.watcherExclude": {},
     "search.exclude": {
         "gen": true
     }
