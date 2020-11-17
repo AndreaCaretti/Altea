@@ -20,7 +20,7 @@ class ProcessorHuMovements {
         try {
             movement = await this.queueRawMovements.getAndSetToProcessing();
         } catch (error) {
-            console.log("Connessione redis caduta, mi rimetto in attesa");
+            console.log("Connessione redis caduta, mi rimetto in attesa", error);
             setImmediate(this.tick);
             return;
         }
