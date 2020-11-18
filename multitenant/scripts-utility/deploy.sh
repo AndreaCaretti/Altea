@@ -6,7 +6,7 @@ set -o errexit
 
 LAST_FILENAME=`ls mta_archives/ -t | head -n 1`
 
-echo -e "${GREEN}MTA che stò per deployare..."
+echo -e "${GREEN}Deploy del file MTA..."
 ls -lh mta_archives/$LAST_FILENAME
 echo -e "${NC}Starting deploy..."
 date
