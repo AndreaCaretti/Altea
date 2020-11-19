@@ -224,21 +224,28 @@ Dati anagrafici cliente, siccome i dati dei clienti sono separati a livello di t
 
 ## Tabella Locations
 
-| _ID_   | name   |
-| ------ | ------ |
-| _GUID_ | PlantA |
-| _GUID_ | PlantB |
+| _ID_   | name   | department    |
+| ------ | ------ | ------------- |
+| _GUID_ | PlantA | DEPARTMENT A  |
+| _GUID_ | PlantB | DEPARTMENT B  |
+
+## Tabella Department
+
+| _ID_   | name         | description     | location  |
+| ------ | ------------ | --------------- | --------- |
+| _GUID_ | DEPARTMENT A | Description 1   | PlantA    |
+| _GUID_ | DEPARTMENT B | Description 2   | PlantB    |
 
 ## Tabella Areas
 
 ### Produttore
 
-| _ID_   | name               | category (AreaCategories) | location (Locations) | ID Device IoT |
-| ------ | ------------------ | ------------------------- | -------------------- | ------------- |
-| _GUID_ | Produzione Plant A | No Temperature            | PlantA               |               |
-| _GUID_ | Stoccaggio         | Cold Room                 | PlantA               | 99999         |
-| _GUID_ | Uscita merci       | No Temperature            | PlantA               |               |
-| _GUID_ | Piazzale esterno   | No Temperature            | PlantA               |               |
+| _ID_   | name               | category (AreaCategories) | location (Locations) | Department   | ID Device IoT |
+| ------ | ------------------ | ------------------------- | -------------------- | ------------ | ------------- |
+| _GUID_ | Produzione Plant A | No Temperature            | PlantA               | DEPARTMENT A |               |
+| _GUID_ | Stoccaggio         | Cold Room                 | PlantA               | DEPARTMENT A | 99999         |
+| _GUID_ | Uscita merci       | No Temperature            | PlantA               | DEPARTMENT A |               |
+| _GUID_ | Piazzale esterno   | No Temperature            | PlantA               | DEPARTMENT A |               |
 
 -   Mappare le aree non a temperatura controllata è utile anche ai fini statistici. Grafici che indicano le aree non controllate a maggior permanenza.
 

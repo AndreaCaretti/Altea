@@ -96,6 +96,7 @@ define entity Areas : cuid, managed {
         TextArrangement : #TextOnly
     }
     location     : Association to one Locations;
+    department   : Association to one Department;
     @title  : 'ID Device IoT'
     ID_DeviceIoT : String
 }
@@ -107,8 +108,19 @@ define entity Locations : cuid, managed {
     @title : 'Locations'
     name        : String(50);
     description : localized String(200);
+    departments : Association to many Department
+                      on departments.location = $self;
 }
 
+@cds.autoexpose
+@cds.odata.valuelist
+@UI.Identification : [{Value : name}]
+define entity Department : cuid, managed {
+    @title : 'Departement'
+    name        : String(50);
+    description : localized String(200);
+    location    : Association to one Locations;
+}
 
 @cds.autoexpose
 @cds.odata.valuelist
