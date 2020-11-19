@@ -88,14 +88,15 @@ Nel frattempo la piattaforma tiene monitorate le connessioni con i gateway edge.
 
 Per calcolare il TOR durante la permanenza in area a temperatura anomala vengono sommati tutti i minuti in cui l'handling unit era in una area con anomalia di temperatura:
 
-| Caso  |    T0    |   T1   | T2 INIZIO ANOMALIA |    T3    |  T4   |   T5   | T6 FINE ANOMALIA |    T7    |   T8   |
-| :---: | :------: | :----: | :----------------: | :------: | :---: | :----: | :--------------: | :------: | :----: |
-|  1°   | INGRESSO | USCITA |                    |          |       |        |                  |          |        |
-|  2°   | INGRESSO |        |                    |          |       | USCITA |                  |          |        |
-|  3°   |          |        |                    | INGRESSO |       | USCITA |                  |          |        |
-|  4°   |          |        |                    | INGRESSO |       |        |                  |          | USCITA |
-|  5°   |          |        |                    |          |       |        |                  | INGRESSO | USCITA |
-|  6°   | INGRESSO |        |                    |          |       |        |                  |          | USCITA |
+| Caso  |    T0    |   T1   | T2 INIZIO ANOMALIA |    T3    |  T4   |   T5   | T6 FINE ANOMALIA |    T7    |   T8   | Tn (anomalia non finiti) |
+| :---: | :------: | :----: | :----------------: | :------: | :---: | :----: | :--------------: | :------: | :----: | :----------------------: |
+|  1°   | INGRESSO | USCITA |                    |          |       |        |                  |          |        |                          |
+|  2°   | INGRESSO |        |                    |          |       | USCITA |                  |          |        |                          |
+|  3°   |          |        |                    | INGRESSO |       | USCITA |                  |          |        |                          |
+|  4°   |          |        |                    | INGRESSO |       |        |                  |          | USCITA |                          |
+|  5°   |          |        |                    |          |       |        |                  | INGRESSO | USCITA |                          |
+|  6°   | INGRESSO |        |                    |          |       |        |                  |          | USCITA |                          |
+|  7°   | INGRESSO |        |                    |          |       |        |                  |          |        |                          |
 
 | Regola                                              | Caso coperto | Inizio TOR | Fine TOR |
 | --------------------------------------------------- | ------------ | ---------- | -------- |
@@ -103,6 +104,7 @@ Per calcolare il TOR durante la permanenza in area a temperatura anomala vengono
 | INGRESSO >= T2 AND USCITA <= T6                     | 3            | T3         | T5       |
 | (INGRESSO >= T2 OR INGRESSO) <= T6 AND USCITA <= T6 | 4            | T3         | T6       |
 | INGRESSO <= T2 AND USCITA => T6                     | 6            | T2         | T6       |
+| regola per 7° caso da scrivere                      | 7            | T0         | Tn       |
 
 # Alternative:
 
@@ -363,7 +365,7 @@ Passaggi Handling Unit da Control Point
 -   TE Momento dell'evento
 -   TS Momento dell'invio del messaggio
 -   SSCC_ID Codice SSCC dell'handling unit
--   DIR Valori possibili: F -> Forward, B -> Backward
+-   DIR Valori possibili: F -> Forward, B -> Backwards
 
 ## Tabella HandlingUnitsMovements
 
@@ -561,23 +563,25 @@ Esempio:
 
 ```
 {
+    "MSG_ID": "35ced3f1-60f5-4c1a-8587-5480c4bb337e",
 	"CP_ID": "90abe75c-e2c6-4e5f-a12f-fb81aa50d011",
-    "DIR": "F"
-    "SSCC_ID": "123456789012345678",
     "TE": "2020-10-14T09:01:33.763Z",
 	"TS": "2020-10-14T09:01:34.763Z",
+    "DIR": "F",
+    "HU_ID": "123456789012345678"
 }
 ```
 
-| Nome Campo | Nome Esteso                        | Descrizione                                   | Formato                | Esempio                              |
-| ---------- | ---------------------------------- | --------------------------------------------- | ---------------------- | ------------------------------------ |
-| CP_ID      | Control Point GUID                 | GUID del control point definito in CCP        | GUID 36 CHAR           | 90abe75c-e2c6-4e5f-a12f-fb81aa50d011 |
-| TE         | Time Event                         | Momento dell'evento                           | Edm.DateTimeOffset UTC | 2020-10-14T09:01:33.763Z             |
-| TS         | Time Send                          | Momento dell'invio del messaggio              | Edm.DateTimeOffset UTC | 2020-10-14T09:01:34.763Z             |
-| SSCC_ID    | Serialized shipping container code | Codice SSCC dell'handling unit                | GS1 SSCC               | 123456789012345678                   |
-| DIR        | Direction                          | Valori possibili: F -> Forward, B -> Backward | CHAR 1                 | F                                    |
+| Nome Campo | Nome Esteso        | Descrizione                                   | Formato                | Esempio                              |
+| ---------- | ------------------ | --------------------------------------------- | ---------------------- | ------------------------------------ |
+| MSG_ID     | Message GUID       | Identificativo univoco del messaggio          | UUID 36 CHAR           | 35ced3f1-60f5-4c1a-8587-5480c4bb337e |
+| CP_ID      | Control Point GUID | GUID del control point definito in CCP        | UUID 36 CHAR           | 90abe75c-e2c6-4e5f-a12f-fb81aa50d011 |
+| TE         | Time Event         | Momento dell'evento                           | Edm.DateTimeOffset UTC | 2020-10-14T09:01:33.763Z             |
+| TS         | Time Send          | Momento dell'invio del messaggio              | Edm.DateTimeOffset UTC | 2020-10-14T09:01:34.763Z             |
+| HU_ID      | Handling Unit GUID | Identificativo univoco del'handling unit      | CHAR 18                | 123456789012345678                   |
+| DIR        | Direction          | Valori possibili: F -> Forward, B -> Backward | CHAR 1                 | F                                    |
 
-### Comunicazione dati temperatura da cella frigorifera\_
+### Comunicazione dati temperatura da cella frigorifera
 
 T° Data Logger ---> Plant Gateway ---> SCP Internet of Things ---> SCP IoT DataLake
 
