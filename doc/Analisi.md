@@ -563,23 +563,25 @@ Esempio:
 
 ```
 {
+    "MSG_ID": "35ced3f1-60f5-4c1a-8587-5480c4bb337e",
 	"CP_ID": "90abe75c-e2c6-4e5f-a12f-fb81aa50d011",
-    "DIR": "F"
-    "SSCC_ID": "123456789012345678",
     "TE": "2020-10-14T09:01:33.763Z",
 	"TS": "2020-10-14T09:01:34.763Z",
+    "DIR": "F",
+    "HU_ID": "123456789012345678"
 }
 ```
 
-| Nome Campo | Nome Esteso                        | Descrizione                                   | Formato                | Esempio                              |
-| ---------- | ---------------------------------- | --------------------------------------------- | ---------------------- | ------------------------------------ |
-| CP_ID      | Control Point GUID                 | GUID del control point definito in CCP        | UUID 36 CHAR           | 90abe75c-e2c6-4e5f-a12f-fb81aa50d011 |
-| TE         | Time Event                         | Momento dell'evento                           | Edm.DateTimeOffset UTC | 2020-10-14T09:01:33.763Z             |
-| TS         | Time Send                          | Momento dell'invio del messaggio              | Edm.DateTimeOffset UTC | 2020-10-14T09:01:34.763Z             |
-| SSCC_ID    | Serialized shipping container code | Codice SSCC dell'handling unit                | GS1 SSCC               | 123456789012345678                   |
-| DIR        | Direction                          | Valori possibili: F -> Forward, B -> Backward | CHAR 1                 | F                                    |
+| Nome Campo | Nome Esteso        | Descrizione                                   | Formato                | Esempio                              |
+| ---------- | ------------------ | --------------------------------------------- | ---------------------- | ------------------------------------ |
+| MSG_ID     | Message GUID       | Identificativo univoco del messaggio          | UUID 36 CHAR           | 35ced3f1-60f5-4c1a-8587-5480c4bb337e |
+| CP_ID      | Control Point GUID | GUID del control point definito in CCP        | UUID 36 CHAR           | 90abe75c-e2c6-4e5f-a12f-fb81aa50d011 |
+| TE         | Time Event         | Momento dell'evento                           | Edm.DateTimeOffset UTC | 2020-10-14T09:01:33.763Z             |
+| TS         | Time Send          | Momento dell'invio del messaggio              | Edm.DateTimeOffset UTC | 2020-10-14T09:01:34.763Z             |
+| HU_ID      | Handling Unit GUID | Identificativo univoco del'handling unit      | CHAR 18                | 123456789012345678                   |
+| DIR        | Direction          | Valori possibili: F -> Forward, B -> Backward | CHAR 1                 | F                                    |
 
-### Comunicazione dati temperatura da cella frigorifera\_
+### Comunicazione dati temperatura da cella frigorifera
 
 T° Data Logger ---> Plant Gateway ---> SCP Internet of Things ---> SCP IoT DataLake
 
