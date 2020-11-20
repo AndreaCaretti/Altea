@@ -16,7 +16,7 @@ class CloudColdChain {
         this.cds = cds;
 
         // Logger
-        this.logger = new Logger(this.app);
+        this.logger = new Logger();
 
         // Handling Units Movements Processor
         this.processorHuMovements = new ProcessorHuMovements(this.logger);

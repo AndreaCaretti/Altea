@@ -1,7 +1,7 @@
 const InternalLogger = require("cf-nodejs-logging-support");
 
 class Logger {
-    constructor(app) {
+    constructor() {
         this.internalLogger = InternalLogger.createLogger();
 
         this.internalLogger.setLoggingLevel("debug");
@@ -11,9 +11,6 @@ class Logger {
         if (this.SIMPLE_LOG === "true") {
             InternalLogger.setLogPattern("{{msg}}");
         }
-
-        this.internalLogger.info("🤷‍♂️ Activating my logs... ");
-        app.use(InternalLogger.logNetwork);
     }
 
     info(...args) {
