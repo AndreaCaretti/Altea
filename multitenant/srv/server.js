@@ -8,7 +8,7 @@ cds.on("bootstrap", async (app) => {
     cloudColdChain.bootstrap(cds, app);
 });
 
-cds.on("served", async (_app) => {
+cds.on("served", async (_services) => {
     cloudColdChain.start();
 });
 
