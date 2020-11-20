@@ -1,4 +1,4 @@
-const Logger = require("../logger");
+const Logger = require("./logger");
 
 const ProcessorHuMovements = require("./processors/processor-hu-movements");
 const ProcessorInsertResidenceTime = require("./processors/processor-insert-residence-time");
