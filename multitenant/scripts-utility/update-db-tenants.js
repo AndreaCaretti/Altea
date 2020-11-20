@@ -1,10 +1,11 @@
+/* eslint-disable no-console */
 const request = require("request");
 const CloudFoundryApi = require("./cloud-foundry-api");
 const defaultEnv = require("../default-env.json");
 
 async function callService(options) {
     return new Promise((resolve, reject) => {
-        request(options, function (error, response) {
+        request(options, (error, response) => {
             if (error) {
                 console.error(error);
                 reject(error);
@@ -15,36 +16,37 @@ async function callService(options) {
 }
 
 async function getToken() {
-    const credentials = defaultEnv.VCAP_SERVICES.xsuaa[0].credentials;
+    const { credentials } = defaultEnv.VCAP_SERVICES.xsuaa[0];
 
     const authenticationUrl = credentials.url;
-    const clientid = credentials.clientid;
-    const clientsecret = credentials.clientsecret;
+    const { clientid } = credentials;
+    const { clientsecret } = credentials;
 
-    const authorization = "Basic " + Buffer.from(`${clientid}:${clientsecret}`).toString("base64");
+    const authorization = `Basic ${Buffer.from(`${clientid}:${clientsecret}`).toString("base64")}`;
 
-    let options = {
+    const options = {
         method: "GET",
         url: `${authenticationUrl}/oauth/token?grant_type=client_credentials&response_type=token`,
         headers: {
             Authorization: authorization,
         },
     };
-    let response = await callService(options);
+    const response = await callService(options);
     return JSON.parse(response.body).access_token;
 }
 
-async function upgradeTenants(capServiceUrl, access_token) {
-    let options = {
+// eslint-disable-next-line consistent-return
+async function upgradeTenants(capServiceUrl, accessToken) {
+    const options = {
         method: "POST",
         url: `${capServiceUrl}/mtx/v1/model/asyncUpgrade`,
         headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${access_token}`,
+            Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify({ tenants: ["all"], autoUndeploy: false }),
     };
-    let response = await callService(options);
+    const response = await callService(options);
 
     if (response.statusCode !== 200) {
         console.error("Error launching tenants DB update:");
@@ -57,53 +59,49 @@ async function upgradeTenants(capServiceUrl, access_token) {
     } catch (error) {
         console.log(response.statusCode, response.body);
         console.error("Error launching tenants DB update");
+        process.exit(4);
     }
 }
 
-async function getJobStatus(capServiceUrl, jobID, access_token) {
-    let options = {
+async function getJobStatus(capServiceUrl, jobID, accessToken) {
+    const options = {
         method: "GET",
         url: `${capServiceUrl}/mtx/v1/model/status/${jobID}`,
         headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${access_token}`,
+            Authorization: `Bearer ${accessToken}`,
         },
     };
-    let response = await callService(options);
+    const response = await callService(options);
     return JSON.parse(response.body);
 }
 
 async function main(capServiceAppName) {
-    let cloudFoundryApi = new CloudFoundryApi();
-    let capServiceUrl = await cloudFoundryApi.getAppRouteUrl(capServiceAppName);
-    let token = await getToken();
+    const cloudFoundryApi = new CloudFoundryApi();
+    const capServiceUrl = await cloudFoundryApi.getAppRouteUrl(capServiceAppName);
+    const accessToken = await getToken();
 
     console.log(`CAP Service url: ${capServiceUrl}`);
 
-    const jobID = await upgradeTenants(capServiceUrl, token);
+    const jobID = await upgradeTenants(capServiceUrl, accessToken);
     console.log("Started Job ID is:", jobID);
 
-    const interval = setInterval(
-        async (jobID, access_token) => {
-            let jobStatus = await getJobStatus(capServiceUrl, jobID, access_token);
+    const interval = setInterval(async () => {
+        const jobStatus = await getJobStatus(capServiceUrl, jobID, accessToken);
 
-            console.log(`Status: ${jobStatus.status}`);
+        console.log(`Status: ${jobStatus.status}`);
 
-            if (jobStatus.status === "ERROR" || jobStatus.status === "FINISHED") {
-                for (const tenantId in jobStatus.result.tenants) {
-                    const tenant = jobStatus.result.tenants[tenantId];
-                    console.log(`Tenant ${tenantId} result ${tenant.status}`);
+        if (jobStatus.status === "ERROR" || jobStatus.status === "FINISHED") {
+            // eslint-disable-next-line guard-for-in, no-restricted-syntax
+            for (const tenantId in jobStatus.result.tenants) {
+                const tenant = jobStatus.result.tenants[tenantId];
+                tenant.buildLogs.split("\n").forEach((riga) => console.log(riga));
 
-                    // console.log(tenant);
-                    tenant.buildLogs.split("\n").forEach((riga) => console.log(riga));
-                }
-                clearImmediate(interval);
+                console.log(`Tenant ${tenantId} result ${tenant.status}`);
             }
-        },
-        5000,
-        jobID,
-        token
-    );
+            clearImmediate(interval);
+        }
+    }, 5000);
 }
 
 main("mtt-cap-services");
