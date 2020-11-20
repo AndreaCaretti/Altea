@@ -101,6 +101,7 @@ define entity Areas : cuid, managed {
     ID_DeviceIoT : String
 }
 
+
 @cds.autoexpose
 @cds.odata.valuelist
 @UI.Identification : [{Value : name}]
