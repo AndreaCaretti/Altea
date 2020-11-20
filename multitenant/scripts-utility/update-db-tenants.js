@@ -93,6 +93,9 @@ async function main(capServiceAppName) {
                 for (const tenantId in jobStatus.result.tenants) {
                     const tenant = jobStatus.result.tenants[tenantId];
                     console.log(`Tenant ${tenantId} result ${tenant.status}`);
+
+                    // console.log(tenant);
+                    tenant.buildLogs.split("\n").forEach((riga) => console.log(riga));
                 }
                 clearImmediate(interval);
             }

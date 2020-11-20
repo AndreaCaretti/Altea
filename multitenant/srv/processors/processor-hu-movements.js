@@ -45,7 +45,7 @@ class ProcessorHuMovements {
             // serve per far partire la validazione sul campo, non di integritá del db
             inputValidation.call(tx, request);
 
-            movement.handlingUnitID = await this.getHandlingUnitFromSSCC(movement.SSCC_ID, tx);
+            movement.handlingUnitID = await this.getHandlingUnitFromHuID(movement.HU_ID, tx);
 
             const s = await tx.create(HandlingUnitsMovements).entries({
                 controlPoint_ID: movement.CP_ID,
@@ -72,6 +72,8 @@ class ProcessorHuMovements {
             await this.queueRawMovements.moveToComplete(movement);
         } catch (error) {
             this.logger.error("Errore inserimento record %j", JSON.stringify(error));
+
+            console.log(error);
             await tx.rollback();
             await this.queueRawMovements.moveToError(movement);
         }
@@ -88,9 +90,9 @@ class ProcessorHuMovements {
         setImmediate(this.tick);
     }
 
-    async getHandlingUnitFromSSCC(SSCC, tx) {
-        this.logger.debug("getHandlingUnitFromSSCC: ", SSCC);
-        return DB.selectOneFieldWhere("HandlingUnits", "ID", { SSCC }, tx, this.logger);
+    async getHandlingUnitFromHuID(huId, tx) {
+        this.logger.debug("getHandlingUnitFromHuID: ", huId);
+        return DB.selectOneFieldWhere("HandlingUnits", "ID", { huId }, tx, this.logger);
     }
 }
 

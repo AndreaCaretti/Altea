@@ -1,7 +1,7 @@
 namespace cloudcoldchain;
 
 using {
-    cloudcoldchain.SSCC,
+    cloudcoldchain.HU_ID,
     cloudcoldchain.RouteStepNr
 } from './global_types';
 
@@ -17,8 +17,8 @@ using {
 
 define entity AccessRights : cuid, managed {
     @title : 'Access Rights'
-    name : String(50);
-    sscc : SSCC;
+    name  : String(50);
+    hu_id : HU_ID;
 
 }
 
@@ -177,10 +177,10 @@ define entity RouteSteps : cuid {
 }
 
 
-//| _sscc_ (SSCC)      | lot     | lastKnownArea(Locations)    | inAreaBusinessTime (Timestamp) | jsonSummary (LargeString)             | blockchainHash (100)
+//| _HU_ID_ (HU_ID)      | lot     | lastKnownArea(Locations)    | inAreaBusinessTime (Timestamp) | jsonSummary (LargeString)             | blockchainHash (100)
 @UI.Identification : [{Value : ID}]
 define entity HandlingUnits : cuid, managed {
-    SSCC               : cloudcoldchain.SSCC;
+    huId               : cloudcoldchain.HU_ID;
     lot                : Association to one Lots;
     lastKnownArea      : Association to one Areas;
     inAreaBusinessTime : Timestamp;
@@ -203,11 +203,11 @@ annotate Books with {
 }
 
 define entity HandlingUnitsRawMovements : cuid, managed {
-    CP_ID   : String;
-    TE      : String;
-    TS      : String;
-    SSCC_ID : String;
-    DIR     : String;
+    CP_ID : String;
+    TE    : String;
+    TS    : String;
+    HU_ID : String;
+    DIR   : String;
 }
 
 
