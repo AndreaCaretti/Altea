@@ -880,7 +880,7 @@ Solo sottoscrizione alla cloud cold chain e portale, CF non attivato
 ## Notifications
   - il metodo `alert` della classe `Notification` riceve `user`, `tenant`, `alertBusinessTime`, `alertCode`, `alertLevel`, `payload`, `GUID`
   - fa il push nella coda REDIS
-  - la classe `Notification` è in attesa sulla coda REDIS e quando riceve un messaggio:
+  - la classe `Notification` è in attesa sulla coda REDIS ('EXTERNAL_NOTIFICATION') e quando riceve un messaggio:
     - invia il messaggio verso la coda del servizio enterprise messaging istanziato nel subaccount centrale di platform
     - inserire un record nella tabella `Notifications`
 
