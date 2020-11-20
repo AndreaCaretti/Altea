@@ -1,5 +1,5 @@
 // const inputValidation = require("@sap/cds-runtime/lib/common/generic/input");
-const DB = require("../db_utilities");
+const DB = require("../db-utilities");
 const QueueResidenceTime = require("../queues/queue-residence-time");
 
 class ProcessorInsertResidenceTime {

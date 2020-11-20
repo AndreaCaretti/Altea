@@ -1,5 +1,4 @@
-const Logger = require("cf-nodejs-logging-support");
-// const bodyParser = require("body-parser");
+const Logger = require("./logger");
 
 const ProcessorHuMovements = require("./processors/processor-hu-movements");
 const ProcessorInsertResidenceTime = require("./processors/processor-insert-residence-time");
@@ -13,13 +12,11 @@ class CloudColdChain {
         // Express app
         this.app = app;
 
-        // this.app.use(bodyParser.json());
-
         // CDS
         this.cds = cds;
 
         // Logger
-        this.logger = this.initLogger(this.app);
+        this.logger = new Logger(this.app);
 
         // Handling Units Movements Processor
         this.processorHuMovements = new ProcessorHuMovements(this.logger);
@@ -46,22 +43,6 @@ class CloudColdChain {
 
         // Update Residence Time processor
         this.processorUpdateResidenceTime.start();
-    }
-
-    // eslint-disable-next-line class-methods-use-this
-    initLogger(app) {
-        const logger = Logger.createLogger();
-
-        logger.setLoggingLevel("debug");
-
-        if (process.env.SIMPLE_LOG === "true") {
-            Logger.setLogPattern("{{written_at}} - {{response_status}} - {{msg}}");
-        }
-
-        logger.info("🤷‍♂️ Activating my logs... ");
-        app.use(Logger.logNetwork);
-
-        return logger;
     }
 
     async initMultitenantProvisioning() {

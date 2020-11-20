@@ -428,14 +428,39 @@ I dati di temperatura sono salvati nel Data Lake IoT, la tabella viene riportata
 | Stoccaggio | 16:55 | 4              |              |
 | Stoccaggio | 17:00 | 4              |              |
 
-# Tabella Alerts
+# Tabella outOfRange
 
-Tabelle di alert applicativi rilevati dalla piattaforma da segnalare / segnalati agli utenti:
+Tabelle di log per le segnalazioni ricevute dal iot per alert di temperatura out of range e calcolo del TOR
 
-| _ID_   | _alertBusinessTime_      | sender(?) | message (String)                           | level (alertLevel) |
-| ------ | ------------------------ | --------- | ------------------------------------------ | ------------------ |
-| _GUID_ | 2020-10-14T09:01:33.763Z |           | RFID XXX già esistente                     | Grave              |
-| _GUID_ | 2020-10-14T09:01:33.763Z |           | Temperatura cella fuori range da 20 minuti | Alert              |
+| _ID_                                 | ID_DeviceIot | startEventTS             | endEventTS               | TOR |
+| ------------------------------------ | ------------ | ------------------------ | ------------------------ | --- |
+| 10d2f997-1e9c-4b21-8817-d48171ead166 | cella1       | 2020-10-14T09:01:33.763Z | 2020-11-14T09:01:33.763Z | 120 |
+| _GUID_                               | cella2       | 2020-10-14T09:01:33.763Z | 2020-10-19T09:01:33.763Z | 190 |
+| _GUID_                               | cella3       | 2020-10-14T09:01:33.763Z |                          | 250 |
+
+# Tabella Notifications
+
+Tabelle di alert applicativi rilevati dalla piattaforma segnalati verso Keethings, che a sua volta invia alle chatroom:
+
+| _ID_   | _alertBusinessTime_      | notificationTime         | alertCode | alertLevel (AlertLevel) | payload (String JSON)                                  | GUID                                 |
+| ------ | ------------------------ | ------------------------ | --------- | ----------------------- | ------------------------------------------------------ | ------------------------------------ |
+| _GUID_ | 2020-10-14T09:01:31.763Z | 2020-10-14T09:01:32.763Z |           | Grave                   | { "msg" : "RFID XXX già esistente"                     |                                      |
+| _GUID_ | 2020-10-14T09:01:33.763Z | 2020-10-14T09:01:34.763Z | OUT       | Alert                   | { "msg": "Temperatura cella fuori range da 20 minuti"} | 10d2f997-1e9c-4b21-8817-d48171ead166 |
+
+-   alertBusinessTime: è l'ora in cui è successo l'evento (esempio per le celle esempio lo start time del problema sulla cella)
+-   notificationTime: è l'ora in cui abbiamo aggiunto la notifica alla coda enterprise messaging
+-   alertCode: codice fisso dell'alert, valori possibile aggiungere man mano
+-   level: livello di alert syslog: 
+    - LOG_EMERG 0 /* system is unusable */
+    - LOG_ALERT 1 /* action must be taken immediately */
+    - LOG_CRIT 2 /* critical conditions */
+    - LOG_ERR 3 /* error conditions */
+    - LOG_WARNING 4 /* warning conditions */
+    - LOG_NOTICE 5 /* normal but significant condition */
+    - LOG_INFO 6 /* informational */
+    - LOG_DEBUG 7 /* debug-level messages */
+-   payload: JSON contente i dettagli dell'alert che verrà inviato alla coda
+-   GUID: guid del record scatenante l'evento, potrebbe anche non esserci, per le celle è il guid della tabella outOfRange
 
 # Tabella Audits
 
@@ -446,16 +471,6 @@ Tabelle di auditing della configurazione della piattaforma:
 | 2020-10-14T09:01:33.763Z | Products | PROD-001 | CREATE |              |          |          | SBARZAGHI |
 | 2020-10-14T09:01:33.763Z | Products | PROD-001 | UPDATE | TOR          | 18       | 20       | SBARZAGHI |
 | 2020-10-14T09:01:33.763Z | Products | PROD-001 | UPDATE | DESCRIZIONE  | aaaa     | AAAA     | SBARZAGHI |
-
-# Tabella outOfRange
-
-Tabelle di log per le segnalazioni ricevute dal iot per alert di temperatura out of range e calcolo del TOR
-
-| ID_DeviceIot | startEventTS             | endEventTS               | TOR |
-| ------------ | ------------------------ | ------------------------ | --- |
-| cella1       | 2020-10-14T09:01:33.763Z | 2020-11-14T09:01:33.763Z | 120 |
-| cella2       | 2020-10-14T09:01:33.763Z | 2020-10-19T09:01:33.763Z | 190 |
-| cella3       | 2020-10-14T09:01:33.763Z |                          | 250 |
 
 # Log piattaforma
 
@@ -856,10 +871,18 @@ Solo sottoscrizione alla cloud cold chain e portale, CF non attivato
 -   in iot c'è configurato un segment che parte con la rule `outOfRange` e finisce con la rule `inRange`
 -   rule `outOfRange` di tipo streaming rule cloud toggle che determina se la temperatura è out of range
 -   rule `inRange` di tipo streaming rule cloud toggle che determina se la temperatura è in range
--   il segment invia i dati in enterprise messaging nel topic fisso deciso da SAP `sap/liot/svc/segments`
+-   IoT invia i dati di apertura e chiusura segmento in enterprise messaging nel topic fisso deciso da SAP `sap/liot/svc/segments`
 -   enterprise messaging ha la coda `sap/liot/svc/TemperatureRange` (TODO: meglio rinominarla in `sap/liot/svc/segments`) con subscription su `sap/liot/svc/segments`
 -   enterprise messaging invia i dati al webhook che punta al servizio cap `/iot/segment`
 -   il servizio cap aggiorna la tabella `OutOfRange`
+-   chiama il metodo `alert` della classe `Notifications`
+
+## Notifications
+  - il metodo `alert` della classe `Notification` riceve `user`, `tenant`, `alertBusinessTime`, `alertCode`, `alertLevel`, `payload`, `GUID`
+  - fa il push nella coda REDIS
+  - la classe `Notification` è in attesa sulla coda REDIS ('EXTERNAL_NOTIFICATION') e quando riceve un messaggio:
+    - invia il messaggio verso la coda del servizio enterprise messaging istanziato nel subaccount centrale di platform
+    - inserire un record nella tabella `Notifications`
 
 # Appunti costi piattaforma
 

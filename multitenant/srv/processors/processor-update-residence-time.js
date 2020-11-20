@@ -1,16 +1,11 @@
 // // eslint-disable-next-line import/no-extraneous-dependencies
 // const inputValidation = require("@sap/cds-runtime/lib/common/generic/input");
-// const DB = require("../db_utilities");
-
-// const QueueHandlingUnitsRawMovements = require("../queues/queue-hu-raw-movements");
-// const QueueResidenceTime = require("../queues/queue-residence-time");
+const cds = require("@sap/cds");
+const DB = require("../db-utilities");
 
 class ProcessorHuMovements {
     constructor(logger) {
         this.logger = logger;
-
-        // this.queueRawMovements = new QueueHandlingUnitsRawMovements();
-        // this.queueResidenceTime = new QueueResidenceTime();
 
         this.tick = this.tick.bind(this);
     }
@@ -19,7 +14,7 @@ class ProcessorHuMovements {
         try {
             await this.doWork();
         } catch (error) {
-            this.logger.error(error);
+            this.logger.logException(error);
         } finally {
             setTimeout(this.tick, 5000);
         }
@@ -33,74 +28,60 @@ class ProcessorHuMovements {
 
         this.logger.setTenantId(technicalUser.tenant);
 
-        const request = new cds.Request({ user: technicalUser });
-        const tx = cds.transaction(request);
+        const residenceTimesToProcess = await this.getResidenceTimesToElaborate(technicalUser);
 
-        const residenceTimesToElaborate = await this.getResidenceTimesToElaborate(tx);
-
-        for (let index = 0; index < residenceTimesToElaborate.length; index++) {
-            // eslint-disable-next-line no-unused-vars
-            const residentTime = residenceTimesToElaborate[index];
+        for (let index = 0; index < residenceTimesToProcess.length; index++) {
+            // eslint-disable-next-line no-await-in-loop
+            await this.processResidentTime(residenceTimesToProcess[index], technicalUser);
         }
-
-        // try {
-        //     // serve per far partire la validazione sul campo, non di integritá del db
-        //     inputValidation.call(tx, request);
-
-        //     movement.handlingUnitID = await this.getHandlingUnitFrom(movement.SSCC_ID, tx);
-
-        //     const s = await tx.create(HandlingUnitsMovements).entries({
-        //         controlPoint_ID: movement.CP_ID,
-        //         TE: movement.TE,
-        //         TS: movement.TS,
-        //         handlingUnit_ID: movement.handlingUnitID,
-        //         DIR: movement.DIR,
-        //     });
-
-        //     console.log("s contiene: ", s);
-
-        //     // eslint-disable-next-line no-restricted-syntax
-        //     for (const result of s) {
-        //         console.log(result);
-        //         movement.ID = result.ID;
-        //     }
-
-        //     console.log("prima di commit");
-        //     const sCommit = await tx.commit();
-        //     console.log("dopo commit", sCommit);
-
-        //     await this.queueResidenceTime.pushToWaiting(movement);
-
-        //     await this.queueRawMovements.moveToComplete(movement);
-        // } catch (error) {
-        //     console.log("error console: ", error);
-        //     this.logger.error("Errore inserimento record", error.toString());
-        //     await tx.rollback();
-        //     await this.queueRawMovements.moveToError(movement);
-        // }
     }
 
     async start() {
-        console.log(`Avvio Residence Time Update Processor...`);
         this.logger.info(`Avvio Residence Time Update Processor...`);
-
-        // this.queueResidenceTime.start();
 
         // setImmediate(this.tick);
     }
 
-    async getResidenceTimesToElaborate(tx) {
-        this.logger.debug("Read residenceTimes da processare");
+    async getResidenceTimesToElaborate(technicalUser) {
+        const tx = DB.getTransaction(technicalUser, this.logger);
 
-        const records = await tx.run(
-            SELECT.from(cds.entities.ResidentTime).where({ outBusinessTime: null })
-        );
+        try {
+            const records = await tx.run(
+                SELECT.from(cds.entities.ResidenceTime).where({ outBusinessTime: null })
+            );
 
-        this.logger.debug(`Residence times da aggiornare: ${records.length}`);
+            this.logger.debug(`Residence times senza outBusinessTime: ${records.length}`);
 
-        this.logger.debug(JSON.stringify(records));
+            return records;
+        } finally {
+            tx.commit();
+        }
+    }
 
-        return records;
+    async processResidentTime(residenceTime, technicalUser) {
+        this.logger.logObject("Processing residenceTime:", residenceTime);
+
+        const tx = DB.getTransaction(technicalUser, this.logger);
+
+        try {
+            // eslint-disable-next-line no-unused-vars
+            const nearResidentTimes = await this.getNearResidentTimes(residenceTime, tx);
+        } catch (error) {
+            this.logger.logException(error);
+        } finally {
+            tx.commit();
+        }
+    }
+
+    async getNearResidentTimes(_residenceTime, _tx) {
+        // const records = await tx.run(
+        //     SELECT.from(cds.entities.ResidenceTime).where(`
+        //         handlingUnitId: residenceTime.handlingUnitId,
+        //         step: residenceTime.step + 1,
+        //         inBusinessTime >
+        //     `)
+        // );
+        this.logger.debug(".");
     }
 }
 

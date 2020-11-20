@@ -160,6 +160,11 @@ class DB {
 
         return recordsCount;
     }
+
+    static getTransaction(technicalUser, logger) {
+        logger.logObject("Get transaction for user: ", technicalUser);
+        return cds.transaction(new cds.Request({ user: technicalUser }));
+    }
 }
 
 module.exports = DB;
