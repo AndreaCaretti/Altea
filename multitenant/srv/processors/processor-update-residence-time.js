@@ -47,7 +47,7 @@ class ProcessorHuMovements {
         //     // serve per far partire la validazione sul campo, non di integritá del db
         //     inputValidation.call(tx, request);
 
-        //     movement.handlingUnitID = await this.getHandlingUnitFromSSCC(movement.SSCC_ID, tx);
+        //     movement.handlingUnitID = await this.getHandlingUnitFrom(movement.SSCC_ID, tx);
 
         //     const s = await tx.create(HandlingUnitsMovements).entries({
         //         controlPoint_ID: movement.CP_ID,

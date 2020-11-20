@@ -1,4 +1,3 @@
-using {cloudcoldchain.HU_ID} from '../../db/global_types';
 using {
     cloudcoldchain,
     cloudcoldchain.HandlingUnits

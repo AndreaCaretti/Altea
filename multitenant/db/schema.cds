@@ -180,7 +180,7 @@ define entity RouteSteps : cuid {
 //| _HU_ID_ (HU_ID)      | lot     | lastKnownArea(Locations)    | inAreaBusinessTime (Timestamp) | jsonSummary (LargeString)             | blockchainHash (100)
 @UI.Identification : [{Value : ID}]
 define entity HandlingUnits : cuid, managed {
-    HU_ID              : cloudcoldchain.HU_ID;
+    huId               : cloudcoldchain.HU_ID;
     lot                : Association to one Lots;
     lastKnownArea      : Association to one Areas;
     inAreaBusinessTime : Timestamp;

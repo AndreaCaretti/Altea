@@ -16,7 +16,7 @@ class HandlingUnitMoved extends ZApplicationService {
                 CP_ID: data.CP_ID,
                 TE: data.TE,
                 TS: data.TS,
-                SSCC_ID: data.SSCC_ID,
+                HU_ID: data.HU_ID,
                 DIR: data.DIR,
                 user: req.user.id,
                 tenant: req.user.tenant,
