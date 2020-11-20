@@ -88,14 +88,15 @@ Nel frattempo la piattaforma tiene monitorate le connessioni con i gateway edge.
 
 Per calcolare il TOR durante la permanenza in area a temperatura anomala vengono sommati tutti i minuti in cui l'handling unit era in una area con anomalia di temperatura:
 
-| Caso |    T0    |   T1   | T2 INIZIO ANOMALIA |    T3    | T4  |   T5   | T6 FINE ANOMALIA |    T7    |   T8   |
-| :--: | :------: | :----: | :----------------: | :------: | :-: | :----: | :--------------: | :------: | :----: |
-|  1°  | INGRESSO | USCITA |                    |          |     |        |                  |          |        |
-|  2°  | INGRESSO |        |                    |          |     | USCITA |                  |          |        |
-|  3°  |          |        |                    | INGRESSO |     | USCITA |                  |          |        |
-|  4°  |          |        |                    | INGRESSO |     |        |                  |          | USCITA |
-|  5°  |          |        |                    |          |     |        |                  | INGRESSO | USCITA |
-|  6°  | INGRESSO |        |                    |          |     |        |                  |          | USCITA |
+| Caso  |    T0    |   T1   | T2 INIZIO ANOMALIA |    T3    |  T4   |   T5   | T6 FINE ANOMALIA |    T7    |   T8   | Tn (anomalia non finiti) |
+| :---: | :------: | :----: | :----------------: | :------: | :---: | :----: | :--------------: | :------: | :----: | :----------------------: |
+|  1°   | INGRESSO | USCITA |                    |          |       |        |                  |          |        |                          |
+|  2°   | INGRESSO |        |                    |          |       | USCITA |                  |          |        |                          |
+|  3°   |          |        |                    | INGRESSO |       | USCITA |                  |          |        |                          |
+|  4°   |          |        |                    | INGRESSO |       |        |                  |          | USCITA |                          |
+|  5°   |          |        |                    |          |       |        |                  | INGRESSO | USCITA |                          |
+|  6°   | INGRESSO |        |                    |          |       |        |                  |          | USCITA |                          |
+|  7°   | INGRESSO |        |                    |          |       |        |                  |          |        |                          |
 
 | Regola                                              | Caso coperto | Inizio TOR | Fine TOR |
 | --------------------------------------------------- | ------------ | ---------- | -------- |
@@ -103,6 +104,7 @@ Per calcolare il TOR durante la permanenza in area a temperatura anomala vengono
 | INGRESSO >= T2 AND USCITA <= T6                     | 3            | T3         | T5       |
 | (INGRESSO >= T2 OR INGRESSO) <= T6 AND USCITA <= T6 | 4            | T3         | T6       |
 | INGRESSO <= T2 AND USCITA => T6                     | 6            | T2         | T6       |
+| regola per 7° caso da scrivere                      | 7            | T0         | Tn       |
 
 # Alternative:
 
@@ -363,7 +365,7 @@ Passaggi Handling Unit da Control Point
 -   TE Momento dell'evento
 -   TS Momento dell'invio del messaggio
 -   SSCC_ID Codice SSCC dell'handling unit
--   DIR Valori possibili: F -> Forward, B -> Backward
+-   DIR Valori possibili: F -> Forward, B -> Backwards
 
 ## Tabella HandlingUnitsMovements
 
@@ -388,17 +390,17 @@ Passaggi Handling Unit da Control Point
 
 Permanenza Handling Unit in area
 
-| _ID_   | HandlingUnit (HandlingUnits) | step | area (Area)                  | inBusinessTime           | outBusinessTime          | residenceTime (Integer) | tor  | failureIn | failureOut | totalTor | tmin | tmax | torElaborationTime (Timestamp) |
-| ------ | ---------------------------- | ---- | ---------------------------- | ------------------------ | ------------------------ | ----------------------- | ---- | --------- | ---------- | -------- | :--: | :--: | ------------------------------ |
-| _GUID_ | 123456789012345678           | 1    | Produzione Plant A           | 2020-10-14T09:01:33.763Z | 2020-10-14T09:02:33.763Z | 1600                    | 1600 |           |            |          |      |      | 2020-10-14T09:01:33.763Z       |
-| _GUID_ | 123456789012345678           | 2    | Cold Room                    | 2020-10-14T09:02:33.763Z | 2020-10-14T09:03:33.763Z | 3600                    | 30   |           |            |          |  4   |  20  | 2020-10-14T09:01:33.763Z       |
-| _GUID_ | 123456789012345678           | 3    | Uscita merci                 | 2020-10-14T09:03:33.763Z | 2020-10-14T09:04:33.763Z | 1600                    | 1600 |           |            |          |      |      | 2020-10-14T09:01:33.763Z       |
-| _GUID_ | 123456789012345678           | 2    | Cold Room                    | 2020-10-14T09:04:33.763Z | 2020-10-14T09:05:33.763Z | 3600                    | 30   |           |            |          |  4   |  20  | 2020-10-14T09:01:33.763Z       |
-| _GUID_ | 123456789012345678           | 3    | Uscita merci                 | 2020-10-14T09:05:33.763Z | 2020-10-14T09:06:33.763Z | 1600                    |      |           |            |          |      |      |                                |
-| _GUID_ | 123456789012345678           | 4    | Piazzale esterno             | 2020-10-14T09:06:33.763Z | 2020-10-14T09:07:33.763Z | 2000                    | 2000 |           |            |          |      |      |                                |
-| _GUID_ | 123456789012345678           | 5    | Truck                        | 2020-10-14T09:07:33.763Z | 2020-10-14T09:08:33.763Z | 20                      |      |           |            |          |      |      |                                |
-| _GUID_ | 123456789012345678           | 6    | Piazzale esterno depositario | 2020-10-14T09:08:33.763Z | 2020-10-14T09:09:33.763Z | 20                      |      |           |            |          |      |      |                                |
-| _GUID_ | 123456789012345678           | 7    | Depositario                  | 2020-10-14T09:09:33.763Z |                          | 20                      |      |           |            |          |      |      |                                |
+| _ID_   | HandlingUnit (HandlingUnits) | step | area (Area)                  | inBusinessTime           | outBusinessTime          | residenceTime (Integer) | tor  | failureIn | failureOut | totalTor | tmin  | tmax  | torElaborationTime (Timestamp) |
+| ------ | ---------------------------- | ---- | ---------------------------- | ------------------------ | ------------------------ | ----------------------- | ---- | --------- | ---------- | -------- | :---: | :---: | ------------------------------ |
+| _GUID_ | 123456789012345678           | 1    | Produzione Plant A           | 2020-10-14T09:01:33.763Z | 2020-10-14T09:02:33.763Z | 1600                    | 1600 |           |            |          |       |       | 2020-10-14T09:01:33.763Z       |
+| _GUID_ | 123456789012345678           | 2    | Cold Room                    | 2020-10-14T09:02:33.763Z | 2020-10-14T09:03:33.763Z | 3600                    | 30   |           |            |          |   4   |  20   | 2020-10-14T09:01:33.763Z       |
+| _GUID_ | 123456789012345678           | 3    | Uscita merci                 | 2020-10-14T09:03:33.763Z | 2020-10-14T09:04:33.763Z | 1600                    | 1600 |           |            |          |       |       | 2020-10-14T09:01:33.763Z       |
+| _GUID_ | 123456789012345678           | 2    | Cold Room                    | 2020-10-14T09:04:33.763Z | 2020-10-14T09:05:33.763Z | 3600                    | 30   |           |            |          |   4   |  20   | 2020-10-14T09:01:33.763Z       |
+| _GUID_ | 123456789012345678           | 3    | Uscita merci                 | 2020-10-14T09:05:33.763Z | 2020-10-14T09:06:33.763Z | 1600                    |      |           |            |          |       |       |                                |
+| _GUID_ | 123456789012345678           | 4    | Piazzale esterno             | 2020-10-14T09:06:33.763Z | 2020-10-14T09:07:33.763Z | 2000                    | 2000 |           |            |          |       |       |                                |
+| _GUID_ | 123456789012345678           | 5    | Truck                        | 2020-10-14T09:07:33.763Z | 2020-10-14T09:08:33.763Z | 20                      |      |           |            |          |       |       |                                |
+| _GUID_ | 123456789012345678           | 6    | Piazzale esterno depositario | 2020-10-14T09:08:33.763Z | 2020-10-14T09:09:33.763Z | 20                      |      |           |            |          |       |       |                                |
+| _GUID_ | 123456789012345678           | 7    | Depositario                  | 2020-10-14T09:09:33.763Z |                          | 20                      |      |           |            |          |       |       |                                |
 
 -   inBusinessTime è l'ora di ingresso dell'handling unit nell'area
 -   outBusinessTime è l'ora di uscita dell'handling unit dall'area
@@ -561,23 +563,25 @@ Esempio:
 
 ```
 {
+    "MSG_ID": "35ced3f1-60f5-4c1a-8587-5480c4bb337e",
 	"CP_ID": "90abe75c-e2c6-4e5f-a12f-fb81aa50d011",
-    "DIR": "F"
-    "SSCC_ID": "123456789012345678",
     "TE": "2020-10-14T09:01:33.763Z",
 	"TS": "2020-10-14T09:01:34.763Z",
+    "DIR": "F",
+    "HU_ID": "123456789012345678"
 }
 ```
 
-| Nome Campo | Nome Esteso                        | Descrizione                                   | Formato                | Esempio                              |
-| ---------- | ---------------------------------- | --------------------------------------------- | ---------------------- | ------------------------------------ |
-| CP_ID      | Control Point GUID                 | GUID del control point definito in CCP        | GUID 36 CHAR           | 90abe75c-e2c6-4e5f-a12f-fb81aa50d011 |
-| TE         | Time Event                         | Momento dell'evento                           | Edm.DateTimeOffset UTC | 2020-10-14T09:01:33.763Z             |
-| TS         | Time Send                          | Momento dell'invio del messaggio              | Edm.DateTimeOffset UTC | 2020-10-14T09:01:34.763Z             |
-| SSCC_ID    | Serialized shipping container code | Codice SSCC dell'handling unit                | GS1 SSCC               | 123456789012345678                   |
-| DIR        | Direction                          | Valori possibili: F -> Forward, B -> Backward | CHAR 1                 | F                                    |
+| Nome Campo | Nome Esteso        | Descrizione                                   | Formato                | Esempio                              |
+| ---------- | ------------------ | --------------------------------------------- | ---------------------- | ------------------------------------ |
+| MSG_ID     | Message GUID       | Identificativo univoco del messaggio          | UUID 36 CHAR           | 35ced3f1-60f5-4c1a-8587-5480c4bb337e |
+| CP_ID      | Control Point GUID | GUID del control point definito in CCP        | UUID 36 CHAR           | 90abe75c-e2c6-4e5f-a12f-fb81aa50d011 |
+| TE         | Time Event         | Momento dell'evento                           | Edm.DateTimeOffset UTC | 2020-10-14T09:01:33.763Z             |
+| TS         | Time Send          | Momento dell'invio del messaggio              | Edm.DateTimeOffset UTC | 2020-10-14T09:01:34.763Z             |
+| HU_ID      | Handling Unit GUID | Identificativo univoco del'handling unit      | CHAR 18                | 123456789012345678                   |
+| DIR        | Direction          | Valori possibili: F -> Forward, B -> Backward | CHAR 1                 | F                                    |
 
-### Comunicazione dati temperatura da cella frigorifera\_
+### Comunicazione dati temperatura da cella frigorifera
 
 T° Data Logger ---> Plant Gateway ---> SCP Internet of Things ---> SCP IoT DataLake
 
@@ -814,11 +818,11 @@ Cloud Cold Chain Development Customer 1
 
 Solo sottoscrizione alla cloud cold chain e portale, CF non attivato
 
-# Documentazione
+# Documentazione tecnica flussi
 
 ## Ingestion dati movimentazione handling unit
 
--   gate rfid invia a enterprise messaging in mqtt nel topic specifico del cliente _aggiungere esempio del topic_
+-   gate rfid invia a enterprise messaging in mqtt nel topic specifico del cliente TODO: _aggiungere esempio del topic_
 -   enterprise messaging sottoscrive il topic e aggiunge ad una coda
 -   la coda è collegata ad un webhook che punto al servizio odata del cap con autenticazione OAuth2, viene richiesto il token al subaccount del cliente, il token staccato determina il tenant del client
 -   il servizio cap inserisce il record secco nella tabella senza controlli HandlingUnitMovementsRaw
@@ -832,11 +836,11 @@ Solo sottoscrizione alla cloud cold chain e portale, CF non attivato
     -   ricerca nella tabella `Routes` con controlPoint e direction per determinare l'area di destinazione della scatola
     -   inserisce nella tabella `HandlingUnitsResidenceTime` un record con: `sscc`, `step`, `area`, `inBusinessTime` con il t del movimento
     -   aggiorna il campo `ResidenceTimeStatus` della tabella `HandlingUnitMovements` a `OK`
-    -   se il t del movimento è maggiore di `HandlingUnits-inAreaBusinessTime` aggiorna `lastKnowArea` e `inAreaBusinessTime`
+    -   se il TE del movimento è maggiore di `HandlingUnits-inAreaBusinessTime` aggiorna `lastKnowArea` e `inAreaBusinessTime`
 
 ## Determinazione HandlingUnitsResidenceTime-outBusinessTime e residenceTime
 
--   ogni n minuti random tra parte un processo per un singolo cliente
+-   ogni n minuti random parte un processo per un singolo cliente
 -   processo che ricerca tutti i record in `HandlingUnitsResidenceTime` senza `outBusinessTime`
 -   per ogni record cerca un record con T > del T movimento e con step = step del record + 1 oppure step del record - 1
 -   se lo trova aggiorna il campo `outBusinessTime` con `inBusinessTime` del record trovato
@@ -849,11 +853,12 @@ Solo sottoscrizione alla cloud cold chain e portale, CF non attivato
 ## Ingestion dati temperatura IoT
 
 -   cella invia i dati a scp iot via mqtt
--   rule `outOfRange` di tipo streaming rule cloud toggle che determina se la temperatura è in range
--   rule `inRange` di tipo streaming rule cloud toggle che determina se la temperatura è in range
 -   in iot c'è configurato un segment che parte con la rule `outOfRange` e finisce con la rule `inRange`
--   il segment invia i dati in enterprise messaging
--   enterprise messaging invia i dati al webhook che punta al servizio cap
+-   rule `outOfRange` di tipo streaming rule cloud toggle che determina se la temperatura è out of range
+-   rule `inRange` di tipo streaming rule cloud toggle che determina se la temperatura è in range
+-   il segment invia i dati in enterprise messaging nel topic fisso deciso da SAP `sap/liot/svc/segments`
+-   enterprise messaging ha la coda `sap/liot/svc/TemperatureRange` (TODO: meglio rinominarla in `sap/liot/svc/segments`) con subscription su `sap/liot/svc/segments`
+-   enterprise messaging invia i dati al webhook che punta al servizio cap `/iot/segment`
 -   il servizio cap aggiorna la tabella `OutOfRange`
 
 # Appunti costi piattaforma
@@ -883,7 +888,7 @@ Feature Capacity Units
 -   SAP IoT, time series archive 1
 -   Total 425
 
-## CONNESSIONE WEBHOOK - CAP (SCP)
+## CONNESSIONE WEBHOOK - CAP per invio segmenti IoT(SCP)
 
 webhookURL: https://ccp-provider-dev-qas-dev-mtt-cap-services.cfapps.eu10.hana.ondemand.com/iot/segment
 Default Content-type: application/json

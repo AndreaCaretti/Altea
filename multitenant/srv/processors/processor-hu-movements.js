@@ -20,7 +20,10 @@ class ProcessorHuMovements {
         try {
             movement = await this.queueRawMovements.getAndSetToProcessing();
         } catch (error) {
-            console.log("Connessione redis caduta, mi rimetto in attesa", error);
+            this.logger.error(
+                "Connessione redis caduta, mi rimetto in attesa %j",
+                JSON.parse(error)
+            );
             setImmediate(this.tick);
             return;
         }
@@ -52,24 +55,23 @@ class ProcessorHuMovements {
                 DIR: movement.DIR,
             });
 
-            console.log("s contiene: ", s);
+            this.logger.debug("s contiene: ", s);
 
             // eslint-disable-next-line no-restricted-syntax
             for (const result of s) {
-                console.log(result);
+                this.logger.debug(result);
                 movement.ID = result.ID;
             }
 
-            console.log("prima di commit");
+            this.logger.debug("prima di commit");
             const sCommit = await tx.commit();
-            console.log("dopo commit", sCommit);
+            this.logger.debug("dopo commit", sCommit);
 
             await this.queueResidenceTime.pushToWaiting(movement);
 
             await this.queueRawMovements.moveToComplete(movement);
         } catch (error) {
-            console.log("error console: ", error);
-            this.logger.error("Errore inserimento record", error.toString());
+            this.logger.error("Errore inserimento record %j", JSON.stringify(error));
             await tx.rollback();
             await this.queueRawMovements.moveToError(movement);
         }
@@ -78,7 +80,7 @@ class ProcessorHuMovements {
     }
 
     async start() {
-        console.log(`Avvio Handling Unit Movements Processor...`);
+        this.logger.info(`Avvio Handling Unit Movements Processor...`);
 
         this.queueRawMovements.start();
         this.queueResidenceTime.start();

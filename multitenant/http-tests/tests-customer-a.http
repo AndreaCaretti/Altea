@@ -15,7 +15,7 @@ GET https://{{provider-subdomain}}-{{space}}-{{cap-service-url}}.cfapps.eu10.han
 Authorization: Bearer {{token}}
 
 ### Create HandlingUnitsRawMovements
-POST http://{{provider-subdomain}}-{{space}}-{{cap-service-url}}.cfapps.eu10.hana.ondemand.com/handling-unit-moved/HandlingUnitsRawMovements HTTP/1.1
+POST https://{{provider-subdomain}}-{{space}}-{{cap-service-url}}.cfapps.eu10.hana.ondemand.com/handling-unit-moved/HandlingUnitsRawMovements HTTP/1.1
 Authorization: Bearer {{token}}
 Content-Type: application/json
 

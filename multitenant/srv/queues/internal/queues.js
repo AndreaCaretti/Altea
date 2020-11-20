@@ -114,7 +114,6 @@ class Queues {
         console.log("Push", queueName, element);
         return new Promise((resolve, _reject) => {
             this.redisClient.lpush(queueName, JSON.stringify(element), (_err, number) => {
-                console.log("Resolve", number);
                 resolve(number);
             });
         });
