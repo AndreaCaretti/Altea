@@ -1,9 +1,8 @@
 /* eslint-disable no-console */
+const Logger = require("../logger");
+const NotificationService = require("./notificationService");
 
 module.exports = (notification) => {
-    const Logger = require("../logger");
-    const NotificationService = require("./notificationService");
-
     notification.on("notification", async (request) => {
         const notificationData = request.data.NotificationPayload;
         // Logger
