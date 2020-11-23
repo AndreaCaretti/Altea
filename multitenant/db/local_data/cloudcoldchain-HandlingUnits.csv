@@ -1,2 +1,2 @@
-ID,SSCC,lot_ID,inAreaBusinessTime,lastKnownArea_ID,lastMovement_ID
+ID,huId,lot_ID,inAreaBusinessTime,lastKnownArea_ID,lastMovement_ID
 51ca3a4d-45a1-449b-820c-f7a378ac8c8c,123456789012345678,728985ee-301e-45be-bffa-e8b2eb7a3683,2020-10-14T09:01:33.763Z,00ff1f4e-9292-4743-9573-678a9663272e,f7e8f323-7d7b-4a6b-aacf-84d8055b311d

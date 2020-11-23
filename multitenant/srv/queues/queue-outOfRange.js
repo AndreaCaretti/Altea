@@ -1,8 +1,8 @@
 const Queue = require("./internal/queue");
 
 class QueueOutOfRange extends Queue {
-    constructor() {
-        super("OUT_OF_RANGES");
+    constructor(logger) {
+        super("OUT_OF_RANGES", logger);
     }
 }
 

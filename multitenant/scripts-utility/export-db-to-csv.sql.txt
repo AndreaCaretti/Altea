@@ -18,7 +18,7 @@ SELECT ID
 FROM cloudcoldchain_ControlPoints;
 
 .once db/local_data/cloudcoldchain-HandlingUnits.csv
-SELECT ID,SSCC,lot_ID,inAreaBusinessTime,lastKnownArea_ID,lastMovement_ID
+SELECT ID,MSG_ID,HU_ID,lot_ID,inAreaBusinessTime,lastKnownArea_ID,lastMovement_ID
 FROM cloudcoldchain_HandlingUnits;
 
 .once db/local_data/cloudcoldchain-Locations.csv

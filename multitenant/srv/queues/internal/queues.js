@@ -4,6 +4,10 @@ const xsenv = require("@sap/xsenv");
 
 class Queues {
     constructor(queueName, logger) {
+        if (!logger) {
+            throw Error("Si ma il logger non me lo passi?");
+        }
+
         this.queueName = queueName;
         this.logger = logger;
 
@@ -11,7 +15,7 @@ class Queues {
 
         this.redisCredentials = xsenv.serviceCredentials({ tag: "cache" });
 
-        console.log(`REDIS URL: ${this.redisCredentials.uri}`);
+        logger.info(`REDIS URL: ${this.redisCredentials.uri}`);
     }
 
     start() {
@@ -92,11 +96,9 @@ class Queues {
                         },
                     }
                 );
-
-                console.log("cluster: ", this.redisClient);
             }
         } catch (error) {
-            console.error("errore creazione cluster", error);
+            this.logger.logObject("errore creazione cluster", error);
         }
 
         // this.redisClient.on("connect", () => {
@@ -105,13 +107,13 @@ class Queues {
         // });
 
         this.redisClient.on("error", (err) => {
-            console.log(`REDIS CONNECT error ${err}`);
-            console.log("node error", err.lastNodeError);
+            this.logger.logException(`REDIS CONNECT error `, err);
+            this.logger.error("node error", err.lastNodeError);
         });
     }
 
     push(queueName, element) {
-        console.log("Push", queueName, element);
+        this.logger.logObject(`REDIS PUSH TO ${queueName}`, element);
         return new Promise((resolve, _reject) => {
             this.redisClient.lpush(queueName, JSON.stringify(element), (_err, number) => {
                 resolve(number);
@@ -131,11 +133,11 @@ class Queues {
         return new Promise((resolve, reject) => {
             this.redisClient.brpop(fromQueueName, 0, (error, element) => {
                 if (error) {
-                    console.error("ERRORE REDIS BRPOP:", error);
-                    reject(error); // Reject fa crashare nodejs, da gestire
+                    this.logger.logException("REDIS ERRORE BRPOP", error);
+                    reject(error); // FIXME: Reject fa crashare nodejs, da gestire
                     return;
                 }
-                console.log("Record from ", fromQueueName, element);
+                this.logger.debug(`REDIS POP FROM ${fromQueueName}`, element);
                 const obj = JSON.parse(element[1]); // element[0] è il nome della coda
                 resolve(obj);
             });

@@ -1,7 +1,7 @@
 namespace cloudcoldchain;
 
 using {
-    cloudcoldchain.SSCC,
+    cloudcoldchain.HU_ID,
     cloudcoldchain.RouteStepNr
 } from './global_types';
 
@@ -17,8 +17,8 @@ using {
 
 define entity AccessRights : cuid, managed {
     @title : 'Access Rights'
-    name : String(50);
-    sscc : SSCC;
+    name  : String(50);
+    hu_id : HU_ID;
 
 }
 
@@ -96,9 +96,11 @@ define entity Areas : cuid, managed {
         TextArrangement : #TextOnly
     }
     location     : Association to one Locations;
+    department   : Association to one Department;
     @title  : 'ID Device IoT'
     ID_DeviceIoT : String
 }
+
 
 @cds.autoexpose
 @cds.odata.valuelist
@@ -107,8 +109,19 @@ define entity Locations : cuid, managed {
     @title : 'Locations'
     name        : String(50);
     description : localized String(200);
+    departments : Association to many Department
+                      on departments.location = $self;
 }
 
+@cds.autoexpose
+@cds.odata.valuelist
+@UI.Identification : [{Value : name}]
+define entity Department : cuid, managed {
+    @title : 'Departement'
+    name        : String(50);
+    description : localized String(200);
+    location    : Association to one Locations;
+}
 
 @cds.autoexpose
 @cds.odata.valuelist
@@ -177,10 +190,10 @@ define entity RouteSteps : cuid {
 }
 
 
-//| _sscc_ (SSCC)      | lot     | lastKnownArea(Locations)    | inAreaBusinessTime (Timestamp) | jsonSummary (LargeString)             | blockchainHash (100)
+//| _HU_ID_ (HU_ID)      | lot     | lastKnownArea(Locations)    | inAreaBusinessTime (Timestamp) | jsonSummary (LargeString)             | blockchainHash (100)
 @UI.Identification : [{Value : ID}]
 define entity HandlingUnits : cuid, managed {
-    SSCC               : cloudcoldchain.SSCC;
+    huId               : cloudcoldchain.HU_ID;
     lot                : Association to one Lots;
     lastKnownArea      : Association to one Areas;
     inAreaBusinessTime : Timestamp;
@@ -190,6 +203,7 @@ define entity HandlingUnits : cuid, managed {
 }
 
 define entity HandlingUnitsMovements : cuid, managed {
+    MSG_ID       : cloudcoldchain.MSG_ID;
     controlPoint : Association to one ControlPoints;
     TE           : Timestamp;
     TS           : Timestamp;
@@ -203,11 +217,12 @@ annotate Books with {
 }
 
 define entity HandlingUnitsRawMovements : cuid, managed {
-    CP_ID   : String;
-    TE      : String;
-    TS      : String;
-    SSCC_ID : String;
-    DIR     : String;
+    MSG_ID : String;
+    CP_ID  : String;
+    TE     : String;
+    TS     : String;
+    HU_ID  : String;
+    DIR    : String;
 }
 
 

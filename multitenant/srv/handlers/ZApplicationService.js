@@ -1,9 +1,15 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 const cds = require("@sap/cds");
+const Logger = require("../logger");
 
 class ZApplicationService extends cds.ApplicationService {
+    async init() {
+        await super.init();
+        this.coldChainLogger = Logger.getInstance();
+    }
+
     async dispatch(req, ...etc) {
-        console.log("🤷‍♂️ Called custom dispatcher...");
+        this.coldChainLogger.debug("🤷‍♂️ Called custom dispatcher...");
         req.on("failed", (e) => {
             this.onValidationError(e, req);
         });

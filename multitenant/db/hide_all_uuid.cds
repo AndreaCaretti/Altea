@@ -51,3 +51,7 @@ annotate cloudcoldchain.Routes with {
 annotate cloudcoldchain.outOfRange with {
     ID @UI.Hidden;
 }
+
+annotate cloudcoldchain.Department with {
+    ID @UI.Hidden;
+}
