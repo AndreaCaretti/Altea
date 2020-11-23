@@ -54,9 +54,16 @@ Authorization: Basic Alice:Alice
 Content-Type: application/json
 
 {
-	"ID": "123456789012345678",
-	"lot_ID": "e2e97c3d-0425-4876-b173-4fdef29a118c"
+	"ID": "2b3b3fbc-da34-452a-876e-75c337a549ef",
+	"lot_ID": "728985ee-301e-45be-bffa-e8b2eb7a3683",
+    "MSG_ID":"2b3b3fbc-da34-452a-876e-75c337a549ef"
 }
+
+
+### GET HandlingUnit
+GET  http://localhost:4004/services/HandlingUnits  HTTP/1.1
+Authorization: Basic Alice:Alice
+Content-Type: application/json
 
 ### Create HandlingUnitsRawMovements
 POST http://localhost:4004/handling-unit-moved/HandlingUnitsRawMovements HTTP/1.1
@@ -64,10 +71,11 @@ Authorization: Basic Alice:Alice
 Content-Type: application/json
 
 {
-    "CP_ID": "90abe75c-e2c6-4e5f-a12f-fb81aa50d011",
-    "TE": "1905-10-14T09:01:33.763Z",
-    "TS": "1905-10-14T09:01:34.763Z",
-    "HU_ID": "123456789012345678",
+    "MSG_ID":"zz4ce6f3-283c-4a95-8470-c3664ebddbd0",
+    "CP_ID": "zzabe75c-e2c6-4e5f-a12f-fb81aa50d011",
+    "TE": "1900-10-14T09:01:33.763Z",
+    "TS": "1900-10-14T09:01:34.763Z",
+    "HU_ID": "Z23456789012345678",
     "DIR": "F"
 }
 
@@ -81,6 +89,26 @@ Authorization: Basic Alice:Alice
 # --------------------------------------------------------------------
 # --------------------------------------------------------------------
 # --------------------------------------------------------------------
+
+### Create HandlingUnitsMovements
+POST http://localhost:4004/handling-unit-moved/HandlingUnitsMovements HTTP/1.1
+Authorization: Basic Alice:Alice
+Content-Type: application/json
+
+{
+    "MSG_ID":"994ce6f3-283c-4a95-8470-c3664ebddbd0",
+    "controlPoint_ID": "90abe75c-e2c6-4e5f-a12f-fb81aa50d011",
+    "TE": "1900-10-14T09:01:33.763Z",
+    "TS": "1900-10-14T09:01:34.763Z",
+    "handlingUnit_ID": "51ca3a4d-45a1-449b-820c-f7a378ac8c8c",
+    "DIR": "F"
+}
+
+
+### GET HandlingUnitsMovements
+GET http://localhost:4004/handling-unit-moved/HandlingUnitsMovements HTTP/1.1
+Authorization: Basic Alice:Alice
+Content-Type: application/json
 
 
 @customera-subdomain = ccp-customera
@@ -103,6 +131,7 @@ Authorization: Bearer {{token}}
 Content-Type: application/json
  
 {
+    "MSG_ID":"994ce6f3-283c-4a95-8470-c3664ebddbd0",
     "CP_ID": "90abe75c-e2c6-4e5f-a12f-fb81aa50d011",
     "TE": "2020-10-14T09:01:33.763Z",
     "TS": "2020-10-14T09:01:34.763Z",
@@ -134,6 +163,7 @@ Content-Type: application/json
 If-Match: "2020-11-01T15:48:57.600Z"
 
 {
+    "MSG_ID":"994ce6f3-283c-4a95-8470-c3664ebddbd0",
     "CP_ID": "a0abe75c-e2c6-4e5f-a12f-fb81aa50d011",
     "TE": "2020-10-14T09:01:33.763Z",
     "TS": "2020-10-14T09:01:34.763Z",
