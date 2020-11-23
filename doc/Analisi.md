@@ -88,15 +88,15 @@ Nel frattempo la piattaforma tiene monitorate le connessioni con i gateway edge.
 
 Per calcolare il TOR durante la permanenza in area a temperatura anomala vengono sommati tutti i minuti in cui l'handling unit era in una area con anomalia di temperatura:
 
-| Caso  |    T0    |   T1   | T2 INIZIO ANOMALIA |    T3    |  T4   |   T5   | T6 FINE ANOMALIA |    T7    |   T8   | Tn (anomalia non finiti) |
-| :---: | :------: | :----: | :----------------: | :------: | :---: | :----: | :--------------: | :------: | :----: | :----------------------: |
-|  1°   | INGRESSO | USCITA |                    |          |       |        |                  |          |        |                          |
-|  2°   | INGRESSO |        |                    |          |       | USCITA |                  |          |        |                          |
-|  3°   |          |        |                    | INGRESSO |       | USCITA |                  |          |        |                          |
-|  4°   |          |        |                    | INGRESSO |       |        |                  |          | USCITA |                          |
-|  5°   |          |        |                    |          |       |        |                  | INGRESSO | USCITA |                          |
-|  6°   | INGRESSO |        |                    |          |       |        |                  |          | USCITA |                          |
-|  7°   | INGRESSO |        |                    |          |       |        |                  |          |        |                          |
+| Caso |    T0    |   T1   | T2 INIZIO ANOMALIA |    T3    | T4  |   T5   | T6 FINE ANOMALIA |    T7    |   T8   | Tn (anomalia non finiti) |
+| :--: | :------: | :----: | :----------------: | :------: | :-: | :----: | :--------------: | :------: | :----: | :----------------------: |
+|  1°  | INGRESSO | USCITA |                    |          |     |        |                  |          |        |                          |
+|  2°  | INGRESSO |        |                    |          |     | USCITA |                  |          |        |                          |
+|  3°  |          |        |                    | INGRESSO |     | USCITA |                  |          |        |                          |
+|  4°  |          |        |                    | INGRESSO |     |        |                  |          | USCITA |                          |
+|  5°  |          |        |                    |          |     |        |                  | INGRESSO | USCITA |                          |
+|  6°  | INGRESSO |        |                    |          |     |        |                  |          | USCITA |                          |
+|  7°  | INGRESSO |        |                    |          |     |        |                  |          |        |                          |
 
 | Regola                                              | Caso coperto | Inizio TOR | Fine TOR |
 | --------------------------------------------------- | ------------ | ---------- | -------- |
@@ -224,21 +224,28 @@ Dati anagrafici cliente, siccome i dati dei clienti sono separati a livello di t
 
 ## Tabella Locations
 
-| _ID_   | name   |
-| ------ | ------ |
-| _GUID_ | PlantA |
-| _GUID_ | PlantB |
+| _ID_   | name   | department    |
+| ------ | ------ | ------------- |
+| _GUID_ | PlantA | DEPARTMENT A  |
+| _GUID_ | PlantB | DEPARTMENT B  |
+
+## Tabella Department
+
+| _ID_   | name         | description     | location  |
+| ------ | ------------ | --------------- | --------- |
+| _GUID_ | DEPARTMENT A | Description 1   | PlantA    |
+| _GUID_ | DEPARTMENT B | Description 2   | PlantB    |
 
 ## Tabella Areas
 
 ### Produttore
 
-| _ID_   | name               | category (AreaCategories) | location (Locations) | ID Device IoT |
-| ------ | ------------------ | ------------------------- | -------------------- | ------------- |
-| _GUID_ | Produzione Plant A | No Temperature            | PlantA               |               |
-| _GUID_ | Stoccaggio         | Cold Room                 | PlantA               | 99999         |
-| _GUID_ | Uscita merci       | No Temperature            | PlantA               |               |
-| _GUID_ | Piazzale esterno   | No Temperature            | PlantA               |               |
+| _ID_   | name               | category (AreaCategories) | location (Locations) | Department   | ID Device IoT |
+| ------ | ------------------ | ------------------------- | -------------------- | ------------ | ------------- |
+| _GUID_ | Produzione Plant A | No Temperature            | PlantA               | DEPARTMENT A |               |
+| _GUID_ | Stoccaggio         | Cold Room                 | PlantA               | DEPARTMENT A | 99999         |
+| _GUID_ | Uscita merci       | No Temperature            | PlantA               | DEPARTMENT A |               |
+| _GUID_ | Piazzale esterno   | No Temperature            | PlantA               | DEPARTMENT A |               |
 
 -   Mappare le aree non a temperatura controllata è utile anche ai fini statistici. Grafici che indicano le aree non controllate a maggior permanenza.
 
@@ -390,17 +397,17 @@ Passaggi Handling Unit da Control Point
 
 Permanenza Handling Unit in area
 
-| _ID_   | HandlingUnit (HandlingUnits) | step | area (Area)                  | inBusinessTime           | outBusinessTime          | residenceTime (Integer) | tor  | failureIn | failureOut | totalTor | tmin  | tmax  | torElaborationTime (Timestamp) |
-| ------ | ---------------------------- | ---- | ---------------------------- | ------------------------ | ------------------------ | ----------------------- | ---- | --------- | ---------- | -------- | :---: | :---: | ------------------------------ |
-| _GUID_ | 123456789012345678           | 1    | Produzione Plant A           | 2020-10-14T09:01:33.763Z | 2020-10-14T09:02:33.763Z | 1600                    | 1600 |           |            |          |       |       | 2020-10-14T09:01:33.763Z       |
-| _GUID_ | 123456789012345678           | 2    | Cold Room                    | 2020-10-14T09:02:33.763Z | 2020-10-14T09:03:33.763Z | 3600                    | 30   |           |            |          |   4   |  20   | 2020-10-14T09:01:33.763Z       |
-| _GUID_ | 123456789012345678           | 3    | Uscita merci                 | 2020-10-14T09:03:33.763Z | 2020-10-14T09:04:33.763Z | 1600                    | 1600 |           |            |          |       |       | 2020-10-14T09:01:33.763Z       |
-| _GUID_ | 123456789012345678           | 2    | Cold Room                    | 2020-10-14T09:04:33.763Z | 2020-10-14T09:05:33.763Z | 3600                    | 30   |           |            |          |   4   |  20   | 2020-10-14T09:01:33.763Z       |
-| _GUID_ | 123456789012345678           | 3    | Uscita merci                 | 2020-10-14T09:05:33.763Z | 2020-10-14T09:06:33.763Z | 1600                    |      |           |            |          |       |       |                                |
-| _GUID_ | 123456789012345678           | 4    | Piazzale esterno             | 2020-10-14T09:06:33.763Z | 2020-10-14T09:07:33.763Z | 2000                    | 2000 |           |            |          |       |       |                                |
-| _GUID_ | 123456789012345678           | 5    | Truck                        | 2020-10-14T09:07:33.763Z | 2020-10-14T09:08:33.763Z | 20                      |      |           |            |          |       |       |                                |
-| _GUID_ | 123456789012345678           | 6    | Piazzale esterno depositario | 2020-10-14T09:08:33.763Z | 2020-10-14T09:09:33.763Z | 20                      |      |           |            |          |       |       |                                |
-| _GUID_ | 123456789012345678           | 7    | Depositario                  | 2020-10-14T09:09:33.763Z |                          | 20                      |      |           |            |          |       |       |                                |
+| _ID_   | HandlingUnit (HandlingUnits) | step | area (Area)                  | inBusinessTime           | outBusinessTime          | residenceTime (Integer) | tor  | failureIn | failureOut | totalTor | tmin | tmax | torElaborationTime (Timestamp) |
+| ------ | ---------------------------- | ---- | ---------------------------- | ------------------------ | ------------------------ | ----------------------- | ---- | --------- | ---------- | -------- | :--: | :--: | ------------------------------ |
+| _GUID_ | 123456789012345678           | 1    | Produzione Plant A           | 2020-10-14T09:01:33.763Z | 2020-10-14T09:02:33.763Z | 1600                    | 1600 |           |            |          |      |      | 2020-10-14T09:01:33.763Z       |
+| _GUID_ | 123456789012345678           | 2    | Cold Room                    | 2020-10-14T09:02:33.763Z | 2020-10-14T09:03:33.763Z | 3600                    | 30   |           |            |          |  4   |  20  | 2020-10-14T09:01:33.763Z       |
+| _GUID_ | 123456789012345678           | 3    | Uscita merci                 | 2020-10-14T09:03:33.763Z | 2020-10-14T09:04:33.763Z | 1600                    | 1600 |           |            |          |      |      | 2020-10-14T09:01:33.763Z       |
+| _GUID_ | 123456789012345678           | 2    | Cold Room                    | 2020-10-14T09:04:33.763Z | 2020-10-14T09:05:33.763Z | 3600                    | 30   |           |            |          |  4   |  20  | 2020-10-14T09:01:33.763Z       |
+| _GUID_ | 123456789012345678           | 3    | Uscita merci                 | 2020-10-14T09:05:33.763Z | 2020-10-14T09:06:33.763Z | 1600                    |      |           |            |          |      |      |                                |
+| _GUID_ | 123456789012345678           | 4    | Piazzale esterno             | 2020-10-14T09:06:33.763Z | 2020-10-14T09:07:33.763Z | 2000                    | 2000 |           |            |          |      |      |                                |
+| _GUID_ | 123456789012345678           | 5    | Truck                        | 2020-10-14T09:07:33.763Z | 2020-10-14T09:08:33.763Z | 20                      |      |           |            |          |      |      |                                |
+| _GUID_ | 123456789012345678           | 6    | Piazzale esterno depositario | 2020-10-14T09:08:33.763Z | 2020-10-14T09:09:33.763Z | 20                      |      |           |            |          |      |      |                                |
+| _GUID_ | 123456789012345678           | 7    | Depositario                  | 2020-10-14T09:09:33.763Z |                          | 20                      |      |           |            |          |      |      |                                |
 
 -   inBusinessTime è l'ora di ingresso dell'handling unit nell'area
 -   outBusinessTime è l'ora di uscita dell'handling unit dall'area
@@ -450,7 +457,8 @@ Tabelle di alert applicativi rilevati dalla piattaforma segnalati verso Keething
 -   alertBusinessTime: è l'ora in cui è successo l'evento (esempio per le celle esempio lo start time del problema sulla cella)
 -   notificationTime: è l'ora in cui abbiamo aggiunto la notifica alla coda enterprise messaging
 -   alertCode: codice fisso dell'alert, valori possibile aggiungere man mano
--   level: livello di alert syslog: 
+<<<<<<< HEAD
+-   alertLevel: livello di alert syslog: 
     - LOG_EMERG 0 /* system is unusable */
     - LOG_ALERT 1 /* action must be taken immediately */
     - LOG_CRIT 2 /* critical conditions */
@@ -459,6 +467,17 @@ Tabelle di alert applicativi rilevati dalla piattaforma segnalati verso Keething
     - LOG_NOTICE 5 /* normal but significant condition */
     - LOG_INFO 6 /* informational */
     - LOG_DEBUG 7 /* debug-level messages */
+=======
+-   level: livello di alert syslog:
+    -   LOG*EMERG 0 /* system is unusable \_/
+    -   LOG*ALERT 1 /* action must be taken immediately \_/
+    -   LOG*CRIT 2 /* critical conditions \_/
+    -   LOG*ERR 3 /* error conditions \_/
+    -   LOG*WARNING 4 /* warning conditions \_/
+    -   LOG*NOTICE 5 /* normal but significant condition \_/
+    -   LOG*INFO 6 /* informational \_/
+    -   LOG*DEBUG 7 /* debug-level messages \_/
+>>>>>>> 26469b06e7e305a63b4754364cd54fe231887b3a
 -   payload: JSON contente i dettagli dell'alert che verrà inviato alla coda
 -   GUID: guid del record scatenante l'evento, potrebbe anche non esserci, per le celle è il guid della tabella outOfRange
 
@@ -578,7 +597,7 @@ Esempio:
 
 ```
 {
-    "MSG_ID": "35ced3f1-60f5-4c1a-8587-5480c4bb337e",
+    "MSG_ID":"994ce6f3-283c-4a95-8470-c3664ebddbd0",
 	"CP_ID": "90abe75c-e2c6-4e5f-a12f-fb81aa50d011",
     "TE": "2020-10-14T09:01:33.763Z",
 	"TS": "2020-10-14T09:01:34.763Z",
@@ -589,7 +608,7 @@ Esempio:
 
 | Nome Campo | Nome Esteso        | Descrizione                                   | Formato                | Esempio                              |
 | ---------- | ------------------ | --------------------------------------------- | ---------------------- | ------------------------------------ |
-| MSG_ID     | Message GUID       | Identificativo univoco del messaggio          | UUID 36 CHAR           | 35ced3f1-60f5-4c1a-8587-5480c4bb337e |
+| MSG_ID     | Message GUID       | Identificativo univoco del messaggio          | UUID 36 CHAR           | 994ce6f3-283c-4a95-8470-c3664ebddbd0 |
 | CP_ID      | Control Point GUID | GUID del control point definito in CCP        | UUID 36 CHAR           | 90abe75c-e2c6-4e5f-a12f-fb81aa50d011 |
 | TE         | Time Event         | Momento dell'evento                           | Edm.DateTimeOffset UTC | 2020-10-14T09:01:33.763Z             |
 | TS         | Time Send          | Momento dell'invio del messaggio              | Edm.DateTimeOffset UTC | 2020-10-14T09:01:34.763Z             |
@@ -878,11 +897,12 @@ Solo sottoscrizione alla cloud cold chain e portale, CF non attivato
 -   chiama il metodo `alert` della classe `Notifications`
 
 ## Notifications
-  - il metodo `alert` della classe `Notification` riceve `user`, `tenant`, `alertBusinessTime`, `alertCode`, `alertLevel`, `payload`, `GUID`
-  - fa il push nella coda REDIS
-  - la classe `Notification` è in attesa sulla coda REDIS ('EXTERNAL_NOTIFICATION') e quando riceve un messaggio:
-    - invia il messaggio verso la coda del servizio enterprise messaging istanziato nel subaccount centrale di platform
-    - inserire un record nella tabella `Notifications`
+
+-   il metodo `alert` della classe `Notification` riceve `user`, `tenant`, `alertBusinessTime`, `alertCode`, `alertLevel`, `payload`, `GUID`
+-   fa il push nella coda REDIS
+-   la classe `Notification` è in attesa sulla coda REDIS ('EXTERNAL_NOTIFICATION') e quando riceve un messaggio:
+    -   invia il messaggio verso la coda del servizio enterprise messaging istanziato nel subaccount centrale di platform
+    -   inserire un record nella tabella `Notifications`
 
 # Appunti costi piattaforma
 

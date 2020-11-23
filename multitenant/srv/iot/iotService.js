@@ -19,10 +19,11 @@ module.exports = (iot) => {
         try {
             if (outOfRangeToUpdate[0] === undefined) {
                 instruction = "CREATE:";
-                if (outOfRange.data[0].action === "CLOSE") {
-                    endEvent = outOfRange.eventTime;
-                } else {
+                if (outOfRange.data[0].action === "OPEN") {
                     startEvent = outOfRange.eventTime;
+                } else {
+                    // CLOSE or END_TIME_UPDATED
+                    endEvent = outOfRange.eventTime;
                 }
 
                 await tx.create(outOfRangeTab).entries({
@@ -35,12 +36,13 @@ module.exports = (iot) => {
             } else {
                 instruction = "UPDATE:";
                 // eslint-disable-next-line no-lonely-if
-                if (outOfRange.data[0].action === "CLOSE") {
-                    startEvent = outOfRangeToUpdate[0].startEventTS;
-                    endEvent = outOfRange.eventTime;
-                } else {
+                if (outOfRange.data[0].action === "OPEN") {
                     startEvent = outOfRange.eventTime;
                     endEvent = outOfRangeToUpdate[0].endEventTS;
+                } else {
+                    // CLOSE or END_TIME_UPDATED
+                    startEvent = outOfRangeToUpdate[0].startEventTS;
+                    endEvent = outOfRange.eventTime;
                 }
 
                 await tx.update(outOfRangeTab, outOfRangeToUpdate[0].ID).with({
