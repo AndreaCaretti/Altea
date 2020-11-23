@@ -92,10 +92,12 @@ async function main(capServiceAppName) {
             if (jobStatus.status === "ERROR" || jobStatus.status === "FINISHED") {
                 for (const tenantId in jobStatus.result.tenants) {
                     const tenant = jobStatus.result.tenants[tenantId];
+                    if (jobStatus.status === "ERROR") {
+                        tenant.buildLogs.split("\n").forEach((riga) => console.log(riga));
+                    }
                     console.log(`Tenant ${tenantId} result ${tenant.status}`);
 
                     // console.log(tenant);
-                    tenant.buildLogs.split("\n").forEach((riga) => console.log(riga));
                 }
                 clearImmediate(interval);
             }
