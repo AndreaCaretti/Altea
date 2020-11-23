@@ -6,7 +6,7 @@ class ProcessorInsertResidenceTime {
     constructor(logger) {
         this.logger = logger;
 
-        this.queueResidenceTime = new QueueResidenceTime();
+        this.queueResidenceTime = new QueueResidenceTime(this.logger);
 
         this.tick = this.tick.bind(this);
     }

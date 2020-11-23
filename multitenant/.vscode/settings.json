@@ -26,6 +26,8 @@
         }
     ],
     "search.exclude": {
-        "gen": true
-    }
+        "gen": true,
+        "_out": true
+    },
+    "sqltools.useNodeRuntime": true
 }

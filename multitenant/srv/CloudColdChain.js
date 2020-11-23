@@ -1,4 +1,4 @@
-const Logger = require("../logger");
+const Logger = require("./logger");
 
 const ProcessorHuMovements = require("./processors/processor-hu-movements");
 const ProcessorInsertResidenceTime = require("./processors/processor-insert-residence-time");
@@ -16,7 +16,7 @@ class CloudColdChain {
         this.cds = cds;
 
         // Logger
-        this.logger = new Logger(this.app);
+        this.logger = Logger.getInstance(app);
 
         // Handling Units Movements Processor
         this.processorHuMovements = new ProcessorHuMovements(this.logger);

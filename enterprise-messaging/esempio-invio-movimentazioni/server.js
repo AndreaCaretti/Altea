@@ -61,7 +61,7 @@ async function main(params) {
 				CP_ID: "e6bbede3-5b6a-472d-8ba6-41abbb89edf2",
 				TE: now,
 				TS: now,
-				SSCC_ID: "123456789012345678",
+				HU_ID: "123456789012345678",
 				DIR: "F",
 			});
 

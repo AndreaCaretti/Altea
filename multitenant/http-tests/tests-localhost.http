@@ -67,7 +67,7 @@ Content-Type: application/json
     "CP_ID": "90abe75c-e2c6-4e5f-a12f-fb81aa50d011",
     "TE": "1905-10-14T09:01:33.763Z",
     "TS": "1905-10-14T09:01:34.763Z",
-    "SSCC_ID": "123456789012345678",
+    "HU_ID": "123456789012345678",
     "DIR": "F"
 }
 
@@ -106,7 +106,7 @@ Content-Type: application/json
     "CP_ID": "90abe75c-e2c6-4e5f-a12f-fb81aa50d011",
     "TE": "2020-10-14T09:01:33.763Z",
     "TS": "2020-10-14T09:01:34.763Z",
-    "SSCC_ID": "123456789012345678",
+    "HU_ID": "123456789012345678",
     "DIR": "B"
 }
 
@@ -123,7 +123,7 @@ Content-Type: application/json
     "CP_ID": "90abe75c-e2c6-4e5f-a12f-fb81aa50d011",
     "TE": "2020-10-14T09:01:33.763Z",
     "TS": "2020-10-14T09:01:34.763Z",
-    "SSCC_ID": "TEST1234",
+    "HU_ID": "TEST1234",
     "DIR": "B"
 }
 
@@ -137,6 +137,6 @@ If-Match: "2020-11-01T15:48:57.600Z"
     "CP_ID": "a0abe75c-e2c6-4e5f-a12f-fb81aa50d011",
     "TE": "2020-10-14T09:01:33.763Z",
     "TS": "2020-10-14T09:01:34.763Z",
-    "SSCC_ID": "TEST1234",
+    "HU_ID": "TEST1234",
     "DIR": "F"
 }
