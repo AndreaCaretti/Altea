@@ -5,7 +5,7 @@ const xsenv = require("@sap/xsenv");
 class Queues {
     constructor(queueName, logger) {
         if (!logger) {
-            throw Error("Si ma il logger non mi lo passi?");
+            throw Error("Si ma il logger non me lo passi?");
         }
 
         this.queueName = queueName;
