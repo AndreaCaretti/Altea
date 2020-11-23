@@ -1,16 +1,12 @@
+const NotificationService = require("../notifications/notificationService");
+
 module.exports = (iot) => {
     iot.on("segment", async (request) => {
-        // console.log(request.data);
-        // console.log(request.user);
-
         const outOfRange = request.data;
-        // console.log(outOfRange);
         const tx = cds.transaction(request);
-
         const outOfRangeTab = cds.entities.outOfRange;
-
         const segmentID = outOfRange.data[0].entityId;
-        // const segmentID = "4f3ecc4d-7369-48e6-a890-90e76b0ec5c8";
+
         const outOfRangeToUpdate = await tx.read(outOfRangeTab).where({ segmentId: segmentID });
 
         let startEvent = "";
@@ -19,18 +15,20 @@ module.exports = (iot) => {
         try {
             if (outOfRangeToUpdate[0] === undefined) {
                 instruction = "CREATE:";
+                let Status = outOfRange.data[0].action;
                 if (outOfRange.data[0].action === "OPEN") {
                     startEvent = outOfRange.eventTime;
                 } else {
                     // CLOSE or END_TIME_UPDATED
                     endEvent = outOfRange.eventTime;
+                    Status = "CLOSE";
                 }
 
                 await tx.create(outOfRangeTab).entries({
                     ID_DeviceIoT: outOfRange.extensions.modelId,
                     startEventTS: startEvent,
                     endEventTS: endEvent,
-                    status: outOfRange.data[0].action,
+                    status: Status,
                     segmentId: outOfRange.data[0].entityId,
                 });
             } else {
@@ -45,6 +43,21 @@ module.exports = (iot) => {
                     endEvent = outOfRange.eventTime;
                 }
 
+                if (outOfRange.data[0].action === "OPEN") {
+                    // RICHIAMO NOTIFICATION-ALERT()------------------------------------
+                    const notificationService = new NotificationService(this.coldChainLogger);
+                    notificationService.start();
+                    notificationService.alert(
+                        request.user.id,
+                        request._.req.hostname,
+                        outOfRange.eventTime,
+                        "OORSegment",
+                        "alertLevel",
+                        outOfRange.data[0],
+                        outOfRange.data[0].entityId
+                    );
+                }
+
                 await tx.update(outOfRangeTab, outOfRangeToUpdate[0].ID).with({
                     status: "CLOSE",
                     startEventTS: startEvent,
@@ -53,14 +66,10 @@ module.exports = (iot) => {
             }
 
             const Commit = await tx.commit();
-            // eslint-disable-next-line no-console
-            console.log("Commit on ", instruction, Commit);
+            this.coldChainLogger.logException("Commit on ", instruction, Commit);
         } catch (error) {
-            // eslint-disable-next-line no-console
-            console.log("error console: ", error);
-            // debugthis.logger.error("Errore inserimento record", error.toString());
+            this.coldChainLogger.logException("error console: ", error);
             await tx.rollback();
-            // await this.queueOutOfRange.moveToError(outOfRange);
         }
 
         return ` -- END -- `;
@@ -73,8 +82,9 @@ module.exports = (iot) => {
         await tx.delete(outOfRangeTab);
         await tx.commit();
         const msg = "OutOfRange ripulita correttamente";
-        // eslint-disable-next-line no-console
-        console.log(msg);
+
+        this.coldChainLogger.logException(msg);
+
         return msg;
     });
 };
