@@ -13,6 +13,7 @@ class HandlingUnitMoved extends ZApplicationService {
 
         this.after("CREATE", "HandlingUnitsRawMovements", async (data, req) => {
             const record = {
+                MSG_ID: data.MSG_ID,
                 CP_ID: data.CP_ID,
                 TE: data.TE,
                 TS: data.TS,

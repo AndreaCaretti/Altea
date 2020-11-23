@@ -20,6 +20,7 @@ Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
+    "MSG_ID":"994ce6f3-283c-4a95-8470-c3664ebddbd0",
     "CP_ID": "90abe75c-e2c6-4e5f-a12f-fb81aa50d011",
     "TE": "1904-10-14T09:01:33.763Z",
     "TS": "1905-10-14T09:01:34.763Z",

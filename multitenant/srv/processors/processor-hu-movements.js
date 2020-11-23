@@ -48,6 +48,7 @@ class ProcessorHuMovements {
             movement.handlingUnitID = await this.getHandlingUnitFromHuID(movement.HU_ID, tx);
 
             const s = await tx.create(HandlingUnitsMovements).entries({
+                MSG_ID: movement.MSG_ID,
                 controlPoint_ID: movement.CP_ID,
                 TE: movement.TE,
                 TS: movement.TS,

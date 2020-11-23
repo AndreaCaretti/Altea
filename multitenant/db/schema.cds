@@ -181,6 +181,7 @@ define entity RouteSteps : cuid {
 @UI.Identification : [{Value : ID}]
 define entity HandlingUnits : cuid, managed {
     huId               : cloudcoldchain.HU_ID;
+    MSG_ID             : cloudcoldchain.MSG_ID;
     lot                : Association to one Lots;
     lastKnownArea      : Association to one Areas;
     inAreaBusinessTime : Timestamp;
@@ -190,6 +191,7 @@ define entity HandlingUnits : cuid, managed {
 }
 
 define entity HandlingUnitsMovements : cuid, managed {
+    MSG_ID       : cloudcoldchain.MSG_ID;
     controlPoint : Association to one ControlPoints;
     TE           : Timestamp;
     TS           : Timestamp;
@@ -203,11 +205,12 @@ annotate Books with {
 }
 
 define entity HandlingUnitsRawMovements : cuid, managed {
-    CP_ID : String;
-    TE    : String;
-    TS    : String;
-    HU_ID : String;
-    DIR   : String;
+    CP_ID  : String;
+    TE     : String;
+    TS     : String;
+    HU_ID  : String;
+    MSG_ID : String;
+    DIR    : String;
 }
 
 
