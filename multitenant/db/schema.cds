@@ -203,6 +203,7 @@ define entity HandlingUnits : cuid, managed {
 }
 
 define entity HandlingUnitsMovements : cuid, managed {
+    MSG_ID       : cloudcoldchain.MSG_ID;
     controlPoint : Association to one ControlPoints;
     TE           : Timestamp;
     TS           : Timestamp;
@@ -216,11 +217,12 @@ annotate Books with {
 }
 
 define entity HandlingUnitsRawMovements : cuid, managed {
-    CP_ID : String;
-    TE    : String;
-    TS    : String;
-    HU_ID : String;
-    DIR   : String;
+    MSG_ID : String;
+    CP_ID  : String;
+    TE     : String;
+    TS     : String;
+    HU_ID  : String;
+    DIR    : String;
 }
 
 
