@@ -9,8 +9,8 @@ class ProcessorHuMovements {
     constructor(logger) {
         this.logger = logger;
 
-        this.queueRawMovements = new QueueHandlingUnitsRawMovements();
-        this.queueResidenceTime = new QueueResidenceTime();
+        this.queueRawMovements = new QueueHandlingUnitsRawMovements(this.logger);
+        this.queueResidenceTime = new QueueResidenceTime(this.logger);
 
         this.tick = this.tick.bind(this);
     }
@@ -71,9 +71,8 @@ class ProcessorHuMovements {
 
             await this.queueRawMovements.moveToComplete(movement);
         } catch (error) {
-            this.logger.error("Errore inserimento record %j", JSON.stringify(error));
+            this.logger.logException("Errore inserimento record in HandlingUnitsMovements", error);
 
-            console.log(error);
             await tx.rollback();
             await this.queueRawMovements.moveToError(movement);
         }

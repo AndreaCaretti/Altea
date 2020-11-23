@@ -1,7 +1,9 @@
 const InternalLogger = require("cf-nodejs-logging-support");
 
+let loggerInstance;
+
 class Logger {
-    constructor(app) {
+    constructor() {
         this.internalLogger = InternalLogger.createLogger();
 
         this.internalLogger.setLoggingLevel("debug");
@@ -12,8 +14,33 @@ class Logger {
             InternalLogger.setLogPattern("{{msg}}");
         }
 
-        this.internalLogger.info("🤷‍♂️ Activating my logs... ");
-        app.use(InternalLogger.logNetwork);
+        loggerInstance = this;
+    }
+
+    static getInstance(app) {
+        if (!loggerInstance) {
+            loggerInstance = new Logger(app);
+
+            if (app) {
+                app.get("/logdebugon", (req, res) => {
+                    loggerInstance.setLevelDebug();
+                    loggerInstance.info("LOG DEBUG ATTIVATO");
+                    res.send("LOG ATTIVATO");
+                });
+
+                app.get("/logdebugoff", (req, res) => {
+                    loggerInstance.setLevelWarning();
+                    loggerInstance.info("LOG DEBUG DISATTIVATO");
+                    res.send("LOG DISATTIVATO");
+                });
+            }
+        }
+
+        return loggerInstance;
+    }
+
+    setLevelWarning() {
+        this.internalLogger.setLoggingLevel("warn");
     }
 
     info(...args) {
@@ -33,19 +60,14 @@ class Logger {
             throw new Error("obj is not an object");
         }
 
-        if (this.SIMPLE_LOG) {
-            console.log(msg, obj);
-        } else {
-            const jsonObject = JSON.stringify(obj, null, 2);
-            this.internalLogger.debug(msg, jsonObject);
-        }
+        this.debug(msg, JSON.stringify(obj, null, 2));
     }
 
-    logException(error) {
-        if (error.stack) {
-            this.internalLogger.error(error.stack);
+    logException(msg, error) {
+        if (error.stack && error.stack !== "not available") {
+            this.internalLogger.error(msg, error.stack);
         } else {
-            this.internalLogger.error(error);
+            this.internalLogger.error(msg, JSON.stringify(error, null, 2));
         }
     }
 
