@@ -1,8 +1,8 @@
 const Queue = require("./internal/queue");
 
 class QueueResidenceTime extends Queue {
-    constructor() {
-        super("RESIDENT_TIME");
+    constructor(logger) {
+        super("RESIDENT_TIME", logger);
     }
 }
 

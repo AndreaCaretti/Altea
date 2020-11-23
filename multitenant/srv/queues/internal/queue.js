@@ -1,9 +1,9 @@
 const Queues = require("./queues");
 
 class Queue {
-    constructor(queueName) {
+    constructor(queueName, logger) {
         this.queueName = queueName;
-        this.queues = new Queues(this.queueName);
+        this.queues = new Queues(this.queueName, logger);
     }
 
     start() {
