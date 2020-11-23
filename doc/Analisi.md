@@ -457,7 +457,7 @@ Tabelle di alert applicativi rilevati dalla piattaforma segnalati verso Keething
 -   alertBusinessTime: è l'ora in cui è successo l'evento (esempio per le celle esempio lo start time del problema sulla cella)
 -   notificationTime: è l'ora in cui abbiamo aggiunto la notifica alla coda enterprise messaging
 -   alertCode: codice fisso dell'alert, valori possibile aggiungere man mano
--   level: livello di alert syslog: 
+-   alertLevel: livello di alert syslog: 
     - LOG_EMERG 0 /* system is unusable */
     - LOG_ALERT 1 /* action must be taken immediately */
     - LOG_CRIT 2 /* critical conditions */
