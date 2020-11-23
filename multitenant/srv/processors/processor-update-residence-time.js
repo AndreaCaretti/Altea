@@ -73,15 +73,15 @@ class ProcessorHuMovements {
         }
     }
 
-    async getNearResidentTimes(_residenceTime, _tx) {
-        // const records = await tx.run(
-        //     SELECT.from(cds.entities.ResidenceTime).where(`
-        //         handlingUnitId: residenceTime.handlingUnitId,
-        //         step: residenceTime.step + 1,
-        //         inBusinessTime >
-        //     `)
-        // );
-        this.logger.debug(".");
+    async getNearResidentTimes(residenceTime, tx) {
+        this.logger.logObject("r", residenceTime);
+        const records = await tx.run(
+            SELECT.from(cds.entities.ResidenceTime)
+                .where({ handlingUnit_ID: residenceTime.handlingUnit_ID })
+                .and(`stepNr = ${residenceTime.stepNr + 1} or stepNr = ${residenceTime.stepNr - 1}`)
+                .and("inBusinessTime > ", residenceTime.inBusinessTime)
+        );
+        this.logger.debug("Record vicini: %i", records.length);
     }
 }
 

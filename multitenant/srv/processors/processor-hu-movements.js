@@ -47,7 +47,7 @@ class ProcessorHuMovements {
 
             movement.handlingUnitID = await this.getHandlingUnitFromSSCC(movement.SSCC_ID, tx);
 
-            const s = await tx.create(HandlingUnitsMovements).entries({
+            const createdRecords = await tx.create(HandlingUnitsMovements).entries({
                 controlPoint_ID: movement.CP_ID,
                 TE: movement.TE,
                 TS: movement.TS,
@@ -55,10 +55,11 @@ class ProcessorHuMovements {
                 DIR: movement.DIR,
             });
 
-            this.logger.debug("s contiene: ", s);
+            this.logger.logObject("Created records", createdRecords);
 
+            // TODO: Mettere check deve esserci un record, uno solo
             // eslint-disable-next-line no-restricted-syntax
-            for (const result of s) {
+            for (const result of createdRecords) {
                 this.logger.debug(result);
                 movement.ID = result.ID;
             }
