@@ -5,6 +5,7 @@ module.exports = (iot) => {
     this.cclogger = Logger.getInstance();
     const notificationService = NotificationService.getInstance();
     iot.on("segment", async (request) => {
+        let message = "";
         const outOfRange = request.data;
         const tx = cds.transaction(request);
         const outOfRangeTab = cds.entities.outOfRange;
@@ -16,7 +17,7 @@ module.exports = (iot) => {
         let endEvent = "";
         let instruction = "";
         try {
-            if (outOfRangeToUpdate[0] === undefined) {
+            if (!outOfRangeToUpdate[0]) {
                 instruction = "CREATE:";
                 let Status = outOfRange.data[0].action;
                 if (outOfRange.data[0].action === "OPEN") {
@@ -68,13 +69,14 @@ module.exports = (iot) => {
                 );
             }
 
-            this.cclogger.debug("fine operazione", instruction, outOfRange.data[0].entityId);
+            message = `fine operazione${instruction}${outOfRange.data[0].entityId}`;
+            this.cclogger.debug(message);
         } catch (error) {
-            this.cclogger.logException("error console: ", error);
+            message = `error console:${error}`;
+            this.cclogger.logException(message);
             await tx.rollback();
         }
-
-        return ` -- END -- `;
+        return message;
     });
 
     // DELETE ALL entries from OutOfRange
