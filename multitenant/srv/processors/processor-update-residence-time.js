@@ -73,17 +73,45 @@ class ProcessorHuMovements {
         }
     }
 
-    async getNearResidentTimes(residenceTime, _tx) {
+    async getNearResidentTimes(residenceTime, tx) {
         this.logger.logObject("r", residenceTime);
-        // const records = await tx.run(
-        //     SELECT.from(cds.entities.ResidenceTime)
-        //         .where({ handlingUnit_ID: residenceTime.handlingUnit_ID })
-        // eslint-disable-next-line max-len
-        //         .and(`stepNr = ${residenceTime.stepNr + 1} or stepNr = ${residenceTime.stepNr - 1}`)
-        //         .and("inBusinessTime > ", residenceTime.inBusinessTime)
-        // );
-        // this.logger.debug("Record vicini: %i", records.length);
+
+        const records = await tx.run(
+            SELECT.from(cds.entities.ResidenceTime)
+                .where({ handlingUnit_ID: residenceTime.handlingUnit_ID })
+                .and({ outBusinessTime: null })
+                .and(`stepNr = ${residenceTime.stepNr + 1} or stepNr = ${residenceTime.stepNr - 1}`)
+                .and("inBusinessTime > ", residenceTime.inBusinessTime)
+                .orderBy({ ref: ["inBusinessTime"], sort: "asc" })
+                .limit({ rows: { val: 1 } })
+        );
+        this.logger.debug("Record vicini: %i", records.length);
+
+        // eslint-disable-next-line no-console
+        console.log(records);
+        if (records) {
+            const values = {
+                outBusinessTime: records.inBusinessTime,
+            };
+
+            await DB.updateSomeFields("ResidenceTime", residenceTime.ID, values, tx, this.logger);
+        }
     }
 }
 
 module.exports = ProcessorHuMovements;
+
+/*
+define entity ResidenceTime : cuid, managed {
+    handlingUnit       : Association to one HandlingUnits;
+    stepNr             : RouteStepNr;
+    area               : Association to one Areas;
+    inBusinessTime     : Timestamp;
+    outBusinessTime    : Timestamp;
+    residenceTime      : Integer;
+    tor                : Integer;
+    tmin               : Decimal;
+    tmax               : Decimal;
+    torElaborationTime : Timestamp;
+}
+*/
