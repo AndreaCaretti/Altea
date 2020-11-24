@@ -169,14 +169,14 @@ class DB {
     static async insertIntoTable(tableName, row, tx, Logger) {
         const recordsCount = await tx.create(tableName).entries(row);
 
-        if (recordsCount.affectedRows === 1) {
+        if (recordsCount.keys && recordsCount.keys.ID) {
             Logger.debug(`Record append: ${tableName.name}/ ${JSON.stringify(row)}}`);
-            tx.commit();
+            await tx.commit();
         } else {
             Logger.error(`Wrong insert: ${tableName.name}/ ${JSON.stringify(row)}}`);
+            tx.rollback();
             throw Error(`Wrong insert: ${tableName.name}/ ${JSON.stringify(row)}}`);
         }
-
         return recordsCount;
     }
 }

@@ -33,7 +33,10 @@ class CloudColdChain {
         this.BGWorkerNotification = new BGWorkerNotification(this.logger);
 
         // Notification - Notification Service
-        this.NotificationeService = new NotificationeService(this.logger);
+        this.NotificationeService = NotificationeService.getInstance(this.logger);
+
+        // Start Notification Service
+        this.NotificationeService.start();
 
         // Provisioning
         this.initMultitenantProvisioning(this.logger);
@@ -54,9 +57,6 @@ class CloudColdChain {
 
         // Start Notification BG Worker
         this.BGWorkerNotification.start();
-
-        // Start Notification Service
-        this.NotificationeService.start();
     }
 
     async initMultitenantProvisioning() {

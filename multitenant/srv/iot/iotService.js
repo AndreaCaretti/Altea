@@ -1,6 +1,9 @@
 const NotificationService = require("../notifications/notificationService");
+const Logger = require("../logger");
 
 module.exports = (iot) => {
+    this.cclogger = Logger.getInstance();
+    const notificationService = NotificationService.getInstance();
     iot.on("segment", async (request) => {
         const outOfRange = request.data;
         const tx = cds.transaction(request);
@@ -43,21 +46,6 @@ module.exports = (iot) => {
                     endEvent = outOfRange.eventTime;
                 }
 
-                if (outOfRange.data[0].action === "OPEN") {
-                    // RICHIAMO NOTIFICATION-ALERT()------------------------------------
-                    const notificationService = new NotificationService(this.coldChainLogger);
-                    notificationService.start();
-                    notificationService.alert(
-                        request.user.id,
-                        request._.req.hostname,
-                        outOfRange.eventTime,
-                        "OORSegment",
-                        "alertLevel",
-                        outOfRange.data[0],
-                        outOfRange.data[0].entityId
-                    );
-                }
-
                 await tx.update(outOfRangeTab, outOfRangeToUpdate[0].ID).with({
                     status: "CLOSE",
                     startEventTS: startEvent,
@@ -65,10 +53,24 @@ module.exports = (iot) => {
                 });
             }
 
-            const Commit = await tx.commit();
-            this.coldChainLogger.logException("Commit on ", instruction, Commit);
+            await tx.commit();
+
+            if (outOfRange.data[0].action === "OPEN") {
+                // RICHIAMO NOTIFICATION-ALERT()------------------------------------
+                notificationService.alert(
+                    request.user.id,
+                    request._.req.hostname,
+                    outOfRange.eventTime,
+                    "LOG_ALERT",
+                    1, // LOG_ALERT
+                    JSON.stringify(outOfRange.data[0]),
+                    outOfRange.data[0].entityId // UUID del segmento
+                );
+            }
+
+            this.cclogger.debug("fine operazione", instruction, outOfRange.data[0].entityId);
         } catch (error) {
-            this.coldChainLogger.logException("error console: ", error);
+            this.cclogger.logException("error console: ", error);
             await tx.rollback();
         }
 

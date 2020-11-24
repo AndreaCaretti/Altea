@@ -194,7 +194,6 @@ define entity RouteSteps : cuid {
 //| _HU_ID_ (HU_ID)      | lot     | lastKnownArea(Locations)    | inAreaBusinessTime (Timestamp) | jsonSummary (LargeString)             | blockchainHash (100)
 @UI.Identification : [{Value : ID}]
 define entity HandlingUnits : cuid, managed {
-    MSG_ID             : String(18);
     huId               : cloudcoldchain.HU_ID;
     lot                : Association to one Lots;
     lastKnownArea      : Association to one Areas;
@@ -205,7 +204,7 @@ define entity HandlingUnits : cuid, managed {
 }
 
 define entity HandlingUnitsMovements : cuid, managed {
-    MSG_ID       : cloudcoldchain.MSG_ID;
+    MSG_ID       : UUID;
     controlPoint : Association to one ControlPoints;
     TE           : Timestamp;
     TS           : Timestamp;
@@ -256,7 +255,7 @@ define entity outOfRange : cuid, managed {
     startEventTS : Timestamp;
     endEventTS   : Timestamp;
     status       : String;
-    segmentId    : String;
+    segmentId    : UUID;
 }
 
 define entity Notification : cuid, managed {
