@@ -7,10 +7,10 @@
     "private": true,
     "dependencies": {
         "@sap/audit-logging": "^3",
-        "@sap/cds": "^4.2.8",
+        "@sap/cds": "^4.3.1",
         "@sap/cds-mtx": "^1.0.22",
-        "@sap/hana-client": "^2.6.58",
-        "@sap/hdi-deploy": "^3.11.13",
+        "@sap/hana-client": "^2.6.61",
+        "@sap/hdi-deploy": "^3.11.15",
         "@sap/instance-manager": "^2",
         "@sap/xb-msg-amqp-v100": "latest",
         "@sap/xsenv": "^3.1.0",
@@ -24,13 +24,13 @@
         "request": "^2"
     },
     "devDependencies": {
-        "eslint": "^7.12.1",
+        "eslint": "^7.14.0",
         "eslint-config-airbnb-base": "^14.2.1",
         "eslint-config-prettier": "^6.15.0",
         "eslint-plugin-import": "^2.22.1",
         "eslint-plugin-prettier": "^3.1.4",
         "husky": "^4.3.0",
-        "prettier": "^2.1.2",
+        "prettier": "^2.2.0",
         "sqlite3": "^5"
     },
     "engines": {
