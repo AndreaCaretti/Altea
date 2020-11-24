@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 const cfenv = require("cfenv");
 
 const appEnv = cfenv.getAppEnv();
