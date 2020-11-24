@@ -1,8 +1,7 @@
 const cds = require("@sap/cds");
 const NotificationQueue = require("../queues/queue-notification");
+const EnterpriseMessageNotification = require("../enterprise-messaging/em_notification");
 const DB = require("../db-utilities");
-
-let BGWorkerNotificationInst;
 
 class BGWorkerNotification {
     constructor(logger) {
@@ -10,14 +9,16 @@ class BGWorkerNotification {
         this.tick = this.tick.bind(this);
         // PUSH TO REDIS CODE
         this.notificationQueue = new NotificationQueue(logger);
+        // ENTERPRISE MESSAGE INSTANCE
+        this.enterpriseMessageNotification = EnterpriseMessageNotification.getInstance(logger);
     }
 
     static getInstance(logger) {
-        if (!BGWorkerNotificationInst) {
-            BGWorkerNotificationInst = new BGWorkerNotification(logger);
+        if (!this.BGWorkerNotificationInst) {
+            this.BGWorkerNotificationInst = new BGWorkerNotification(logger);
         }
 
-        return BGWorkerNotificationInst;
+        return this.BGWorkerNotificationInst;
     }
 
     async tick() {
@@ -53,12 +54,13 @@ class BGWorkerNotification {
             payload: notification.payload,
             GUID: notification.GUID,
         };
-
-        DB.insertIntoTable(Notification, dataNotification, tx, this.logger);
-
         this.logger.setTenantId(technicalUser.tenant);
 
         // INSERT INTO TABLE
+        DB.insertIntoTable(Notification, dataNotification, tx, this.logger);
+        // SEND TO ENTERPRISE MESSAGE SERVICE NOTIFICATION
+        const dataForMessageService = JSON.stringify(dataNotification);
+        this.enterpriseMessageNotification.sendNotificationMessage(dataForMessageService);
 
         setImmediate(this.tick);
     }
