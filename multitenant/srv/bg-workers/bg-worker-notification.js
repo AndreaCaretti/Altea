@@ -10,7 +10,7 @@ class BGWorkerNotification {
         // PUSH TO REDIS CODE
         this.notificationQueue = new NotificationQueue(logger);
         // ENTERPRISE MESSAGE INSTANCE
-        this.EnterpriseMessageNotification = EnterpriseMessageNotification.getInstance(logger);
+        this.enterpriseMessageNotification = EnterpriseMessageNotification.getInstance(logger);
     }
 
     static getInstance(logger) {
@@ -60,7 +60,7 @@ class BGWorkerNotification {
         DB.insertIntoTable(Notification, dataNotification, tx, this.logger);
         // SEND TO ENTERPRISE MESSAGE SERVICE NOTIFICATION
         const dataForMessageService = JSON.stringify(dataNotification);
-        this.EnterpriseMessageNotification.sendNotificationMessage(dataForMessageService);
+        this.enterpriseMessageNotification.sendNotificationMessage(dataForMessageService);
 
         setImmediate(this.tick);
     }

@@ -2,13 +2,13 @@
 const cfenv = require("cfenv");
 
 const appEnv = cfenv.getAppEnv();
-const { Client } = require("@sap/xb-msg-amqp-v100");
-
 const emCreds = appEnv.getServiceCreds(process.env.EM_SERVICE);
+// const emCredsM = emCreds.messaging.filter((em) => em.protocol == "amqp10ws");
+const { Client } = require("@sap/xb-msg-amqp-v100");
 
 class EnterpriseMessageNotification {
     constructor(logger) {
-        this.infoger = logger;
+        this.logger = logger;
     }
 
     static getInstance(logger) {
@@ -19,11 +19,10 @@ class EnterpriseMessageNotification {
         return this.EnterpriseMessageNotificationIstance;
     }
 
-    sendNotificationMessage(messagePayload) {
-        this.infoger.info("Begin sending Notification Message Payload");
-
+    getConnectionOption(messagePayload) {
+        this.logger.info(`Get Connection Options`);
         // https://github.com/SAP-samples/enterprise-messaging-client-nodejs-samples/tree/master/xb-msg-amqp-v100-doc#sender
-        const options = {
+        const connectionOptions = {
             uri:
                 "wss://enterprise-messaging-messaging-gateway.cfapps.eu10.hana.ondemand.com/protocols/amqp10ws",
             oa2: {
@@ -43,6 +42,13 @@ class EnterpriseMessageNotification {
             },
         };
 
+        return connectionOptions;
+    }
+
+    sendNotificationMessage(messagePayload) {
+        this.logger.info("Begin sending Notification Message Payload");
+
+        const options = this.getConnectionOption(messagePayload);
         const clientOut = new Client(options);
 
         const streamOut = clientOut
@@ -53,33 +59,33 @@ class EnterpriseMessageNotification {
         // SCRITTURA
         streamOut
             .on("ready", () => {
-                this.infoger.info("ready");
+                this.logger.info("ready");
                 streamOut.write(message);
                 streamOut.end();
             })
             .on("drain", () => {
-                this.infoger.info("drain");
+                this.logger.info("drain");
             })
             .on("finish", () => {
-                this.infoger.info("finish");
+                this.logger.info("finish");
                 clientOut.disconnect();
             });
 
         clientOut
             .on("connected", (destination, peerInfo) => {
-                this.infoger.info("connected", peerInfo.description);
+                this.logger.info("connected", peerInfo.description);
             })
             .on("assert", (error) => {
-                this.infoger.info(error.message);
+                this.logger.info(error.message);
             })
             .on("error", (error) => {
-                this.infoger.info(error.message);
+                this.logger.info(error.message);
             })
             .on("reconnecting", (destination) => {
-                this.infoger.info(`reconnecting, using destination ${destination}`);
+                this.logger.info(`reconnecting, using destination ${destination}`);
             })
             .on("disconnected", (hadError, byBroker, statistics) => {
-                this.infoger.info("disconnected");
+                this.logger.info("disconnected");
             });
 
         clientOut.connect();

@@ -167,21 +167,15 @@ class DB {
     }
 
     static async insertIntoTable(tableName, row, tx, Logger) {
-        const recordsCount = await tx.create(tableName).entries(row);
-
-<<<<<<< HEAD
-        if (recordsCount.results[0].affectedRows > 0) {
-=======
-        if (recordsCount.keys && recordsCount.keys.ID) {
->>>>>>> RDESALVO
+        try {
+            const recordsCount = await tx.create(tableName).entries(row);
             Logger.debug(`Record append: ${tableName.name}/ ${JSON.stringify(row)}}`);
             await tx.commit();
-        } else {
-            Logger.error(`Wrong insert: ${tableName.name}/ ${JSON.stringify(row)}}`);
+            return recordsCount;
+        } catch (error) {
             tx.rollback();
-            throw Error(`Wrong insert: ${tableName.name}/ ${JSON.stringify(row)}}`);
+            throw Error(`Wrong insert: ${error}/ ${JSON.stringify(row)}}`);
         }
-        return recordsCount;
     }
 }
 

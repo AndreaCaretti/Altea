@@ -34,12 +34,9 @@ class CloudColdChain {
 
         // Notification - Notification Service
         this.NotificationeService = NotificationeService.getInstance(this.logger);
-<<<<<<< HEAD
-=======
 
         // Start Notification Service
         this.NotificationeService.start();
->>>>>>> RDESALVO
 
         // Provisioning
         this.initMultitenantProvisioning(this.logger);
