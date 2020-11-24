@@ -169,9 +169,9 @@ class DB {
     static async insertIntoTable(tableName, row, tx, Logger) {
         const recordsCount = await tx.create(tableName).entries(row);
 
-        if (recordsCount.affectedRows === 1) {
+        if (recordsCount.results[0].affectedRows > 0) {
             Logger.debug(`Record append: ${tableName.name}/ ${JSON.stringify(row)}}`);
-            tx.commit();
+            await tx.commit();
         } else {
             Logger.error(`Wrong insert: ${tableName.name}/ ${JSON.stringify(row)}}`);
             throw Error(`Wrong insert: ${tableName.name}/ ${JSON.stringify(row)}}`);
