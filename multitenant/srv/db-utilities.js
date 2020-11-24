@@ -165,6 +165,20 @@ class DB {
         logger.logObject("Get transaction for user: ", technicalUser);
         return cds.transaction(new cds.Request({ user: technicalUser }));
     }
+
+    static async insertIntoTable(tableName, row, tx, Logger) {
+        const recordsCount = await tx.create(tableName).entries(row);
+
+        if (recordsCount.affectedRows === 1) {
+            Logger.debug(`Record append: ${tableName.name}/ ${JSON.stringify(row)}}`);
+            tx.commit();
+        } else {
+            Logger.error(`Wrong insert: ${tableName.name}/ ${JSON.stringify(row)}}`);
+            throw Error(`Wrong insert: ${tableName.name}/ ${JSON.stringify(row)}}`);
+        }
+
+        return recordsCount;
+    }
 }
 
 module.exports = DB;

@@ -457,7 +457,6 @@ Tabelle di alert applicativi rilevati dalla piattaforma segnalati verso Keething
 -   alertBusinessTime: è l'ora in cui è successo l'evento (esempio per le celle esempio lo start time del problema sulla cella)
 -   notificationTime: è l'ora in cui abbiamo aggiunto la notifica alla coda enterprise messaging
 -   alertCode: codice fisso dell'alert, valori possibile aggiungere man mano
-<<<<<<< HEAD
 -   alertLevel: livello di alert syslog: 
     - LOG_EMERG 0 /* system is unusable */
     - LOG_ALERT 1 /* action must be taken immediately */
@@ -467,17 +466,6 @@ Tabelle di alert applicativi rilevati dalla piattaforma segnalati verso Keething
     - LOG_NOTICE 5 /* normal but significant condition */
     - LOG_INFO 6 /* informational */
     - LOG_DEBUG 7 /* debug-level messages */
-=======
--   level: livello di alert syslog:
-    -   LOG*EMERG 0 /* system is unusable \_/
-    -   LOG*ALERT 1 /* action must be taken immediately \_/
-    -   LOG*CRIT 2 /* critical conditions \_/
-    -   LOG*ERR 3 /* error conditions \_/
-    -   LOG*WARNING 4 /* warning conditions \_/
-    -   LOG*NOTICE 5 /* normal but significant condition \_/
-    -   LOG*INFO 6 /* informational \_/
-    -   LOG*DEBUG 7 /* debug-level messages \_/
->>>>>>> 26469b06e7e305a63b4754364cd54fe231887b3a
 -   payload: JSON contente i dettagli dell'alert che verrà inviato alla coda
 -   GUID: guid del record scatenante l'evento, potrebbe anche non esserci, per le celle è il guid della tabella outOfRange
 

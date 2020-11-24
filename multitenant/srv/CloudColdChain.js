@@ -3,8 +3,8 @@ const Logger = require("./logger");
 const ProcessorHuMovements = require("./processors/processor-hu-movements");
 const ProcessorInsertResidenceTime = require("./processors/processor-insert-residence-time");
 const ProcessorUpdateResidenceTime = require("./processors/processor-update-residence-time");
-// NOTIFICATIONS SERVICE HANDLER
-const NotificationService = require("./notifications/notificationService");
+const BGWorkerNotification = require("./bg-workers/bg-worker-notification");
+const NotificationeService = require("./notifications/notificationService");
 
 class CloudColdChain {
     /*
@@ -29,8 +29,11 @@ class CloudColdChain {
         // Update Time Processor
         this.processorUpdateResidenceTime = new ProcessorUpdateResidenceTime(this.logger);
 
-        // Notification - Notification service
-        this.notificationService = new NotificationService(this.logger);
+        // Notification - Notification BG Worker
+        this.BGWorkerNotification = new BGWorkerNotification(this.logger);
+
+        // Notification - Notification Service
+        this.NotificationeService = new NotificationeService(this.logger);
 
         // Provisioning
         this.initMultitenantProvisioning(this.logger);
@@ -49,8 +52,11 @@ class CloudColdChain {
         // Update Residence Time processor
         this.processorUpdateResidenceTime.start();
 
-        // Start notification Service Istance
-        this.notificationService.start();
+        // Start Notification BG Worker
+        this.BGWorkerNotification.start();
+
+        // Start Notification Service
+        this.NotificationeService.start();
     }
 
     async initMultitenantProvisioning() {

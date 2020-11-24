@@ -2,7 +2,8 @@ namespace cloudcoldchain;
 
 using {
     cloudcoldchain.HU_ID,
-    cloudcoldchain.RouteStepNr
+    cloudcoldchain.RouteStepNr,
+    cloudcoldchain.LogLevel
 } from './global_types';
 
 using {
@@ -193,6 +194,7 @@ define entity RouteSteps : cuid {
 //| _HU_ID_ (HU_ID)      | lot     | lastKnownArea(Locations)    | inAreaBusinessTime (Timestamp) | jsonSummary (LargeString)             | blockchainHash (100)
 @UI.Identification : [{Value : ID}]
 define entity HandlingUnits : cuid, managed {
+    MSG_ID             : String(18);
     huId               : cloudcoldchain.HU_ID;
     lot                : Association to one Lots;
     lastKnownArea      : Association to one Areas;
@@ -203,6 +205,7 @@ define entity HandlingUnits : cuid, managed {
 }
 
 define entity HandlingUnitsMovements : cuid, managed {
+    MSG_ID       : String(18);
     controlPoint : Association to one ControlPoints;
     TE           : Timestamp;
     TS           : Timestamp;
@@ -216,11 +219,12 @@ annotate Books with {
 }
 
 define entity HandlingUnitsRawMovements : cuid, managed {
-    CP_ID : String;
-    TE    : String;
-    TS    : String;
-    HU_ID : String;
-    DIR   : String;
+    MSG_ID : String(18);
+    CP_ID  : String;
+    TE     : String;
+    TS     : String;
+    HU_ID  : String;
+    DIR    : String;
 }
 
 
@@ -254,4 +258,12 @@ define entity outOfRange : cuid, managed {
     status       : String;
     segmentId    : String;
 }
-/*  */
+
+define entity Notification : cuid, managed {
+    alertBusinessTime : Timestamp;
+    notificationTime  : Timestamp;
+    alertCode         : String(20);
+    alertLevel        : LogLevel;
+    payload           : String;
+    GUID              : UUID;
+}
