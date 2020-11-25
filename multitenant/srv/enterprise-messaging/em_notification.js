@@ -1,13 +1,15 @@
-/* eslint-disable no-unused-vars */
-const cfenv = require("cfenv");
-
-const appEnv = cfenv.getAppEnv();
-const emCreds = appEnv.getServiceCreds(process.env.EM_SERVICE);
-// const emCredsM = emCreds.messaging.filter((em) => em.protocol == "amqp10ws");
 const { Client } = require("@sap/xb-msg-amqp-v100");
 
+const QUEUENAME = "massequeue";
+const EMLOG_NAME = "Enterprise Messaging";
+
+// https://github.com/SAP-samples/enterprise-messaging-client-nodejs-samples/tree/master/xb-msg-amqp-v100-doc#sender
+// https://github.com/saphanaacademy/em-consumer
 class EnterpriseMessageNotification {
     constructor(logger) {
+        if (!logger) {
+            throw Error("Si ma il logger non me lo passi?");
+        }
         this.logger = logger;
     }
 
@@ -19,9 +21,8 @@ class EnterpriseMessageNotification {
         return this.EnterpriseMessageNotificationIstance;
     }
 
-    getConnectionOption(messagePayload) {
-        this.logger.info(`Get Connection Options`);
-        // https://github.com/SAP-samples/enterprise-messaging-client-nodejs-samples/tree/master/xb-msg-amqp-v100-doc#sender
+    getConfiguration() {
+        this.logger.info(`Get Cpnfiguration for Enterprise Messaging Client`);
         const connectionOptions = {
             uri:
                 "wss://enterprise-messaging-messaging-gateway.cfapps.eu10.hana.ondemand.com/protocols/amqp10ws",
@@ -32,63 +33,100 @@ class EnterpriseMessageNotification {
                 secret:
                     "7d0c7f5d-383b-410a-8071-9f603305eb51$SDYFCh8iLxiETSvdIRV6HQK5af6t3fM-xCaGRR_EN5M=",
             },
-            data: {
-                source: "massequeue",
-                // payload: `{"PROVA" : "VALORE"}`,
-                payload: messagePayload,
-                target: "massequeue",
-                maxCount: 100000,
-                logCount: 100000,
-            },
         };
 
         return connectionOptions;
     }
 
-    sendNotificationMessage(messagePayload) {
-        this.logger.info("Begin sending Notification Message Payload");
+    async start() {
+        this.logger.info(`Start ${EMLOG_NAME}`);
 
-        const options = this.getConnectionOption(messagePayload);
-        const clientOut = new Client(options);
+        const connectionOptions = this.getConfiguration();
 
-        const streamOut = clientOut
-            .sender("out")
-            .attach(`queue:${options.data.target}`, "", options.data.maxCount);
-        const message = { payload: Buffer.from(options.data.payload, "utf-8") };
+        const client = await this.connect(connectionOptions);
 
-        // SCRITTURA
-        streamOut
-            .on("ready", () => {
-                this.logger.info("ready");
-                streamOut.write(message);
-                streamOut.end();
-            })
-            .on("drain", () => {
-                this.logger.info("drain");
-            })
-            .on("finish", () => {
-                this.logger.info("finish");
-                clientOut.disconnect();
-            });
+        this.stream = await this.createStream(client, `queue:${QUEUENAME}`, 100000);
+    }
 
-        clientOut
-            .on("connected", (destination, peerInfo) => {
-                this.logger.info("connected", peerInfo.description);
-            })
-            .on("assert", (error) => {
-                this.logger.info(error.message);
-            })
-            .on("error", (error) => {
-                this.logger.info(error.message);
-            })
-            .on("reconnecting", (destination) => {
-                this.logger.info(`reconnecting, using destination ${destination}`);
-            })
-            .on("disconnected", (hadError, byBroker, statistics) => {
-                this.logger.info("disconnected");
-            });
+    async connect(options) {
+        this.logger.info(`Connect To ${EMLOG_NAME} Client`);
 
-        clientOut.connect();
+        return new Promise((resolve, reject) => {
+            const client = new Client(options);
+
+            client
+                .on("connected", (destination, peerInfo) => {
+                    this.logger.info(`Connected to ${EMLOG_NAME}`, peerInfo.description);
+                })
+                .on("assert", (error) => {
+                    this.logger.logException(EMLOG_NAME, error);
+                })
+                .on("error", (error) => {
+                    this.logger.logException(EMLOG_NAME, error);
+                })
+                .on("reconnecting", (destination) => {
+                    this.logger.info(
+                        `Reconnecting ${EMLOG_NAME}, using destination ${destination}`
+                    );
+                })
+                .on("disconnected", (_hadError, _byBroker, _statistics) => {
+                    console.log(`Disconnected ${EMLOG_NAME}`);
+                });
+
+            client.connect(resolve(client), reject);
+        });
+    }
+
+    async createStream(client, target, maxCount) {
+        this.logger.info(`Connect To Enterprise Messaging Client`);
+
+        return new Promise((resolve, _reject) => {
+            const sender = client.sender("out");
+
+            sender
+                .on("opened", (ox, ix) => {
+                    this.logger.info(`${EMLOG_NAME} - Attached`);
+                    this.logger.info(`${EMLOG_NAME} - Attached ${ox}`);
+                    this.logger.info(`${EMLOG_NAME} - Attached ${ix}`);
+                })
+                .on("closed", (ox, ix) => {
+                    this.logger.info(`${EMLOG_NAME} - Closed`);
+                    this.logger.info(`${EMLOG_NAME} - Closed ${ox}`);
+                    this.logger.info(`${EMLOG_NAME} - Closed ${ix}`);
+                });
+
+            const stream = sender.attach(target, "", maxCount);
+
+            stream
+                .on("ready", () => {
+                    this.logger.info(`${EMLOG_NAME} - Ready`);
+                    resolve(stream);
+                })
+
+                .on("drain", () => {
+                    this.logger.info(`${EMLOG_NAME} - Drain`);
+                });
+        });
+    }
+
+    async send(payload) {
+        this.logger.debug(`Send To Enterprise Messaging Client`);
+        return new Promise((resolve, reject) => {
+            const message = {
+                payload: Buffer.from(payload, "utf-8"),
+                done: () => {
+                    resolve("Inviato");
+                    this.logger.info(`${EMLOG_NAME} Sent`);
+                },
+                failed: () => {
+                    reject(new Error("Error"));
+                },
+            };
+
+            if (!this.stream.write(message)) {
+                this.logger.error(`${EMLOG_NAME} Write`);
+            }
+        });
     }
 }
 

@@ -59,8 +59,8 @@ class BGWorkerNotification {
         // INSERT INTO TABLE
         DB.insertIntoTable(Notification, dataNotification, tx, this.logger);
         // SEND TO ENTERPRISE MESSAGE SERVICE NOTIFICATION
-        const dataForMessageService = JSON.stringify(dataNotification);
-        this.enterpriseMessageNotification.sendNotificationMessage(dataForMessageService);
+        const dataForMsgService = JSON.stringify(dataNotification);
+        await this.enterpriseMessageNotification.send(dataForMsgService);
 
         setImmediate(this.tick);
     }
