@@ -14,9 +14,9 @@ class ProcessorHuMovements {
         try {
             await this.doWork();
         } catch (error) {
-            this.logger.logException(error);
+            this.logger.error(error);
         } finally {
-            setTimeout(this.tick, 5000);
+            setTimeout(this.tick, 15000);
         }
     }
 
@@ -37,9 +37,9 @@ class ProcessorHuMovements {
     }
 
     async start() {
-        this.logger.info(`Avvio Residence Time Update Processor...`);
-
+        this.logger.info(`Avvio Residence Time Update Processorr...`);
         // setImmediate(this.tick);
+        setTimeout(this.tick, 10000);
     }
 
     async getResidenceTimesToElaborate(technicalUser) {
@@ -76,26 +76,39 @@ class ProcessorHuMovements {
     async getNearResidentTimes(residenceTime, tx) {
         this.logger.logObject("r", residenceTime);
 
-        const records = await tx.run(
-            SELECT.from(cds.entities.ResidenceTime)
+        const record = await tx.run(
+            SELECT.one
+                .from(cds.entities.ResidenceTime)
                 .where({ handlingUnit_ID: residenceTime.handlingUnit_ID })
-                .and({ outBusinessTime: null })
                 .and(`stepNr = ${residenceTime.stepNr + 1} or stepNr = ${residenceTime.stepNr - 1}`)
                 .and("inBusinessTime > ", residenceTime.inBusinessTime)
-                .orderBy({ ref: ["inBusinessTime"], sort: "asc" })
-                .limit({ rows: { val: 1 } })
+                .orderBy([{ ref: ["inBusinessTime"], sort: "asc" }])
         );
-        this.logger.debug("Record vicini: %i", records.length);
+        // this.logger.debug("Record vicini: %i", record.length);
 
         // eslint-disable-next-line no-console
-        console.log(records);
-        if (records) {
-            const values = {
-                outBusinessTime: records.inBusinessTime,
-            };
+        // console.log(record);
+        let values = {};
+        let resTime = 0;
+        const inBusinessTime = new Date(residenceTime.inBusinessTime);
 
-            await DB.updateSomeFields("ResidenceTime", residenceTime.ID, values, tx, this.logger);
+        if (record) {
+            const outBusinessTime = new Date(record.inBusinessTime);
+            resTime = Math.round((outBusinessTime - inBusinessTime) / 60000);
+            // se trovo un record di chiusura, imposto OutBusinessTime
+            values = {
+                outBusinessTime: record.inBusinessTime,
+                residenceTime: resTime, // CALCOLARE la differenza in MINUTI
+            };
+        } else {
+            const actualDate = new Date();
+            // ricalcolo il ResidenceTime senza aggiornare OutBusinessTime
+            resTime = Math.round((actualDate - inBusinessTime) / 60000);
+            values = {
+                residenceTime: resTime,
+            };
         }
+        await DB.updateSomeFields("ResidenceTime", residenceTime.ID, values, tx, this.logger);
     }
 }
 

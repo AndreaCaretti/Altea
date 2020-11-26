@@ -106,6 +106,15 @@ Per calcolare il TOR durante la permanenza in area a temperatura anomala vengono
 | INGRESSO <= T2 AND USCITA => T6                     | 6            | T2         | T6       |
 | regola per 7° caso da scrivere                      | 7            | T0         | Tn       |
 
+REGOLE CALCOLO TOR
+nelle Aree NON a temperatura controllata, il TOR coincide con il residenceTime
+nelle Aree a temperatura controllata, il TOR è 0
+quando riceviamo un alert di APERTURA segmento OutOfRange , recuperiamo tutti i record APERTI (senza OutBusinessTime oppure con OUTBusinessTime > momento Apertura Segmento - per gestire i record ricevuti in ritardo) della tabella ResidenceTime all'interno delle aree a temperatura controllata.
+
+restiamo in attesa dell'evento di chiusura OutOfRange oppure di uscita dall'area a temperatura controllata e calcoliamo il tor dall'inizio (apertura segmento o ingresso cella)
+se riceviamo l'evento di chiusura anomalia, azzeriamo il TOR.
+se riceviamo l'evento di uscita dalla cella, calcoliamo il TOR da sommare al movimento successivo.
+
 # Alternative:
 
 ## Cliente non vuole dati in cloud
@@ -224,17 +233,17 @@ Dati anagrafici cliente, siccome i dati dei clienti sono separati a livello di t
 
 ## Tabella Locations
 
-| _ID_   | name   | department    |
-| ------ | ------ | ------------- |
-| _GUID_ | PlantA | DEPARTMENT A  |
-| _GUID_ | PlantB | DEPARTMENT B  |
+| _ID_   | name   | department   |
+| ------ | ------ | ------------ |
+| _GUID_ | PlantA | DEPARTMENT A |
+| _GUID_ | PlantB | DEPARTMENT B |
 
 ## Tabella Department
 
-| _ID_   | name         | description     | location  |
-| ------ | ------------ | --------------- | --------- |
-| _GUID_ | DEPARTMENT A | Description 1   | PlantA    |
-| _GUID_ | DEPARTMENT B | Description 2   | PlantB    |
+| _ID_   | name         | description   | location |
+| ------ | ------------ | ------------- | -------- |
+| _GUID_ | DEPARTMENT A | Description 1 | PlantA   |
+| _GUID_ | DEPARTMENT B | Description 2 | PlantB   |
 
 ## Tabella Areas
 
@@ -457,15 +466,15 @@ Tabelle di alert applicativi rilevati dalla piattaforma segnalati verso Keething
 -   alertBusinessTime: è l'ora in cui è successo l'evento (esempio per le celle esempio lo start time del problema sulla cella)
 -   notificationTime: è l'ora in cui abbiamo aggiunto la notifica alla coda enterprise messaging
 -   alertCode: codice fisso dell'alert, valori possibile aggiungere man mano
--   alertLevel: livello di alert syslog: 
-    - LOG_EMERG 0 /* system is unusable */
-    - LOG_ALERT 1 /* action must be taken immediately */
-    - LOG_CRIT 2 /* critical conditions */
-    - LOG_ERR 3 /* error conditions */
-    - LOG_WARNING 4 /* warning conditions */
-    - LOG_NOTICE 5 /* normal but significant condition */
-    - LOG_INFO 6 /* informational */
-    - LOG_DEBUG 7 /* debug-level messages */
+-   alertLevel: livello di alert syslog:
+    -   LOG*EMERG 0 /* system is unusable \_/
+    -   LOG*ALERT 1 /* action must be taken immediately \_/
+    -   LOG*CRIT 2 /* critical conditions \_/
+    -   LOG*ERR 3 /* error conditions \_/
+    -   LOG*WARNING 4 /* warning conditions \_/
+    -   LOG*NOTICE 5 /* normal but significant condition \_/
+    -   LOG*INFO 6 /* informational \_/
+    -   LOG*DEBUG 7 /* debug-level messages \_/
 -   payload: JSON contente i dettagli dell'alert che verrà inviato alla coda
 -   GUID: guid del record scatenante l'evento, potrebbe anche non esserci, per le celle è il guid della tabella outOfRange
 

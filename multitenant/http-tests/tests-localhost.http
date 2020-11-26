@@ -90,7 +90,7 @@ Authorization: Basic Alice:Alice
 # --------------------------------------------------------------------
 # --------------------------------------------------------------------
 
-### Create HandlingUnitsMovements
+### Create HandlingUnitsMovements ---------------------- DO NOT USE -----------------
 POST http://localhost:4004/handling-unit-moved/HandlingUnitsMovements HTTP/1.1
 Authorization: Basic Alice:Alice
 Content-Type: application/json
@@ -105,7 +105,7 @@ Content-Type: application/json
 }
 
 
-### GET HandlingUnitsMovements
+### GET HandlingUnitsMovements---------------------- DO NOT USE -----------------
 GET http://localhost:4004/handling-unit-moved/HandlingUnitsMovements HTTP/1.1
 Authorization: Basic Alice:Alice
 Content-Type: application/json
