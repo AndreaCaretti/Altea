@@ -170,22 +170,3 @@ If-Match: "2020-11-01T15:48:57.600Z"
     "HU_ID": "TEST1234",
     "DIR": "F"
 }
-
-
-
-### Aggionamento Book con etag
-POST  http://localhost:4004/notificaton-servive-call/notification  HTTP/1.1
-Authorization: Basic Alice:Alice
-Content-Type: application/json
-
-{"NotificationPayload" :
-    {
-        "user"      : "USERTEST",
-        "tenant"    : "TENANT_TEST", 
-        "alertBusinessTime" : "2020-11-23T12:00:00.000Z",
-        "alertCode" : "Alert", 
-        "alertLevel" : "0", 
-        "payload"  : "",
-        "GUID" : "7bcf4b77-605f-439a-bf1d-c927051e0ca7"
-    }
-}
