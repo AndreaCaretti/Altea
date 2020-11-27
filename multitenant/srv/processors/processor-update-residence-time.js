@@ -92,7 +92,7 @@ class ProcessorHuMovements {
         let resTime = 0;
         const inBusinessTime = new Date(residenceTime.inBusinessTime);
 
-        const controlledTemperature = await this.calculateSingleTor(residenceTime, tx);
+        const controlledTemperature = await this.calculateResidenceTime(residenceTime, tx);
 
         if (record) {
             const outBusinessTime = new Date(record.inBusinessTime);
@@ -120,7 +120,7 @@ class ProcessorHuMovements {
         await DB.updateSomeFields("ResidenceTime", residenceTime.ID, values, tx, this.logger);
     }
 
-    async calculateSingleTor(residenceTime, tx) {
+    async calculateResidenceTime(residenceTime, tx) {
         let controlledTemperature;
         try {
             const res = await tx.run(

@@ -9,6 +9,7 @@ module.exports = (iot) => {
         const outOfRange = request.data;
         const tx = cds.transaction(request);
         const outOfRangeTab = cds.entities.outOfRange;
+        const AreasTab = cds.entities.Areas;
         const segmentID = outOfRange.data[0].entityId;
 
         const outOfRangeToUpdate = await tx.read(outOfRangeTab).where({ segmentId: segmentID });
@@ -28,8 +29,16 @@ module.exports = (iot) => {
                     Status = "CLOSE";
                 }
 
+                // CALCOLARE AREA PARTENDO DA DEVICE IOT-----
+                const area = await tx.run(
+                    SELECT.one("ID")
+                        .from(AreasTab)
+                        .where({ ID_DeviceIoT: outOfRange.extensions.modelId })
+                );
+
                 await tx.create(outOfRangeTab).entries({
                     ID_DeviceIoT: outOfRange.extensions.modelId,
+                    area_ID: area.ID,
                     startEventTS: startEvent,
                     endEventTS: endEvent,
                     status: Status,

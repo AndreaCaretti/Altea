@@ -235,7 +235,8 @@ define entity ResidenceTime : cuid, managed {
     inBusinessTime     : Timestamp;
     outBusinessTime    : Timestamp;
     residenceTime      : Integer;
-    tor                : Integer;
+    singleTOR          : Integer;
+    totalTOR           : Integer;
     tmin               : Decimal;
     tmax               : Decimal;
     torElaborationTime : Timestamp;
@@ -253,6 +254,7 @@ define entity Alerts : cuid, managed {
 define entity outOfRange : cuid, managed {
     @title : 'ID Device IoT'
     ID_DeviceIoT : String;
+    area         : Association to one Areas;
     startEventTS : Timestamp;
     endEventTS   : Timestamp;
     status       : String;
