@@ -121,11 +121,11 @@ class ProcessorHuMovements {
                     .join("AreaCategories")
                     .on("Areas.category_ID", "<=", "AreaCategories.ID")
                     .where("Areas.ID", "=", "00ff1f4e-9292-4743-9573-678a9663272e")
-            );*/
+            ); */
 
                 SELECT.from("Areas")
                     .join("AreaCategories")
-                    .on("Areas.category_ID", '=', "AreaCategories.ID")
+                    .on("Areas.category_ID", "=", "AreaCategories.ID")
                     .where("Areas.ID", "=", "00ff1f4e-9292-4743-9573-678a9663272e")
             );
 
