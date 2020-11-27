@@ -13,7 +13,8 @@ class Notification {
     static getInstance(logger) {
         if (!notificationIstance) {
             notificationIstance = new Notification(logger);
-            console.log("NotificationService->GetInstance()");
+            this.logger = logger;
+            this.logger.info("NotificationService->GetInstance()");
         }
 
         return notificationIstance;

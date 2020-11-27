@@ -1,6 +1,5 @@
 const { Client } = require("@sap/xb-msg-amqp-v100");
 
-const QUEUENAME = "massequeue";
 const TOPICNAME = "topic";
 const EMLOG_NAME = "Enterprise Messaging";
 
