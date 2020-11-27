@@ -1,3 +1,4 @@
+const { v4: uuidv4 } = require("uuid");
 /**
  * DB utilities methods
  */
@@ -167,15 +168,20 @@ class DB {
     }
 
     static async insertIntoTable(tableName, row, tx, Logger) {
+        const oTX = tx;
         try {
-            const recordsCount = await tx.create(tableName).entries(row);
+            const recordsCount = await oTX.create(tableName).entries(row);
             Logger.debug(`Record append: ${tableName.name}/ ${JSON.stringify(row)}}`);
-            await tx.commit();
+            await oTX.commit();
             return recordsCount;
         } catch (error) {
-            tx.rollback();
+            oTX.rollback();
             throw Error(`Wrong insert: ${error}/ ${JSON.stringify(row)}}`);
         }
+    }
+
+    static async getUUID() {
+        return uuidv4();
     }
 }
 

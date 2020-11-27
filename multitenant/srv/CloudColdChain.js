@@ -5,6 +5,7 @@ const ProcessorInsertResidenceTime = require("./processors/processor-insert-resi
 const ProcessorUpdateResidenceTime = require("./processors/processor-update-residence-time");
 const BGWorkerNotification = require("./bg-workers/bg-worker-notification");
 const NotificationeService = require("./notifications/notificationService");
+const EnterpriseMessageNotification = require("./enterprise-messaging/em_notification");
 
 class CloudColdChain {
     /*
@@ -38,6 +39,9 @@ class CloudColdChain {
         // Start Notification Service
         this.NotificationeService.start();
 
+        // Enterprise Messaging comunicatio Layer
+        this.enterpriseMessageNotification = EnterpriseMessageNotification.getInstance();
+
         // Provisioning
         this.initMultitenantProvisioning(this.logger);
     }
@@ -57,6 +61,9 @@ class CloudColdChain {
 
         // Start Notification BG Worker
         this.BGWorkerNotification.start();
+
+        // Start Enterprise Messaging comunicatio Layer
+        this.enterpriseMessageNotification.start();
     }
 
     async initMultitenantProvisioning() {
