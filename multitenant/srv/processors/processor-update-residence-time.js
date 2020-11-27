@@ -120,7 +120,6 @@ class ProcessorHuMovements {
         await DB.updateSomeFields("ResidenceTime", residenceTime.ID, values, tx, this.logger);
     }
 
-    // eslint-disable-next-line class-methods-use-this
     async calculateSingleTor(residenceTime, tx) {
         let controlledTemperature;
         try {
@@ -128,16 +127,14 @@ class ProcessorHuMovements {
                 SELECT.one("controlledTemperature")
                     .from("cloudcoldchain.Areas as A")
                     .join("cloudcoldchain.AreaCategories as B")
-                    // .on("Areas.category_ID", "=", "AreaCategories.ID")
                     .on({
                         xpr: ["A.category_ID", "=", "B.ID"],
                     })
                     .where("A.ID", "=", residenceTime.area_ID)
             );
             controlledTemperature = res.controlledTemperature;
-            console.log("Area_controlledTemperature:", controlledTemperature);
         } catch (error) {
-            console.log(error);
+            this.logger.logException(error);
         }
         return controlledTemperature;
     }
@@ -157,5 +154,27 @@ define entity ResidenceTime : cuid, managed {
     tmin               : Decimal;
     tmax               : Decimal;
     torElaborationTime : Timestamp;
+}
+*/
+
+/*
+define entity Areas : cuid, managed {
+    @title  : 'Areas'
+    name         : String(50);
+    @title  : 'Category'
+    @Common : {
+        Text            : category.name,
+        TextArrangement : #TextOnly
+    }
+    category     : Association to one AreaCategories;
+    @title  : 'Location'
+    @Common : {
+        Text            : location.name,
+        TextArrangement : #TextOnly
+    }
+    location     : Association to one Locations;
+    department   : Association to one Department;
+    @title  : 'ID Device IoT'
+    ID_DeviceIoT : String
 }
 */

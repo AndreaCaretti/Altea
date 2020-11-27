@@ -183,6 +183,34 @@ class DB {
     static async getUUID() {
         return uuidv4();
     }
+
+    // ----- DA PROVARE ------ //
+    static async join(tableName, tableNameJoin, joinContidion, whereCondition, tx, Logger) {
+        // ----- DA PROVARE ------ //
+
+        // JoinCondition nel formato  "xpr: ["A.category_ID", "=", "B.ID"]"
+        // whereCondition nel formato  "A.ID", "=", "valueString"
+
+        try {
+            const res = await tx.run(
+                SELECT
+                    // .from("cloudcoldchain.Areas as A")
+                    .from("tableName")
+                    // .join("cloudcoldchain.AreaCategories as B")
+                    .join("tableNameJoin")
+                    .on({
+                        // xpr: ["A.category_ID", "=", "B.ID"],
+                        joinContidion,
+                    })
+                    // .where("A.ID", "=", "valueString")
+                    .where(whereCondition)
+            );
+            return res;
+        } catch (error) {
+            Logger.debug(`Error: ${error}/ ${tableName.name} JOIN ${tableNameJoin.name}`);
+            throw Error(`error on Join: ${error} / ${tableName.name} JOIN ${tableNameJoin.name}`);
+        }
+    }
 }
 
 module.exports = DB;
