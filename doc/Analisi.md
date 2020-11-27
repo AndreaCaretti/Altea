@@ -458,11 +458,12 @@ Tabelle di log per le segnalazioni ricevute dal iot per alert di temperatura out
 
 Tabelle di alert applicativi rilevati dalla piattaforma segnalati verso Keethings, che a sua volta invia alle chatroom:
 
-| _ID_   | _alertBusinessTime_      | notificationTime         | alertCode | alertLevel (AlertLevel) | payload (String JSON)                                  | GUID                                 |
-| ------ | ------------------------ | ------------------------ | --------- | ----------------------- | ------------------------------------------------------ | ------------------------------------ |
-| _GUID_ | 2020-10-14T09:01:31.763Z | 2020-10-14T09:01:32.763Z |           | Grave                   | { "msg" : "RFID XXX già esistente"                     |                                      |
-| _GUID_ | 2020-10-14T09:01:33.763Z | 2020-10-14T09:01:34.763Z | OUT       | Alert                   | { "msg": "Temperatura cella fuori range da 20 minuti"} | 10d2f997-1e9c-4b21-8817-d48171ead166 |
+| _ID_   | _alertBusinessTime_       | area                                 | notificationTime         | alertCode | alertLevel (AlertLevel) | payload (String JSON)                | GUID                                 |
+| ------ | ------------------------  | ------------------------------------ | ------------------------ | --------- | ----------------------- | ---------------------------------    | ------------------------------------ |
+| _GUID_ | 2020-10-14T09:01:31.763Z  | 8b78d720-e240-4912-92dd-6e654474a694 | 2020-10-14T09:01:32.763Z |           | Grave                   | { "msg" : "RFID XXX già esistente"   | 10d2f997-1e9c-4b21-8817-d48171ead166 |
+| _GUID_ | 2020-10-14T09:01:33.763Z  | 8b78d720-e240-4912-92dd-6e654474a69  | 2020-10-14T09:01:34.763Z | OUT       | Alert                   | { "msg": "Temperatura cella..."}     | 10d2f997-1e9c-4b21-8817-d48171ead166 |
 
+-   area : area relativa a avvenimento di notifica
 -   alertBusinessTime: è l'ora in cui è successo l'evento (esempio per le celle esempio lo start time del problema sulla cella)
 -   notificationTime: è l'ora in cui abbiamo aggiunto la notifica alla coda enterprise messaging
 -   alertCode: codice fisso dell'alert, valori possibile aggiungere man mano
@@ -895,7 +896,7 @@ Solo sottoscrizione alla cloud cold chain e portale, CF non attivato
 
 ## Notifications
 
--   il metodo `alert` della classe `Notification` riceve `user`, `tenant`, `alertBusinessTime`, `alertCode`, `alertLevel`, `payload`, `GUID`
+-   il metodo `alert` della classe `Notification` riceve `user`, `tenant`, `area`, `alertBusinessTime`, `alertCode`, `alertLevel`, `payload`, `GUID`
 -   fa il push nella coda REDIS
 -   la classe `Notification` è in attesa sulla coda REDIS ('EXTERNAL_NOTIFICATION') e quando riceve un messaggio:
     -   invia il messaggio verso la coda del servizio enterprise messaging istanziato nel subaccount centrale di platform
