@@ -9,6 +9,7 @@ module.exports = (iot) => {
         const outOfRange = request.data;
         const tx = cds.transaction(request);
         const outOfRangeTab = cds.entities.outOfRange;
+        const AreasTab = cds.entities.Areas;
         const segmentID = outOfRange.data[0].entityId;
 
         const outOfRangeToUpdate = await tx.read(outOfRangeTab).where({ segmentId: segmentID });
@@ -17,6 +18,7 @@ module.exports = (iot) => {
         let endEvent = "";
         let instruction = "";
         try {
+            let area;
             if (!outOfRangeToUpdate[0]) {
                 instruction = "CREATE:";
                 let Status = outOfRange.data[0].action;
@@ -28,8 +30,16 @@ module.exports = (iot) => {
                     Status = "CLOSE";
                 }
 
+                // CALCOLARE AREA PARTENDO DA DEVICE IOT-----
+                area = await tx.run(
+                    SELECT.one("ID")
+                        .from(AreasTab)
+                        .where({ ID_DeviceIoT: outOfRange.extensions.modelId })
+                );
+
                 await tx.create(outOfRangeTab).entries({
                     ID_DeviceIoT: outOfRange.extensions.modelId,
+                    area_ID: area.ID,
                     startEventTS: startEvent,
                     endEventTS: endEvent,
                     status: Status,
@@ -57,10 +67,10 @@ module.exports = (iot) => {
             await tx.commit();
 
             if (outOfRange.data[0].action === "OPEN") {
-                // RICHIAMO NOTIFICATION-ALERT()------------------------------------
                 notificationService.alert(
                     request.user.id,
                     request._.req.hostname,
+                    area.ID,
                     outOfRange.eventTime,
                     "LOG_ALERT",
                     1, // LOG_ALERT

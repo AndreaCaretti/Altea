@@ -6,6 +6,7 @@ service NotificatonServiveCall {
     type NotificationPayload {
         user              : String;
         tenant            : String;
+        area              : String;
         alertBusinessTime : String;
         alertCode         : String;
         alertLevel        : String;

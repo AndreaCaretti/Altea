@@ -7,6 +7,7 @@ Content-Type: application/json
     {
         "user"      : "USERTEST",
         "tenant"    : "TENANT_TEST", 
+        "area"      : "2e0d8f14-59d7-4020-b91c-bfec1a53ff3f",
         "alertBusinessTime" : "2020-11-24T09:40:43.327Z",
         "alertCode" : "LOG_ALERT", 
         "alertLevel" : "1", 

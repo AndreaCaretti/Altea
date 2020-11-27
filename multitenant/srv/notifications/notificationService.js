@@ -25,10 +25,11 @@ class Notification {
         this.notificationQueue.start();
     }
 
-    alert(user, tenant, alertBusinessTime, alertCode, alertLevel, payload, GUID) {
+    alert(user, tenant, area, alertBusinessTime, alertCode, alertLevel, payload, GUID) {
         const alertNotificationData = {
             user,
             tenant,
+            area,
             alertBusinessTime,
             alertCode,
             alertLevel,

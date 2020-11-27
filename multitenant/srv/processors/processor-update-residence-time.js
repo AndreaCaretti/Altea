@@ -74,53 +74,53 @@ class ProcessorHuMovements {
     }
 
     async getNearResidentTimes(residenceTime, tx) {
-        this.logger.logObject("r", residenceTime);
+        this.logger.logObject("residenceTime:", residenceTime);
+        try {
+            const record = await tx.run(
+                SELECT.one
+                    .from(cds.entities.ResidenceTime)
+                    .where({ handlingUnit_ID: residenceTime.handlingUnit_ID })
+                    .and(
+                        `stepNr = ${residenceTime.stepNr + 1} or stepNr = ${
+                            residenceTime.stepNr - 1
+                        }`
+                    )
+                    .and("inBusinessTime > ", residenceTime.inBusinessTime)
+                    .orderBy([{ ref: ["inBusinessTime"], sort: "asc" }])
+            );
+            this.updateResidenceTime(record, residenceTime, tx);
+        } catch (error) {
+            this.logger.logException(error);
+        }
+    }
 
-        const record = await tx.run(
-            SELECT.one
-                .from(cds.entities.ResidenceTime)
-                .where({ handlingUnit_ID: residenceTime.handlingUnit_ID })
-                .and(`stepNr = ${residenceTime.stepNr + 1} or stepNr = ${residenceTime.stepNr - 1}`)
-                .and("inBusinessTime > ", residenceTime.inBusinessTime)
-                .orderBy([{ ref: ["inBusinessTime"], sort: "asc" }])
-        );
-        // this.logger.debug("Record vicini: %i", record.length);
-
-        // eslint-disable-next-line no-console
-        // console.log(record);
+    async updateResidenceTime(record, residenceTime, tx) {
         let values = {};
-        let resTime = 0;
+        let resTime;
         const inBusinessTime = new Date(residenceTime.inBusinessTime);
-
-        const controlledTemperature = await this.calculateSingleTor(residenceTime, tx);
 
         if (record) {
             const outBusinessTime = new Date(record.inBusinessTime);
-            if (!controlledTemperature) {
-                // calcolo il residenceTime solo se l'area NON è a temperatura controllata
-                resTime = Math.round((outBusinessTime - inBusinessTime) / 60000);
-            }
-            // se trovo un record di chiusura, imposto OutBusinessTime
+            resTime = Math.round((outBusinessTime - inBusinessTime) / 60000);
             values = {
                 outBusinessTime: record.inBusinessTime,
                 residenceTime: resTime,
             };
         } else {
-            const actualDate = new Date();
-            // ricalcolo il ResidenceTime senza aggiornare OutBusinessTime
-            if (!controlledTemperature) {
-                // calcolo il residenceTime solo se l'area NON è a temperatura controllata
+            const isLastArea = await this.checkLastKnownArea(residenceTime, tx);
+            if (isLastArea) {
+                const actualDate = new Date();
                 resTime = Math.round((actualDate - inBusinessTime) / 60000);
+                values = {
+                    residenceTime: resTime,
+                };
             }
-            values = {
-                residenceTime: resTime,
-            };
         }
 
         await DB.updateSomeFields("ResidenceTime", residenceTime.ID, values, tx, this.logger);
     }
 
-    async calculateSingleTor(residenceTime, tx) {
+    async getControlledTemperature(residenceTime, tx) {
         let controlledTemperature;
         try {
             const res = await tx.run(
@@ -138,9 +138,44 @@ class ProcessorHuMovements {
         }
         return controlledTemperature;
     }
+
+    async checkLastKnownArea(residenceTime, tx) {
+        let isLastArea = false;
+        try {
+            const res = await tx.run(
+                SELECT.one("lastKnownArea")
+                    .from(cds.entities.HandlingUnits)
+                    .where({ ID: residenceTime.handlingUnitID })
+            );
+            if (res && res.lastKnownArea === residenceTime.area_ID) {
+                isLastArea = true;
+            }
+        } catch (error) {
+            this.logger.logException(error);
+        }
+        return isLastArea;
+    }
 }
 
 module.exports = ProcessorHuMovements;
+
+/*              const record = await tx.run(
+                SELECT.one
+                    .from("cloudcoldchain.ResidenceTime as A")
+                    .join("cloudcoldchain.HandlingUnits as B")
+                    .on({
+                        xpr: ["A.handlingUnit_ID", "=", "B.ID"],
+                    })
+                    .where("A.handlingUnit_ID", "=", residenceTime.handlingUnit_ID)
+                    .and("A.inBusinessTime > ", residenceTime.inBusinessTime)
+                    .and(
+                        `stepNr = ${residenceTime.stepNr + 1} or stepNr = ${
+                            residenceTime.stepNr - 1
+                        }`
+                    )
+                    .orderBy([{ ref: ["inBusinessTime"], sort: "asc" }])
+            );
+            */
 
 /*
 define entity ResidenceTime : cuid, managed {
@@ -176,5 +211,18 @@ define entity Areas : cuid, managed {
     department   : Association to one Department;
     @title  : 'ID Device IoT'
     ID_DeviceIoT : String
+}
+*/
+
+/*
+@UI.Identification : [{Value : ID}]
+define entity HandlingUnits : cuid, managed {
+    huId               : cloudcoldchain.HU_ID;
+    lot                : Association to one Lots;
+    lastKnownArea      : Association to one Areas;
+    inAreaBusinessTime : Timestamp;
+    lastMovement       : Association to one HandlingUnitsMovements;
+    jsonSummary        : LargeString;
+    blockchainHash     : String(100);
 }
 */
