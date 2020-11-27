@@ -92,9 +92,14 @@ class ProcessorHuMovements {
         let resTime = 0;
         const inBusinessTime = new Date(residenceTime.inBusinessTime);
 
+        const controlledTemperature = await this.calculateSingleTor(residenceTime, tx);
+
         if (record) {
             const outBusinessTime = new Date(record.inBusinessTime);
-            resTime = Math.round((outBusinessTime - inBusinessTime) / 60000);
+            if (!controlledTemperature) {
+                // calcolo il residenceTime solo se l'area NON è a temperatura controllata
+                resTime = Math.round((outBusinessTime - inBusinessTime) / 60000);
+            }
             // se trovo un record di chiusura, imposto OutBusinessTime
             values = {
                 outBusinessTime: record.inBusinessTime,
@@ -103,46 +108,38 @@ class ProcessorHuMovements {
         } else {
             const actualDate = new Date();
             // ricalcolo il ResidenceTime senza aggiornare OutBusinessTime
-            resTime = Math.round((actualDate - inBusinessTime) / 60000);
+            if (!controlledTemperature) {
+                // calcolo il residenceTime solo se l'area NON è a temperatura controllata
+                resTime = Math.round((actualDate - inBusinessTime) / 60000);
+            }
             values = {
                 residenceTime: resTime,
             };
         }
 
-        await this.calculateSingleTor(residenceTime, tx);
         await DB.updateSomeFields("ResidenceTime", residenceTime.ID, values, tx, this.logger);
     }
 
     // eslint-disable-next-line class-methods-use-this
     async calculateSingleTor(residenceTime, tx) {
+        let controlledTemperature;
         try {
-            const result = await tx.run(
-                /*     SELECT.from("Areas")
-                    .join("AreaCategories")
-                    .on("Areas.category_ID", "<=", "AreaCategories.ID")
-                    .where("Areas.ID", "=", "00ff1f4e-9292-4743-9573-678a9663272e")
-            ); */
-
-                SELECT.from("Areas")
-                    .join("AreaCategories")
-                    .on("Areas.category_ID", "=", "AreaCategories.ID")
-                    .where("Areas.ID", "=", "00ff1f4e-9292-4743-9573-678a9663272e")
+            const res = await tx.run(
+                SELECT.one("controlledTemperature")
+                    .from("cloudcoldchain.Areas as A")
+                    .join("cloudcoldchain.AreaCategories as B")
+                    // .on("Areas.category_ID", "=", "AreaCategories.ID")
+                    .on({
+                        xpr: ["A.category_ID", "=", "B.ID"],
+                    })
+                    .where("A.ID", "=", residenceTime.area_ID)
             );
-
-            console.log("AREA:", result);
+            controlledTemperature = res.controlledTemperature;
+            console.log("Area_controlledTemperature:", controlledTemperature);
         } catch (error) {
             console.log(error);
         }
-
-        /*
-        if (residenceTime.area.category.controlledTemperature) {
-            console.log("temperatura controllata");
-        } else {
-            console.log("temperatura non controllata");
-where: [{ref:["ID"]}, "=", {val: 111}],
-            .where({ cds.entities.Areas.ID: residenceTime.area_ID })
-        }
-*/
+        return controlledTemperature;
     }
 }
 
