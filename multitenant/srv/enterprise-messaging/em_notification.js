@@ -1,6 +1,7 @@
 const { Client } = require("@sap/xb-msg-amqp-v100");
 
 const QUEUENAME = "massequeue";
+const TOPICNAME = "topic";
 const EMLOG_NAME = "Enterprise Messaging";
 
 // https://github.com/SAP-samples/enterprise-messaging-client-nodejs-samples/tree/master/xb-msg-amqp-v100-doc#sender
@@ -22,7 +23,7 @@ class EnterpriseMessageNotification {
     }
 
     getConfiguration() {
-        this.logger.info(`Get Cpnfiguration for Enterprise Messaging Client`);
+        this.logger.info(`Get Configuration for Enterprise Messaging Client`);
         const connectionOptions = {
             uri:
                 "wss://enterprise-messaging-messaging-gateway.cfapps.eu10.hana.ondemand.com/protocols/amqp10ws",
@@ -45,7 +46,7 @@ class EnterpriseMessageNotification {
 
         const client = await this.connect(connectionOptions);
 
-        this.stream = await this.createStream(client, `queue:${QUEUENAME}`, 100000);
+        this.stream = await this.createStream(client, `topic:${TOPICNAME}`, 100000);
     }
 
     async connect(options) {
@@ -109,22 +110,25 @@ class EnterpriseMessageNotification {
         });
     }
 
-    async send(payload) {
+    async send(payload, tableData, logger, callback) {
         this.logger.debug(`Send To Enterprise Messaging Client`);
-        return new Promise((resolve, reject) => {
-            const message = {
-                payload: Buffer.from(payload, "utf-8"),
-                done: () => {
-                    resolve("Inviato");
-                    this.logger.info(`${EMLOG_NAME} Sent`);
-                },
-                failed: () => {
-                    reject(new Error("Error"));
-                },
-            };
-
-            if (!this.stream.write(message)) {
-                this.logger.error(`${EMLOG_NAME} Write`);
+        return new Promise((resolve, _reject) => {
+            if (!this.stream) {
+                this.logger.debug(`Missing ${EMLOG_NAME} Steam`);
+                resolve(`Missing ${EMLOG_NAME} Steam`);
+            } else {
+                const message = {
+                    payload: Buffer.from(payload, "utf-8"),
+                    done: () => {
+                        this.logger.info(`${EMLOG_NAME} Sent`);
+                        callback(tableData, logger);
+                        resolve("Inviato");
+                    },
+                    failed: () => {
+                        resolve(new Error("Error"));
+                    },
+                };
+                this.stream.write(message);
             }
         });
     }
