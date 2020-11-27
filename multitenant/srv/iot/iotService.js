@@ -18,6 +18,7 @@ module.exports = (iot) => {
         let endEvent = "";
         let instruction = "";
         try {
+            let area;
             if (!outOfRangeToUpdate[0]) {
                 instruction = "CREATE:";
                 let Status = outOfRange.data[0].action;
@@ -30,7 +31,7 @@ module.exports = (iot) => {
                 }
 
                 // CALCOLARE AREA PARTENDO DA DEVICE IOT-----
-                const area = await tx.run(
+                area = await tx.run(
                     SELECT.one("ID")
                         .from(AreasTab)
                         .where({ ID_DeviceIoT: outOfRange.extensions.modelId })
@@ -66,10 +67,10 @@ module.exports = (iot) => {
             await tx.commit();
 
             if (outOfRange.data[0].action === "OPEN") {
-                // RICHIAMO NOTIFICATION-ALERT()------------------------------------
                 notificationService.alert(
                     request.user.id,
                     request._.req.hostname,
+                    area.ID,
                     outOfRange.eventTime,
                     "LOG_ALERT",
                     1, // LOG_ALERT
