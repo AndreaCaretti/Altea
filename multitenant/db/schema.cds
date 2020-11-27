@@ -76,8 +76,9 @@ define entity ControlPointsCategories : cuid, managed {
 @UI.Identification : [{Value : name}]
 define entity AreaCategories : cuid, managed {
     @title : 'Area Category'
-    name        : String(50);
-    description : localized String(200);
+    name                  : String(50);
+    description           : localized String(200);
+    controlledTemperature : Boolean;
 }
 
 @cds.odata.valuelist

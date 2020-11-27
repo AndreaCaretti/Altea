@@ -187,11 +187,11 @@ Categorie di clienti
 
 Categorie di aree
 
-| _ID_ | _name_ (25)        |
-| ---- | ------------------ |
-| GUID | No Temperature     |
-| GUID | Cold Room          |
-| GUID | Refrigerator Truck |
+| _ID_ | _name_ (25)        | controlledTemperature(flag) |
+| ---- | ------------------ | --------------------------- |
+| GUID | No Temperature     |                             |
+| GUID | Cold Room          | X                           |
+| GUID | Refrigerator Truck | X                           |
 
 ## Tabella ControlPointsCategories
 

@@ -16,7 +16,7 @@ class ProcessorHuMovements {
         } catch (error) {
             this.logger.error(error);
         } finally {
-            setTimeout(this.tick, 15000);
+            setTimeout(this.tick, 5000);
         }
     }
 
@@ -39,7 +39,7 @@ class ProcessorHuMovements {
     async start() {
         this.logger.info(`Avvio Residence Time Update Processorr...`);
         // setImmediate(this.tick);
-        setTimeout(this.tick, 10000);
+        setTimeout(this.tick, 3000);
     }
 
     async getResidenceTimesToElaborate(technicalUser) {
@@ -98,7 +98,7 @@ class ProcessorHuMovements {
             // se trovo un record di chiusura, imposto OutBusinessTime
             values = {
                 outBusinessTime: record.inBusinessTime,
-                residenceTime: resTime, // CALCOLARE la differenza in MINUTI
+                residenceTime: resTime,
             };
         } else {
             const actualDate = new Date();
@@ -108,7 +108,41 @@ class ProcessorHuMovements {
                 residenceTime: resTime,
             };
         }
+
+        await this.calculateSingleTor(residenceTime, tx);
         await DB.updateSomeFields("ResidenceTime", residenceTime.ID, values, tx, this.logger);
+    }
+
+    // eslint-disable-next-line class-methods-use-this
+    async calculateSingleTor(residenceTime, tx) {
+        try {
+            const result = await tx.run(
+                /*     SELECT.from("Areas")
+                    .join("AreaCategories")
+                    .on("Areas.category_ID", "<=", "AreaCategories.ID")
+                    .where("Areas.ID", "=", "00ff1f4e-9292-4743-9573-678a9663272e")
+            );*/
+
+                SELECT.from("Areas")
+                    .join("AreaCategories")
+                    .on("Areas.category_ID", '=', "AreaCategories.ID")
+                    .where("Areas.ID", "=", "00ff1f4e-9292-4743-9573-678a9663272e")
+            );
+
+            console.log("AREA:", result);
+        } catch (error) {
+            console.log(error);
+        }
+
+        /*
+        if (residenceTime.area.category.controlledTemperature) {
+            console.log("temperatura controllata");
+        } else {
+            console.log("temperatura non controllata");
+where: [{ref:["ID"]}, "=", {val: 111}],
+            .where({ cds.entities.Areas.ID: residenceTime.area_ID })
+        }
+*/
     }
 }
 
