@@ -91,17 +91,13 @@ async function main(capServiceAppName) {
 
         console.log(`Status: ${jobStatus.status}`);
 
-            if (jobStatus.status === "ERROR" || jobStatus.status === "FINISHED") {
-                for (const tenantId in jobStatus.result.tenants) {
-                    const tenant = jobStatus.result.tenants[tenantId];
-                    if (jobStatus.status === "ERROR") {
-                        tenant.buildLogs.split("\n").forEach((riga) => console.log(riga));
-                    }
-                    console.log(`Tenant ${tenantId} result ${tenant.status}`);
+        if (jobStatus.status === "ERROR" || jobStatus.status === "FINISHED") {
+            // eslint-disable-next-line guard-for-in, no-restricted-syntax
+            for (const tenantId in jobStatus.result.tenants) {
+                const tenant = jobStatus.result.tenants[tenantId];
+                tenant.buildLogs.split("\n").forEach((riga) => console.log(riga));
 
-                    // console.log(tenant);
-                }
-                clearImmediate(interval);
+                console.log(`Tenant ${tenantId} result ${tenant.status}`);
             }
             clearImmediate(interval);
         }
