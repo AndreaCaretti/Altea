@@ -873,13 +873,13 @@ Solo sottoscrizione alla cloud cold chain e portale, CF non attivato
 
 -   ogni n minuti random parte un processo per un singolo cliente
 -   processo che ricerca tutti i record in `HandlingUnitsResidenceTime` senza `outBusinessTime`
--   per ogni record cerca un record con T > del T movimento e con step = step del record + 1 oppure step del record - 1
+-   per ogni record cerca un record con T > del T movimento (piu vicino) e con step = step del record + 1 oppure step del record - 1
 -   se lo trova aggiorna il campo `outBusinessTime` con `inBusinessTime` del record trovato
 -   calcola la differenza in minuti arrotondando per eccesso di `outBusinessTime` - `inBusinessTime`
 -   se l'area è l'area in cui è in questo momento la handling unit (capibile leggendo la tabella `HandlingUnits`) aggiorna il campo residenceTime = current time - inBusinessTime
--   se l'area non è a temperatura controllata riporta il campo `residenceTime` nel campo `tot` e impostato il `torElaborationTime`
--   se l'area è a temperatura controlla scrive nella coda waiting dei record che devono recuperare da IoT i dati della cella e calcolo del TOR
--   finito il check per il cliente viene impostata l'ora in cui verrà rifatto il controllo per il cliente
+-   se l'area non è a temperatura controllata riporta il campo `residenceTime` nel campo `singleTOR` e imposta il `torElaborationTime`
+-   se l'area è a temperatura controllata calcolo il `residenceTime` se ho `outBusinessTime`, altrimenti controllo l'area attuale della HU e se coincide calcolo il `residenceTime` = current time - inBusinessTime
+    -   se l'area è a temperatura controllata, non modifico il TOR che dovrebbe essere 0 oppure pari al valore calcolato da un'altro processo che intercetta gli alert sui segmenti delle celle.
 
 ## Ingestion dati temperatura IoT
 
