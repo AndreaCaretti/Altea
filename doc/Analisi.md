@@ -38,7 +38,7 @@ Per esempio se un cartone contiene 20 confezioni, viene spedito e tracciato, in 
 
 Viene inviato il seriale RFID contenente l'sscc dell'handling unit, la location, il lotto, business e technical send timestamp. L'RFID diventa la chiave univoca dell'unità di movimentazione. Tutti i messaggi successivi faranno riferimento all'unità di movimentazione tramite questo ID globalmente univoco, globalmente vuol dire univoco anche rispetto a tutti gli altri clienti della piattaforma.  
 Per generalizzare il processo, il nome tecnico del campo id dell'unità non sarà RFID, ma HANDLING_UNIT_ID.
-L'etichettatrice esegue una singola chiamata al gateway accentratore locale di plant che accoda il messaggio per l'invio a CCP. (Alternativa l'etichettatrice potrebbe raggruppare i codici generati e mandare pacchetti di messaggi). Il messaggio verso gateway viene inviato tramite protocollo MQTTs e da accentratore verso cloud in MQTTs.  
+L'etichettatrice esegue una singola chiamata al gateway accentratore locale di plant che accoda il messaggio per l'invio a CCP. Il messaggio verso gateway viene inviato tramite protocollo MQTTs e da accentratore verso cloud in MQTTs.  
 L'accentratore invia l'unità di movimentazione in CCP, l'unità viene creata, nella configurazione in cloud delle etichettatrici sarà possibile definire in quale area andare a posizionare l'handling unit appena etichettata. Dovremo avere l'elenco delle aree. L'area sarà un tipo generico di cold room, refrigerator truck oppure un'area a temperatura non controllata.
 
 Gestione errori: se per errore viene inviato due volte lo stesso RFID il processo dovrebbe bloccarsi. Come vogliamo gestirlo?  
@@ -72,17 +72,20 @@ Il T° frontend deve avere un buffer in cui salvare i dati che non riesce ad inv
 Nel frattempo ogni 5 minuti gira il processo in CCP che calcola i dati di permanenza in area di ogni handling unit. Il processo incrocia i dati di movimentazione delle handling units con i dati di temperatura inviati dalle celle frigorifere per calcolare il T Min, T Max e TOR.  
 Il TOR delle aree senza controllo temperatura è uguale al tempo di permanenza in area, nel caso di zona a temperatura controllata considera i tempi di anomalia considerando che una handling unit potrebbe essere solo passata dalla cella durante l'anomalia, magari perchè è stata sposata in una cella funzionante.  
 Cioè se una sacca entra in cella alle 10:00 ed esce alle 16:00 e la cella ha un'anomalia di temperatura dalle 14:00 alle 20:00 il TOR è di 2 ore (dalle 14:00 alle 16:00).  
-Il calcolo delle anomalia arriva alla risoluzione del minuto.  
-_Alternativa, la cella è in grado di dirci dall'ora A all'ora B quanti minuti è stata fuori range, deve essere in grado di supportare molteplici richieste in parallelo, una per handling unit, possiamo ottimizzare inserendo una cache per evitare chiamate con gli stessi parametri. I servizi onPremise della cella devono essere rangiungibile dall'esterno, utilizzare SAP Cloud Connector?_
+Il calcolo delle anomalia arriva alla risoluzione del minuto.
 
 Nel frattempo ogni 15 minuti gira il processo in CCP che estrae tutte le handling unit arrivate a destinazione, estrae tutte le informazioni riepilogative dell'handling unit, prepara un JSON e lo scrive in Blockchain, il servizio Blockchain restituisce l'hash del JSON, l'hash viene salvato in CCP, i dati consolidati vengono spostati del database di archiviazione.
 _(come capiamo se il processo di spedizione della sacca è concluso e consolidato?_)
 
-Nel frattempo il communication frontend richiede a CCP i dati di una specifica handling unit _(o richiede i dati riepilogativi di un lotto?)_ CCP recupera i dati di riepilogo, se il tracciamento dell'handling unit è terminato e consolidato _(come e quando determiniamo e consideriamo un tracking concluso e consolidato?)_ viene fatta la verifica in blockchain della validità dei dati archiviati.
+Nel frattempo l'arrivo di segnalazioni dalle celle frigorifere vengono inviati al communication frontend.
 
-Nel frattempo il communication frontend richiede i dati di temperatura di un'area in un dato periodo di tempo, CCP recupera i dati di temperatura dal db iot.
+Nel frattempo tutti i warning/errori determinati dalla piattaforma vengono inviati al communication frontend.
 
-Nel frattempo la piattaforma tiene monitorate le connessioni con i gateway edge.
+Nel frattempo il communication frontend richiede a CCP i dati di una specifica handling unit o dati riepilogativi di un lotto, CCP recupera i dati di riepilogo, se il tracciamento dell'handling unit è terminato e consolidato _(come e quando determiniamo e consideriamo un tracking concluso e consolidato?)_ viene fatta la verifica in blockchain della validità dei dati archiviati.
+
+Nel frattempo il communication frontend richiede i dati di temperatura di un'area in un dato periodo di tempo, CCP recupera i dati di temperatura dal datalake IoT.
+
+_Nel frattempo la piattaforma tiene monitorate le connessioni con i gateway edge._
 
 ## Casistiche determinazione TOR prodotto in cella con anomalie
 
@@ -115,15 +118,20 @@ restiamo in attesa dell'evento di chiusura OutOfRange oppure di uscita dall'area
 se riceviamo l'evento di chiusura anomalia, azzeriamo il TOR.
 se riceviamo l'evento di uscita dalla cella, calcoliamo il TOR da sommare al movimento successivo.
 
-# Alternative:
+# Vincoli:
 
-## Cliente non vuole dati in cloud
+## Celle con solo prodotti appartenenti allo stesso range
 
-Manteniamo i dati on premise oppure in private cloud? Solo dati in cloud, dati on premise non sono in ambito
+Nelle celle sono contenuti solo prodotti che devono rimanere nello stesso range di temperatur
 
-## Logica di calcolo TOR on edge
+## Piattaforma solo Cloud
 
-Per calcolare il TOR in edge l'EDGE dovrebbe avere tutte le informazioni per determinare i tempi di fuori temperatura, mantenere lo storico di tutte le temperature, oppure la cella deve ritornare i minuti di anomalia nel periodo
+Tutta la piattaforma centrale è progettata per mantenere i dati in cloud
+
+## Logica di calcolo TOR solo in Cloud
+
+Il calcolo del TOR viene effettuato in Cloud
+Per calcolare il TOR in edge l'EDGE dovrebbe avere tutte le informazioni per determinare i tempi di fuori temperatura, mantenere lo storico di tutte le temperature
 
 # Tipologie di utenti:
 
@@ -134,17 +142,11 @@ Riceve le notifiche di alert di alto livello della piattaforma, esempio alert su
 
 ## Superuser
 
-Utente gestore dei dati del singolo cliente (definizione di una nuova cella frigorifera, gesione anagrafica prodotti, ...), i clienti finali della piattaforma hanno accesso con questo livello.
-Riceve le notifiche di alert di alto livello del cliente, esempio disconnessione del gateway accentratore di plant con il cloud.
+Utente gestore dei dati del singolo cliente (definizione di una nuova cella frigorifera, gestione anagrafica prodotti, ...), i clienti finali della piattaforma hanno accesso con questo livello.
 
-## Operatore
+## Altre tipologie
 
-Utente operativo, utente che lavora all'interno del plant, i clienti finali della piattaforma hanno accesso con questo livello.
-Riceve le notifiche di alert di basso livello del cliente, esempio segnalazioni in arrivo dalla cella, problemi riconoscimento RFID.
-
-## Utente
-
-?
+Ci sono anche altre tipologie di utenti che non accederanno alla piattaforma centrale ma che riceveranno notifiche di warning/errori e potranno fare richieste di dati puntuali/statitisci. Questi utenti accederanno tramite il communication frontend.
 
 # Tabelle centrali di piattaforma
 
@@ -164,15 +166,25 @@ Categorie di clienti
 
 Dati anagrafici soggetti
 
-| _ID_   | name (50)  | category (CustomerCategories) | gs1CompanyPrefix (9) | tenantGUID                           |
-| ------ | ---------- | ----------------------------- | -------------------- | ------------------------------------ |
-| _GUID_ | Customer A | Produttore                    | 123456789            | a1d03e7f-53e4-414b-aca0-c4d44157f2a0 |
-| _GUID_ | Customer B | Trasportatore                 | 234567890            | dfea1d03e7f-53e4-414b-aca0-c4d4334ff |
-| _GUID_ | Customer C | Depositario                   | 567891234            | e34s1d03e7f-53e4-414b-aca0-ddde3322a |
+| _ID_   | name (50)  | category (CustomerCategories) | tenantGUID                           |
+| ------ | ---------- | ----------------------------- | ------------------------------------ |
+| _GUID_ | Customer A | Produttore                    | a1d03e7f-53e4-414b-aca0-c4d44157f2a0 |
+| _GUID_ | Customer B | Trasportatore                 | dfea1d03e7f-53e4-414b-aca0-c4d4334ff |
+| _GUID_ | Customer C | Depositario                   | e34s1d03e7f-53e4-414b-aca0-ddde3322a |
+
+-   `tenantGUID`: ID del tenant/subaccount SAP Cloud Platform
+
+## Tabella CustomersCompanyCodes
+
+| _ID_   | gs1CompanyPrefix (9) |
+| ------ | -------------------- |
+| _GUID_ | 123456789            |
+| _GUID_ | 234567890            |
+| _GUID_ | 567891234            |
 
 # Tabelle configurazione piattaforma
 
-Tabelle per parametrizzare la piattaforma - DB Multitenant
+Tabelle per parametrizzare la piattaforma, i record vengono inseriti nel db centrale e replicati su db dei clienti - DB Multitenant
 
 ## Tabella CustomerCategories
 
@@ -975,8 +987,3 @@ Authentication: OAuth2ClientCredentials
 ClientID: sb-ccp-provider-dev-qas-dev-cloud-cold-chain!t61773
 ClientSecret: oEPmeoq3s9kvPuGZsd89POK9Eo8=
 TokenURL: https://ccp-customera.authentication.eu10.hana.ondemand.com/oauth/token
-
-# Vincoli
-
--   in una area a temperatura controllata devono rimanere solo prodotti che devo stare nello stesso range di temperatura
--
