@@ -364,7 +364,7 @@ Tabella contenenti dati transazionali
 
 ## Tabella HandlingUnitsRawMovements
 
-Passaggi Handling Unit da Control Point
+Passaggi Handling Unit da Control Point, movimenti raw campi tutti stringa senza controlli
 
 | _ID_   | CP_ID (String 36)                    | SSCC_ID (SSCC)     | TE (String 24)           | TS (String 24)           | DIR (String 1) |
 | ------ | ------------------------------------ | ------------------ | ------------------------ | ------------------------ | -------------- |
@@ -385,7 +385,7 @@ Passaggi Handling Unit da Control Point
 
 ## Tabella HandlingUnitsMovements
 
-Passaggi Handling Unit da Control Point
+Passaggi Handling Unit da Control Point, campi controllati
 
 | _ID_   | sscc (SSCC)        | businessTime (Timestamp) | controlPoint           | direction | destinationArea                  | elaborationTime (Timestamp) |
 | ------ | ------------------ | ------------------------ | ---------------------- | --------- | -------------------------------- | --------------------------- |
@@ -432,27 +432,54 @@ Permanenza Handling Unit in area
 
 I dati di temperatura sono salvati nel Data Lake IoT, la tabella viene riportata qui per promemoria, i campi sono provvisori
 
-| _Area_     | _Ora_ | Temperatura °C | Anomalia     |
-| ---------- | ----- | -------------- | ------------ |
-| Stoccaggio | 16:00 | 4              |              |
-| Stoccaggio | 16:15 | 4              |              |
-| Stoccaggio | 16:30 | 20             | OUT_OF_RANGE |
-| Stoccaggio | 16:35 | 20             | OUT_OF_RANGE |
-| Stoccaggio | 16:40 | 20             | OUT_OF_RANGE |
-| Stoccaggio | 16:45 | 20             | OUT_OF_RANGE |
-| Stoccaggio | 16:50 | 20             | OUT_OF_RANGE |
-| Stoccaggio | 16:55 | 4              |              |
-| Stoccaggio | 17:00 | 4              |              |
+| _Area_     | _Ora_ | Temperatura °C |
+| ---------- | ----- | -------------- |
+| Stoccaggio | 16:00 | 4              |
+| Stoccaggio | 16:15 | 4              |
+| Stoccaggio | 16:30 | 20             |
+| Stoccaggio | 16:35 | 20             |
+| Stoccaggio | 16:40 | 20             |
+| Stoccaggio | 16:45 | 20             |
+| Stoccaggio | 16:50 | 20             |
+| Stoccaggio | 16:55 | 4              |
+| Stoccaggio | 17:00 | 4              |
 
-# Tabella outOfRange
+# Tabella OutOfRange
 
-Tabelle di log per le segnalazioni ricevute dal iot per alert di temperatura out of range e calcolo del TOR
+Tabella delle segnalazioni ricevute dal iot per alert di temperatura out of range e calcolo del TOR
 
-| _ID_                                 | ID_DeviceIot | startEventTS             | endEventTS               | TOR |
-| ------------------------------------ | ------------ | ------------------------ | ------------------------ | --- |
-| 10d2f997-1e9c-4b21-8817-d48171ead166 | cella1       | 2020-10-14T09:01:33.763Z | 2020-11-14T09:01:33.763Z | 120 |
-| _GUID_                               | cella2       | 2020-10-14T09:01:33.763Z | 2020-10-19T09:01:33.763Z | 190 |
-| _GUID_                               | cella3       | 2020-10-14T09:01:33.763Z |                          | 250 |
+| _ID_                                 | ID_DeviceIot | startEventTS             | endEventTS               | area (Area) | segmentId (GUID) |
+| ------------------------------------ | ------------ | ------------------------ | ------------------------ | ----------- | ---------------- |
+| 10d2f997-1e9c-4b21-8817-d48171ead166 | cella1       | 2020-10-14T09:01:33.763Z | 2020-11-14T09:01:33.763Z |             |                  |
+| _GUID_                               | cella2       | 2020-10-14T09:01:33.763Z | 2020-10-19T09:01:33.763Z |             |                  |
+| _GUID_                               | cella3       | 2020-10-14T09:01:33.763Z |                          |             |                  |
+
+-   `ID_DeviceIot`: ID del device IoT che ha inviato la segnalazione
+-   `startEventTS`: è l'ora di inizio del problema
+-   `endEventTS`: è l'ora di fine del problema
+-   `area`: area collegata al device IoT nel momento in cui abbiamo ricevuto la segnalazione
+-   `segmentId`: ID del segmento IoT collegato alla segnalazione
+
+# Tabella OutOfRangeHandlingUnits
+
+Tabella delle handling units collegate alla segnalazione di out of range
+
+| _ID_                                 | outOfRange (OutOfRange)              | handlingUnit (HandlingUnit) | startTime                | endTime                  | startReason (enum) | duration (Integer) |     |
+| ------------------------------------ | ------------------------------------ | --------------------------- | ------------------------ | ------------------------ | ------------------ | ------------------ | --- |
+| 99d2f997-1e9c-4b21-8817-d48171ead166 | 10d2f997-1e9c-4b21-8817-d48171ead166 | _GUID_                      | 2020-10-14T09:01:33.763Z | 2020-11-14T09:01:33.763Z |                    |                    |     |
+| _GUID_                               | cella2                               |                             | 2020-10-14T09:01:33.763Z | 2020-10-19T09:01:33.763Z |                    |                    |     |
+| _GUID_                               | cella3                               |                             | 2020-10-14T09:01:33.763Z |                          |                    |                    |     |
+
+-   `outOfRange`: collegamento al segmento `OutOfRange` che ha scatenato il problema
+-   `startTime`: ora di inizio del problema oppure momento in cui la cella è entrata nella cella
+-   `startReason`: motivo dell'inizio del problema
+    -   `WAS_ALREADY_IN_AREA`: l'handling unit si trovava nell'area nel momento dell'inizio del problema
+    -   `ARRIVED_IN_AREA`: l'hangling unit è entrato nell'area durante il problema
+-   `endTime`: ora di fine del problema oppure momento in cui la cella è uscita dalla cella
+-   `endReason`: motivo della fine del problema
+    -   `EXIT_FROM_AREA`: l'handling unit è uscita dall'area
+    -   `END_PROBLEM`: il problema è stato risolto
+-   `duration`: durata in minuti in cui il problema ha avuto impatti sull'handling unit
 
 # Tabella Notifications
 
@@ -463,10 +490,10 @@ Tabelle di alert applicativi rilevati dalla piattaforma segnalati verso Keething
 | _GUID_ | 2020-10-14T09:01:31.763Z | 2020-10-14T09:01:32.763Z |           | Grave                   | { "msg" : "RFID XXX già esistente"                     |                                      |
 | _GUID_ | 2020-10-14T09:01:33.763Z | 2020-10-14T09:01:34.763Z | OUT       | Alert                   | { "msg": "Temperatura cella fuori range da 20 minuti"} | 10d2f997-1e9c-4b21-8817-d48171ead166 |
 
--   alertBusinessTime: è l'ora in cui è successo l'evento (esempio per le celle esempio lo start time del problema sulla cella)
--   notificationTime: è l'ora in cui abbiamo aggiunto la notifica alla coda enterprise messaging
--   alertCode: codice fisso dell'alert, valori possibile aggiungere man mano
--   alertLevel: livello di alert syslog:
+-   `alertBusinessTime`: è l'ora in cui è successo l'evento (esempio per le celle esempio lo start time del problema sulla cella)
+-   `notificationTime`: è l'ora in cui abbiamo aggiunto la notifica alla coda enterprise messaging
+-   `alertCode`: codice fisso dell'alert, valori possibile aggiungere man mano
+-   `alertLevel`: livello di alert syslog:
     -   LOG*EMERG 0 /* system is unusable \_/
     -   LOG*ALERT 1 /* action must be taken immediately \_/
     -   LOG*CRIT 2 /* critical conditions \_/
@@ -475,8 +502,8 @@ Tabelle di alert applicativi rilevati dalla piattaforma segnalati verso Keething
     -   LOG*NOTICE 5 /* normal but significant condition \_/
     -   LOG*INFO 6 /* informational \_/
     -   LOG*DEBUG 7 /* debug-level messages \_/
--   payload: JSON contente i dettagli dell'alert che verrà inviato alla coda
--   GUID: guid del record scatenante l'evento, potrebbe anche non esserci, per le celle è il guid della tabella outOfRange
+-   `payload`: JSON contente i dettagli dell'alert che verrà inviato alla coda
+-   `GUID`: guid del record scatenante l'evento, potrebbe anche non esserci, per le celle è il guid della tabella outOfRange
 
 # Tabella Audits
 
@@ -782,8 +809,8 @@ https://help.sap.com/viewer/bf82e6b26456494cbdd197057c09979f/Cloud/en-US/ac83090
 | `central/cloud-foundry/xsuaa/xs-security.json`                           | Authorization Scopes and Roles configuration central platform                            |
 | `central/mta.yaml`                                                       | MTA yaml configuration for the whole central project                                     |
 | `central/package.json`                                                   | Central project metadata and configuration                                               |
-| `tenant/`                                                                | Folder with with customer tenant dependent components                                    |
-| `tenant/db`                                                              | Customer tenant domain models                                                            |
+| `multitenant/`                                                           | Folder with with customer tenant dependent components                                    |
+| `multitenant/db`                                                         | Customer tenant domain models                                                            |
 | `iot/`                                                                   | IoT Components                                                                           |
 | `enterprise-messaging/`                                                  | Enterprise Messaging Components Components                                               |
 | `readme.md`                                                              | Main documentation (this document)                                                       |
@@ -871,15 +898,14 @@ Solo sottoscrizione alla cloud cold chain e portale, CF non attivato
 
 ## Determinazione HandlingUnitsResidenceTime-outBusinessTime e residenceTime
 
--   ogni n minuti random parte un processo per un singolo cliente
+-   ogni n minuti parte un processo per un singolo cliente
 -   processo che ricerca tutti i record in `HandlingUnitsResidenceTime` senza `outBusinessTime`
 -   per ogni record cerca un record con T > del T movimento (piu vicino) e con step = step del record + 1 oppure step del record - 1
 -   se lo trova aggiorna il campo `outBusinessTime` con `inBusinessTime` del record trovato
--   calcola la differenza in minuti arrotondando per eccesso di `outBusinessTime` - `inBusinessTime`
--   se l'area è l'area in cui è in questo momento la handling unit (capibile leggendo la tabella `HandlingUnits`) aggiorna il campo residenceTime = current time - inBusinessTime
+-   se ho `outBusinessTime` calcola la differenza in minuti di `outBusinessTime` - `inBusinessTime` e aggiorna il campo `residenceTime`
+-   se l'area è l'area in cui è in questo momento la handling unit (campendolo leggendo la tabella `HandlingUnits`) aggiorna il campo `residenceTime = current time - inBusinessTime`
 -   se l'area non è a temperatura controllata riporta il campo `residenceTime` nel campo `singleTOR` e imposta il `torElaborationTime`
--   se l'area è a temperatura controllata calcolo il `residenceTime` se ho `outBusinessTime`, altrimenti controllo l'area attuale della HU e se coincide calcolo il `residenceTime` = current time - inBusinessTime
-    -   se l'area è a temperatura controllata, non modifico il TOR che dovrebbe essere 0 oppure pari al valore calcolato da un'altro processo che intercetta gli alert sui segmenti delle celle.
+-   se l'area è a temperatura controllata, non modifico il TOR che dovrebbe essere 0 oppure pari al valore calcolato da un'altro processo che intercetta gli alert sui segmenti delle celle.
 
 ## Ingestion dati temperatura IoT
 
@@ -892,6 +918,18 @@ Solo sottoscrizione alla cloud cold chain e portale, CF non attivato
 -   enterprise messaging invia i dati al webhook che punta al servizio cap `/iot/segment`
 -   il servizio cap aggiorna la tabella `OutOfRange`
 -   chiama il metodo `alert` della classe `Notifications`
+-   inserisce nella coda `OUT_OF_RANGE` un record per indicare la creazione o la fine di un segmento
+
+## Aggiornamento tabella con problemi legati all'handling units
+
+-   classe `BGWorkerOutOfRangeHandlingUnits` in attesa di qualcosa nella coda `OUT_OF_RANGE` cioè in attesa di segnalazioni da IoT
+-   se è un inizio di problema:
+    -   cerca tutte le handling units che erano nell'area nel momento dell'inizio del problema leggendo la tabella `ResidenceTime` con `area = area con il problema e inAreaBusinessTime <= inizio problema e ( outBusinessTime = vuoto oppure outBusinessTime >= inizio problema)`
+    -   per ogni handling unit crea un record nella tabella `OutOfRangeHandlingUnits` impostando i campi `startTime` e la reason `WAS_IN_AREA`
+-   se è una fine di problema:
+    -   cerca tutte le handling units collegate al problema cercando nella tabella `OutOfRangeHandlingUnits` (se non trova record vuol dire che non è arrivato l'inizio del problema, per adesso errore)
+    -   per ogni handling unit aggiorna il campo `END_OF_PROBLEM`
+-   se il record è completo cioè ha sia `startTime` che `endTime` aggiorna il campo `duration`
 
 ## Notifications
 
@@ -936,3 +974,8 @@ Authentication: OAuth2ClientCredentials
 ClientID: sb-ccp-provider-dev-qas-dev-cloud-cold-chain!t61773
 ClientSecret: oEPmeoq3s9kvPuGZsd89POK9Eo8=
 TokenURL: https://ccp-customera.authentication.eu10.hana.ondemand.com/oauth/token
+
+# Vincoli
+
+-   in una area a temperatura controllata devono rimanere solo prodotti che devo stare nello stesso range di temperatura
+-
