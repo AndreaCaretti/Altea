@@ -117,7 +117,6 @@ class EnterpriseMessageNotification {
     }
 
     async send(payload, tableData, logger, callback) {
-        this.logger.debug(`Send To Enterprise Messaging Client`);
         return new Promise((resolve, reject) => {
             const message = {
                 payload: Buffer.from(payload, "utf-8"),
@@ -130,6 +129,7 @@ class EnterpriseMessageNotification {
                     reject(new Error(oError));
                 },
             };
+            this.logger.debug(`Send To Enterprise Messaging Client`);
             this.stream.write(message);
         });
     }

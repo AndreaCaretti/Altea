@@ -55,7 +55,7 @@ class BGWorkerNotification {
             );
         } catch (Error) {
             // 'Todo: Open' // Gestire errore , riprendo inserimento in coda?
-            this.logger.info(Error);
+            this.logger.info(Error.message);
         }
 
         setImmediate(this.tick);
