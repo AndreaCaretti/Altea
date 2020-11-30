@@ -59,8 +59,8 @@ class CloudColdChain {
         // Insert Residence Time processor
         this.processorInsertResidenceTime.start();
 
-        // Update Residence Time processor
-        this.processorUpdateResidenceTime.start();
+        // // Update Residence Time processor
+        // this.processorUpdateResidenceTime.start();
 
         // Start Notification BG Worker
         this.BGWorkerNotification.start();
