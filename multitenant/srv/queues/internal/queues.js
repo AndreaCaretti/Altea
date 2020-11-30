@@ -15,6 +15,10 @@ class Queues {
 
         this.redisCredentials = xsenv.serviceCredentials({ tag: "cache" });
 
+        if (this.redisCredentials.cluster_mode) {
+            this.redisCredentials.uri =
+                "rediss://no-user-name-for-redis:GaJoFOorxmiPONZjZPabLYQLlcmgzAGU@rg-b1d65754-56bd-4059-bfc2-e113c2bad9e0-0001-001.rg-b1d65754-56bd-4059-bfc2-e113c2bad9e0.iroxbd.euc1.cache.amazonaws.com:1205";
+        }
         logger.info(`REDIS URL: ${this.redisCredentials.uri}`);
     }
 
@@ -58,48 +62,48 @@ class Queues {
 */
 
         try {
-            const cfIp = process.env.CF_INSTANCE_INTERNAL_IP;
-            if (cfIp === undefined) {
-                // LOCALE - non posso utilizzare il cluster
-                this.redisClient = new Redis(this.redisCredentials.uri);
-            } else {
-                //  CLOUD - utilizzo il cluster
-                /*
-                this.redisClient = new Redis.Cluster([
-                    {
-                        port: this.redisCredentials.port,
-                        host: this.redisCredentials.hostname,
-                    },
-                    {
-                        slotsRefreshTimeout: 2000,
-                        redisOptions: {
-                            tls: {},
-                            password: this.redisCredentials.password,
-                        },
-                    },
-                ]);
-                */
+            // const cfIp = process.env.CF_INSTANCE_INTERNAL_IP;
+            // if (cfIp === undefined) {
+            // LOCALE - non posso utilizzare il cluster
+            this.redisClient = new Redis(this.redisCredentials.uri);
+            // } else {
+            //     //  CLOUD - utilizzo il cluster
+            //     /*
+            //     this.redisClient = new Redis.Cluster([
+            //         {
+            //             port: this.redisCredentials.port,
+            //             host: this.redisCredentials.hostname,
+            //         },
+            //         {
+            //             slotsRefreshTimeout: 2000,
+            //             redisOptions: {
+            //                 tls: {},
+            //                 password: this.redisCredentials.password,
+            //             },
+            //         },
+            //     ]);
+            //     */
 
-                this.redisClient = new Redis.Cluster(
-                    [
-                        {
-                            host: this.redisCredentials.hostname,
-                            port: this.redisCredentials.port,
-                        },
-                    ],
-                    {
-                        slotsRefreshTimeout: 2500,
-                        dnsLookup: (address, callback) => callback(null, address),
-                        redisOptions: {
-                            tls: {
-                                host: this.redisCredentials.tls.host,
-                                port: this.redisCredentials.tls.port,
-                            },
-                            password: this.redisCredentials.password,
-                        },
-                    }
-                );
-            }
+            //     this.redisClient = new Redis.Cluster(
+            //         [
+            //             {
+            //                 host: this.redisCredentials.hostname,
+            //                 port: this.redisCredentials.port,
+            //             },
+            //         ],
+            //         {
+            //             slotsRefreshTimeout: 2500,
+            //             dnsLookup: (address, callback) => callback(null, address),
+            //             redisOptions: {
+            //                 tls: {
+            //                     host: this.redisCredentials.tls.host,
+            //                     port: this.redisCredentials.tls.port,
+            //                 },
+            //                 password: this.redisCredentials.password,
+            //             },
+            //         }
+            //     );
+            // }
         } catch (error) {
             this.logger.logObject("errore creazione cluster", error);
         }
