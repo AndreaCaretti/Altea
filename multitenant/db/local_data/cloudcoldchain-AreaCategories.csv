@@ -1,0 +1,4 @@
+ID,name,description,controlledTemperature
+66f18636-3000-11eb-adc1-0242ac120002,"Cold Room","Cold Room Area",true
+c07a1434-3000-11eb-adc1-0242ac120002,"No Temperature","No Temperature Area",false
+d2720fe8-3000-11eb-adc1-0242ac120002,"Refrigerator Truck","Refrigerator Truck",true
