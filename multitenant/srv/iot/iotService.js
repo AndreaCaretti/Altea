@@ -17,6 +17,7 @@ module.exports = (iot) => {
         let startEvent = "";
         let endEvent = "";
         let instruction = "";
+        let areaID;
         try {
             let area;
             if (!outOfRangeToUpdate[0]) {
@@ -30,16 +31,19 @@ module.exports = (iot) => {
                     Status = "CLOSE";
                 }
 
-                // CALCOLARE AREA PARTENDO DA DEVICE IOT-----
                 area = await tx.run(
                     SELECT.one("ID")
                         .from(AreasTab)
                         .where({ ID_DeviceIoT: outOfRange.extensions.modelId })
                 );
 
+                if (!area) {
+                    areaID = area.ID;
+                }
+
                 await tx.create(outOfRangeTab).entries({
                     ID_DeviceIoT: outOfRange.extensions.modelId,
-                    area_ID: area.ID,
+                    area_ID: areaID,
                     startEventTS: startEvent,
                     endEventTS: endEvent,
                     status: Status,
@@ -63,14 +67,12 @@ module.exports = (iot) => {
                     endEventTS: endEvent,
                 });
             }
-
             await tx.commit();
-
             if (outOfRange.data[0].action === "OPEN") {
                 notificationService.alert(
                     request.user.id,
-                    request._.req.hostname,
-                    area.ID,
+                    request.user.tenant,
+                    areaID,
                     outOfRange.eventTime,
                     "LOG_ALERT",
                     1, // LOG_ALERT
@@ -79,11 +81,11 @@ module.exports = (iot) => {
                 );
             }
 
-            message = `fine operazione${instruction}${outOfRange.data[0].entityId}`;
+            message = `fine operazione ${instruction}${outOfRange.data[0].entityId}`;
             this.cclogger.debug(message);
         } catch (error) {
-            message = `error console:${error}`;
-            this.cclogger.logException(message);
+            //  message = `error console:${error}`;
+            this.cclogger.logException("ERRORE SERVIZIO iotService", error);
             await tx.rollback();
         }
         return message;

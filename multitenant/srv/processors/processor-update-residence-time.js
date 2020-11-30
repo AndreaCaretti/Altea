@@ -39,7 +39,7 @@ class ProcessorHuMovements {
     async start() {
         this.logger.info(`Avvio Residence Time Update Processorr...`);
         // setImmediate(this.tick);
-        setTimeout(this.tick, 3000);
+        setTimeout(this.tick, 5000);
     }
 
     async getResidenceTimesToElaborate(technicalUser) {
