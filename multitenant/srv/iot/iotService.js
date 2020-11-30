@@ -37,7 +37,7 @@ module.exports = (iot) => {
                         .where({ ID_DeviceIoT: outOfRange.extensions.modelId })
                 );
 
-                if (area) {
+                if (!area) {
                     areaID = area.ID;
                 }
 
@@ -85,7 +85,7 @@ module.exports = (iot) => {
             this.cclogger.debug(message);
         } catch (error) {
             //  message = `error console:${error}`;
-            this.cclogger.logException(error);
+            this.cclogger.logException("ERRORE SERVIZIO iotService", error);
             await tx.rollback();
         }
         return message;
