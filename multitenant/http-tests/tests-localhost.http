@@ -90,7 +90,7 @@ Authorization: Basic Alice:Alice
 # --------------------------------------------------------------------
 # --------------------------------------------------------------------
 
-### Create HandlingUnitsMovements
+### Create HandlingUnitsMovements ---------------------- DO NOT USE -----------------
 POST http://localhost:4004/handling-unit-moved/HandlingUnitsMovements HTTP/1.1
 Authorization: Basic Alice:Alice
 Content-Type: application/json
@@ -105,7 +105,7 @@ Content-Type: application/json
 }
 
 
-### GET HandlingUnitsMovements
+### GET HandlingUnitsMovements---------------------- DO NOT USE -----------------
 GET http://localhost:4004/handling-unit-moved/HandlingUnitsMovements HTTP/1.1
 Authorization: Basic Alice:Alice
 Content-Type: application/json
@@ -118,8 +118,7 @@ Content-Type: application/json
 ### Get bearer token
 # @name getToken
 GET https://{{customera-subdomain}}.authentication.eu10.hana.ondemand.com/oauth/token?grant_type=client_credentials&response_type=token HTTP/1.1
-Authorization: Basic sb-dev-cloud-cold-chain!t61773 I4pSt9LZ2ar5djKL7lB518ZWV6s=
-
+Authorization: Basic sb-ccp-provider-dev-qas-dev-cloud-cold-chain!t61773 oEPmeoq3s9kvPuGZsd89POK9Eo8=
 
 ### E' possibile collegare il cap locale al db hana in cloud! esempio get
 GET http://localhost:4004/handling-unit-moved/HandlingUnitsRawMovements/$count HTTP/1.1

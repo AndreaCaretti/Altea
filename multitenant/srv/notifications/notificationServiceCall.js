@@ -14,6 +14,7 @@ module.exports = (notification) => {
         await notificationService.alert(
             notificationData.user,
             notificationData.tenant,
+            notificationData.area,
             notificationData.alertBusinessTime,
             notificationData.alertCode,
             notificationData.alertLevel,

@@ -76,8 +76,9 @@ define entity ControlPointsCategories : cuid, managed {
 @UI.Identification : [{Value : name}]
 define entity AreaCategories : cuid, managed {
     @title : 'Area Category'
-    name        : String(50);
-    description : localized String(200);
+    name                  : String(50);
+    description           : localized String(200);
+    controlledTemperature : Boolean;
 }
 
 @cds.odata.valuelist
@@ -250,7 +251,8 @@ define entity ResidenceTime : cuid, managed {
     inBusinessTime     : Timestamp;
     outBusinessTime    : Timestamp;
     residenceTime      : Integer;
-    tor                : Integer;
+    singleTOR          : Integer;
+    totalTOR           : Integer;
     tmin               : Decimal;
     tmax               : Decimal;
     torElaborationTime : Timestamp;
@@ -268,6 +270,7 @@ define entity Alerts : cuid, managed {
 define entity outOfRange : cuid, managed {
     @title : 'ID Device IoT'
     ID_DeviceIoT : String;
+    area         : Association to one Areas;
     startEventTS : Timestamp;
     endEventTS   : Timestamp;
     status       : String;
@@ -275,6 +278,7 @@ define entity outOfRange : cuid, managed {
 }
 
 define entity Notification : cuid, managed {
+    area              : UUID;
     alertBusinessTime : Timestamp;
     notificationTime  : Timestamp;
     alertCode         : String(20);
