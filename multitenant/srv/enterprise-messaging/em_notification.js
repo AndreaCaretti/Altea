@@ -1,16 +1,18 @@
 const { Client } = require("@sap/xb-msg-amqp-v100");
+const xsenv = require("@sap/xsenv");
 
 const TOPICNAME = "topic";
 const EMLOG_NAME = "Enterprise Messaging";
 
-// https://github.com/SAP-samples/enterprise-messaging-client-nodejs-samples/tree/master/xb-msg-amqp-v100-doc#sender
-// https://github.com/saphanaacademy/em-consumer
 class EnterpriseMessageNotification {
     constructor(logger) {
         if (!logger) {
             throw Error("Si ma il logger non me lo passi?");
         }
         this.logger = logger;
+        xsenv.loadEnv();
+
+        this.redisCredentials = xsenv.serviceCredentials({ tag: "cache" });
     }
 
     static getInstance(logger) {

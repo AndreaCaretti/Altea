@@ -205,7 +205,15 @@ define entity HandlingUnits : cuid, managed {
 }
 
 define entity HandlingUnitsMovements : cuid, managed {
+<<<<<<< HEAD
+<<<<<<< HEAD
+    MSG_ID       : String(18);
+=======
+    MSG_ID       : cloudcoldchain.MSG_ID;
+>>>>>>> origin/main
+=======
     MSG_ID       : UUID;
+>>>>>>> ACARETTI
     controlPoint : Association to one ControlPoints;
     TE           : Timestamp;
     TS           : Timestamp;
@@ -219,7 +227,15 @@ annotate Books with {
 }
 
 define entity HandlingUnitsRawMovements : cuid, managed {
+<<<<<<< HEAD
+<<<<<<< HEAD
+    MSG_ID : String(18);
+=======
     MSG_ID : String;
+>>>>>>> origin/main
+=======
+    MSG_ID : String;
+>>>>>>> ACARETTI
     CP_ID  : String;
     TE     : String;
     TS     : String;

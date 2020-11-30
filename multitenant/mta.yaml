@@ -470,13 +470,13 @@ resources:
       parameters:
           service: redis-cache
           service-plan: standard
-  #
-  # ┌─────────────────────────────────────┐   #
-  # │        ENTERPRISE MESSAGING         │   #
-  # └─────────────────────────────────────┘   #
-  #          
+    #
+    # ┌─────────────────────────────────────┐   #
+    # │        ENTERPRISE MESSAGING         │   #
+    # └─────────────────────────────────────┘   #
+    #
     - name: mtt-enterprise-messaging
-        type: org.cloudfoundry.existing-service
-        parameters:
-        service: enterprise-messaging
-        service-plan: dev
+      type: org.cloudfoundry.managed-service
+      parameters:
+          service: enterprise-messaging
+          service-plan: default
