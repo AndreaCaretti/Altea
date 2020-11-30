@@ -47,6 +47,7 @@ modules:
           - name: mtt-saas
           - name: mtt-application-logging
           - name: mtt-redis
+          - name: mtt-enterprise-messaging
       provides:
           - name: mtt-cap-services-api
             properties:
