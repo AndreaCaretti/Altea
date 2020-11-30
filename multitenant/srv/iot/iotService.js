@@ -30,7 +30,6 @@ module.exports = (iot) => {
                     Status = "CLOSE";
                 }
 
-                // CALCOLARE AREA PARTENDO DA DEVICE IOT-----
                 area = await tx.run(
                     SELECT.one("ID")
                         .from(AreasTab)
@@ -62,9 +61,8 @@ module.exports = (iot) => {
                     startEventTS: startEvent,
                     endEventTS: endEvent,
                 });
+                await tx.commit();
             }
-
-            await tx.commit();
 
             if (outOfRange.data[0].action === "OPEN") {
                 notificationService.alert(

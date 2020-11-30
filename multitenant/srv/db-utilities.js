@@ -169,15 +169,16 @@ class DB {
 
     static async insertIntoTable(tableName, row, tx, Logger) {
         const oTX = tx;
+        let recordsCount;
         try {
-            const recordsCount = await oTX.create(tableName).entries(row);
+            recordsCount = await oTX.create(tableName).entries(row);
             Logger.debug(`Record append: ${tableName.name}/ ${JSON.stringify(row)}}`);
-            await oTX.commit();
-            return recordsCount;
         } catch (error) {
             oTX.rollback();
             throw Error(`Wrong insert: ${error}/ ${JSON.stringify(row)}}`);
         }
+        await oTX.commit();
+        return recordsCount;
     }
 
     static async getUUID() {
@@ -187,10 +188,6 @@ class DB {
     // ----- DA PROVARE ------ //
     static async join(tableName, tableNameJoin, joinContidion, whereCondition, tx, Logger) {
         // ----- DA PROVARE ------ //
-
-        // JoinCondition nel formato  "xpr: ["A.category_ID", "=", "B.ID"]"
-        // whereCondition nel formato  "A.ID", "=", "valueString"
-
         try {
             const res = await tx.run(
                 SELECT
