@@ -280,23 +280,3 @@ define entity OutOfRangeHandlingUnits : cuid, managed {
     startReason  : cloudcoldchain.reasonType;
     duration     : Integer;
 }
-/*
-
-| _ID_                                 | outOfRange (OutOfRange)              | handlingUnit (HandlingUnit) | startTime                | endTime                  | startReason (enum) | duration (Integer) |     |
-| ------------------------------------ | ------------------------------------ | --------------------------- | ------------------------ | ------------------------ | ------------------ | ------------------ | --- |
-| 99d2f997-1e9c-4b21-8817-d48171ead166 | 10d2f997-1e9c-4b21-8817-d48171ead166 | _GUID_                      | 2020-10-14T09:01:33.763Z | 2020-11-14T09:01:33.763Z |                    |                    |     |
-| _GUID_                               | cella2                               |                             | 2020-10-14T09:01:33.763Z | 2020-10-19T09:01:33.763Z |                    |                    |     |
-| _GUID_                               | cella3                               |                             | 2020-10-14T09:01:33.763Z |                          |                    |                    |     |
-
--   `outOfRange`: collegamento al segmento `OutOfRange` che ha scatenato il problema
--   `startTime`: ora di inizio del problema oppure momento in cui la cella è entrata nella cella
--   `startReason`: motivo dell'inizio del problema
-    -   `WAS_ALREADY_IN_AREA`: l'handling unit si trovava nell'area nel momento dell'inizio del problema
-    -   `ARRIVED_IN_AREA`: l'hangling unit è entrato nell'area durante il problema
--   `endTime`: ora di fine del problema oppure momento in cui la cella è uscita dalla cella
--   `endReason`: motivo della fine del problema
-    -   `EXIT_FROM_AREA`: l'handling unit è uscita dall'area
-    -   `END_PROBLEM`: il problema è stato risolto
--   `duration`: durata in minuti in cui il problema ha avuto impatti sull'handling unit
-
-*/
