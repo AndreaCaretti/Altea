@@ -121,7 +121,7 @@ class EnterpriseMessageNotification {
         return new Promise((resolve, reject) => {
             const message = {
                 payload: Buffer.from(payload, "utf-8"),
-                done: (data, request) => {
+                done: () => {
                     this.logger.info(`${EMLOG_NAME} Sent`);
                     callback(tableData, logger);
                     resolve("Inviato");
