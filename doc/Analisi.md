@@ -38,7 +38,7 @@ Per esempio se un cartone contiene 20 confezioni, viene spedito e tracciato, in 
 
 Viene inviato il seriale RFID contenente l'sscc dell'handling unit, la location, il lotto, business e technical send timestamp. L'RFID diventa la chiave univoca dell'unità di movimentazione. Tutti i messaggi successivi faranno riferimento all'unità di movimentazione tramite questo ID globalmente univoco, globalmente vuol dire univoco anche rispetto a tutti gli altri clienti della piattaforma.  
 Per generalizzare il processo, il nome tecnico del campo id dell'unità non sarà RFID, ma HANDLING_UNIT_ID.
-L'etichettatrice esegue una singola chiamata al gateway accentratore locale di plant che accoda il messaggio per l'invio a CCP. (Alternativa l'etichettatrice potrebbe raggruppare i codici generati e mandare pacchetti di messaggi). Il messaggio verso gateway viene inviato tramite protocollo MQTTs e da accentratore verso cloud in MQTTs.  
+L'etichettatrice esegue una singola chiamata al gateway accentratore locale di plant che accoda il messaggio per l'invio a CCP. Il messaggio verso gateway viene inviato tramite protocollo MQTTs e da accentratore verso cloud in MQTTs.  
 L'accentratore invia l'unità di movimentazione in CCP, l'unità viene creata, nella configurazione in cloud delle etichettatrici sarà possibile definire in quale area andare a posizionare l'handling unit appena etichettata. Dovremo avere l'elenco delle aree. L'area sarà un tipo generico di cold room, refrigerator truck oppure un'area a temperatura non controllata.
 
 Gestione errori: se per errore viene inviato due volte lo stesso RFID il processo dovrebbe bloccarsi. Come vogliamo gestirlo?  
@@ -72,17 +72,20 @@ Il T° frontend deve avere un buffer in cui salvare i dati che non riesce ad inv
 Nel frattempo ogni 5 minuti gira il processo in CCP che calcola i dati di permanenza in area di ogni handling unit. Il processo incrocia i dati di movimentazione delle handling units con i dati di temperatura inviati dalle celle frigorifere per calcolare il T Min, T Max e TOR.  
 Il TOR delle aree senza controllo temperatura è uguale al tempo di permanenza in area, nel caso di zona a temperatura controllata considera i tempi di anomalia considerando che una handling unit potrebbe essere solo passata dalla cella durante l'anomalia, magari perchè è stata sposata in una cella funzionante.  
 Cioè se una sacca entra in cella alle 10:00 ed esce alle 16:00 e la cella ha un'anomalia di temperatura dalle 14:00 alle 20:00 il TOR è di 2 ore (dalle 14:00 alle 16:00).  
-Il calcolo delle anomalia arriva alla risoluzione del minuto.  
-_Alternativa, la cella è in grado di dirci dall'ora A all'ora B quanti minuti è stata fuori range, deve essere in grado di supportare molteplici richieste in parallelo, una per handling unit, possiamo ottimizzare inserendo una cache per evitare chiamate con gli stessi parametri. I servizi onPremise della cella devono essere rangiungibile dall'esterno, utilizzare SAP Cloud Connector?_
+Il calcolo delle anomalia arriva alla risoluzione del minuto.
 
 Nel frattempo ogni 15 minuti gira il processo in CCP che estrae tutte le handling unit arrivate a destinazione, estrae tutte le informazioni riepilogative dell'handling unit, prepara un JSON e lo scrive in Blockchain, il servizio Blockchain restituisce l'hash del JSON, l'hash viene salvato in CCP, i dati consolidati vengono spostati del database di archiviazione.
 _(come capiamo se il processo di spedizione della sacca è concluso e consolidato?_)
 
-Nel frattempo il communication frontend richiede a CCP i dati di una specifica handling unit _(o richiede i dati riepilogativi di un lotto?)_ CCP recupera i dati di riepilogo, se il tracciamento dell'handling unit è terminato e consolidato _(come e quando determiniamo e consideriamo un tracking concluso e consolidato?)_ viene fatta la verifica in blockchain della validità dei dati archiviati.
+Nel frattempo l'arrivo di segnalazioni dalle celle frigorifere vengono inviati al communication frontend.
 
-Nel frattempo il communication frontend richiede i dati di temperatura di un'area in un dato periodo di tempo, CCP recupera i dati di temperatura dal db iot.
+Nel frattempo tutti i warning/errori determinati dalla piattaforma vengono inviati al communication frontend.
 
-Nel frattempo la piattaforma tiene monitorate le connessioni con i gateway edge.
+Nel frattempo il communication frontend richiede a CCP i dati di una specifica handling unit o dati riepilogativi di un lotto, CCP recupera i dati di riepilogo, se il tracciamento dell'handling unit è terminato e consolidato _(come e quando determiniamo e consideriamo un tracking concluso e consolidato?)_ viene fatta la verifica in blockchain della validità dei dati archiviati.
+
+Nel frattempo il communication frontend richiede i dati di temperatura di un'area in un dato periodo di tempo, CCP recupera i dati di temperatura dal datalake IoT.
+
+_Nel frattempo la piattaforma tiene monitorate le connessioni con i gateway edge._
 
 ## Casistiche determinazione TOR prodotto in cella con anomalie
 
@@ -115,15 +118,20 @@ restiamo in attesa dell'evento di chiusura OutOfRange oppure di uscita dall'area
 se riceviamo l'evento di chiusura anomalia, azzeriamo il TOR.
 se riceviamo l'evento di uscita dalla cella, calcoliamo il TOR da sommare al movimento successivo.
 
-# Alternative:
+# Vincoli:
 
-## Cliente non vuole dati in cloud
+## Celle con solo prodotti appartenenti allo stesso range
 
-Manteniamo i dati on premise oppure in private cloud? Solo dati in cloud, dati on premise non sono in ambito
+Nelle celle sono contenuti solo prodotti che devono rimanere nello stesso range di temperatur
 
-## Logica di calcolo TOR on edge
+## Piattaforma solo Cloud
 
-Per calcolare il TOR in edge l'EDGE dovrebbe avere tutte le informazioni per determinare i tempi di fuori temperatura, mantenere lo storico di tutte le temperature, oppure la cella deve ritornare i minuti di anomalia nel periodo
+Tutta la piattaforma centrale è progettata per mantenere i dati in cloud
+
+## Logica di calcolo TOR solo in Cloud
+
+Il calcolo del TOR viene effettuato in Cloud
+Per calcolare il TOR in edge l'EDGE dovrebbe avere tutte le informazioni per determinare i tempi di fuori temperatura, mantenere lo storico di tutte le temperature
 
 # Tipologie di utenti:
 
@@ -134,17 +142,11 @@ Riceve le notifiche di alert di alto livello della piattaforma, esempio alert su
 
 ## Superuser
 
-Utente gestore dei dati del singolo cliente (definizione di una nuova cella frigorifera, gesione anagrafica prodotti, ...), i clienti finali della piattaforma hanno accesso con questo livello.
-Riceve le notifiche di alert di alto livello del cliente, esempio disconnessione del gateway accentratore di plant con il cloud.
+Utente gestore dei dati del singolo cliente (definizione di una nuova cella frigorifera, gestione anagrafica prodotti, ...), i clienti finali della piattaforma hanno accesso con questo livello.
 
-## Operatore
+## Altre tipologie
 
-Utente operativo, utente che lavora all'interno del plant, i clienti finali della piattaforma hanno accesso con questo livello.
-Riceve le notifiche di alert di basso livello del cliente, esempio segnalazioni in arrivo dalla cella, problemi riconoscimento RFID.
-
-## Utente
-
-?
+Ci sono anche altre tipologie di utenti che non accederanno alla piattaforma centrale ma che riceveranno notifiche di warning/errori e potranno fare richieste di dati puntuali/statitisci. Questi utenti accederanno tramite il communication frontend.
 
 # Tabelle centrali di piattaforma
 
@@ -164,15 +166,25 @@ Categorie di clienti
 
 Dati anagrafici soggetti
 
-| _ID_   | name (50)  | category (CustomerCategories) | gs1CompanyPrefix (9) | tenantGUID                           |
-| ------ | ---------- | ----------------------------- | -------------------- | ------------------------------------ |
-| _GUID_ | Customer A | Produttore                    | 123456789            | a1d03e7f-53e4-414b-aca0-c4d44157f2a0 |
-| _GUID_ | Customer B | Trasportatore                 | 234567890            | dfea1d03e7f-53e4-414b-aca0-c4d4334ff |
-| _GUID_ | Customer C | Depositario                   | 567891234            | e34s1d03e7f-53e4-414b-aca0-ddde3322a |
+| _ID_   | name (50)  | category (CustomerCategories) | tenantGUID                           |
+| ------ | ---------- | ----------------------------- | ------------------------------------ |
+| _GUID_ | Customer A | Produttore                    | a1d03e7f-53e4-414b-aca0-c4d44157f2a0 |
+| _GUID_ | Customer B | Trasportatore                 | dfea1d03e7f-53e4-414b-aca0-c4d4334ff |
+| _GUID_ | Customer C | Depositario                   | e34s1d03e7f-53e4-414b-aca0-ddde3322a |
+
+-   `tenantGUID`: ID del tenant/subaccount SAP Cloud Platform
+
+## Tabella CustomersCompanyCodes
+
+| _ID_   | gs1CompanyPrefix (9) |
+| ------ | -------------------- |
+| _GUID_ | 123456789            |
+| _GUID_ | 234567890            |
+| _GUID_ | 567891234            |
 
 # Tabelle configurazione piattaforma
 
-Tabelle per parametrizzare la piattaforma - DB Multitenant
+Tabelle per parametrizzare la piattaforma, i record vengono inseriti nel db centrale e replicati su db dei clienti - DB Multitenant
 
 ## Tabella CustomerCategories
 
@@ -364,7 +376,7 @@ Tabella contenenti dati transazionali
 
 ## Tabella HandlingUnitsRawMovements
 
-Passaggi Handling Unit da Control Point
+Passaggi Handling Unit da Control Point, movimenti raw campi tutti stringa senza controlli
 
 | _ID_   | CP_ID (String 36)                    | SSCC_ID (SSCC)     | TE (String 24)           | TS (String 24)           | DIR (String 1) |
 | ------ | ------------------------------------ | ------------------ | ------------------------ | ------------------------ | -------------- |
@@ -385,7 +397,7 @@ Passaggi Handling Unit da Control Point
 
 ## Tabella HandlingUnitsMovements
 
-Passaggi Handling Unit da Control Point
+Passaggi Handling Unit da Control Point, campi controllati
 
 | _ID_   | sscc (SSCC)        | businessTime (Timestamp) | controlPoint           | direction | destinationArea                  | elaborationTime (Timestamp) |
 | ------ | ------------------ | ------------------------ | ---------------------- | --------- | -------------------------------- | --------------------------- |
@@ -432,42 +444,69 @@ Permanenza Handling Unit in area
 
 I dati di temperatura sono salvati nel Data Lake IoT, la tabella viene riportata qui per promemoria, i campi sono provvisori
 
-| _Area_     | _Ora_ | Temperatura °C | Anomalia     |
-| ---------- | ----- | -------------- | ------------ |
-| Stoccaggio | 16:00 | 4              |              |
-| Stoccaggio | 16:15 | 4              |              |
-| Stoccaggio | 16:30 | 20             | OUT_OF_RANGE |
-| Stoccaggio | 16:35 | 20             | OUT_OF_RANGE |
-| Stoccaggio | 16:40 | 20             | OUT_OF_RANGE |
-| Stoccaggio | 16:45 | 20             | OUT_OF_RANGE |
-| Stoccaggio | 16:50 | 20             | OUT_OF_RANGE |
-| Stoccaggio | 16:55 | 4              |              |
-| Stoccaggio | 17:00 | 4              |              |
+| _Area_     | _Ora_ | Temperatura °C |
+| ---------- | ----- | -------------- |
+| Stoccaggio | 16:00 | 4              |
+| Stoccaggio | 16:15 | 4              |
+| Stoccaggio | 16:30 | 20             |
+| Stoccaggio | 16:35 | 20             |
+| Stoccaggio | 16:40 | 20             |
+| Stoccaggio | 16:45 | 20             |
+| Stoccaggio | 16:50 | 20             |
+| Stoccaggio | 16:55 | 4              |
+| Stoccaggio | 17:00 | 4              |
 
-# Tabella outOfRange
+# Tabella OutOfRange
 
-Tabelle di log per le segnalazioni ricevute dal iot per alert di temperatura out of range e calcolo del TOR
+Tabella delle segnalazioni ricevute dal iot per alert di temperatura out of range e calcolo del TOR
 
-| _ID_                                 | ID_DeviceIot | startEventTS             | endEventTS               | TOR |
-| ------------------------------------ | ------------ | ------------------------ | ------------------------ | --- |
-| 10d2f997-1e9c-4b21-8817-d48171ead166 | cella1       | 2020-10-14T09:01:33.763Z | 2020-11-14T09:01:33.763Z | 120 |
-| _GUID_                               | cella2       | 2020-10-14T09:01:33.763Z | 2020-10-19T09:01:33.763Z | 190 |
-| _GUID_                               | cella3       | 2020-10-14T09:01:33.763Z |                          | 250 |
+| _ID_                                 | ID_DeviceIot | startEventTS             | endEventTS               | area (Area) | segmentId (GUID) |
+| ------------------------------------ | ------------ | ------------------------ | ------------------------ | ----------- | ---------------- |
+| 10d2f997-1e9c-4b21-8817-d48171ead166 | cella1       | 2020-10-14T09:01:33.763Z | 2020-11-14T09:01:33.763Z |             |                  |
+| _GUID_                               | cella2       | 2020-10-14T09:01:33.763Z | 2020-10-19T09:01:33.763Z |             |                  |
+| _GUID_                               | cella3       | 2020-10-14T09:01:33.763Z |                          |             |                  |
+
+-   `ID_DeviceIot`: ID del device IoT che ha inviato la segnalazione
+-   `startEventTS`: è l'ora di inizio del problema
+-   `endEventTS`: è l'ora di fine del problema
+-   `area`: area collegata al device IoT nel momento in cui abbiamo ricevuto la segnalazione
+-   `segmentId`: ID del segmento IoT collegato alla segnalazione
+
+# Tabella OutOfRangeHandlingUnits
+
+Tabella delle handling units collegate alla segnalazione di out of range
+
+| _ID_                                 | outOfRange (OutOfRange)              | handlingUnit (HandlingUnit) | startTime                | endTime                  | startReason (enum) | duration (Integer) |     |
+| ------------------------------------ | ------------------------------------ | --------------------------- | ------------------------ | ------------------------ | ------------------ | ------------------ | --- |
+| 99d2f997-1e9c-4b21-8817-d48171ead166 | 10d2f997-1e9c-4b21-8817-d48171ead166 | _GUID_                      | 2020-10-14T09:01:33.763Z | 2020-11-14T09:01:33.763Z |                    |                    |     |
+| _GUID_                               | cella2                               |                             | 2020-10-14T09:01:33.763Z | 2020-10-19T09:01:33.763Z |                    |                    |     |
+| _GUID_                               | cella3                               |                             | 2020-10-14T09:01:33.763Z |                          |                    |                    |     |
+
+-   `outOfRange`: collegamento al segmento `OutOfRange` che ha scatenato il problema
+-   `startTime`: ora di inizio del problema oppure momento in cui la cella è entrata nella cella
+-   `startReason`: motivo dell'inizio del problema
+    -   `WAS_ALREADY_IN_AREA`: l'handling unit si trovava nell'area nel momento dell'inizio del problema
+    -   `ARRIVED_IN_AREA`: l'hangling unit è entrato nell'area durante il problema
+-   `endTime`: ora di fine del problema oppure momento in cui la cella è uscita dalla cella
+-   `endReason`: motivo della fine del problema
+    -   `EXIT_FROM_AREA`: l'handling unit è uscita dall'area
+    -   `END_PROBLEM`: il problema è stato risolto
+-   `duration`: durata in minuti in cui il problema ha avuto impatti sull'handling unit
 
 # Tabella Notifications
 
 Tabelle di alert applicativi rilevati dalla piattaforma segnalati verso Keethings, che a sua volta invia alle chatroom:
 
-| _ID_   | _alertBusinessTime_       | area                                 | notificationTime         | alertCode | alertLevel (AlertLevel) | payload (String JSON)                | GUID                                 |
-| ------ | ------------------------  | ------------------------------------ | ------------------------ | --------- | ----------------------- | ---------------------------------    | ------------------------------------ |
-| _GUID_ | 2020-10-14T09:01:31.763Z  | 8b78d720-e240-4912-92dd-6e654474a694 | 2020-10-14T09:01:32.763Z |           | Grave                   | { "msg" : "RFID XXX già esistente"   | 10d2f997-1e9c-4b21-8817-d48171ead166 |
-| _GUID_ | 2020-10-14T09:01:33.763Z  | 8b78d720-e240-4912-92dd-6e654474a69  | 2020-10-14T09:01:34.763Z | OUT       | Alert                   | { "msg": "Temperatura cella..."}     | 10d2f997-1e9c-4b21-8817-d48171ead166 |
+| _ID_   | _alertBusinessTime_      | area                                 | notificationTime         | alertCode | alertLevel (AlertLevel) | payload (String JSON)              | GUID                                 |
+| ------ | ------------------------ | ------------------------------------ | ------------------------ | --------- | ----------------------- | ---------------------------------- | ------------------------------------ |
+| _GUID_ | 2020-10-14T09:01:31.763Z | 8b78d720-e240-4912-92dd-6e654474a694 | 2020-10-14T09:01:32.763Z |           | Grave                   | { "msg" : "RFID XXX già esistente" | 10d2f997-1e9c-4b21-8817-d48171ead166 |
+| _GUID_ | 2020-10-14T09:01:33.763Z | 8b78d720-e240-4912-92dd-6e654474a69  | 2020-10-14T09:01:34.763Z | OUT       | Alert                   | { "msg": "Temperatura cella..."}   | 10d2f997-1e9c-4b21-8817-d48171ead166 |
 
--   area : area relativa a avvenimento di notifica
--   alertBusinessTime: è l'ora in cui è successo l'evento (esempio per le celle esempio lo start time del problema sulla cella)
--   notificationTime: è l'ora in cui abbiamo aggiunto la notifica alla coda enterprise messaging
--   alertCode: codice fisso dell'alert, valori possibile aggiungere man mano
--   alertLevel: livello di alert syslog:
+-   `area` : area relativa a avvenimento di notifica
+-   `alertBusinessTime`: è l'ora in cui è successo l'evento (esempio per le celle esempio lo start time del problema sulla cella)
+-   `notificationTime`: è l'ora in cui abbiamo aggiunto la notifica alla coda enterprise messaging
+-   `alertCode`: codice fisso dell'alert, valori possibile aggiungere man mano
+-   `alertLevel`: livello di alert syslog:
     -   LOG*EMERG 0 /* system is unusable \_/
     -   LOG*ALERT 1 /* action must be taken immediately \_/
     -   LOG*CRIT 2 /* critical conditions \_/
@@ -476,8 +515,8 @@ Tabelle di alert applicativi rilevati dalla piattaforma segnalati verso Keething
     -   LOG*NOTICE 5 /* normal but significant condition \_/
     -   LOG*INFO 6 /* informational \_/
     -   LOG*DEBUG 7 /* debug-level messages \_/
--   payload: JSON contente i dettagli dell'alert che verrà inviato alla coda
--   GUID: guid del record scatenante l'evento, potrebbe anche non esserci, per le celle è il guid della tabella outOfRange
+-   `payload`: JSON contente i dettagli dell'alert che verrà inviato alla coda
+-   `GUID`: guid del record scatenante l'evento, potrebbe anche non esserci, per le celle è il guid della tabella outOfRange
 
 # Tabella Audits
 
@@ -783,8 +822,8 @@ https://help.sap.com/viewer/bf82e6b26456494cbdd197057c09979f/Cloud/en-US/ac83090
 | `central/cloud-foundry/xsuaa/xs-security.json`                           | Authorization Scopes and Roles configuration central platform                            |
 | `central/mta.yaml`                                                       | MTA yaml configuration for the whole central project                                     |
 | `central/package.json`                                                   | Central project metadata and configuration                                               |
-| `tenant/`                                                                | Folder with with customer tenant dependent components                                    |
-| `tenant/db`                                                              | Customer tenant domain models                                                            |
+| `multitenant/`                                                           | Folder with with customer tenant dependent components                                    |
+| `multitenant/db`                                                         | Customer tenant domain models                                                            |
 | `iot/`                                                                   | IoT Components                                                                           |
 | `enterprise-messaging/`                                                  | Enterprise Messaging Components Components                                               |
 | `readme.md`                                                              | Main documentation (this document)                                                       |
@@ -872,15 +911,14 @@ Solo sottoscrizione alla cloud cold chain e portale, CF non attivato
 
 ## Determinazione HandlingUnitsResidenceTime-outBusinessTime e residenceTime
 
--   ogni n minuti random parte un processo per un singolo cliente
+-   ogni n minuti parte un processo per un singolo cliente
 -   processo che ricerca tutti i record in `HandlingUnitsResidenceTime` senza `outBusinessTime`
 -   per ogni record cerca un record con T > del T movimento (piu vicino) e con step = step del record + 1 oppure step del record - 1
 -   se lo trova aggiorna il campo `outBusinessTime` con `inBusinessTime` del record trovato
--   calcola la differenza in minuti arrotondando per eccesso di `outBusinessTime` - `inBusinessTime`
--   se l'area è l'area in cui è in questo momento la handling unit (capibile leggendo la tabella `HandlingUnits`) aggiorna il campo residenceTime = current time - inBusinessTime
+-   se ho `outBusinessTime` calcola la differenza in minuti di `outBusinessTime` - `inBusinessTime` e aggiorna il campo `residenceTime`
+-   se l'area è l'area in cui è in questo momento la handling unit (campendolo leggendo la tabella `HandlingUnits`) aggiorna il campo `residenceTime = current time - inBusinessTime`
 -   se l'area non è a temperatura controllata riporta il campo `residenceTime` nel campo `singleTOR` e imposta il `torElaborationTime`
--   se l'area è a temperatura controllata calcolo il `residenceTime` se ho `outBusinessTime`, altrimenti controllo l'area attuale della HU e se coincide calcolo il `residenceTime` = current time - inBusinessTime
-    -   se l'area è a temperatura controllata, non modifico il TOR che dovrebbe essere 0 oppure pari al valore calcolato da un'altro processo che intercetta gli alert sui segmenti delle celle.
+-   se l'area è a temperatura controllata, non modifico il TOR che dovrebbe essere 0 oppure pari al valore calcolato da un'altro processo che intercetta gli alert sui segmenti delle celle.
 
 ## Ingestion dati temperatura IoT
 
@@ -893,6 +931,18 @@ Solo sottoscrizione alla cloud cold chain e portale, CF non attivato
 -   enterprise messaging invia i dati al webhook che punta al servizio cap `/iot/segment`
 -   il servizio cap aggiorna la tabella `OutOfRange`
 -   chiama il metodo `alert` della classe `Notifications`
+-   inserisce nella coda `OUT_OF_RANGE` un record per indicare la creazione o la fine di un segmento
+
+## Aggiornamento tabella con problemi legati all'handling units
+
+-   classe `BGWorkerOutOfRangeHandlingUnits` in attesa di qualcosa nella coda `OUT_OF_RANGE` cioè in attesa di segnalazioni da IoT
+-   se è un inizio di problema:
+    -   cerca tutte le handling units che erano nell'area nel momento dell'inizio del problema leggendo la tabella `ResidenceTime` con `area = area con il problema e inAreaBusinessTime <= inizio problema e ( outBusinessTime = vuoto oppure outBusinessTime >= inizio problema)`
+    -   per ogni handling unit crea un record nella tabella `OutOfRangeHandlingUnits` impostando i campi `startTime` e la reason `WAS_IN_AREA`
+-   se è una fine di problema:
+    -   cerca tutte le handling units collegate al problema cercando nella tabella `OutOfRangeHandlingUnits` (se non trova record vuol dire che non è arrivato l'inizio del problema, per adesso errore)
+    -   per ogni handling unit aggiorna il campo `END_OF_PROBLEM`
+-   se il record è completo cioè ha sia `startTime` che `endTime` aggiorna il campo `duration`
 
 ## Notifications
 
