@@ -122,6 +122,7 @@ class EnterpriseMessageNotification {
                 payload: Buffer.from(payload, "utf-8"),
                 done: () => {
                     this.logger.info(`${EMLOG_NAME} Sent`);
+                    this.logger.info(`${payload} Data Sent`);
                     callback(tableData, logger);
                     resolve("Inviato");
                 },
