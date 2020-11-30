@@ -46,3 +46,4 @@ multitenant/cloud-foundry/html5-deployer/resources/
 # In git le due versioni xs-app-cloud.json e xs-app-local.json, questa viene creata per copia non serve in git
 multitenant/cloud-foundry/approuter/xs-app.json
 multitenant/srv/processor/processor-hu-movements.js
+multitenant/local-test-data.db-journal
