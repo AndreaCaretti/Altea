@@ -4,8 +4,6 @@ service NotificatonServiveCall {
     action notification(NotificationPayload : NotificationPayload) returns String;
 
     type NotificationPayload {
-        user              : String;
-        tenant            : String;
         area              : String;
         alertBusinessTime : String;
         alertCode         : String;
