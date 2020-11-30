@@ -950,6 +950,9 @@ Solo sottoscrizione alla cloud cold chain e portale, CF non attivato
 -   fa il push nella coda REDIS
 -   la classe `Notification` è in attesa sulla coda REDIS ('EXTERNAL_NOTIFICATION') e quando riceve un messaggio:
     -   invia il messaggio verso la coda del servizio enterprise messaging istanziato nel subaccount centrale di platform
+    -   A titolo di esempio si è utilizzato quest riferimenti :
+        https://github.com/SAP-samples/enterprise-messaging-client-nodejs-samples/tree/master/xb-msg-amqp-v100-doc#sender
+        https://github.com/saphanaacademy/em-consumer
     -   inserire un record nella tabella `Notifications`
 
 # Appunti costi piattaforma
