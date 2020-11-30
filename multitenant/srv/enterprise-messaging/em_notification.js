@@ -1,7 +1,7 @@
 const { Client } = require("@sap/xb-msg-amqp-v100");
 const xsenv = require("@sap/xsenv");
 
-const TOPICNAME = "topic";
+const TOPICNAME = "coldchainplatform/central/notifications";
 const EMLOG_NAME = "Enterprise Messaging";
 
 class EnterpriseMessageNotification {

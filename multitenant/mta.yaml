@@ -480,3 +480,4 @@ resources:
       parameters:
           service: enterprise-messaging
           service-plan: default
+          path: cloud-foundry/enterprise-messaging/config.json
