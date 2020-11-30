@@ -10,25 +10,25 @@
                 "instance_name": "mtt-enterprise-messaging",
                 "binding_name": null,
                 "credentials": {
-                    "namespace": "coldchainplatform/mtt/central/",
-                    "xsappname": "default-a6052e72-de54-4b94-88be-35b83c4bdf88-clone!b61773|xbem-service-broker-!b2436",
+                    "namespace": "coldchainplatform/mtt/central",
+                    "xsappname": "default-2b829ef0-bc8c-4404-b201-74e7dffbb889-clone!b61773|xbem-service-broker-!b2436",
                     "management": [
                         {
                             "oa2": {
-                                "clientid": "sb-default-a6052e72-de54-4b94-88be-35b83c4bdf88-clone!b61773|xbem-service-broker-!b2436",
-                                "clientsecret": "0000231c-29e5-4a6a-9f14-8d49c2e9c143$CO7FxAQaGoa0qN1aIa3xG8ajo0ZlET_kRw984c1GGfQ=",
+                                "clientid": "sb-default-2b829ef0-bc8c-4404-b201-74e7dffbb889-clone!b61773|xbem-service-broker-!b2436",
+                                "clientsecret": "2a82f06c-e687-41e9-b97f-9719800b72e5$aehPek4xC0ar0S1TUHcMRx_M8RyjGgQFBZBOkfOfx4A=",
                                 "tokenendpoint": "https://ccp-provider-dev-qas.authentication.eu10.hana.ondemand.com/oauth/token",
                                 "granttype": "client_credentials"
                             },
                             "uri": "https://enterprise-messaging-hub-backend.cfapps.eu10.hana.ondemand.com"
                         }
                     ],
-                    "serviceinstanceid": "a6052e72-de54-4b94-88be-35b83c4bdf88",
+                    "serviceinstanceid": "2b829ef0-bc8c-4404-b201-74e7dffbb889",
                     "messaging": [
                         {
                             "oa2": {
-                                "clientid": "sb-default-a6052e72-de54-4b94-88be-35b83c4bdf88-clone!b61773|xbem-service-broker-!b2436",
-                                "clientsecret": "0000231c-29e5-4a6a-9f14-8d49c2e9c143$CO7FxAQaGoa0qN1aIa3xG8ajo0ZlET_kRw984c1GGfQ=",
+                                "clientid": "sb-default-2b829ef0-bc8c-4404-b201-74e7dffbb889-clone!b61773|xbem-service-broker-!b2436",
+                                "clientsecret": "2a82f06c-e687-41e9-b97f-9719800b72e5$aehPek4xC0ar0S1TUHcMRx_M8RyjGgQFBZBOkfOfx4A=",
                                 "tokenendpoint": "https://ccp-provider-dev-qas.authentication.eu10.hana.ondemand.com/oauth/token",
                                 "granttype": "client_credentials"
                             },
@@ -40,8 +40,8 @@
                         },
                         {
                             "oa2": {
-                                "clientid": "sb-default-a6052e72-de54-4b94-88be-35b83c4bdf88-clone!b61773|xbem-service-broker-!b2436",
-                                "clientsecret": "0000231c-29e5-4a6a-9f14-8d49c2e9c143$CO7FxAQaGoa0qN1aIa3xG8ajo0ZlET_kRw984c1GGfQ=",
+                                "clientid": "sb-default-2b829ef0-bc8c-4404-b201-74e7dffbb889-clone!b61773|xbem-service-broker-!b2436",
+                                "clientsecret": "2a82f06c-e687-41e9-b97f-9719800b72e5$aehPek4xC0ar0S1TUHcMRx_M8RyjGgQFBZBOkfOfx4A=",
                                 "tokenendpoint": "https://ccp-provider-dev-qas.authentication.eu10.hana.ondemand.com/oauth/token",
                                 "granttype": "client_credentials"
                             },
@@ -53,8 +53,8 @@
                         },
                         {
                             "oa2": {
-                                "clientid": "sb-default-a6052e72-de54-4b94-88be-35b83c4bdf88-clone!b61773|xbem-service-broker-!b2436",
-                                "clientsecret": "0000231c-29e5-4a6a-9f14-8d49c2e9c143$CO7FxAQaGoa0qN1aIa3xG8ajo0ZlET_kRw984c1GGfQ=",
+                                "clientid": "sb-default-2b829ef0-bc8c-4404-b201-74e7dffbb889-clone!b61773|xbem-service-broker-!b2436",
+                                "clientsecret": "2a82f06c-e687-41e9-b97f-9719800b72e5$aehPek4xC0ar0S1TUHcMRx_M8RyjGgQFBZBOkfOfx4A=",
                                 "tokenendpoint": "https://ccp-provider-dev-qas.authentication.eu10.hana.ondemand.com/oauth/token",
                                 "granttype": "client_credentials"
                             },

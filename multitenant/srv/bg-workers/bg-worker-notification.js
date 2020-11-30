@@ -46,12 +46,17 @@ class BGWorkerNotification {
         const date = new Date().toISOString();
         notification.notificationTime = date;
 
-        await this.enterpriseMessageNotification.send(
-            dataForMsgService,
-            notification,
-            this.logger,
-            this.submitIntoTable
-        );
+        try {
+            await this.enterpriseMessageNotification.send(
+                dataForMsgService,
+                notification,
+                this.logger,
+                this.submitIntoTable
+            );
+        } catch (Error) {
+            // 'Todo: Open' // Gestire errore , riprendo inserimento in coda?
+            this.logger.info(Error);
+        }
 
         setImmediate(this.tick);
     }

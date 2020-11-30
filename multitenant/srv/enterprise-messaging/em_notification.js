@@ -1,8 +1,9 @@
 const { Client } = require("@sap/xb-msg-amqp-v100");
 const xsenv = require("@sap/xsenv");
 
-const TOPICNAME = "coldchainplatform/central/notifications";
+const TOPICNAME = "coldchainplatform/mtt/central/notification";
 const EMLOG_NAME = "Enterprise Messaging";
+const MESSAGING_PROTOCOL = `amqp10ws`;
 
 class EnterpriseMessageNotification {
     constructor(logger) {
@@ -11,8 +12,10 @@ class EnterpriseMessageNotification {
         }
         this.logger = logger;
         xsenv.loadEnv();
-
-        this.redisCredentials = xsenv.serviceCredentials({ tag: "cache" });
+        this.EMCredentials = xsenv.serviceCredentials({ tag: "enterprise-messaging" });
+        if (!this.EMCredentials) {
+            throw Error(`Missing Enterprise Messaging Credential`);
+        }
     }
 
     static getInstance(logger) {
@@ -25,15 +28,17 @@ class EnterpriseMessageNotification {
 
     getConfiguration() {
         this.logger.info(`Get Configuration for Enterprise Messaging Client`);
+
+        const valueMessaging = this.EMCredentials.messaging.find(
+            (element) => element.protocol[0] === MESSAGING_PROTOCOL
+        );
+
         const connectionOptions = {
-            uri:
-                "wss://enterprise-messaging-messaging-gateway.cfapps.eu10.hana.ondemand.com/protocols/amqp10ws",
+            uri: valueMessaging.uri,
             oa2: {
-                endpoint: "https://990f868ftrial.authentication.eu10.hana.ondemand.com/oauth/token",
-                client:
-                    "sb-clone-xbem-service-broker-42c67a3c2ca84685849759bea7bbdf25-clone!b56968|xbem-service-broker-!b2436",
-                secret:
-                    "7d0c7f5d-383b-410a-8071-9f603305eb51$SDYFCh8iLxiETSvdIRV6HQK5af6t3fM-xCaGRR_EN5M=",
+                endpoint: valueMessaging.oa2.tokenendpoint,
+                client: valueMessaging.oa2.clientid,
+                secret: valueMessaging.oa2.clientsecret,
             },
         };
 
@@ -113,16 +118,16 @@ class EnterpriseMessageNotification {
 
     async send(payload, tableData, logger, callback) {
         this.logger.debug(`Send To Enterprise Messaging Client`);
-        return new Promise((resolve, _reject) => {
+        return new Promise((resolve, reject) => {
             const message = {
                 payload: Buffer.from(payload, "utf-8"),
-                done: () => {
+                done: (data, request) => {
                     this.logger.info(`${EMLOG_NAME} Sent`);
                     callback(tableData, logger);
                     resolve("Inviato");
                 },
-                failed: () => {
-                    resolve(new Error("Error"));
+                failed: (oError) => {
+                    reject(new Error(oError));
                 },
             };
             this.stream.write(message);
