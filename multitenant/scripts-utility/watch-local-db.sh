@@ -54,4 +54,4 @@ cds_command=$(which cds)
 
 # Avvia cds watch in una subshell con debug
 #( export NODE_OPTIONS='--inspect-brk' && $cds_command )
-cds run
+cds watch
