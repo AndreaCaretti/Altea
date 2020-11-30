@@ -11,7 +11,7 @@ module.exports = (notification) => {
         const notificationService = new NotificationService(logger);
         notificationService.start();
 
-        await notificationService.alert(
+        notificationService.alert(
             notificationData.user,
             notificationData.tenant,
             notificationData.area,
@@ -22,7 +22,7 @@ module.exports = (notification) => {
             notificationData.GUID
         );
 
-        console.log(notificationData);
+        console.log("Test cds notificationServicecall.js: ", notificationData);
         return `DONE `;
     });
 };
