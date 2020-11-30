@@ -143,11 +143,11 @@ class ProcessorHuMovements {
         let isLastArea = false;
         try {
             const res = await tx.run(
-                SELECT.one("lastKnownArea")
+                SELECT.one("lastKnownArea_ID")
                     .from(cds.entities.HandlingUnits)
-                    .where({ ID: residenceTime.handlingUnitID })
+                    .where({ ID: residenceTime.handlingUnit_ID })
             );
-            if (res && res.lastKnownArea === residenceTime.area_ID) {
+            if (res && res.lastKnownArea_ID === residenceTime.area_ID) {
                 isLastArea = true;
             }
         } catch (error) {
