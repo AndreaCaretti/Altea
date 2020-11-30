@@ -277,6 +277,7 @@ define entity OutOfRangeHandlingUnits : cuid, managed {
     handlingUnit : Association to HandlingUnits;
     startTime    : Timestamp;
     endTime      : Timestamp;
-    startReason  : cloudcoldchain.reasonType;
+    startReason  : cloudcoldchain.startReasonType;
+    endReason    : cloudcoldchain.endReasonType;
     duration     : Integer;
 }

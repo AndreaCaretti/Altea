@@ -1,2 +1,2 @@
-ID,outOfRange_ID,handlingUnit_ID,startTime,endTime,startReason,duration
-be8c6555-c882-4084-9a63-4d94749f8740, d48014b3-ef2f-4335-976d-190e3be9ca6f, 51ca3a4d-45a1-449b-820c-f7a378ac8c8c, 2020-01-01T09:00:00.000Z, 2020-01-02T12:00:00.000Z,0,100
+ID,outOfRange_ID,handlingUnit_ID,startTime,endTime,startReason,endReason,duration
+be8c6555-c882-4084-9a63-4d94749f8740, d48014b3-ef2f-4335-976d-190e3be9ca6f, 51ca3a4d-45a1-449b-820c-f7a378ac8c8c, 2020-01-01T09:00:00.000Z, 2020-01-02T12:00:00.000Z,0,1,100
