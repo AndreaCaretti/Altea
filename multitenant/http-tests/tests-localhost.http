@@ -27,6 +27,33 @@ Content-Type: application/json
     "ID": "TEST1234"
 }
 
+### Creazione segmento iot
+POST http://localhost:4004/iot/segment  HTTP/1.1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+	"cloudEventsVersion": "1.0",
+	"eventID": "SRL-C8F9B5EA1E7446CF91171F7A9F3410D7",
+	"eventType": "com.sap.appiot.eventtypes:SegmentNotifications",
+	"source": "IOT-BSV-SEG",
+	"eventTime": "2020-11-30T17:19:55.59Z",
+	"contentType": "application/json",
+	"extensions": {
+		"modelId": "592D9BEA5FD74E3DBF2C9BF5BD7CDA26",
+		"dataModel": "Thing",
+		"correlationId": "c8f9b5ea-1e74-46cf-9117-1f7a9f3410d7"
+	},
+	"data": [
+		{
+			"entityType": "SEGMENT",
+			"action": "OPEN",
+			"entityId": "c5d7cbe6-ceaf-4dff-8452-c7a25c970772",
+			"entityURL": "https://sap-iot-noah-live-segment-service.cfapps.eu10.hana.ondemand.com/v1/segments/c5d7cbe6-ceaf-4dff-8452-c7a25c970772"
+		}
+	]
+}
+
 ### Create Product
 POST http://localhost:4004/services/Products  HTTP/1.1
 Authorization: Basic Alice:Alice
@@ -169,3 +196,4 @@ If-Match: "2020-11-01T15:48:57.600Z"
     "HU_ID": "TEST1234",
     "DIR": "F"
 }
+
