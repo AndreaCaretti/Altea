@@ -49,5 +49,8 @@ cp cloud-foundry/approuter/xs-app-local.json cloud-foundry/approuter/xs-app.json
 
 echo -e "${GREEN}Apri il browser all'indirizzo http://localhost:5000${NC}"
 
-# Avvia cds watch
-cds watch
+# Recupera comando cds da avviare
+cds_command=$(which cds)
+
+# Avvia cds watch in una subshell con debug
+( export NODE_OPTIONS='--inspect-brk' && $cds_command )
