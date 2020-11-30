@@ -33,14 +33,17 @@ class CloudColdChain {
         // Notification - Notification BG Worker
         this.BGWorkerNotification = new BGWorkerNotification(this.logger);
 
+        // Enterprise Messaging comunicatio Layer
+        this.enterpriseMessageNotification = EnterpriseMessageNotification.getInstance();
+
+        // Start Enterprise Messaging comunicatio Layer
+        await this.enterpriseMessageNotification.start();
+
         // Notification - Notification Service
         this.NotificationeService = NotificationeService.getInstance(this.logger);
 
         // Start Notification Service
         this.NotificationeService.start();
-
-        // Enterprise Messaging comunicatio Layer
-        this.enterpriseMessageNotification = EnterpriseMessageNotification.getInstance();
 
         // Provisioning
         this.initMultitenantProvisioning(this.logger);
@@ -61,9 +64,6 @@ class CloudColdChain {
 
         // Start Notification BG Worker
         this.BGWorkerNotification.start();
-
-        // Start Enterprise Messaging comunicatio Layer
-        this.enterpriseMessageNotification.start();
     }
 
     async initMultitenantProvisioning() {

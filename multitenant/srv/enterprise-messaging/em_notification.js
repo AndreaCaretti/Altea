@@ -70,7 +70,7 @@ class EnterpriseMessageNotification {
                     );
                 })
                 .on("disconnected", (_hadError, _byBroker, _statistics) => {
-                    console.log(`Disconnected ${EMLOG_NAME}`);
+                    this.logger.info(`Disconnected ${EMLOG_NAME}`);
                 });
 
             client.connect(resolve(client), reject);
@@ -112,23 +112,18 @@ class EnterpriseMessageNotification {
     async send(payload, tableData, logger, callback) {
         this.logger.debug(`Send To Enterprise Messaging Client`);
         return new Promise((resolve, _reject) => {
-            if (!this.stream) {
-                this.logger.debug(`Missing ${EMLOG_NAME} Steam`);
-                resolve(`Missing ${EMLOG_NAME} Steam`);
-            } else {
-                const message = {
-                    payload: Buffer.from(payload, "utf-8"),
-                    done: () => {
-                        this.logger.info(`${EMLOG_NAME} Sent`);
-                        callback(tableData, logger);
-                        resolve("Inviato");
-                    },
-                    failed: () => {
-                        resolve(new Error("Error"));
-                    },
-                };
-                this.stream.write(message);
-            }
+            const message = {
+                payload: Buffer.from(payload, "utf-8"),
+                done: () => {
+                    this.logger.info(`${EMLOG_NAME} Sent`);
+                    callback(tableData, logger);
+                    resolve("Inviato");
+                },
+                failed: () => {
+                    resolve(new Error("Error"));
+                },
+            };
+            this.stream.write(message);
         });
     }
 }
