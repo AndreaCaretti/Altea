@@ -3,7 +3,7 @@ const Logger = require("../logger");
 
 module.exports = (iot) => {
     this.cclogger = Logger.getInstance();
-    const notificationService = NotificationService.getInstance();
+    const notificationService = NotificationService.getInstance(this.cclogger);
     iot.on("segment", async (request) => {
         let message = "";
         const outOfRange = request.data;
