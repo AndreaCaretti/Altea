@@ -91,7 +91,10 @@ class Queues {
                         slotsRefreshTimeout: 2500,
                         dnsLookup: (address, callback) => callback(null, address),
                         redisOptions: {
-                            tls: {},
+                            tls: {
+                                host: this.redisCredentials.tls.host,
+                                port: this.redisCredentials.tls.port,
+                            },
                             password: this.redisCredentials.password,
                         },
                     }
