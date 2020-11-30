@@ -67,7 +67,7 @@ module.exports = (iot) => {
             if (outOfRange.data[0].action === "OPEN") {
                 notificationService.alert(
                     request.user.id,
-                    request._.req.hostname,
+                    request.user.tenant,
                     area.ID,
                     outOfRange.eventTime,
                     "LOG_ALERT",
