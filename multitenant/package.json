@@ -47,7 +47,7 @@
         "debug-on": "scripts-utility/debug-on.sh",
         "deploy": "scripts-utility/deploy.sh",
         "deploy-cap": "scripts-utility/deploy-cap.sh",
-        "refreshEnv": "node scripts-utility/get-cap-services-env.js > default-env.json",
+        "refresh-default-env": "node scripts-utility/get-cap-services-env.js > default-env.json",
         "update-db-tenants": "node scripts-utility/update-db-tenants.js",
         "update-local-db": "scripts-utility/update-local-db.sh",
         "start-local-redis": "scripts-utility/start-local-redis.sh",
