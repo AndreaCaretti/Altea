@@ -1,20 +1,82 @@
 # Communication Frontends
 
+## Invio configurazione piattaforma centrale
+
+> Descrizione
+
+Invio al communication frontend delle locations/departments/aree e dei prodotti configurati nella piattaforma centrale, con i rispettivi responsabili assegnati
+
+> Quando viene inviato
+
+Premendo un tasto nell'applicazione di configurazione della piattaforma
+
+> Tracciato
+```json
+{
+    "customer" : {
+        "customerGUID" : "d532b292-a03c-4530-af37-6732dc5c7758",
+        "companyName": "...",
+        "gs1CompanyPrefixs" : [
+            "123456789",
+            "234567890"
+        ],
+        "locations" : [
+            {
+                "locationGUID" : "eff08cb8-57fc-4863-bb1e-e898479e0fe2",
+                "description" : "Plant A",
+                "departments" : [
+                    {
+                        "departmentGUID" : "9dcc35bf-1bb5-411a-b6b0-0527465ec900",
+                        "description" : "Packaging Area A",
+                        "areas" : [
+                            {
+                                "areaGUID" : "a6fe9383-13c5-48b6-94a5-fe0a69f362ee",
+                                "description" : "Cold Room 1",
+                                "assetManager" : "coldroom1@domain.com"
+                            },
+                            {
+                                "areaGUID" : "a7dac933-2b2a-4dde-b0ac-cc1c328b25da",
+                                "description" : "Cold Room 2",
+                                "assetManager" : "coldroom2@domain.com"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "products" : [
+            {
+                "gtin" : "1234567890123",
+                "description" : "...",
+                "productManager" : "productmanager1@domain.com",
+                "QAManager" : "qamanager1@domain.com"
+            },
+            {
+                "gtin" : "1234567890199",
+                "description" : "...",
+                "productManager" : "productmanager1@domain.com",
+                "QAManager" : "qamanager2@domain.com"
+            }
+        ]
+    }
+}
+```
+
 ## Piattaforma -> Frontend
 
 ### OLT - Out of limit temperature
 
->Descrizione
+> Descrizione
 
 Avviso che viene inviato quando un'area refrigerata è fuori dal range di temperatura stabilito.
 Vengono inviate le informazioni relative all'allarme, all'area e il suo contenuto nel momento in cui è scattato l'allarme, il contenuto raggruppato per prodotto/lotto e la sua quantità.
 
->Esempio
+> Esempio
 
 La cella 1 del reparto packaging del plant A alle 13:30 ha raggiunto la temperatura di 20°, la sua temperatura prevista è 4° - 10° e nel momento dell'allarme conteneva 50 cartoni di aspirina lotto AB12344
 
 > Quando viene inviato
-> 
+
 - l'area segnala in near realtime alla piattaforma che la temperatura rilevata è uscita dal range definito
 - la piattaforma inserisce in near realtime la notifica nella coda verso il communication frontend
 - la coda richiama il webhook esposto dal communication frontend per inviare la notifica
