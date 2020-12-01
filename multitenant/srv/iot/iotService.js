@@ -5,7 +5,7 @@ module.exports = (iot) => {
     this.cclogger = Logger.getInstance();
     const notificationService = NotificationService.getInstance(this.cclogger);
     iot.on("segment", async (request) => {
-        let message = "";
+        let message;
         const outOfRange = request.data;
         const tx = cds.transaction(request);
         const outOfRangeTab = cds.entities.outOfRange;
@@ -14,9 +14,11 @@ module.exports = (iot) => {
 
         const outOfRangeToUpdate = await tx.read(outOfRangeTab).where({ segmentId: segmentID });
 
-        let startEvent = "";
-        let endEvent = "";
-        let instruction = "";
+        this.cclogger.logObject("SEGMENTO", outOfRange);
+
+        let startEvent;
+        let endEvent;
+        let instruction;
         let areaID;
         try {
             let area;

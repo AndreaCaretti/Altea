@@ -53,7 +53,8 @@
         "start-local-redis": "scripts-utility/start-local-redis.sh",
         "lint": "eslint srv",
         "postlint": "echo ✅ lint valid",
-        "export-db-to-csv": "scripts-utility/export-db-to-csv.sh"
+        "export-db-to-csv": "scripts-utility/export-db-to-csv.sh",
+        "print-deployed-version": "scripts-utility/print-deployed-version.sh"
     },
     "husky": {
         "hooks": {
