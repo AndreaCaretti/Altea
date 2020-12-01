@@ -94,7 +94,7 @@ Tracciato
 - `area`: informazioni riguardanti l'area
     - `guid`: UUID generato dalla piattaforma, identifica univocamente l'area
     - `description`: descrizione dell'area, non in lingua
-    - `category`: categoria dell'area `COLD_ROOM`, (wave 2 `TRUCK`)
+    - `category`: categoria dell'area `COLD_ROOM`, (wave 2 `REFRIGERATOR_TRUCK`)
     - `department`: dipartimento in cui è inserita l'area
         - `guid`: UUID generato dalla piattaforma, identifica univocamente il dipartimento
         - `description`: descrizione del dipartimento, non in lingua
