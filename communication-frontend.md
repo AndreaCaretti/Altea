@@ -192,7 +192,7 @@ Attualmente sono nell'area di Carico A1 che è una zona non refrigerata.
 | alarmType            | fisso OLT out of limit temperature                                                      | String   | "TOR"                                  |
 | eventDate            | momento in cui viene generato l'evento dal device che monitora la temperatura dell'area | ISO 8601 | "2020-11-17T12:00:00Z"                 |
 | notificationDate     | momento in cui la notifica viene accodata verso il communication - frontend             | ISO 8601 | "2020-11-17T12:00:00Z"                 |
-| area                 | informazioni riguardanti l'area                                                         | Object   |                                        |
+| area                 | l'area in cui i prodotti si trovano nel momento dell'invio della notifica               | Object   |                                        |
 | - guid               | UUID generato dalla piattaforma, identifica univocamente l'area                         | UUID     | "ada49efe-c732-4ed3-a7a9-cb7275ae5c5e" |
 | - description        | descrizione dell'area, non in lingua                                                    | String   | "Cold Room 1"                          |
 | - category           | categoria dell'area `COLD_ROOM`, (wave 2 `REFRIGERATOR_TRUCK`)                          | String   | "COLD_ROOM"                            |
