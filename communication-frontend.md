@@ -2,16 +2,16 @@
 
 ## Invio configurazione piattaforma centrale
 
-> Descrizione
+### Descrizione
 
 Invio al communication frontend delle locations/departments/aree e dei prodotti configurati nella piattaforma centrale, con i rispettivi responsabili assegnati
 
-> Quando viene inviato
+### Quando viene inviato
 
 Premendo un tasto nell'applicazione di configurazione della piattaforma viene richiamato un webservice REST esposto dal communication frontend.
 Nella piattaforma vengono tracciati le invii effettuati (data, ora, payload, result).
 
-> Tracciato
+### Tracciato
 ```json
 {
     "customer" : {
@@ -71,22 +71,22 @@ Nella piattaforma vengono tracciati le invii effettuati (data, ora, payload, res
 
 ### OLT - Out of limit temperature
 
-> Descrizione
+### Descrizione
 
 Avviso che viene inviato quando un'area refrigerata è fuori dal range di temperatura stabilito.
 Vengono inviate le informazioni relative all'allarme, all'area e il suo contenuto nel momento in cui è scattato l'allarme, il contenuto raggruppato per prodotto/lotto e la sua quantità.
 
-> Esempio
+### Esempio
 
 La cella 1 del reparto packaging del plant A alle 13:30 ha raggiunto la temperatura di 20°, la sua temperatura prevista è 4° - 10° e nel momento dell'allarme conteneva 50 cartoni di aspirina lotto AB12344
 
-> Quando viene inviato
+### Quando viene inviato
 
 - l'area segnala in near realtime alla piattaforma che la temperatura rilevata è uscita dal range definito
 - la piattaforma inserisce in near realtime la notifica nella coda verso il communication frontend
 - la coda richiama il webhook esposto dal communication frontend per inviare la notifica
 
-> Tracciato
+### Tracciato
 ```json
 {
     "eventGuid": "ada49efe-c732-4ed3-a7a9-cb7275ae5c5e",
@@ -181,24 +181,24 @@ La cella 1 del reparto packaging del plant A alle 13:30 ha raggiunto la temperat
 
 ### TOR - Time out of refrigeration
 
->Descrizione
+### Descrizione
 
 Avviso che viene inviato quando le unità di movimentazione superano una determinata soglia di tempo al di fuori del proprio range di temperatura.
 Vengono inviate le informazioni relative all'allarme, all'area e i prodotti / lotti che hanno superato l'intervallo TOR.
 
 
-> Esempio
+### Esempio
  
 100 cartoni di Aspirina 500g con TOR 4 ore e 200 cartoni di Aspirina 1000g con TOR 5 ore sono al di fuori del loro range di temperatura da 6 ore.
 Attualmente sono nell'area di Carico A1 che è una zona non refrigerata.
 
->Quando viene inviato
+###Quando viene inviato
 
 - Viene rilevato che il prodotto Aspirina 500g - Lotto 123456789 è nell'Area di carico (A1) da 6 ore, il suo tempo di TOR è di 4 ore.
 - Viene rilevato che il prodotto Aspirina 1000g - Lotto 9876554321 è nell'Area di carico (A1) da 6 ore, il suo tempo di TOR è di 5 ore.
 - Viene inviata una singola notifica per area aggregando per prodotti e lotti
 
-> Tracciato
+### Tracciato
 ```json
 {
     "eventGuid": "ada49efe-c732-4ed3-a7a9-cb7275ae5c5e",
