@@ -8,7 +8,8 @@ Invio al communication frontend delle locations/departments/aree e dei prodotti 
 
 > Quando viene inviato
 
-Premendo un tasto nell'applicazione di configurazione della piattaforma
+Premendo un tasto nell'applicazione di configurazione della piattaforma viene richiamato un webservice REST esposto dal communication frontend.
+Nella piattaforma vengono tracciati le invii effettuati (data, ora, payload, result).
 
 > Tracciato
 ```json
