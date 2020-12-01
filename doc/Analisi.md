@@ -91,15 +91,15 @@ _Nel frattempo la piattaforma tiene monitorate le connessioni con i gateway edge
 
 Per calcolare il TOR durante la permanenza in area a temperatura anomala vengono sommati tutti i minuti in cui l'handling unit era in una area con anomalia di temperatura:
 
-| Caso |    T0    |   T1   | T2 INIZIO ANOMALIA |    T3    | T4  |   T5   | T6 FINE ANOMALIA |    T7    |   T8   | Tn (anomalia non finiti) |
-| :--: | :------: | :----: | :----------------: | :------: | :-: | :----: | :--------------: | :------: | :----: | :----------------------: |
-|  1°  | INGRESSO | USCITA |                    |          |     |        |                  |          |        |                          |
-|  2°  | INGRESSO |        |                    |          |     | USCITA |                  |          |        |                          |
-|  3°  |          |        |                    | INGRESSO |     | USCITA |                  |          |        |                          |
-|  4°  |          |        |                    | INGRESSO |     |        |                  |          | USCITA |                          |
-|  5°  |          |        |                    |          |     |        |                  | INGRESSO | USCITA |                          |
-|  6°  | INGRESSO |        |                    |          |     |        |                  |          | USCITA |                          |
-|  7°  | INGRESSO |        |                    |          |     |        |                  |          |        |                          |
+| Caso  |    T0    |   T1   | T2 INIZIO ANOMALIA |    T3    |  T4   |   T5   | T6 FINE ANOMALIA |    T7    |   T8   | Tn (anomalia non finiti) |
+| :---: | :------: | :----: | :----------------: | :------: | :---: | :----: | :--------------: | :------: | :----: | :----------------------: |
+|  1°   | INGRESSO | USCITA |                    |          |       |        |                  |          |        |                          |
+|  2°   | INGRESSO |        |                    |          |       | USCITA |                  |          |        |                          |
+|  3°   |          |        |                    | INGRESSO |       | USCITA |                  |          |        |                          |
+|  4°   |          |        |                    | INGRESSO |       |        |                  |          | USCITA |                          |
+|  5°   |          |        |                    |          |       |        |                  | INGRESSO | USCITA |                          |
+|  6°   | INGRESSO |        |                    |          |       |        |                  |          | USCITA |                          |
+|  7°   | INGRESSO |        |                    |          |       |        |                  |          |        |                          |
 
 | Regola                                              | Caso coperto | Inizio TOR | Fine TOR |
 | --------------------------------------------------- | ------------ | ---------- | -------- |
@@ -231,6 +231,15 @@ Range di temperature
 -   warningMin temperatura minima in °C per far scattare il warning
 -   warningMax temperatura massima in °C per far scattare il warning
 
+## Tabella HandlingUnitTypology
+
+| _ID_   | description (50) | uom     |
+| ------ | ---------------- | ------- |
+| _GUID_ | Pallet           | pallet  |
+| _GUID_ | Cartoni          | cartoni |
+| _GUID_ | Blister          | blister |
+
+
 # Tabelle parametriche/customizing singolo cliente
 
 Tabelle per parametrizzare/customizzare la soluzione per il singolo cliente, DB Multitenant
@@ -317,6 +326,7 @@ Dati anagrafici cliente, siccome i dati dei clienti sono separati a livello di t
 | _GUID_ | Stoccaggio     | Gate RFID                          |
 | _GUID_ | Uscita Merci A | Gate RFID                          |
 
+
 # Tabelle anagrafiche
 
 Tabelle anagrafiche con dati specifici di un singolo cliente, i dati dei clienti sono suddivisi a livello tenant
@@ -355,13 +365,14 @@ Records solo nel DB del produttore
 
 ## Tabella HandlingUnits
 
-| _sscc_ (SSCC)      | lot     | lastKnownArea(Areas) | inAreaBusinessTime (Timestamp) | lastMovement (HandlingUnitsMovements) | jsonSummary (LargeString)             | blockchainHash (100)                                 |
-| ------------------ | ------- | -------------------- | ------------------------------ | ------------------------------------- | ------------------------------------- | ---------------------------------------------------- |
-| 123456789012345678 | LOT-XYZ | Uscita magazzino     | 2020-10-14T09:01:33.763Z       | _GUID_                                | { HandlingUnit: "HandlingUnitA", etc} | adb24ba2f2ef33d73d79e60b9d47f7fb97c69013eb6c8f37c... |
+| _sscc_ (SSCC) | lot | typology | lastKnownArea(Areas) | inAreaBusinessTime (Timestamp) | lastMovement (HandlingUnitsMovements) | jsonSummary (LargeString) | blockchainHash (100) |
+| ------------- | --- || -------------------- | ------------------------------ | ------------------------------------- | ------------------------------------- | ---------------------------------------------------- |
+| 123456789012345678 | LOT-XYZ |            | Uscita magazzino     | 2020-10-14T09:01:33.763Z       | _GUID_                                | { HandlingUnit: "HandlingUnitA", etc} | adb24ba2f2ef33d73d79e60b9d47f7fb97c69013eb6c8f37c... |
 
 -   `lastKnowArea`: ultima posizione conosciuta dell'SSCC
 -   `inAreaBusinessTime`: momento in cui è stato rilevato l'ultimo spostamento
 -   `lastMovement`: guid dell'ultimo movimento
+-   `typology`: tipologia di movimentazione della [HandlingUnitTypology](#tabella-handlingunittypology)
 
 SSCC:
 
@@ -418,17 +429,20 @@ Passaggi Handling Unit da Control Point, campi controllati
 
 Permanenza Handling Unit in area
 
-| _ID_   | HandlingUnit (HandlingUnits) | step | area (Area)                  | inBusinessTime           | outBusinessTime          | residenceTime (Integer) | tor  | failureIn | failureOut | totalTor | tmin | tmax | torElaborationTime (Timestamp) |
-| ------ | ---------------------------- | ---- | ---------------------------- | ------------------------ | ------------------------ | ----------------------- | ---- | --------- | ---------- | -------- | :--: | :--: | ------------------------------ |
-| _GUID_ | 123456789012345678           | 1    | Produzione Plant A           | 2020-10-14T09:01:33.763Z | 2020-10-14T09:02:33.763Z | 1600                    | 1600 |           |            |          |      |      | 2020-10-14T09:01:33.763Z       |
-| _GUID_ | 123456789012345678           | 2    | Cold Room                    | 2020-10-14T09:02:33.763Z | 2020-10-14T09:03:33.763Z | 3600                    | 30   |           |            |          |  4   |  20  | 2020-10-14T09:01:33.763Z       |
-| _GUID_ | 123456789012345678           | 3    | Uscita merci                 | 2020-10-14T09:03:33.763Z | 2020-10-14T09:04:33.763Z | 1600                    | 1600 |           |            |          |      |      | 2020-10-14T09:01:33.763Z       |
-| _GUID_ | 123456789012345678           | 2    | Cold Room                    | 2020-10-14T09:04:33.763Z | 2020-10-14T09:05:33.763Z | 3600                    | 30   |           |            |          |  4   |  20  | 2020-10-14T09:01:33.763Z       |
-| _GUID_ | 123456789012345678           | 3    | Uscita merci                 | 2020-10-14T09:05:33.763Z | 2020-10-14T09:06:33.763Z | 1600                    |      |           |            |          |      |      |                                |
-| _GUID_ | 123456789012345678           | 4    | Piazzale esterno             | 2020-10-14T09:06:33.763Z | 2020-10-14T09:07:33.763Z | 2000                    | 2000 |           |            |          |      |      |                                |
-| _GUID_ | 123456789012345678           | 5    | Truck                        | 2020-10-14T09:07:33.763Z | 2020-10-14T09:08:33.763Z | 20                      |      |           |            |          |      |      |                                |
-| _GUID_ | 123456789012345678           | 6    | Piazzale esterno depositario | 2020-10-14T09:08:33.763Z | 2020-10-14T09:09:33.763Z | 20                      |      |           |            |          |      |      |                                |
-| _GUID_ | 123456789012345678           | 7    | Depositario                  | 2020-10-14T09:09:33.763Z |                          | 20                      |      |           |            |          |      |      |                                |
+| _ID_   | HandlingUnit (HandlingUnits) | step | area (Area)                  | inBusinessTime           | outBusinessTime          | residenceTime (Integer) | tor   | failureIn | failureOut | totalTor      | tmin  | tmax  | torElaborationTime (Timestamp) |
+| ------ | ---------------------------- | ---- | ---------------------------- | ------------------------ | ------------------------ | ----------------------- | ----- | --------- | ---------- | ------------- | :---: | :---: | ------------------------------ |
+| _GUID_ | 123456789012345678           | 1    | Produzione Plant A           | 2020-10-14T09:01:33.763Z | 2020-10-14T09:02:33.763Z | 1600                    | 1600  |           |            |               |       |       | 2020-10-14T09:01:33.763Z       |
+| _GUID_ | 123456789012345678           | 2    | Cold Room                    | 2020-10-14T09:02:33.763Z | 2020-10-14T09:03:33.763Z | 3600                    | 30    |           |            |               |   4   |  20   | 2020-10-14T09:01:33.763Z       |
+| _GUID_ | 123456789012345678           | 3    | Uscita merci                 | 2020-10-14T09:03:33.763Z | 2020-10-14T09:04:33.763Z | 1600                    | 1600  |           |            |               |       |       | 2020-10-14T09:01:33.763Z       |
+| _GUID_ | 123456789012345678           | 2    | Cold Room                    | 2020-10-14T09:04:33.763Z | 2020-10-14T09:05:33.763Z | 3600                    | 30    |           |            |               |   4   |  20   | 2020-10-14T09:01:33.763Z       |
+| _GUID_ | 123456789012345678           | 3    | Uscita merci                 | 2020-10-14T09:05:33.763Z | 2020-10-14T09:06:33.763Z | 1600                    |       |           |            |               |       |       |                                |
+| _GUID_ | 123456789012345678           | 4    | Piazzale esterno             | 2020-10-14T09:06:33.763Z | 2020-10-14T09:07:33.763Z | 2000                    | 2000  |           |            |               |       |       |                                |
+| _GUID_ | 123456789012345678           | 5    | Truck                        | 2020-10-14T09:07:33.763Z | 2020-10-14T09:08:33.763Z | 20                      |       |           |            |               |       |       |                                |
+| _GUID_ | 123456789012345678           | 6    | Piazzale esterno depositario | 2020-10-14T09:08:33.763Z | 2020-10-14T09:09:33.763Z | 20                      |       |           |            |               |       |       |                                |
+| _GUID_ | 123456789012345678           | 7    | Depositario                  | 2020-10-14T09:09:33.763Z |                          | 20                      |       |           |            |               |       |       |                                |
+| _GUID_ | 123456789012345699           | 1    | Esterno Magazzino            | 2020-10-14T09:09:33.763Z | 2020-10-15T09:09:33.763Z | 1 day                   | 1 day |           |            | 1 day         |       |       |                                |
+| _GUID_ | 123456789012345699           | 2    | Esterno Magazzino 2          | 2020-10-15T09:09:33.763Z |                          |                         |       |           |            | 2 day + diff. |       |       |                                |
+
 
 -   inBusinessTime è l'ora di ingresso dell'handling unit nell'area
 -   outBusinessTime è l'ora di uscita dell'handling unit dall'area
