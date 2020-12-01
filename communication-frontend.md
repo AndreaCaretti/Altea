@@ -78,35 +78,36 @@ Tracciato
     ]
 }
 ```
-
-- `eventGuid`: UUID generato dalla piattaforma, identifica univocamente la notifica
-- `severity`: livello della notifica `1` - allarme
-- `alarmType`: fisso `OLT` out of limit temperature
-- `eventDate`: momento in cui viene generato l'evento dal device che monitora la temperatura dell'area
-- `notificationDate`: momento in cui la notifica viene accodata verso il communication - frontend
-- `details`: dettagli dell'allarme
-    - `measurementUnit`: unità di misura della temperatura rilevata
-    - `eventTemperature`: temperatura rilevata nel momento dell'allarme
-    - `workingTemperature`: range di temperatura di funzionamento previsto
-        - `min`: temperatura minima
-        - `max`: temperatura massima
-    - `cause`: futuri ampliamenti, attualmente vuoto
-- `area`: informazioni riguardanti l'area
-    - `guid`: UUID generato dalla piattaforma, identifica univocamente l'area
-    - `description`: descrizione dell'area, non in lingua
-    - `category`: categoria dell'area `COLD_ROOM`, (wave 2 `REFRIGERATOR_TRUCK`)
-    - `department`: dipartimento in cui è inserita l'area
-        - `guid`: UUID generato dalla piattaforma, identifica univocamente il dipartimento
-        - `description`: descrizione del dipartimento, non in lingua
-    - `location`: plant in cui è inserita l'area
-        - `guid`: UUID generato dalla piattaforma, identifica univocamente il plant
-        - `description`: descrizione del plant, non in lingua
-    - `guidAsset`: GUID dell'asset IoT che ha generato l'allarme
-- `handlingUnits`: elenco delle handling units presenti nell'area nel momento dell'allarme
-    - `gtin`: codice GTIN del prodotto
-    - `productDescription`: descrizione del prodotto, non in lingua
-    - `lot`: lotto
-    - `quantity`: quantità di handling units presenti nell'area nel momento dell'allarme
+| Campo                  | Descrizione                                                                             | Tipo | Esempio |
+| ---------------------- | --------------------------------------------------------------------------------------- | ---- | ------- |
+| `eventGuid`            | UUID generato dalla piattaforma, identifica univocamente la notifica                    |      |         |
+| `severity`             | livello della notifica `1` - allarme                                                    |      |         |
+| `alarmType`            | fisso `OLT` out of limit temperature                                                    |      |         |
+| `eventDate`            | momento in cui viene generato l'evento dal device che monitora la temperatura dell'area |      |         |
+| `notificationDate`     | momento in cui la notifica viene accodata verso il communication - frontend             |      |         |
+| `details`              | dettagli dell'allarme                                                                   |      |         |
+| - `measurementUnit`    | unità di misura della temperatura rilevata                                              |      |         |
+| - `eventTemperature`   | temperatura rilevata nel momento dell'allarme                                           |      |         |
+| - `workingTemperature` | range di temperatura di funzionamento previsto                                          |      |         |
+| - `min`                | temperatura minima                                                                      |      |         |
+| - `max`                | temperatura massima                                                                     |      |         |
+| - `cause`              | futuri ampliamenti, attualmente vuoto                                                   |      |         |
+| `area`                 | informazioni riguardanti l'area                                                         |      |         |
+| - `guid`               | UUID generato dalla piattaforma, identifica univocamente l'area                         |      |         |
+| - `description`        | descrizione dell'area, non in lingua                                                    |      |         |
+| - `category`           | categoria dell'area `COLD_ROOM`, (wave 2 `REFRIGERATOR_TRUCK`)                          |      |         |
+| `department`           | dipartimento in cui è inserita l'area                                                   |      |         |
+| - `guid`               | UUID generato dalla piattaforma, identifica univocamente il dipartimento                |      |         |
+| - `description`        | descrizione del dipartimento, non in lingua                                             |      |         |
+| `location`             | plant in cui è inserita l'area                                                          |      |         |
+| - `guid`               | UUID generato dalla piattaforma, identifica univocamente il plant                       |      |         |
+| - `description`        | descrizione del plant, non in lingua                                                    |      |         |
+| - `guidAsset`          | GUID dell'asset IoT che ha generato l'allarme                                           |      |         |
+| `handlingUnits`        | elenco delle handling units presenti nell'area nel momento dell'allarme                 |      |         |
+| - `gtin`               | codice GTIN del prodotto                                                                |      |         |
+| - `productDescription` | descrizione del prodotto, non in lingua                                                 |      |         |
+| - `lot`                | lotto                                                                                   |      |         |
+| - `quantity`           | quantità di handling units presenti nell'area nel momento dell'allarme                  |      |         |
 
 ### TOR - Time out of refrigeration
 
