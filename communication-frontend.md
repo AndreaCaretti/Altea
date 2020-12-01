@@ -74,7 +74,7 @@ Nella piattaforma vengono tracciati le invii effettuati (data, ora, payload, res
 #### Descrizione
 
 Avviso che viene inviato quando un'area refrigerata è fuori dal range di temperatura stabilito.
-Vengono inviate le informazioni relative all'allarme, all'area e il suo contenuto nel momento in cui è scattato l'allarme, il contenuto raggruppato per prodotto/lotto e la sua quantità.
+Vengono inviate le informazioni relative all'allarme, all'area e il contenuto dell'area nel momento in cui è scattato l'allarme, il contenuto viene raggruppato per prodotto/lotto.
 
 #### Esempio
 
@@ -186,7 +186,6 @@ La cella 1 del reparto packaging del plant A alle 13:30 ha raggiunto la temperat
 Avviso che viene inviato quando le unità di movimentazione superano una determinata soglia di tempo al di fuori del proprio range di temperatura.
 Vengono inviate le informazioni relative all'allarme, all'area e i prodotti / lotti che hanno superato l'intervallo TOR.
 
-
 #### Esempio
  
 100 cartoni di Aspirina 500g con TOR 4 ore e 200 cartoni di Aspirina 1000g con TOR 5 ore sono al di fuori del loro range di temperatura da 6 ore.
@@ -194,9 +193,9 @@ Attualmente sono nell'area di Carico A1 che è una zona non refrigerata.
 
 #### Quando viene inviato
 
-- Viene rilevato che il prodotto Aspirina 500g - Lotto 123456789 è nell'Area di carico (A1) da 6 ore, il suo tempo di TOR è di 4 ore.
-- Viene rilevato che il prodotto Aspirina 1000g - Lotto 9876554321 è nell'Area di carico (A1) da 6 ore, il suo tempo di TOR è di 5 ore.
-- Viene inviata una singola notifica per area aggregando per prodotti e lotti
+- la piattaforma tiene monitorati i tempi di permanenza delle handling units stoccate in aree a temperatura non controllata oppure in aree a temperatura controllata ma che hanno dei problemi di out of range
+- al superamento delle soglie la piattaforma inserisce una notifica nella coda verso il communication frontend aggregando per area, i dati delle handling units vengono raggruppati per prodotto e lotto
+- la coda richiama il webhook esposto dal communication frontend per inviare la notifica
 
 #### Tracciato
 ```json
