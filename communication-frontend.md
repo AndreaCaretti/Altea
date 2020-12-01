@@ -17,6 +17,12 @@ Quando viene inviato
 Tracciato
 
 ```json
+ {
+     "nome": "sam"
+ }
+```
+
+```
 {
     "eventGuid": "ada49efe-c732-4ed3-a7a9-cb7275ae5c5e", // eventGuid invece che id
     "severity": 1,
