@@ -17,6 +17,10 @@ Nella piattaforma vengono tracciati le invii effettuati (data, ora, payload, res
     "customer" : {
         "customerGUID" : "d532b292-a03c-4530-af37-6732dc5c7758",
         "companyName": "...",
+        "customerTenant" : {
+            "tokenEndpoint" : "https://ccp-customera.authentication.eu10.hana.ondemand.com/oauth/token",
+            "uri" : "https://ccp-provider-dev-qas.dev.cfapps.eu10.hana.ondemand.com"
+        },
         "gs1CompanyPrefixs" : [
             "123456789",
             "234567890"
@@ -285,13 +289,27 @@ Quando viene inviato
 
 Tracciato
 
+
 ## Frontend -> Piattaforma
 
 ### Lotto Compliance
 
 Descrizione
 
-Quando viene richiesto
+L'utente richiede informazioni riguardo allo stato di compliance di un prodotto/lotto.
 
-Tracciato
+Esempio richiesta
+https://ccp-provider-dev-qas.dev.cfapps.eu10.hana.ondemand.com/frontend/lotStatus(gtin='1234589',lot='AB123')
+
+Tracciato risposta
+```json
+{
+    "gtin" : "1234567",
+    "lot" : "AB123",
+    "locations" : [
+        "Ontario...",
+        "Plant B..,",
+    ],
+    "status" : 1
+}
 
