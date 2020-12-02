@@ -29,3 +29,13 @@ type LogLevel : Integer enum {
     LOG_INFO    = 6; /* informational */
     LOG_DEBUG   = 7; /* debug-level messages */
 }
+
+type endReasonType : Integer enum {
+    EXIT_FROM_AREA = 0; // l'handling unit è uscita dall'area
+    END_PROBLEM    = 1; // il problema è stato risolto
+}
+
+type startReasonType : Integer enum {
+    WAS_ALREADY_IN_AREA = 0; // l'handling unit si trovava nell'area nel momento dell'inizio del problema
+    ARRIVED_IN_AREA     = 1; // : l'hangling unit è entrato nell'area durante il problema
+}

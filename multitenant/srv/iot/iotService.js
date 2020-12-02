@@ -23,7 +23,7 @@ module.exports = (iot) => {
         try {
             let area;
             if (!outOfRangeToUpdate[0]) {
-                instruction = "CREATE:";
+                instruction = "CREATE";
                 let Status = outOfRange.data[0].action;
                 if (outOfRange.data[0].action === "OPEN") {
                     startEvent = outOfRange.eventTime;
@@ -52,7 +52,7 @@ module.exports = (iot) => {
                     segmentId: outOfRange.data[0].entityId,
                 });
             } else {
-                instruction = "UPDATE:";
+                instruction = "UPDATE";
                 // eslint-disable-next-line no-lonely-if
                 if (outOfRange.data[0].action === "OPEN") {
                     startEvent = outOfRange.eventTime;
@@ -83,7 +83,7 @@ module.exports = (iot) => {
                 );
             }
 
-            message = `fine operazione ${instruction}${outOfRange.data[0].entityId}`;
+            message = `fine operazione ${instruction} record su outOfRange: ${outOfRange.data[0].entityId}`;
             this.cclogger.debug(message);
         } catch (error) {
             //  message = `error console:${error}`;

@@ -283,3 +283,13 @@ define entity NotificationPayloadPrepare : cuid, managed {
     preparationClass  : String(50);
     preparationMethod : String(20);
 }
+
+define entity OutOfRangeHandlingUnits : cuid, managed {
+    outOfRange   : Association to outOfRange;
+    handlingUnit : Association to HandlingUnits;
+    startTime    : Timestamp;
+    endTime      : Timestamp;
+    startReason  : cloudcoldchain.startReasonType;
+    endReason    : cloudcoldchain.endReasonType;
+    duration     : Integer;
+}
