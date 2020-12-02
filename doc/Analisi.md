@@ -240,6 +240,14 @@ Range di temperature
 | _GUID_ | Blister          | blister  |
 
 
+## Tabella Mapping tipo Notifica funzione di preparazione Payload NotificationPayloadPrepare
+| _ID_ | value String(20) | preparationClass String(20) | preparationMethod String(20) |
+| ---- | ---------------- | --------------------------- | ---------------------------- |
+| GUID | OLT              | OLTNotificationPrepare      | prepareData                  |
+| GUID | TOR              | TORNotificationPrepare      | prepareData                  |
+| GUID | EOD              | EODotificationPrepare       | prepareData                  |
+
+
 # Tabelle parametriche/customizing singolo cliente
 
 Tabelle per parametrizzare/customizzare la soluzione per il singolo cliente, DB Multitenant

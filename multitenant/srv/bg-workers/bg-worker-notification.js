@@ -1,6 +1,6 @@
 const cds = require("@sap/cds");
 const NotificationQueue = require("../queues/queue-notification");
-const NotificationService = require("../notifications/notificationService");
+const NotificationPrepareData = require("../notifications/prepareData/notificationPrepareData");
 const EnterpriseMessageNotification = require("../enterprise-messaging/em_notification");
 const DB = require("../db-utilities");
 
@@ -12,6 +12,7 @@ class BGWorkerNotification {
         this.notificationQueue = new NotificationQueue(logger);
         // ENTERPRISE MESSAGE INSTANCE
         this.enterpriseMessageNotification = EnterpriseMessageNotification.getInstance(logger);
+        this.notificationPrepareData = NotificationPrepareData.getInstance(logger);
     }
 
     static getInstance(logger) {
@@ -38,15 +39,14 @@ class BGWorkerNotification {
         // GET NOTIFICATION FOR TABLE INSERT
         this.logger.info(`Notification retrieved : ${JSON.stringify(notification)}`);
 
-        // SEND TO ENTERPRISE MESSAGE SERVICE NOTIFICATION
-        // const dataForMsgService = JSON.stringify(notification);
-        const dataForMsgService = JSON.stringify(
-            await NotificationService.prepareDataForKeetings(notification, this.logger)
-        );
-        const date = new Date().toISOString();
-        notification.notificationTime = date;
-
         try {
+            // SEND TO ENTERPRISE MESSAGE SERVICE NOTIFICATION
+            const dataForMsgService = JSON.stringify(
+                await this.notificationPrepareData.prepareNotificationPayload(notification)
+            );
+            const date = new Date().toISOString();
+            notification.notificationTime = date;
+
             await this.enterpriseMessageNotification.send(
                 dataForMsgService,
                 notification,
@@ -56,6 +56,7 @@ class BGWorkerNotification {
         } catch (Error) {
             // 'Todo: Open' // Gestire errore , riprendo inserimento in coda?
             this.logger.info(Error.message);
+            setImmediate(this.tick);
         }
 
         setImmediate(this.tick);

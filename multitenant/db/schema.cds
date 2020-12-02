@@ -276,3 +276,10 @@ define entity Notification : cuid, managed {
     payload           : String;
     GUID              : UUID;
 }
+
+
+define entity NotificationPayloadPrepare : cuid, managed {
+    value             : String(20);
+    preparationClass  : String(50);
+    preparationMethod : String(20);
+}
