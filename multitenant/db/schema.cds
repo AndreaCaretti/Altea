@@ -207,7 +207,7 @@ define entity HandlingUnits : cuid, managed {
 
 define entity HandlingUnitTypology : cuid, managed {
     definition : String(50);
-    uom        : String
+    uom        : String(50);
 }
 
 define entity HandlingUnitsMovements : cuid, managed {
