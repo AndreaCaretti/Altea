@@ -81,7 +81,7 @@ class CloudColdChain {
         service.on("UPDATE", "tenant", async (req, next) => {
             await next(); // default implementation which is doing the HDI container creation
             const url = `https://${req.data.subscribedSubdomain}-dev-cap-template-approuter.cfapps.us10.hana.ondemand.com`;
-            console.log(`[INFO ][ON_UPDATE_TENANT] Application URL is ${url}`);
+            this.logger.info(`[INFO ][ON_UPDATE_TENANT] Application URL is ${url}`);
             return url;
         });
     }
