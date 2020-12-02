@@ -93,13 +93,13 @@ class Notification {
                 },
                 {
                     gtin: "1234567890123",
-                    productDescription: "”Antibiotic X",
+                    productDescription: "Antibiotic X",
                     lot: "U4655",
                     quantity: "200",
                 },
                 {
                     gtin: "1234567890125",
-                    productDescription: "”Antibiotic Y",
+                    productDescription: "Antibiotic Y",
                     lot: "U7655",
                     quantity: "200",
                 },

@@ -1,3 +1,4 @@
+@(requires : 'authenticated-user')
 service iot {
 
     // action segment() returns String;

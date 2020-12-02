@@ -8,12 +8,13 @@ module.exports = (notification) => {
         // Logger
         const logger = Logger.getInstance();
         // Notification - Notification service
-        const notificationService = new NotificationService(logger);
+        const notificationService = NotificationService.getInstance(logger);
         notificationService.start();
 
+        // https://cap.cloud.sap/docs/node.js/authentication#cds-user
         notificationService.alert(
-            notificationData.user,
-            notificationData.tenant,
+            request.user.id,
+            request.user.tenant,
             notificationData.area,
             notificationData.alertBusinessTime,
             notificationData.alertCode,
