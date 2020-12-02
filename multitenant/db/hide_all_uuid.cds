@@ -55,3 +55,7 @@ annotate cloudcoldchain.outOfRange with {
 annotate cloudcoldchain.Department with {
     ID @UI.Hidden;
 }
+
+annotate cloudcoldchain.HandlingUnitTypology with {
+    ID @UI.Hidden;
+}

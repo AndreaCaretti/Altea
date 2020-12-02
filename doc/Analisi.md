@@ -233,11 +233,11 @@ Range di temperature
 
 ## Tabella HandlingUnitTypology
 
-| _ID_   | description (50) | uom     |
-| ------ | ---------------- | ------- |
-| _GUID_ | Pallet           | pallet  |
-| _GUID_ | Cartoni          | cartoni |
-| _GUID_ | Blister          | blister |
+| _ID_   | description (50) | uom (50) |
+| ------ | ---------------- | -------- |
+| _GUID_ | Pallet           | pallet   |
+| _GUID_ | Cartoni          | cartoni  |
+| _GUID_ | Blister          | blister  |
 
 
 # Tabelle parametriche/customizing singolo cliente
@@ -365,9 +365,9 @@ Records solo nel DB del produttore
 
 ## Tabella HandlingUnits
 
-| _sscc_ (SSCC) | lot | typology | lastKnownArea(Areas) | inAreaBusinessTime (Timestamp) | lastMovement (HandlingUnitsMovements) | jsonSummary (LargeString) | blockchainHash (100) |
-| ------------- | --- || -------------------- | ------------------------------ | ------------------------------------- | ------------------------------------- | ---------------------------------------------------- |
-| 123456789012345678 | LOT-XYZ |            | Uscita magazzino     | 2020-10-14T09:01:33.763Z       | _GUID_                                | { HandlingUnit: "HandlingUnitA", etc} | adb24ba2f2ef33d73d79e60b9d47f7fb97c69013eb6c8f37c... |
+| _sscc_ (SSCC)      | lot     | typology | lastKnownArea(Areas) | inAreaBusinessTime (Timestamp) | lastMovement (HandlingUnitsMovements) | jsonSummary (LargeString)             | blockchainHash (100)                                 |
+| ------------------ | ------- | -------- | -------------------- | ------------------------------ | ------------------------------------- | ------------------------------------- | ---------------------------------------------------- |
+| 123456789012345678 | LOT-XYZ | Pallet   | Uscita magazzino     | 2020-10-14T09:01:33.763Z       | _GUID_                                | { HandlingUnit: "HandlingUnitA", etc} | adb24ba2f2ef33d73d79e60b9d47f7fb97c69013eb6c8f37c... |
 
 -   `lastKnowArea`: ultima posizione conosciuta dell'SSCC
 -   `inAreaBusinessTime`: momento in cui è stato rilevato l'ultimo spostamento

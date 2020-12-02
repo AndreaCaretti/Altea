@@ -197,11 +197,17 @@ define entity RouteSteps : cuid {
 define entity HandlingUnits : cuid, managed {
     huId               : cloudcoldchain.HU_ID;
     lot                : Association to one Lots;
+    typology           : Composition of one HandlingUnitTypology;
     lastKnownArea      : Association to one Areas;
     inAreaBusinessTime : Timestamp;
     lastMovement       : Association to one HandlingUnitsMovements;
     jsonSummary        : LargeString;
     blockchainHash     : String(100);
+}
+
+define entity HandlingUnitTypology : cuid, managed {
+    definition : String(50);
+    uom        : String
 }
 
 define entity HandlingUnitsMovements : cuid, managed {
