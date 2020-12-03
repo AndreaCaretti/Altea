@@ -51,3 +51,7 @@ annotate cloudcoldchain.Routes with {
 annotate cloudcoldchain.outOfRange with {
     ID @Core.Computed;
 }
+
+annotate cloudcoldchain.HandlingUnitTypology with {
+    ID @Core.Computed;
+}

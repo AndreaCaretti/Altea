@@ -12,6 +12,34 @@ class OLTNotificationPrepare {
         });
 
         const tx = DB.getTransaction(technicalUser, this.logger);
+        // READ CONFIGURATION TABLE
+        const query = cds.parse.cql(
+            `SELECT 
+                T0.outOfRange_ID OutOfRange_ID, 
+                T0.handlingUnit_ID HU_ID, 
+                T1.area_ID AreaID,
+                T2.name AreaName,
+                T2.location_ID Location_ID,
+                T2.department_ID Department_ID
+            from 
+                cloudcoldchain_OutOfRangeHandlingUnits T0 
+            LEFT JOIN 
+                cloudcoldchain_outOfRange T1 
+                    ON T0.outOfRange_ID = T1.ID 
+            LEFT JOIN 
+                cloudcoldchain_Areas T2 
+                    ON T1.area_ID = T2.ID 
+            LEFT JOIN 
+                cloudcoldchain_Locations T3
+                    ON T2.location_ID = T3.ID
+            LEFT JOIN 
+                cloudcoldchain_Department T4
+                    ON T2.department_ID = T4.ID                    
+            WHERE T0.outOfRange_ID = '${data.GUID}'`
+        );
+
+        const OutOfRangeHandlingUnitsData2 = await tx.run(query);
+        this.logger.info(OutOfRangeHandlingUnitsData2);
 
         // UTILIZZO GUUID DEVICE IOT PER LEGGERE TABELLA
 
