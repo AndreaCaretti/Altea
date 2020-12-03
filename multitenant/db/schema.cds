@@ -92,12 +92,11 @@ define entity Areas : cuid, managed {
         TextArrangement : #TextOnly
     }
     category     : Association to one AreaCategories;
-    @title  : 'Location'
+    @title  : 'Department'
     @Common : {
-        Text            : location.name,
+        Text            : department.name,
         TextArrangement : #TextOnly
     }
-    location     : Association to one Locations;
     department   : Association to one Department;
     @title  : 'ID Device IoT'
     ID_DeviceIoT : String
@@ -206,8 +205,8 @@ define entity HandlingUnits : cuid, managed {
 }
 
 define entity HandlingUnitTypology : cuid, managed {
-    definition : String(50);
-    uom        : String(50);
+    name : String(50);
+    uom  : String(50);
 }
 
 define entity HandlingUnitsMovements : cuid, managed {
@@ -293,3 +292,24 @@ define entity OutOfRangeHandlingUnits : cuid, managed {
     endReason    : cloudcoldchain.endReasonType;
     duration     : Integer;
 }
+
+define entity OutOfRangeHandlingUnitsAreas as
+    select from OutOfRangeHandlingUnits {
+        ID                                                  as outOfRangeID,
+        outOfRange.ID_DeviceIoT                             as ID_DeviceIoT,
+        handlingUnit.lastKnownArea.ID                       as AreaID,
+        handlingUnit.lastKnownArea.name                     as AreaName,
+        handlingUnit.lastKnownArea.department.ID            as DepartmentID,
+        handlingUnit.lastKnownArea.department.name          as DepartmentName,
+        handlingUnit.lastKnownArea.department.location.ID   as LocationId,
+        handlingUnit.lastKnownArea.department.location.name as LocationName
+    }
+    group by
+        ID,
+        outOfRange.ID_DeviceIoT,
+        handlingUnit.lastKnownArea.ID,
+        handlingUnit.lastKnownArea.name,
+        handlingUnit.lastKnownArea.department.ID,
+        handlingUnit.lastKnownArea.department.name,
+        handlingUnit.lastKnownArea.department.location.ID,
+        handlingUnit.lastKnownArea.department.location.name;

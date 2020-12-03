@@ -233,11 +233,11 @@ Range di temperature
 
 ## Tabella HandlingUnitTypology
 
-| _ID_   | description (50) | uom (50) |
-| ------ | ---------------- | -------- |
-| _GUID_ | Pallet           | pallet   |
-| _GUID_ | Cartoni          | cartoni  |
-| _GUID_ | Blister          | blister  |
+| _ID_   | name (50) | uom (50) |
+| ------ | --------- | -------- |
+| _GUID_ | Pallet    | pallet   |
+| _GUID_ | Cartoni   | cartoni  |
+| _GUID_ | Blister   | blister  |
 
 
 ## Tabella Mapping tipo Notifica funzione di preparazione Payload NotificationPayloadPrepare
@@ -498,11 +498,11 @@ Tabella delle segnalazioni ricevute dal iot per alert di temperatura out of rang
 
 Tabella delle handling units collegate alla segnalazione di out of range
 
-| _ID_                                 | outOfRange (OutOfRange)              | handlingUnit (HandlingUnit) | startTime                | endTime                  | startReason (enum) |endReason| duration (Integer) |     |
-| ------------------------------------ | ------------------------------------ | --------------------------- | ------------------------ | ------------------------ | ------------------ | ------------------ | --- |
-| 99d2f997-1e9c-4b21-8817-d48171ead166 | 10d2f997-1e9c-4b21-8817-d48171ead166 | _GUID_                      | 2020-10-14T09:01:33.763Z | 2020-11-14T09:01:33.763Z |                    |                    |     |
-| _GUID_                               | cella2                               |                             | 2020-10-14T09:01:33.763Z | 2020-10-19T09:01:33.763Z |                    |                    |     |
-| _GUID_                               | cella3                               |                             | 2020-10-14T09:01:33.763Z |                          |                    |                    |     |
+| _ID_                                 | outOfRange (OutOfRange)              | handlingUnit (HandlingUnit) | startTime                | endTime                  | startReason (enum) | endReason | duration (Integer) |  |
+| ------------------------------------ | ------------------------------------ | --------------------------- | ------------------------ | ------------------------ | ------------------ | --------- | ------------------ |
+| 99d2f997-1e9c-4b21-8817-d48171ead166 | 10d2f997-1e9c-4b21-8817-d48171ead166 | _GUID_                      | 2020-10-14T09:01:33.763Z | 2020-11-14T09:01:33.763Z |                    |           |                    |
+| _GUID_                               | cella2                               |                             | 2020-10-14T09:01:33.763Z | 2020-10-19T09:01:33.763Z |                    |           |                    |
+| _GUID_                               | cella3                               |                             | 2020-10-14T09:01:33.763Z |                          |                    |           |                    |
 
 -   `outOfRange`: collegamento al segmento `OutOfRange` che ha scatenato il problema
 -   `startTime`: ora di inizio del problema oppure momento in cui la cella è entrata nella cella

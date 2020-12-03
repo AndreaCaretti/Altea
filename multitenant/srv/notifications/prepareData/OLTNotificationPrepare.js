@@ -1,5 +1,8 @@
 // const FgRed = "\x1b[31m";
 const LOG_PREFIX = `Preparo dati per invio notifica OLT - `;
+const SEVERITY = 1;
+const ALARM_TYPE = `OLT`;
+const MEASURE_UNIT = "Celsius";
 const DB = require("../../db-utilities");
 
 class OLTNotificationPrepare {
@@ -13,33 +16,53 @@ class OLTNotificationPrepare {
 
         const tx = DB.getTransaction(technicalUser, this.logger);
         // READ CONFIGURATION TABLE
-        const query = cds.parse.cql(
+        const queryArea = cds.parse.cql(
             `SELECT 
-                T0.outOfRange_ID OutOfRange_ID, 
-                T0.handlingUnit_ID HU_ID, 
-                T1.area_ID AreaID,
-                T2.name AreaName,
-                T2.location_ID Location_ID,
-                T2.department_ID Department_ID
+                T0.ID OutOfRangeID, 
+                T0.area_ID AreaID,
+                T1.name AreaName,
+                T3.name AreaCategory,
+                T1.department_ID DepartmentID,
+                T2.name DepartmentName,
+                T4.ID LocationID,
+                T4.name LocationName
+            from 
+                cloudcoldchain_outOfRange T0 
+            LEFT JOIN 
+                cloudcoldchain_Areas T1 
+                    ON T0.area_ID = T1.ID 
+            LEFT JOIN 
+                cloudcoldchain_Department T2
+                    ON T1.department_ID = T2.ID  
+            LEFT JOIN
+                cloudcoldchain_AreaCategories T3
+                    ON T1.category_ID = T3.ID  
+            LEFT JOIN
+                cloudcoldchain_Locations T4
+                        ON T2.location_ID = T4.ID  
+            WHERE T0.ID = '${data.GUID}'`
+        );
+
+        const AreaQueryInformation = await tx.run(queryArea);
+        const AreaInformation = AreaQueryInformation[0];
+        this.logger.info(`${LOG_PREFIX} recupero informazioni per location ${AreaInformation}`);
+
+        const queryHandligUnit = cds.parse.cql(
+            `SELECT 
+                T0.ID OutOfRange_ID,
+                T1.ID HandlingUnit_ID
             from 
                 cloudcoldchain_OutOfRangeHandlingUnits T0 
             LEFT JOIN 
-                cloudcoldchain_outOfRange T1 
-                    ON T0.outOfRange_ID = T1.ID 
-            LEFT JOIN 
-                cloudcoldchain_Areas T2 
-                    ON T1.area_ID = T2.ID 
-            LEFT JOIN 
-                cloudcoldchain_Locations T3
-                    ON T2.location_ID = T3.ID
-            LEFT JOIN 
-                cloudcoldchain_Department T4
-                    ON T2.department_ID = T4.ID                    
+                cloudcoldchain_HandlingUnits T1 
+                    ON handlingUnit_ID = T1.ID                    
             WHERE T0.outOfRange_ID = '${data.GUID}'`
         );
 
-        const OutOfRangeHandlingUnitsData2 = await tx.run(query);
-        this.logger.info(OutOfRangeHandlingUnitsData2);
+        const HandlingUnitInformation = await tx.run(queryHandligUnit);
+        this.logger.info(
+            `${LOG_PREFIX} recupero informazioni per location ${HandlingUnitInformation}`
+        );
 
         // UTILIZZO GUUID DEVICE IOT PER LEGGERE TABELLA
 
@@ -47,7 +70,7 @@ class OLTNotificationPrepare {
         const valueOutPut = {
             eventGuid: await DB.getUUID(),
             // eventGuid invece che id
-            severity: 1,
+            severity: SEVERITY,
             eventDate: data.alertBusinessTime,
             // invece che creationDate
             notificationDate: data.notificationDate,
@@ -55,19 +78,19 @@ class OLTNotificationPrepare {
             area: {
                 // identifica l'area impattata dall'evento
                 // (per area intendiamo cella frigorifera ma in futuro anche un truck)
-                guid: "c7163657-20c8-4fc3-925a-9028bc6b0d8f",
-                description: "Cold Room 1",
-                category: "COLD_ROOM",
+                guid: AreaInformation.AreaID,
+                description: AreaInformation.AreaName,
+                category: AreaInformation.AreaCategory,
                 // categoria dell'area impattata (COLD_ROOM, TRUCK, ...)
                 department: {
                     // identifica il department in cui è contenuta l'area
-                    guid: "c55dd03a-c097-487c-a60c-bf3fa8abea5b",
-                    description: "Packging",
+                    guid: AreaInformation.DepartmentID,
+                    description: AreaInformation.DepartmentName,
                 },
                 location: {
                     // identifica il plant in cui è contenuta l'area
-                    guid: "c55dd03a-c097-487c-a60c-bf3fa8abea5b",
-                    description: "Plant A",
+                    guid: AreaInformation.LocationID,
+                    description: AreaInformation.LocationName,
                 },
                 guidAsset: data.GUID, // guid dell'asset iot che ha notificato l'evento
             },
@@ -94,9 +117,9 @@ class OLTNotificationPrepare {
                     quantity: "200",
                 },
             ],
-            alarmType: "OLT",
+            alarmType: ALARM_TYPE,
             details: {
-                measurementUnit: "Celsius",
+                measurementUnit: MEASURE_UNIT,
                 eventTemperature: "20.00",
                 // eventTemperature invece che currentTemperatura, nel momento dell'evento
                 workingTemperature: {
