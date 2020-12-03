@@ -85,22 +85,23 @@ define entity AreaCategories : cuid, managed {
 @UI.Identification : [{Value : name}]
 define entity Areas : cuid, managed {
     @title  : 'Areas'
-    name         : String(50);
+    name                  : String(50);
     @title  : 'Category'
     @Common : {
         Text            : category.name,
         TextArrangement : #TextOnly
     }
-    category     : Association to one AreaCategories;
-    @title  : 'Location'
+    category              : Association to one AreaCategories;
+    @title  : 'Department'
     @Common : {
-        Text            : location.name,
+        Text            : department.name,
         TextArrangement : #TextOnly
     }
-    location     : Association to one Locations;
-    department   : Association to one Department;
+    department            : Association to one Department;
     @title  : 'ID Device IoT'
-    ID_DeviceIoT : String
+    ID_DeviceIoT          : String;
+    minWorkingTemperature : Decimal;
+    maxWorkingTemperature : Decimal;
 }
 
 
@@ -197,11 +198,17 @@ define entity RouteSteps : cuid {
 define entity HandlingUnits : cuid, managed {
     huId               : cloudcoldchain.HU_ID;
     lot                : Association to one Lots;
+    typology           : Composition of one HandlingUnitTypology;
     lastKnownArea      : Association to one Areas;
     inAreaBusinessTime : Timestamp;
     lastMovement       : Association to one HandlingUnitsMovements;
     jsonSummary        : LargeString;
     blockchainHash     : String(100);
+}
+
+define entity HandlingUnitTypology : cuid, managed {
+    name : String(50);
+    uom  : String(50);
 }
 
 define entity HandlingUnitsMovements : cuid, managed {
@@ -272,6 +279,12 @@ define entity Notification : cuid, managed {
 }
 
 
+define entity NotificationPayloadPrepare : cuid, managed {
+    value             : String(20);
+    preparationClass  : String(50);
+    preparationMethod : String(20);
+}
+
 define entity OutOfRangeHandlingUnits : cuid, managed {
     outOfRange   : Association to outOfRange;
     handlingUnit : Association to HandlingUnits;
@@ -281,3 +294,68 @@ define entity OutOfRangeHandlingUnits : cuid, managed {
     endReason    : cloudcoldchain.endReasonType;
     duration     : Integer;
 }
+
+define entity OutOfRangeAreaDetails             as
+    select from outOfRange {
+        ID                            as OutOfRangeID,
+        ID_DeviceIoT                  as ID_DeviceIoT,
+        area.ID                       as AreaID,
+        area.name                     as AreaName,
+        area.category.ID              as AreaCategoryID,
+        area.category.name            as AreaCategoryName,
+        area.department.ID            as DepartmentID,
+        area.department.name          as DepartmentName,
+        area.department.location.ID   as LocationID,
+        area.department.location.name as LocationName
+    }
+    group by
+        ID,
+        ID_DeviceIoT,
+        area.ID,
+        area.name,
+        area.category.ID,
+        area.category.name,
+        area.department.ID,
+        area.department.name,
+        area.department.location.ID,
+        area.department.location.name;
+
+/**
+ * #
+ *
+ * # ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
+ *
+ * # View Defintions
+ *
+ * # ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+ */
+define entity OutOfRangeHandlingUnitDetails     as
+    select from OutOfRangeHandlingUnits
+    left join OutOfRangeHandlingUnitDetailCount
+        on OutOfRangeHandlingUnitDetailCount.OutOfRangeID = OutOfRangeHandlingUnits.outOfRange.ID
+    {
+        outOfRange.ID                                                    as OutOfRangeID,
+        handlingUnit.lot.ID                                              as LotID,
+        handlingUnit.lot.product.gtin                                    as GTIN,
+        handlingUnit.lot.product.name                                    as ProductName,
+        OutOfRangeHandlingUnitDetailCount.OutOfRangeHandlingUnitsIDCount as CountHandlingUnit
+    }
+    group by
+        outOfRange.ID,
+        handlingUnit.lot.ID,
+        handlingUnit.lot.product.gtin,
+        handlingUnit.lot.product.name;
+
+define entity OutOfRangeHandlingUnitDetailCount as
+    select from OutOfRangeHandlingUnits {
+        count(
+            ID
+        )                             as OutOfRangeHandlingUnitsIDCount,
+        outOfRange.ID                 as OutOfRangeID,
+        handlingUnit.lot.ID           as LotID,
+        handlingUnit.lot.product.gtin as GTIN,
+    }
+    group by
+        outOfRange.ID,
+        handlingUnit.lot.ID,
+        handlingUnit.lot.product.gtin;

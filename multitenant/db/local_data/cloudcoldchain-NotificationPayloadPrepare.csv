@@ -1,0 +1,4 @@
+ID,value,preparationClass,preparationMethod
+8b08e519-9f40-427f-8b78-507f198804b9,OLT,OLTNotificationPrepare,prepareData
+3f301735-e156-43fd-bd62-384c456b57fd,TOR,TORNotificationPrepare,prepareData
+abde2348-e0bc-45ab-8709-03f8f5616e5b,EOD,EODotificationPrepare,prepareData

@@ -31,6 +31,30 @@ class DB {
         return fieldValue[fieldName];
     }
 
+    static selectAllRowsWhere(tableName, where, tx, logger) {
+        const rowValue = tx.run(SELECT.from(tableName).where(where));
+
+        if (!rowValue) {
+            throw Error(
+                `selectAllRowsWhere - Record not found: ${tableName}/${JSON.stringify(where)}`
+            );
+        }
+
+        if (!rowValue) {
+            throw Error(
+                `selectAllRowsWhere - Empty field: ${tableName}/${JSON.stringify(
+                    where
+                )}/${rowValue}`
+            );
+        }
+
+        logger.debug(
+            `selectAllRowsWhere: ${tableName}/${JSON.stringify(where)}/${where} -> '${rowValue}'`
+        );
+
+        return rowValue;
+    }
+
     /**
      *
      * @param {*} tableName
@@ -39,30 +63,26 @@ class DB {
      * @param {*} tx
      * @param {*} logger
      */
-    static async selectOneFieldWhere(tableName, fieldName, where, tx, logger) {
-        const fieldValue = await tx.run(SELECT.one(tableName).columns(fieldName).where(where));
+    static selectOneRowWhere(tableName, where, tx, logger) {
+        const rowValue = tx.run(SELECT.one(tableName).where(where));
 
-        if (!fieldValue) {
+        if (!rowValue) {
             throw Error(
-                `selectOneFieldWhere - Record not found: ${tableName}/${JSON.stringify(where)}`
+                `selectOneRowWhere - Record not found: ${tableName}/${JSON.stringify(where)}`
             );
         }
 
-        if (!fieldValue[fieldName]) {
+        if (!rowValue) {
             throw Error(
-                `selectOneFieldWhere - Empty field: ${tableName}/${JSON.stringify(
-                    where
-                )}/${fieldName}`
+                `selectOneRowWhere - Empty field: ${tableName}/${JSON.stringify(where)}/${rowValue}`
             );
         }
 
         logger.debug(
-            `selectOneFieldWhere: ${tableName}/${JSON.stringify(where)}/${fieldName} -> '${
-                fieldValue[fieldName]
-            }'`
+            `selectOneRowWhere: ${tableName}/${JSON.stringify(where)}/${where} -> '${rowValue}'`
         );
 
-        return fieldValue[fieldName];
+        return rowValue;
     }
 
     /**
@@ -167,6 +187,13 @@ class DB {
         return cds.transaction(new cds.Request({ user: technicalUser }));
     }
 
+    /** Metodo per inserimento singolo di un record in tabella
+     *
+     * @param {*} tableName - Nome Tabella
+     * @param {*} row  - Valore xsa inserire in tabella
+     * @param {*} tx  - TX context per inserimento in tabella
+     * @param {*} Logger  - classe di logger globale
+     */
     static async insertIntoTable(tableName, row, tx, Logger) {
         const oTX = tx;
         let recordsCount;
@@ -181,6 +208,34 @@ class DB {
         return recordsCount;
     }
 
+    /**
+     *
+     * @param {*} tableName - Nome tabella
+     * @param {*} whereClause - Condizione di where esempio { ID: idValue }
+     * @param {*} tx - TX contect per esecuzione query
+     * @param {*} logger - classe di logger globale
+     */
+    static async selectOneRecordUsing(tableName, whereClause, tx, logger) {
+        const record = await tx.run(SELECT.one(tableName).where(whereClause));
+
+        if (!record) {
+            throw Error(
+                `SelectOneRecord - Record not found for table : ${tableName} and where clause ${whereClause}`
+            );
+        }
+
+        logger.debug(
+            `SelectOneRecord for table : ${tableName} and whereCause ${whereClause} -> '${JSON.stringify(
+                record
+            )}'`
+        );
+
+        return record;
+    }
+
+    /**
+     * Metodo recupero dinamico di un UUID
+     */
     static async getUUID() {
         return uuidv4();
     }

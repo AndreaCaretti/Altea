@@ -1,1 +1,1 @@
-ab -l -n 1000 -c 100 -T application/json -p esempio-massivo.json http://localhost:4004/notificaton-servive-call/notification
+ab -l -n 1000 -c 100 -T application/json -p esempio-massivo.json http://localhost:4004/notificaton-servive-call/sendNotification
