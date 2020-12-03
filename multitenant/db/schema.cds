@@ -85,21 +85,23 @@ define entity AreaCategories : cuid, managed {
 @UI.Identification : [{Value : name}]
 define entity Areas : cuid, managed {
     @title  : 'Areas'
-    name         : String(50);
+    name                  : String(50);
     @title  : 'Category'
     @Common : {
         Text            : category.name,
         TextArrangement : #TextOnly
     }
-    category     : Association to one AreaCategories;
+    category              : Association to one AreaCategories;
     @title  : 'Department'
     @Common : {
         Text            : department.name,
         TextArrangement : #TextOnly
     }
-    department   : Association to one Department;
+    department            : Association to one Department;
     @title  : 'ID Device IoT'
-    ID_DeviceIoT : String
+    ID_DeviceIoT          : String;
+    minWorkingTemperature : Decimal;
+    maxWorkingTemperature : Decimal;
 }
 
 
@@ -293,23 +295,58 @@ define entity OutOfRangeHandlingUnits : cuid, managed {
     duration     : Integer;
 }
 
-define entity OutOfRangeHandlingUnitsAreas as
-    select from OutOfRangeHandlingUnits {
-        ID                                                  as outOfRangeID,
-        outOfRange.ID_DeviceIoT                             as ID_DeviceIoT,
-        handlingUnit.lastKnownArea.ID                       as AreaID,
-        handlingUnit.lastKnownArea.name                     as AreaName,
-        handlingUnit.lastKnownArea.department.ID            as DepartmentID,
-        handlingUnit.lastKnownArea.department.name          as DepartmentName,
-        handlingUnit.lastKnownArea.department.location.ID   as LocationId,
-        handlingUnit.lastKnownArea.department.location.name as LocationName
+define entity OutOfRangeAreaDetails             as
+    select from outOfRange {
+        ID                            as OutOfRangeID,
+        ID_DeviceIoT                  as ID_DeviceIoT,
+        area.ID                       as AreaID,
+        area.name                     as AreaName,
+        area.category.ID              as AreaCategoryID,
+        area.category.name            as AreaCategoryName,
+        area.department.ID            as DepartmentID,
+        area.department.name          as DepartmentName,
+        area.department.location.ID   as LocationID,
+        area.department.location.name as LocationName
     }
     group by
         ID,
-        outOfRange.ID_DeviceIoT,
-        handlingUnit.lastKnownArea.ID,
-        handlingUnit.lastKnownArea.name,
-        handlingUnit.lastKnownArea.department.ID,
-        handlingUnit.lastKnownArea.department.name,
-        handlingUnit.lastKnownArea.department.location.ID,
-        handlingUnit.lastKnownArea.department.location.name;
+        ID_DeviceIoT,
+        area.ID,
+        area.name,
+        area.category.ID,
+        area.category.name,
+        area.department.ID,
+        area.department.name,
+        area.department.location.ID,
+        area.department.location.name;
+
+define entity OutOfRangeHandlingUnitDetails     as
+    select from OutOfRangeHandlingUnits
+    left join OutOfRangeHandlingUnitDetailCount
+        on OutOfRangeHandlingUnitDetailCount.OutOfRangeID = OutOfRangeHandlingUnits.outOfRange.ID
+    {
+        outOfRange.ID                                                    as OutOfRangeID,
+        handlingUnit.lot.ID                                              as LotID,
+        handlingUnit.lot.product.gtin                                    as GTIN,
+        handlingUnit.lot.product.name                                    as ProductName,
+        OutOfRangeHandlingUnitDetailCount.OutOfRangeHandlingUnitsIDCount as CountHandlingUnit
+    }
+    group by
+        outOfRange.ID,
+        handlingUnit.lot.ID,
+        handlingUnit.lot.product.gtin,
+        handlingUnit.lot.product.name;
+
+define entity OutOfRangeHandlingUnitDetailCount as
+    select from OutOfRangeHandlingUnits {
+        count(
+            ID
+        )                             as OutOfRangeHandlingUnitsIDCount,
+        outOfRange.ID                 as OutOfRangeID,
+        handlingUnit.lot.ID           as LotID,
+        handlingUnit.lot.product.gtin as GTIN,
+    }
+    group by
+        outOfRange.ID,
+        handlingUnit.lot.ID,
+        handlingUnit.lot.product.gtin;

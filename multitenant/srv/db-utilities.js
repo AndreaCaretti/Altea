@@ -31,6 +31,30 @@ class DB {
         return fieldValue[fieldName];
     }
 
+    static selectAllRowsWhere(tableName, where, tx, logger) {
+        const rowValue = tx.run(SELECT.from(tableName).where(where));
+
+        if (!rowValue) {
+            throw Error(
+                `selectAllRowsWhere - Record not found: ${tableName}/${JSON.stringify(where)}`
+            );
+        }
+
+        if (!rowValue) {
+            throw Error(
+                `selectAllRowsWhere - Empty field: ${tableName}/${JSON.stringify(
+                    where
+                )}/${rowValue}`
+            );
+        }
+
+        logger.debug(
+            `selectAllRowsWhere: ${tableName}/${JSON.stringify(where)}/${where} -> '${rowValue}'`
+        );
+
+        return rowValue;
+    }
+
     /**
      *
      * @param {*} tableName
