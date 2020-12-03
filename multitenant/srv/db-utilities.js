@@ -40,7 +40,11 @@ class DB {
      * @param {*} logger
      */
     static async selectOneFieldWhere(tableName, fieldName, where, tx, logger) {
-        const fieldValue = await tx.run(SELECT.one(tableName).columns(fieldName).where(where));
+        try {
+            const fieldValue = await tx.run(SELECT.one(tableName).columns(fieldName).where(where));
+        } catch (error) {
+            console.log(error);
+        }
 
         if (!fieldValue) {
             throw Error(
@@ -183,6 +187,14 @@ class DB {
 
     static async getUUID() {
         return uuidv4();
+    }
+
+    static async checkDuplicateRecords(tableName, fieldName, fieldValue) {
+        const record = SELECT.one(tableName).columns(fieldName).where({ fieldName: fieldValue });
+        if (record) {
+            throw Error(`Record Duplicato per ${tableName.name}/${fieldName}: ${fieldValue}`);
+        }
+        return false;
     }
 
     // ----- DA PROVARE ------ //

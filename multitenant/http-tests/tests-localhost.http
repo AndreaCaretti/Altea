@@ -29,31 +29,30 @@ Content-Type: application/json
 
 ### Creazione segmento iot
 POST http://localhost:4004/iot/segment  HTTP/1.1
-Authorization: Bearer {{token}}
+Authorization: Basic Alice:Alice
 Content-Type: application/json
 
 {
-	"cloudEventsVersion": "1.0",
-	"eventID": "SRL-C8F9B5EA1E7446CF91171F7A9F3410D7",
-	"eventType": "com.sap.appiot.eventtypes:SegmentNotifications",
-	"source": "IOT-BSV-SEG",
-	"eventTime": "2020-11-30T17:19:55.59Z",
-	"contentType": "application/json",
-	"extensions": {
-		"modelId": "592D9BEA5FD74E3DBF2C9BF5BD7CDA26",
-		"dataModel": "Thing",
-		"correlationId": "c8f9b5ea-1e74-46cf-9117-1f7a9f3410d7"
-	},
-	"data": [
-		{
-			"entityType": "SEGMENT",
-			"action": "OPEN",
-			"entityId": "c5d7cbe6-ceaf-4dff-8452-c7a25c970772",
-			"entityURL": "https://sap-iot-noah-live-segment-service.cfapps.eu10.hana.ondemand.com/v1/segments/c5d7cbe6-ceaf-4dff-8452-c7a25c970772"
-		}
-	]
+    "cloudEventsVersion": "1.0",
+    "eventID": "SRL-B3AC20A58D7A47B6937073DA40CA95AC",
+    "eventType": "com.sap.appiot.eventtypes:SegmentNotifications",
+    "source": "IOT-BSV-SEG",
+    "eventTime": "2020-11-30T10:04:26.868Z",
+    "contentType": "application/json",
+    "extensions": {
+        "modelId": "592D9BEA5FD74E3DBF2C9BF5BD7CDA26",
+        "dataModel": "Thing",
+        "correlationId": "b3ac20a5-8d7a-47b6-9370-73da40ca95ac"
+    },
+    "data": [
+        {
+            "entityType": "SEGMENT",
+            "action": "OPEN",
+            "entityId": "205f253b-0575-4e94-84b4-5ee5906c20e4",
+            "entityURL": "https://sap-iot-noah-live-segment-service.cfapps.eu10.hana.ondemand.com/v1/segments/205f253b-0575-4e94-84b4-5ee5906c20e4"
+        }
+    ]
 }
-
 ### Create Product
 POST http://localhost:4004/services/Products  HTTP/1.1
 Authorization: Basic Alice:Alice
