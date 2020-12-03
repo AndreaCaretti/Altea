@@ -320,6 +320,15 @@ define entity OutOfRangeAreaDetails             as
         area.department.location.ID,
         area.department.location.name;
 
+/**
+ * #
+ *
+ * # ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
+ *
+ * # View Defintions
+ *
+ * # ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+ */
 define entity OutOfRangeHandlingUnitDetails     as
     select from OutOfRangeHandlingUnits
     left join OutOfRangeHandlingUnitDetailCount
