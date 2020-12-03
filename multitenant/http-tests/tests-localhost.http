@@ -37,7 +37,7 @@ Content-Type: application/json
     "eventID": "SRL-B3AC20A58D7A47B6937073DA40CA95AC",
     "eventType": "com.sap.appiot.eventtypes:SegmentNotifications",
     "source": "IOT-BSV-SEG",
-    "eventTime": "2020-11-30T10:04:26.868Z",
+    "eventTime": "2020-10-15T09:13:13.113Z",
     "contentType": "application/json",
     "extensions": {
         "modelId": "592D9BEA5FD74E3DBF2C9BF5BD7CDA26",

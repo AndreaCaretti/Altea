@@ -40,11 +40,7 @@ class DB {
      * @param {*} logger
      */
     static async selectOneFieldWhere(tableName, fieldName, where, tx, logger) {
-        try {
-            const fieldValue = await tx.run(SELECT.one(tableName).columns(fieldName).where(where));
-        } catch (error) {
-            console.log(error);
-        }
+        const fieldValue = await tx.run(SELECT.one(tableName).columns(fieldName).where(where));
 
         if (!fieldValue) {
             throw Error(

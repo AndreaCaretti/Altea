@@ -1,3 +1,3 @@
 using from './handlers/handlingUnitMoved';
-using from './iot/iotService';
+using from './handlers/iot/iotService';
 using from './notifications/notificationServiceCall';
