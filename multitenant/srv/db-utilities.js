@@ -58,7 +58,7 @@ class DB {
             throw Error(
                 `selectAllRowsWhere - Record not found: ${
                     tableName.name
-                } where where ${JSON.stringify(whereClause)} -> '${JSON.stringify(singleRow)}'`
+                } where where ${JSON.stringify(whereClause)} -> '${JSON.stringify(allRows)}'`
             );
         }
 
