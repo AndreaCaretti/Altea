@@ -84,20 +84,20 @@ class DB {
 
         if (!fieldValue) {
             throw Error(
-                `selectOneFieldWhere - Record not found: ${tableName}/${JSON.stringify(where)}`
+                `selectOneFieldWhere - Record not found: ${tableName.name}/${JSON.stringify(where)}`
             );
         }
 
         if (!fieldValue[fieldName]) {
             throw Error(
-                `selectOneFieldWhere - Empty field: ${tableName}/${JSON.stringify(
+                `selectOneFieldWhere - Empty field: ${tableName.name}/${JSON.stringify(
                     where
                 )}/${fieldName}`
             );
         }
 
         logger.debug(
-            `selectOneFieldWhere: ${tableName}/${JSON.stringify(where)}/${fieldName} -> '${
+            `selectOneFieldWhere: ${tableName.name}/${JSON.stringify(where)}/${fieldName} -> '${
                 fieldValue[fieldName]
             }'`
         );
@@ -116,10 +116,12 @@ class DB {
         const record = await tx.run(SELECT.one(tableName).where({ ID: idValue }));
 
         if (!record) {
-            throw Error(`selectOneRecord - Record not found: ${tableName}/${idValue}`);
+            throw Error(`selectOneRecord - Record not found: ${tableName.name}/${idValue}`);
         }
 
-        logger.debug(`selectOneRecord: ${tableName}/${idValue} -> '${JSON.stringify(record)}'`);
+        logger.debug(
+            `selectOneRecord: ${tableName.name}/${idValue} -> '${JSON.stringify(record)}'`
+        );
 
         return record;
     }
@@ -137,7 +139,7 @@ class DB {
         if (!records.length) {
             throw Error(`SelectAll - Records not found: ${tableName}/${parentIdValue}`);
         }
-        logger.debug(`SelectAll: ${tableName}/${parentIdValue} -> ${records.length}`);
+        logger.debug(`SelectAll: ${tableName.name}/${parentIdValue} -> ${records.length}`);
 
         return records;
     }
@@ -159,10 +161,10 @@ class DB {
         );
 
         if (recordsCount === 0) {
-            throw Error(`Record not updated: ${tableName}/${idRecord}`);
+            throw Error(`Record not updated: ${tableName.name}/${idRecord}`);
         }
         logger.debug(
-            `updateSingleField: ${tableName}/${idRecord}/${fieldName}/${fieldValue} -> ${recordsCount}`
+            `updateSingleField: ${tableName.name}/${idRecord}/${fieldName}/${fieldValue} -> ${recordsCount}`
         );
 
         return recordsCount;
@@ -184,7 +186,7 @@ class DB {
 
         if (recordsCount === 0) {
             throw Error(
-                `Record not updated: ${tableName}/${idRecord}/${JSON.stringify(
+                `Record not updated: ${tableName.name}/${idRecord}/${JSON.stringify(
                     fieldsValue,
                     null,
                     2
@@ -192,7 +194,7 @@ class DB {
             );
         }
         logger.debug(
-            `updateSomeFields: ${tableName}/${idRecord}/${JSON.stringify(
+            `updateSomeFields: ${tableName.name}/${idRecord}/${JSON.stringify(
                 fieldsValue,
                 null,
                 2
