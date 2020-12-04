@@ -247,7 +247,7 @@ Attualmente sono nell'area di Carico A1 che è una zona non refrigerata.
             "TOR" : 7200000 ,
             "maxTOR" : 5600000
         }
-	],
+	]
 }
 ```
 
