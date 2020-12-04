@@ -219,6 +219,7 @@ define entity HandlingUnitsMovements : cuid, managed {
     handlingUnit : Association to one HandlingUnits;
     DIR          : cloudcoldchain.direction;
     STATUS       : Boolean;
+    rawMovement  : Association to one HandlingUnitsRawMovements;
 }
 
 annotate Books with {
@@ -232,7 +233,6 @@ define entity HandlingUnitsRawMovements : cuid, managed {
     TS       : String;
     HU_ID    : String;
     DIR      : String;
-    MOVEMENT : Association to one HandlingUnitsMovements;
 }
 
 

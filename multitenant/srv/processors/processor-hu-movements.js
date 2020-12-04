@@ -47,41 +47,21 @@ class ProcessorHuMovements {
 
             movement.handlingUnitID = await this.getHandlingUnitFromHuID(movement.HU_ID, tx);
 
-            const createdRecords = await tx.create(HandlingUnitsMovements).entries({
+            await tx.create(HandlingUnitsMovements).entries({
                 MSG_ID: movement.MSG_ID,
                 controlPoint_ID: movement.CP_ID,
                 TE: movement.TE,
                 TS: movement.TS,
                 handlingUnit_ID: movement.handlingUnitID,
                 DIR: movement.DIR,
+                rawMovement_ID: movement.ID,
             });
 
-            // FIXME: TypeError: Converting circular structure to JSON
-            // this.logger.logObject("Created records", createdRecords);
-
-            // eslint-disable-next-line no-restricted-syntax
-            for (const result of createdRecords) {
-                this.logger.debug(result);
-                movement.ID = result.ID;
-            }
-
-            // check deve esserci un record, uno solo
-            if (createdRecords.length === 0) {
-                throw new Error("Errore inserimento record nella tabella HandlingUnitsMovements");
-            } else if (createdRecords.length > 1) {
-                // await tx.rollback();
-                throw new Error("Errore inserimento multiplo nella tabella HandlingUnitsMovements");
-            }
-
-            this.logger.debug("prima di commit");
-            const sCommit = await tx.commit();
-            this.logger.debug("dopo commit", sCommit);
+            await tx.commit();
 
             await this.queueResidenceTime.pushToWaiting(movement);
 
             await this.queueRawMovements.moveToComplete(movement);
-            const newMovementID = createdRecords[0].IDM;
-            await this.updateRawMovements(movement, newMovementID, tx);
         } catch (error) {
             this.logger.logException("Errore inserimento record in HandlingUnitsMovements", error);
 
@@ -103,22 +83,7 @@ class ProcessorHuMovements {
 
     async getHandlingUnitFromHuID(huId, tx) {
         this.logger.debug("getHandlingUnitFromHuID: ", huId);
-        return DB.selectOneFieldWhere("HandlingUnits", "ID", { huId }, tx, this.logger);
-    }
-
-    async updateRawMovements(movement, newMovementID, tx) {
-        const values = {
-            STATUS: true,
-            MOVEMENT_ID: newMovementID,
-        };
-        await DB.updateSomeFields(
-            "HandlingUnitsRawMovements",
-            movement.ID,
-            values,
-            tx,
-            this.logger
-        );
-        await tx.commit();
+        return DB.selectOneFieldWhere(cds.entities.HandlingUnits, "ID", { huId }, tx, this.logger);
     }
 }
 
