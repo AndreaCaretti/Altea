@@ -12,7 +12,7 @@ class IotService extends ZApplicationService {
         this.queue.start(); // IOT_SERVICE
 
         this.on("segment", async (request) => {
-            this.coldChainLogger.debug(`Avvio iot/Segment ${request.data.data[0].entityId}`);
+            this.coldChainLogger.debug(`Arrivato segmento iot ${request.data.data[0].entityId}`);
 
             const tx = cds.transaction(request);
 
@@ -112,7 +112,11 @@ class IotService extends ZApplicationService {
         const HuInArea = await this.getHandlingUnitsInArea(areaID, outOfRange.eventTime, tx);
 
         try {
-            HuInArea.forEach((element) => {
+            const insertPromises = [];
+
+            for (let index = 0; index < HuInArea.length; index++) {
+                const element = HuInArea[index];
+
                 const { OutOfRangeHandlingUnits } = cds.entities;
                 const dataOutOfRangeHandlingUnits = {
                     outOfRange_ID: oorID, // outOfRange.ID,
@@ -123,16 +127,19 @@ class IotService extends ZApplicationService {
                     // endReason: "",
                     // duration: "",
                 };
-                DB.insertIntoTable(
-                    OutOfRangeHandlingUnits,
-                    dataOutOfRangeHandlingUnits,
-                    tx,
-                    this.coldChainLogger
+                insertPromises.push(
+                    DB.insertIntoTable(
+                        OutOfRangeHandlingUnits,
+                        dataOutOfRangeHandlingUnits,
+                        tx,
+                        this.coldChainLogger
+                    )
                 );
-
-                this.pushToQueueIotService(request, outOfRange, areaID);
-            });
+            }
+            await Promise.all(insertPromises);
             await tx.commit();
+
+            this.pushToQueueIotService(request, outOfRange, areaID);
         } catch (error) {
             this.coldChainLogger.logException(
                 "ERRORE SERVIZIO iotService/createOutOfRangeHandlingUnits: ",

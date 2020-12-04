@@ -70,13 +70,14 @@ class BGWorkerNotification {
 
     // eslint-disable-next-line class-methods-use-this
     async submitIntoTable(data, logger) {
-        try {
-            const technicalUser = new cds.User({
-                id: data.user,
-                tenant: data.tenant,
-            });
+        const technicalUser = new cds.User({
+            id: data.user,
+            tenant: data.tenant,
+        });
 
-            const tx = DB.getTransaction(technicalUser, logger);
+        const tx = DB.getTransaction(technicalUser, logger);
+
+        try {
             const { Notification } = cds.entities;
             const dataNotification = {
                 area: data.area,
@@ -88,8 +89,10 @@ class BGWorkerNotification {
             };
             logger.setTenantId(technicalUser.tenant);
             await DB.insertIntoTable(Notification, dataNotification, tx, logger, true);
+            await tx.commit();
         } catch (oError) {
             logger.error(oError.message);
+            await tx.rollback();
         }
     }
 }
