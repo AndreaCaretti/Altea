@@ -58,7 +58,7 @@ class IotService extends ZApplicationService {
             await tx.commit();
         } catch (error) {
             this.coldChainLogger.logException(
-                "ERRORE SERVIZIO iotService-StartEndEventiTime",
+                "ERRORE SERVIZIO iotService-StartEndEventiTime: ",
                 error
             );
             await tx.rollback();
@@ -136,7 +136,7 @@ class IotService extends ZApplicationService {
             //   await tx.commit();
         } catch (error) {
             this.coldChainLogger.logException(
-                "ERRORE SERVIZIO iotService/createOutOfRangeHandlingUnits",
+                "ERRORE SERVIZIO iotService/createOutOfRangeHandlingUnits: ",
                 error.message
             );
             await tx.rollback();
@@ -164,7 +164,7 @@ result = await tx.run(
 
             this.coldChainLogger.debug(result);
         } catch (error) {
-            this.coldChainLogger.error(error.message);
+            this.coldChainLogger.error(error);
         }
         return result;
     }
@@ -201,7 +201,7 @@ result = await tx.run(
                 oorID = res.req.data.ID;
                 // await tx.commit();
             } catch (error) {
-                this.coldChainLogger.logException("ERRORE CREATE OutOfRange - iotService", error);
+                this.coldChainLogger.logException("ERRORE CREATE OutOfRange - iotService: ", error);
                 await tx.rollback();
             }
         }
@@ -229,7 +229,7 @@ result = await tx.run(
             oorID = outOfRangeToUpdate.ID;
             //  await tx.commit();
         } catch (error) {
-            this.coldChainLogger.logException("ERRORE UPDATE OutOfRange - iotService", error);
+            this.coldChainLogger.logException("ERRORE UPDATE OutOfRange - iotService: ", error);
             await tx.rollback();
         }
         return oorID;
