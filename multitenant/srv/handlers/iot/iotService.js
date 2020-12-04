@@ -1,15 +1,15 @@
 const NotificationService = require("../../notifications/notificationService");
 const DB = require("../../db-utilities");
 const ZApplicationService = require("../ZApplicationService");
-const QueueIotService = require("../../queues/queue-iotService");
+// const QueueIotService = require("../../queues/queue-iotService");
 // const ProcessorInsertResidenceTime = require("../../processors/processor-insert-residence-time");
 
 class IotService extends ZApplicationService {
     async init() {
         await super.init(); // restituisce this.coldChainLogger
 
-        this.queue = new QueueIotService(this.coldChainLogger);
-        this.queue.start(); // IOT_SERVICE
+        // this.queue = new QueueIotService(this.coldChainLogger);
+        // this.queue.start(); // IOT_SERVICE
 
         this.on("segment", async (request) => {
             this.coldChainLogger.debug(`Arrivato segmento iot ${request.data.data[0].entityId}`);
@@ -47,15 +47,15 @@ class IotService extends ZApplicationService {
             if (outOfRange.data[0].action === "OPEN") {
                 // inserisco prima il record sulla tabella outOf
                 await this.createOutOfRangeHandlingUnits(request, oorID, areaID, tx);
-
-                // poi inserisco nella coda REDIS tramite la quale invio la notification Alert
-                // --> sostutito da pushToQueueIotService()
-                // await this.notificationAlert(request, outOfRange, areaID);
             }
 
             message = `fine operazione ${instruction} record su outOfRange: ${outOfRange.data[0].entityId}`;
             this.coldChainLogger.debug(message);
             await tx.commit();
+
+            if (outOfRange.data[0].action === "OPEN") {
+                await this.notificationAlert(request, outOfRange, areaID);
+            }
         } catch (error) {
             this.coldChainLogger.logException(
                 "ERRORE SERVIZIO iotService-StartEndEventiTime: ",
@@ -66,7 +66,6 @@ class IotService extends ZApplicationService {
         return message;
     }
 
-    // sostituita da pushToQueueIotService -------
     notificationAlert(request, areaID) {
         const outOfRange = request.data;
         const notificationService = NotificationService.getInstance(this.coldChainLogger);
@@ -86,24 +85,24 @@ class IotService extends ZApplicationService {
         );
     }
 
-    async pushToQueueIotService(request, outOfRange, areaID) {
-        const record = {
-            user: request.user.id,
-            tenant: request.user.tenant,
-            area: areaID,
-            alertBusinessTime: outOfRange.eventTime,
-            alertCode: "LOG_ALERT",
-            alertLevel: 1, // LOG_ALERT
-            payload: JSON.stringify(outOfRange.data[0]),
-            GUID: outOfRange.data[0].entityId, // UUID del segmento
-            notificationType: "OLT",
-        };
+    // async pushToQueueIotService(request, outOfRange, areaID) {
+    //     const record = {
+    //         user: request.user.id,
+    //         tenant: request.user.tenant,
+    //         area: areaID,
+    //         alertBusinessTime: outOfRange.eventTime,
+    //         alertCode: "LOG_ALERT",
+    //         alertLevel: 1, // LOG_ALERT
+    //         payload: JSON.stringify(outOfRange.data[0]),
+    //         GUID: outOfRange.data[0].entityId, // UUID del segmento
+    //         notificationType: "OLT",
+    //     };
 
-        if (!(await this.queue.pushToWaiting(record))) {
-            this.coldChainLogger.logException("Errore inserimento record in REDIS:", record);
-            throw new Error("Errore inserimento record nella lista Redis, rollback");
-        }
-    }
+    //     if (!(await this.queue.pushToWaiting(record))) {
+    //         this.coldChainLogger.logException("Errore inserimento record in REDIS:", record);
+    //         throw new Error("Errore inserimento record nella lista Redis, rollback");
+    //     }
+    // }
 
     // eslint-disable-next-line class-methods-use-this
     async createOutOfRangeHandlingUnits(request, oorID, areaID, tx) {
@@ -139,7 +138,7 @@ class IotService extends ZApplicationService {
             await Promise.all(insertPromises);
             await tx.commit();
 
-            this.pushToQueueIotService(request, outOfRange, areaID);
+            // this.pushToQueueIotService(request, outOfRange, areaID);
         } catch (error) {
             this.coldChainLogger.logException(
                 "ERRORE SERVIZIO iotService/createOutOfRangeHandlingUnits: ",
