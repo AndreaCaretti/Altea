@@ -232,7 +232,6 @@ define entity HandlingUnitsRawMovements : cuid, managed {
     TS       : String;
     HU_ID    : String;
     DIR      : String;
-    STATUS   : Boolean;
     MOVEMENT : Association to one HandlingUnitsMovements;
 }
 
