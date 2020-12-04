@@ -1,5 +1,8 @@
 const InternalLogger = require("cf-nodejs-logging-support");
 
+const FgRed = "\x1b[31m";
+const FfNormal = "\x1b[0m";
+
 let loggerInstance;
 
 class Logger {
@@ -64,11 +67,17 @@ class Logger {
     }
 
     logException(msg, error) {
-        if (error.stack && error.stack !== "not available") {
-            this.internalLogger.error(msg, error.stack);
+        let errorMessage;
+
+        if (!error) {
+            errorMessage = "";
+        } else if (error.stack && error.stack !== "not available") {
+            errorMessage = error.stack;
         } else {
-            this.internalLogger.error(msg, JSON.stringify(error, null, 2));
+            errorMessage = JSON.stringify(error, null, 2);
         }
+
+        this.internalLogger.error(FgRed + msg + FfNormal, errorMessage);
     }
 
     setTenantId(tenantId) {
