@@ -1,7 +1,5 @@
 const NotificationQueue = require("../queues/queue-notification");
 
-let notificationIstance;
-
 class Notification {
     constructor(logger) {
         this.logger = logger;
@@ -10,13 +8,12 @@ class Notification {
     }
 
     static getInstance(logger) {
-        if (!notificationIstance) {
-            notificationIstance = new Notification(logger);
+        if (!this.notificationIstance) {
+            this.notificationIstance = new Notification(logger);
             this.logger = logger;
             this.logger.info("NotificationService->GetInstance()");
         }
-
-        return notificationIstance;
+        return this.notificationIstance;
     }
 
     async start() {

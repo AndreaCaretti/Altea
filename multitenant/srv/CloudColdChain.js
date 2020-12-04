@@ -37,7 +37,7 @@ class CloudColdChain {
         this.enterpriseMessageNotification = EnterpriseMessageNotification.getInstance();
 
         // Start Enterprise Messaging comunicatio Layer
-        await this.enterpriseMessageNotification.start();
+        this.enterpriseMessageNotification.start();
 
         // Notification - Notification Service
         this.NotificationeService = NotificationeService.getInstance(this.logger);
