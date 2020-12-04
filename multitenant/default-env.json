@@ -70,20 +70,22 @@
                 "volume_mounts": []
             }
         ],
-        "redis-cache": [{
-             "binding_name": null,
+        "redis-cache": [
+            {
+                "label": "redis-cache",
+                "provider": null,
+                "plan": "standard",
+                "name": "mtt-redis",
+                "tags": ["cache"],
+                "instance_name": "mtt-redis",
+                "binding_name": null,
                 "credentials": {
-                        "cluster_mode": true,    
-                        "hostname": "clustercfg.rg-b1d65754-56bd-4059-bfc2-e113c2bad9e0.iroxbd.euc1.cache.amazonaws.com",
-                        "password": "GaJoFOorxmiPONZjZPabLYQLlcmgzAGU",
-                        "port": 1205,
-                        "tls": {
-                        "host": "clustercfg.rg-b1d65754-56bd-4059-bfc2-e113c2bad9e0.iroxbd.euc1.cache.amazonaws.com",
-                        "port": 1205
+                    "uri": "redis://127.0.0.1:6379"
                 },
-                "uri": "rediss://no-user-name-for-redis:GaJoFOorxmiPONZjZPabLYQLlcmgzAGU@clustercfg.rg-b1d65754-56bd-4059-bfc2-e113c2bad9e0.iroxbd.euc1.cache.amazonaws.com:1205"
-                }
-            }],
+                "syslog_drain_url": null,
+                "volume_mounts": []
+            }
+        ],
         "application-logs": [
             {
                 "label": "application-logs",
