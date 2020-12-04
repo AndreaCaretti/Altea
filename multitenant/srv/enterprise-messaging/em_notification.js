@@ -4,7 +4,6 @@ const xsenv = require("@sap/xsenv");
 const TOPICNAME = "coldchainplatform/mtt/central/notification";
 const EMLOG_NAME = "Enterprise Messaging";
 const MESSAGING_PROTOCOL = `amqp10ws`;
-const FgRed = "\x1b[31m";
 
 class EnterpriseMessageNotification {
     constructor(logger) {
@@ -79,7 +78,6 @@ class EnterpriseMessageNotification {
                 })
                 .on("disconnected", (_hadError, _byBroker, _statistics) => {
                     this.logger.logException(
-                        FgRed,
                         `Disconnesso da ${EMLOG_NAME}, verifica la configurazione`
                     );
                 });
