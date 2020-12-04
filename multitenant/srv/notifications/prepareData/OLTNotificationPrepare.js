@@ -6,54 +6,26 @@ const MEASURE_UNIT = "Celsius";
 const DB = require("../../db-utilities");
 
 class OLTNotificationPrepare {
-    static async prepareData(data, logger) {
+    static async prepareData(data, logger, tx) {
+        // return new Promise((resolve, reject) => {
         this.logger = logger;
         this.logger.info(`${LOG_PREFIX}Prepare data for OLT`);
-        const technicalUser = new cds.User({
-            id: data.user,
-            tenant: data.tenant,
-        });
 
-        const tx = DB.getTransaction(technicalUser, this.logger);
-
-        // SELECT DA VIEW
-        const { OutOfRangeAreaDetails } = cds.entities;
-        const areaInformation = await DB.selectOneRowWhere(
-            OutOfRangeAreaDetails,
-            { OutOfRangeID: data.GUID },
-            tx,
-            this.logger
-        );
-
-        this.logger.info(
-            `${LOG_PREFIX} recupero informazioni per location - view ${areaInformation}`
-        );
-
-        const { OutOfRangeHandlingUnitDetails } = cds.entities;
-        const handlingUnitInformation = await DB.selectAllRowsWhere(
-            OutOfRangeHandlingUnitDetails,
-            { OutOfRangeID: data.GUID },
-            tx,
-            this.logger
-        );
+        const areaInformation = await this.getAreaInformation(data, tx);
+        const handlingUnitInformation = await this.getHandlingUnitData(areaInformation, tx);
         const handlingUnitData = [];
 
         handlingUnitInformation.forEach((element) => {
             const handlingUnitSingleRow = {
                 gtin: element.GTIN,
-                lot: element.ProductName,
+                productDescription: element.ProductName,
+                lot: element.LotID,
                 quantity: element.CountHandlingUnit,
             };
             handlingUnitData.push(handlingUnitSingleRow);
         });
 
-        this.logger.info(
-            `${LOG_PREFIX} recupero informazioni per Handling Units - view ${handlingUnitInformation}`
-        );
-
         // UTILIZZO GUUID DEVICE IOT PER LEGGERE TABELLA
-
-        // const valueInput = JSON.parse(JSON.stringify(data));
         const valueOutPut = {
             eventGuid: await DB.getUUID(),
             // eventGuid invece che id
@@ -97,8 +69,29 @@ class OLTNotificationPrepare {
             },
         };
 
-        tx.rollback();
         return valueOutPut;
+    }
+
+    static async getAreaInformation(data, tx) {
+        const { OutOfRangeAreaDetails } = cds.entities;
+        const oAreaInformation = await DB.selectOneRowWhere(
+            OutOfRangeAreaDetails,
+            { SegmentID: data.GUID },
+            tx,
+            this.logger
+        );
+        return oAreaInformation;
+    }
+
+    static async getHandlingUnitData(data, tx) {
+        const { OutOfRangeHandlingUnitDetails } = cds.entities;
+        const oHandlingUnitData = await DB.selectAllRowsWhere(
+            OutOfRangeHandlingUnitDetails,
+            { OutOfRangeID: data.OutOfRangeID },
+            tx,
+            this.logger
+        );
+        return oHandlingUnitData;
     }
 }
 

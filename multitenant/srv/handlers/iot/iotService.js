@@ -25,7 +25,7 @@ class IotService extends ZApplicationService {
         const outOfRange = request.data;
 
         this.coldChainLogger.logObject("SEGMENTO", outOfRange);
-        let message;
+        let message = "";
 
         try {
             let oorID;
@@ -40,13 +40,15 @@ class IotService extends ZApplicationService {
             if (outOfRange.data[0].action === "OPEN") {
                 // inserisco prima il record sulla tabella outOf
                 await this.createOutOfRangeHandlingUnits(request, oorID, areaID, tx);
-
-                // poi inserisco nella coda REDIS tramite la quale invio la notification Alert
-                await this.notificationAlert(request, outOfRange, areaID);
             }
 
             message = `fine operazione ${instruction} record su outOfRange: ${outOfRange.data[0].entityId}`;
             this.coldChainLogger.debug(message);
+            await tx.commit();
+            if (outOfRange.data[0].action === "OPEN") {
+                // poi inserisco nella coda REDIS tramite la quale invio la notification Alert
+                this.notificationAlert(request, outOfRange, areaID, tx);
+            }
         } catch (error) {
             this.coldChainLogger.logException("ERRORE SERVIZIO iotService", error);
             await tx.rollback();
@@ -54,10 +56,11 @@ class IotService extends ZApplicationService {
         return message;
     }
 
-    notificationAlert(request, areaID) {
+    async notificationAlert(request, areaID) {
         const outOfRange = request.data;
         const notificationService = NotificationService.getInstance(this.coldChainLogger);
-        notificationService.start();
+
+        await notificationService.start();
 
         notificationService.alert(
             request.user.id,
@@ -77,35 +80,49 @@ class IotService extends ZApplicationService {
         const outOfRange = request.data;
 
         const HuInArea = await this.getHandlingUnitsInArea(areaID, outOfRange.eventTime, tx);
-        // console.log(HuInArea);
+        let indexHuInArea = 0;
+        const limitHuInArea = HuInArea.length;
 
-        try {
-            HuInArea.forEach((element) => {
-                const { OutOfRangeHandlingUnits } = cds.entities;
-                const dataOutOfRangeHandlingUnits = {
-                    outOfRange_ID: oorID, // outOfRange.ID,
-                    handlingUnit_ID: element.handlingUnit_ID,
-                    startTime: outOfRange.eventTime,
-                    // endTime: "",
-                    startReason: 0, // WAS_ALREADY_IN_AREA
-                    // endReason: "",
-                    // duration: "",
-                };
-                DB.insertIntoTable(
-                    OutOfRangeHandlingUnits,
-                    dataOutOfRangeHandlingUnits,
-                    tx,
-                    this.coldChainLogger
+        return new Promise((resolve, reject) => {
+            // console.log(HuInArea);
+            try {
+                HuInArea.forEach((element) => {
+                    const { OutOfRangeHandlingUnits } = cds.entities;
+                    const dataOutOfRangeHandlingUnits = {
+                        outOfRange_ID: oorID, // outOfRange.ID,
+                        handlingUnit_ID: element.handlingUnit_ID,
+                        startTime: outOfRange.eventTime,
+                        // endTime: "",
+                        startReason: 0, // WAS_ALREADY_IN_AREA
+                        // endReason: "",
+                        // duration: "",
+                    };
+                    DB.insertIntoTable(
+                        OutOfRangeHandlingUnits,
+                        dataOutOfRangeHandlingUnits,
+                        tx,
+                        this.coldChainLogger
+                    ).then(() => {
+                        indexHuInArea += 1;
+                        if (indexHuInArea === limitHuInArea) {
+                            this.coldChainLogger.info(
+                                `Fine inserimento tabella OutOfRangeHandlingUnits`
+                            );
+                            resolve("OK");
+                        }
+                        this.coldChainLogger.info(`Inserimento Riga ${indexHuInArea} OK`);
+                    });
+                });
+
+                // await tx.commit();
+            } catch (error) {
+                this.coldChainLogger.logException(
+                    "ERRORE SERVIZIO iotService/createOutOfRangeHandlingUnits",
+                    error.message
                 );
-            });
-
-            await tx.commit();
-        } catch (error) {
-            this.coldChainLogger.logException(
-                "ERRORE SERVIZIO iotService/createOutOfRangeHandlingUnits",
-                error.message
-            );
-        }
+                reject(new Error("Errore inserimento iotService/createOutOfRangeHandlingUnits"));
+            }
+        });
     }
 
     // eslint-disable-next-line class-methods-use-this

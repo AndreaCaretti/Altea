@@ -295,9 +295,20 @@ define entity OutOfRangeHandlingUnits : cuid, managed {
     duration     : Integer;
 }
 
+/**
+ * #
+ *
+ * # ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
+ *
+ * # View Defintions
+ *
+ * # ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+ */
+
 define entity OutOfRangeAreaDetails             as
     select from outOfRange {
         ID                            as OutOfRangeID,
+        segmentId                     as SegmentID,
         ID_DeviceIoT                  as ID_DeviceIoT,
         area.ID                       as AreaID,
         area.name                     as AreaName,
@@ -320,39 +331,30 @@ define entity OutOfRangeAreaDetails             as
         area.department.location.ID,
         area.department.location.name;
 
-/**
- * #
- *
- * # ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
- *
- * # View Defintions
- *
- * # ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
- */
 define entity OutOfRangeHandlingUnitDetails     as
     select from OutOfRangeHandlingUnits
     left join OutOfRangeHandlingUnitDetailCount
         on OutOfRangeHandlingUnitDetailCount.OutOfRangeID = OutOfRangeHandlingUnits.outOfRange.ID
     {
         outOfRange.ID                                                    as OutOfRangeID,
-        handlingUnit.lot.ID                                              as LotID,
+        handlingUnit.lot.name                                            as LotID,
         handlingUnit.lot.product.gtin                                    as GTIN,
         handlingUnit.lot.product.name                                    as ProductName,
         OutOfRangeHandlingUnitDetailCount.OutOfRangeHandlingUnitsIDCount as CountHandlingUnit
     }
     group by
         outOfRange.ID,
-        handlingUnit.lot.ID,
+        handlingUnit.lot.name,
         handlingUnit.lot.product.gtin,
         handlingUnit.lot.product.name;
 
 define entity OutOfRangeHandlingUnitDetailCount as
     select from OutOfRangeHandlingUnits {
         count(
-            ID
+            handlingUnit.ID
         )                             as OutOfRangeHandlingUnitsIDCount,
         outOfRange.ID                 as OutOfRangeID,
-        handlingUnit.lot.ID           as LotID,
+        handlingUnit.lot.name         as LotID,
         handlingUnit.lot.product.gtin as GTIN,
     }
     group by
