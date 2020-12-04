@@ -1,0 +1,40 @@
+### Create HandlingUnitsRawMovements
+POST http://localhost:4004/handling-unit-moved/HandlingUnitsRawMovements HTTP/1.1
+Authorization: Basic Alice:Alice
+Content-Type: application/json
+
+{
+    "MSG_ID":"zz4ce6f3-283c-4a95-8470-c3664ebddbd0",
+    "CP_ID": "90abe75c-e2c6-4e5f-a12f-fb81aa50d011",
+    "TE": "1900-10-14T09:01:33.763Z",
+    "TS": "1900-10-14T09:01:34.763Z",
+    "HU_ID": "123456789012345678",
+    "DIR": "F"
+}
+
+### Creazione segmento iot
+POST http://localhost:4004/iot/segment  HTTP/1.1
+Authorization: Basic Alice:Alice
+Content-Type: application/json
+
+{
+    "cloudEventsVersion": "1.0",
+    "eventID": "SRL-B3AC20A58D7A47B6937073DA40CA95AC",
+    "eventType": "com.sap.appiot.eventtypes:SegmentNotifications",
+    "source": "IOT-BSV-SEG",
+    "eventTime": "2020-10-15T09:13:13.113Z",
+    "contentType": "application/json",
+    "extensions": {
+        "modelId": "592D9BEA5FD74E3DBF2C9BF5BD7CDA26",
+        "dataModel": "Thing",
+        "correlationId": "b3ac20a5-8d7a-47b6-9370-73da40ca95ac"
+    },
+    "data": [
+        {
+            "entityType": "SEGMENT",
+            "action": "OPEN",
+            "entityId": "205f253b-0575-4e94-84b4-5ee5906c20e4",
+            "entityURL": "https://sap-iot-noah-live-segment-service.cfapps.eu10.hana.ondemand.com/v1/segments/205f253b-0575-4e94-84b4-5ee5906c20e4"
+        }
+    ]
+}
