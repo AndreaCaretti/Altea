@@ -128,21 +128,21 @@ La cella 1 del reparto packaging del plant A alle 13:30 ha raggiunto la temperat
             "productDescription": "Antibiotic X",
             "lot": "U4654",
             "quantity": 5,
-            "unitOfMeasure" : "pallet",
+            "unitOfMeasure" : "pallet"
         },
         {
             "gtin": "1234567890123",
             "productDescription": "Antibiotic X",
             "lot": "U4655",
             "quantity": 3,
-            "unitOfMeasure" : "pallet",
+            "unitOfMeasure" : "pallet"
         },
         {
             "gtin": "1234567890125",
             "productDescription": "”Antibiotic Y",
             "lot": "U7655",
             "quantity": 200,
-            "unitOfMeasure" : "cartoni",
+            "unitOfMeasure" : "cartoni"
         }
     ]
 }
