@@ -23,95 +23,39 @@ class Queues {
     }
 
     start() {
-        /*
-        const connectionOptions = {
-            retry_strategy(options) {
-                // if (options.error && options.error.code === "ECONNREFUSED") {
-                //     // End reconnecting on a specific error and flush all commands with
-                //     // a individual error
-                //     return new Error("The server refused the connection");
-                // }
-                if (options.total_retry_time > 1000 * 60 * 60) {
-                    // End reconnecting after a specific timeout and flush all commands
-                    // with a individual error
-                    return new Error("Retry time exhausted");
-                }
-
-                // if (options.attempt > 10) {
-                //     // End reconnecting with built in error
-                //     return undefined;
-                // }
-
-                // reconnect after
-                const maxMilliseconds = 1000 * 60 * 10;
-                const randomWait = Math.floor(Math.random() * 1000);
-
-                const wait = Math.min(options.attempt * 1000 + randomWait, maxMilliseconds);
-                console.log(` Reconnecting after ${wait} milliseconds`);
-                return wait;
-            },
-        };
-
-        this.redisClient = redis.createClient(this.redisCredentials.uri, connectionOptions);
-
-        this.redisClient.on("ready", () => console.log(`${this.queueName} ready`));
-        this.redisClient.on("connect", () => console.log(`${this.queueName} connect`));
-        this.redisClient.on("reconnecting", () => console.log(`${this.queueName} reconnecting`));
-        this.redisClient.on("end", () => console.log(`${this.queueName} end`));
-        this.redisClient.on("warning", () => console.log(`${this.queueName} warning`));
-*/
-
         try {
+            // CCCP-98 - leggiamo la variabile dell'environment
+            // redis-cache.cluster_mode per capire se usare o meno il cluster
             // const cfIp = process.env.CF_INSTANCE_INTERNAL_IP;
-            // if (cfIp === undefined) {
-            // LOCALE - non posso utilizzare il cluster
-            this.redisClient = new Redis(this.redisCredentials.uri);
-            // } else {
-            //     //  CLOUD - utilizzo il cluster
-            //     /*
-            //     this.redisClient = new Redis.Cluster([
-            //         {
-            //             port: this.redisCredentials.port,
-            //             host: this.redisCredentials.hostname,
-            //         },
-            //         {
-            //             slotsRefreshTimeout: 2000,
-            //             redisOptions: {
-            //                 tls: {},
-            //                 password: this.redisCredentials.password,
-            //             },
-            //         },
-            //     ]);
-            //     */
+            if (!this.redisCredentials.cluster_mode) {
+                this.logger.info(`ClusterMode NON attiva`);
+                // LOCALE - non posso utilizzare il cluster
+                this.redisClient = new Redis(this.redisCredentials.uri);
+            } else {
+                this.logger.info(`ClusterMode Attiva`);
+                //  CLOUD - utilizzo il cluster
+                this.redisClient = new Redis.Cluster(
+                    [
+                        {
+                            host: this.redisCredentials.hostname,
+                            port: this.redisCredentials.port,
+                        },
+                    ],
+                    {
+                        slotsRefreshTimeout: 2500,
+                        dnsLookup: (address, callback) => callback(null, address),
+                        redisOptions: {
+                            tls: {},
+                            password: this.redisCredentials.password,
+                        },
+                    }
+                );
 
-            //     this.redisClient = new Redis.Cluster(
-            //         [
-            //             {
-            //                 host: this.redisCredentials.hostname,
-            //                 port: this.redisCredentials.port,
-            //             },
-            //         ],
-            //         {
-            //             slotsRefreshTimeout: 2500,
-            //             dnsLookup: (address, callback) => callback(null, address),
-            //             redisOptions: {
-            //                 tls: {
-            //                     host: this.redisCredentials.tls.host,
-            //                     port: this.redisCredentials.tls.port,
-            //                 },
-            //                 password: this.redisCredentials.password,
-            //             },
-            //         }
-            //     );
-            // }
+                this.logger.logObject(`creazione cluster ${this.redisClient}`);
+            }
         } catch (error) {
             this.logger.logObject("errore creazione cluster", error);
         }
-
-        // this.redisClient.on("connect", () => {
-        // console.log("REDIS : ", this.redisClient);
-        // console.log("ClusterNodes: ", this.redisClient.nodes());
-        // });
 
         this.redisClient.on("error", (err) => {
             this.logger.logException(`REDIS CONNECT error `, err);

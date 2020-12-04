@@ -226,12 +226,13 @@ annotate Books with {
 }
 
 define entity HandlingUnitsRawMovements : cuid, managed {
-    MSG_ID : String;
-    CP_ID  : String;
-    TE     : String;
-    TS     : String;
-    HU_ID  : String;
-    DIR    : String;
+    MSG_ID   : String;
+    CP_ID    : String;
+    TE       : String;
+    TS       : String;
+    HU_ID    : String;
+    DIR      : String;
+    MOVEMENT : Association to one HandlingUnitsMovements;
 }
 
 
