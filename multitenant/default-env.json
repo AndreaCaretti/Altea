@@ -70,20 +70,20 @@
                 "volume_mounts": []
             }
         ],
-        "redis-cache": [
-            {
+        "redis-cache": [{
              "binding_name": null,
-             "credentials": {
-                    "cluster_mode": true,    
-                    "hostname": "clustercfg.rg-b1d65754-56bd-4059-bfc2-e113c2bad9e0.iroxbd.euc1.cache.amazonaws.com",
-                    "password": "GaJoFOorxmiPONZjZPabLYQLlcmgzAGU",
-                    "port": 1205,
-                    "tls": {
-                    "host": "clustercfg.rg-b1d65754-56bd-4059-bfc2-e113c2bad9e0.iroxbd.euc1.cache.amazonaws.com",
-                    "port": 1205
-              },
-              "uri": "rediss://no-user-name-for-redis:GaJoFOorxmiPONZjZPabLYQLlcmgzAGU@clustercfg.rg-b1d65754-56bd-4059-bfc2-e113c2bad9e0.iroxbd.euc1.cache.amazonaws.com:1205"
-             },
+                "credentials": {
+                        "cluster_mode": true,    
+                        "hostname": "clustercfg.rg-b1d65754-56bd-4059-bfc2-e113c2bad9e0.iroxbd.euc1.cache.amazonaws.com",
+                        "password": "GaJoFOorxmiPONZjZPabLYQLlcmgzAGU",
+                        "port": 1205,
+                        "tls": {
+                        "host": "clustercfg.rg-b1d65754-56bd-4059-bfc2-e113c2bad9e0.iroxbd.euc1.cache.amazonaws.com",
+                        "port": 1205
+                },
+                "uri": "rediss://no-user-name-for-redis:GaJoFOorxmiPONZjZPabLYQLlcmgzAGU@clustercfg.rg-b1d65754-56bd-4059-bfc2-e113c2bad9e0.iroxbd.euc1.cache.amazonaws.com:1205"
+                }
+            }],
         "application-logs": [
             {
                 "label": "application-logs",

@@ -177,7 +177,6 @@ class DB {
             oTX.rollback();
             throw Error(`Wrong insert: ${error}/ ${JSON.stringify(row)}}`);
         }
-        await oTX.commit();
         return recordsCount;
     }
 

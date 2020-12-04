@@ -132,8 +132,7 @@ class IotService extends ZApplicationService {
 
                 this.pushToQueueIotService(request, outOfRange, areaID);
             });
-
-            //   await tx.commit();
+            await tx.commit();
         } catch (error) {
             this.coldChainLogger.logException(
                 "ERRORE SERVIZIO iotService/createOutOfRangeHandlingUnits: ",
