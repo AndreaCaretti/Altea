@@ -70,6 +70,7 @@ class IotService extends ZApplicationService {
     notificationAlert(request, areaID) {
         const outOfRange = request.data;
         const notificationService = NotificationService.getInstance(this.coldChainLogger);
+
         notificationService.start();
 
         notificationService.alert(
@@ -109,7 +110,6 @@ class IotService extends ZApplicationService {
         const outOfRange = request.data;
 
         const HuInArea = await this.getHandlingUnitsInArea(areaID, outOfRange.eventTime, tx);
-        // console.log(HuInArea);
 
         try {
             HuInArea.forEach((element) => {

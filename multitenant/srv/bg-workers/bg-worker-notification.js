@@ -87,7 +87,7 @@ class BGWorkerNotification {
                 GUID: data.GUID,
             };
             logger.setTenantId(technicalUser.tenant);
-            await DB.insertIntoTable(Notification, dataNotification, tx, logger);
+            await DB.insertIntoTable(Notification, dataNotification, tx, logger, true);
         } catch (oError) {
             logger.error(oError.message);
         }

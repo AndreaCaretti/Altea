@@ -31,6 +31,46 @@ class DB {
         return fieldValue[fieldName];
     }
 
+    static async selectOneRowWhere(tableName, whereClause, tx, logger) {
+        const singleRow = await tx.read(tableName).where(whereClause);
+
+        if (singleRow.length === 0) {
+            throw Error(
+                `SelectOneRowWhere - Record not found: ${tableName.name} where ${JSON.stringify(
+                    whereClause
+                )} -> '${JSON.stringify(singleRow)}'`
+            );
+        }
+
+        logger.debug(
+            `SelectOneRowWhere: ${tableName.name} where ${JSON.stringify(
+                whereClause
+            )} -> '${JSON.stringify(singleRow)}'`
+        );
+
+        return singleRow[0];
+    }
+
+    static async selectAllRowsWhere(tableName, whereClause, tx, logger) {
+        const allRows = await tx.read(tableName).where(whereClause);
+
+        if (allRows.length === 0) {
+            throw Error(
+                `selectAllRowsWhere - Record not found: ${
+                    tableName.name
+                } where where ${JSON.stringify(whereClause)} -> '${JSON.stringify(allRows)}'`
+            );
+        }
+
+        logger.debug(
+            `selectAllRowsWhere: ${tableName.name} where ${JSON.stringify(
+                whereClause
+            )} -> '${JSON.stringify(allRows)}'`
+        );
+
+        return allRows;
+    }
+
     /**
      *
      * @param {*} tableName
@@ -167,7 +207,7 @@ class DB {
         return cds.transaction(new cds.Request({ user: technicalUser }));
     }
 
-    static async insertIntoTable(tableName, row, tx, Logger) {
+    static async insertIntoTable(tableName, row, tx, Logger, commit) {
         const oTX = tx;
         let recordsCount;
         try {
@@ -176,6 +216,9 @@ class DB {
         } catch (error) {
             oTX.rollback();
             throw Error(`Wrong insert: ${error}/ ${JSON.stringify(row)}}`);
+        }
+        if (commit) {
+            await oTX.commit();
         }
         return recordsCount;
     }
