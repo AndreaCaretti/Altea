@@ -117,7 +117,13 @@ class ProcessorHuMovements {
             }
         }
 
-        await DB.updateSomeFields("ResidenceTime", residenceTime.ID, values, tx, this.logger);
+        await DB.updateSomeFields(
+            cds.entities.ResidenceTime,
+            residenceTime.ID,
+            values,
+            tx,
+            this.logger
+        );
     }
 
     async getControlledTemperature(residenceTime, tx) {

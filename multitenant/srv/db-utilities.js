@@ -17,15 +17,15 @@ class DB {
         );
 
         if (!fieldValue) {
-            throw Error(`SelectOneField - Record not found: ${tableName}/${idValue}`);
+            throw Error(`SelectOneField - Record not found: ${tableName.name}/${idValue}`);
         }
 
         if (!fieldValue[fieldName]) {
-            throw Error(`SelectOneField - Empty field: ${tableName}/${idValue}/${fieldName}`);
+            throw Error(`SelectOneField - Empty field: ${tableName.name}/${idValue}/${fieldName}`);
         }
 
         logger.debug(
-            `SelectOneField: ${tableName}/${idValue}/${fieldName} -> '${fieldValue[fieldName]}'`
+            `SelectOneField: ${tableName.name}/${idValue}/${fieldName} -> '${fieldValue[fieldName]}'`
         );
 
         return fieldValue[fieldName];
@@ -209,18 +209,13 @@ class DB {
         return cds.transaction(new cds.Request({ user: technicalUser }));
     }
 
-    static async insertIntoTable(tableName, row, tx, Logger, commit) {
-        const oTX = tx;
+    static async insertIntoTable(tableName, row, tx, logger) {
         let recordsCount;
         try {
-            recordsCount = await oTX.create(tableName).entries(row);
-            Logger.debug(`Record append: ${tableName.name}/ ${JSON.stringify(row)}}`);
+            recordsCount = await tx.create(tableName).entries(row);
+            logger.debug(`Record append: ${tableName.name}/ ${JSON.stringify(row)}}`);
         } catch (error) {
-            oTX.rollback();
             throw Error(`Wrong insert: ${error}/ ${JSON.stringify(row)}}`);
-        }
-        if (commit) {
-            await oTX.commit();
         }
         return recordsCount;
     }

@@ -38,7 +38,7 @@ class ProcessorInsertResidenceTime {
 
             await this.createRecordResidentTime(movement, info, tx);
 
-            await this.updateMovementStatus(movement, tx);
+            // await this.updateMovementStatus(movement, tx);
 
             // FIXME: Se ci sono più istanze dell'app CAP può essere che il campo TE
             // dell'handling unit sia già stato aggiornato da un altro processo con
@@ -111,22 +111,22 @@ class ProcessorInsertResidenceTime {
 
     async getHandlingUnitInfo(handlingUnitID, tx) {
         this.logger.debug("getHandlingUnitInfo: ", handlingUnitID);
-        return DB.selectOneRecord("HandlingUnits", handlingUnitID, tx, this.logger);
+        return DB.selectOneRecord(cds.entities.HandlingUnits, handlingUnitID, tx, this.logger);
     }
 
     async getProductFromLot(lot, tx) {
         this.logger.debug("getProductFromLot: ", lot);
-        return DB.selectOneField("Lots", "product_ID", lot, tx, this.logger);
+        return DB.selectOneField(cds.entities.Lots, "product_ID", lot, tx, this.logger);
     }
 
     async getRouteFromProduct(product, tx) {
         this.logger.debug("getRouteFromProduct: ", product);
-        return DB.selectOneField("Products", "route_ID", product, tx, this.logger);
+        return DB.selectOneField(cds.entities.Products, "route_ID", product, tx, this.logger);
     }
 
     async getRouteStepsFromRoute(route, tx) {
         this.logger.debug("getRouteStepsFromRoute: ", route);
-        return DB.selectAllWithParent("RouteSteps", route, tx, this.logger);
+        return DB.selectAllWithParent(cds.entities.RouteSteps, route, tx, this.logger);
     }
 
     async start() {
@@ -140,7 +140,7 @@ class ProcessorInsertResidenceTime {
     async createRecordResidentTime(movement, info, tx) {
         this.logger.debug(`Create record resident time ${JSON.stringify(info)}`);
 
-        await tx.create("ResidenceTime").entries({
+        await tx.create(cds.entities.ResidenceTime).entries({
             handlingUnit_ID: movement.handlingUnitID,
             stepNr: info.routeStep.stepNr,
             inBusinessTime: movement.TE,
@@ -149,7 +149,7 @@ class ProcessorInsertResidenceTime {
 
     async updateMovementStatus(movement, tx) {
         await DB.updateSingleField(
-            "HandlingUnitsMovements",
+            cds.entities.HandlingUnitsMovements,
             movement.ID,
             "STATUS",
             true,
@@ -164,7 +164,13 @@ class ProcessorInsertResidenceTime {
             inAreaBusinessTime: movement.TE,
             lastMovement_ID: movement.ID,
         };
-        await DB.updateSomeFields("HandlingUnits", info.handlingUnit.ID, values, tx, this.logger);
+        await DB.updateSomeFields(
+            cds.entities.HandlingUnits,
+            info.handlingUnit.ID,
+            values,
+            tx,
+            this.logger
+        );
     }
 }
 
