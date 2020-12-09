@@ -1,35 +1,36 @@
+/* eslint-disable no-console */
 const request = require("request");
 const CloudFoundryApi = require("./cloud-foundry-api");
 
 async function callService(options) {
     return new Promise((resolve, reject) => {
-        request(options, function (error, response) {
+        request(options, (error, response) => {
             if (error) reject(error);
             resolve(response);
         });
     });
 }
 
-async function getAppEnviroment(apiUrl, appGuid, access_token) {
-    let options = {
+async function getAppEnviroment(apiUrl, appGuid, accessToken) {
+    const options = {
         method: "GET",
         url: `${apiUrl}/v3/apps/${appGuid}/env/`,
         headers: {
-            Authorization: access_token,
+            Authorization: accessToken,
         },
     };
 
-    let response = await callService(options);
-    const vcap_services = JSON.parse(response.body).system_env_json.VCAP_SERVICES;
-    return { VCAP_SERVICES: vcap_services };
+    const response = await callService(options);
+    const vcapServices = JSON.parse(response.body).system_env_json.VCAP_SERVICES;
+    return { VCAP_SERVICES: vcapServices };
 }
 async function main(appName) {
     const cloudFoundryApi = new CloudFoundryApi();
-    const access_token = await cloudFoundryApi.getAccessToken();
+    const accessToken = await cloudFoundryApi.getAccessToken();
     const appGuid = await cloudFoundryApi.getAppGuid(appName);
     const apiUrl = await cloudFoundryApi.getApiUrl();
 
-    const enviroment = await getAppEnviroment(apiUrl, appGuid, access_token);
+    const enviroment = await getAppEnviroment(apiUrl, appGuid, accessToken);
 
     console.log(JSON.stringify(enviroment, null, 2));
 }
