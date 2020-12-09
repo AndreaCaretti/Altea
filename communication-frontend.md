@@ -15,7 +15,7 @@ Nella piattaforma vengono tracciati le invii effettuati (data, ora, payload, res
 ```json
 {
     "customer" : {
-        "customerGUID" : "d532b292-a03c-4530-af37-6732dc5c7758",
+        "guid" : "d532b292-a03c-4530-af37-6732dc5c7758",
         "companyName": "...",
         "customerTenant" : {
             "tokenEndpoint" : "https://ccp-customera.authentication.eu10.hana.ondemand.com/oauth/token",
@@ -27,21 +27,23 @@ Nella piattaforma vengono tracciati le invii effettuati (data, ora, payload, res
         ],
         "locations" : [
             {
-                "locationGUID" : "eff08cb8-57fc-4863-bb1e-e898479e0fe2",
+                "guid" : "eff08cb8-57fc-4863-bb1e-e898479e0fe2",
                 "description" : "Plant A",
                 "departments" : [
                     {
-                        "departmentGUID" : "9dcc35bf-1bb5-411a-b6b0-0527465ec900",
+                        "guid" : "9dcc35bf-1bb5-411a-b6b0-0527465ec900",
                         "description" : "Packaging Area A",
                         "areas" : [
                             {
-                                "areaGUID" : "a6fe9383-13c5-48b6-94a5-fe0a69f362ee",
+                                "guid" : "a6fe9383-13c5-48b6-94a5-fe0a69f362ee",
                                 "description" : "Cold Room 1",
+				"category": "COLD_ROOM",
                                 "assetManager" : "coldroom1@domain.com"
                             },
                             {
-                                "areaGUID" : "a7dac933-2b2a-4dde-b0ac-cc1c328b25da",
+                                "guid" : "a7dac933-2b2a-4dde-b0ac-cc1c328b25da",
                                 "description" : "Cold Room 2",
+				"category": "COLD_ROOM",
                                 "assetManager" : "coldroom2@domain.com"
                             }
                         ]
@@ -89,7 +91,7 @@ La cella 1 del reparto packaging del plant A alle 13:30 ha raggiunto la temperat
 #### Tracciato
 ```json
 {
-    "eventGuid": "ada49efe-c732-4ed3-a7a9-cb7275ae5c5e",
+    "guid": "ada49efe-c732-4ed3-a7a9-cb7275ae5c5e",
     "severity": 1,
     "alarmType": "OLT",
     "eventDate": "2020-11-17T12:00:00Z",
@@ -107,39 +109,32 @@ La cella 1 del reparto packaging del plant A alle 13:30 ha raggiunto la temperat
     "area": {
     
         "guid": "c7163657-20c8-4fc3-925a-9028bc6b0d8f",
-        "description": "Cold Room 1",
-        "category": "COLD_ROOM",
-        "department": {
-        
-            "guid": "c55dd03a-c097-487c-a60c-bf3fa8abea5b",
-            "description": "Packging"
+        "department": {        
+            "guid": "c55dd03a-c097-487c-a60c-bf3fa8abea5b"
         },
-        "location": {
-        
-            "guid": "c55dd03a-c097-487c-a60c-bf3fa8abea5b",
-            "description": "Plant A"
+        "location": {        
+            "guid": "c55dd03a-c097-487c-a60c-bf3fa8abea5b"
         },
-        "guidAsset": "592D9BEA5FD74E3DBF2C9BF5BD7CDA26"
+	"asset": {        
+            "guid": "592D9BEA5FD74E3DBF2C9BF5BD7CDA26"
+        }
     },
     "handlingUnits": [
     
         {
-            "gtin": "1234567890123",
-            "productDescription": "Antibiotic X",
+            "gtin": "1234567890123",           
             "lot": "U4654",
             "quantity": 5,
             "unitOfMeasure" : "pallet"
         },
         {
             "gtin": "1234567890123",
-            "productDescription": "Antibiotic X",
             "lot": "U4655",
             "quantity": 3,
             "unitOfMeasure" : "pallet"
         },
         {
             "gtin": "1234567890125",
-            "productDescription": "”Antibiotic Y",
             "lot": "U7655",
             "quantity": 200,
             "unitOfMeasure" : "cartoni"
@@ -200,29 +195,24 @@ Attualmente sono nell'area di Carico A1 che è una zona non refrigerata.
 #### Tracciato
 ```json
 {
-    "eventGuid": "ada49efe-c732-4ed3-a7a9-cb7275ae5c5e",
+    "guid": "ada49efe-c732-4ed3-a7a9-cb7275ae5c5e",
     "severity": 1,
     "alarmType": "TOR",
     "eventDate": "2020-11-17T12:00:00Z",
     "notificationDate": "2020-11-17T12:05:00Z",
     "area": {
-        "guid": "c7163657-20c8-4fc3-925a-9028bc6b0d8f",
-        "description": "Load Area",
-        "category": "LOAD_AREA",
+        "guid": "c7163657-20c8-4fc3-925a-9028bc6b0d8f"
         "department": {
-            "guid": "c55dd03a-c097-487c-a60c-bf3fa8abea5b",
-            "description": "Packging"
+            "guid": "c55dd03a-c097-487c-a60c-bf3fa8abea5b"
         },
         "location": {
-            "guid": "c55dd03a-c097-487c-a60c-bf3fa8abea5b",
-            "description": "Area di Carico A1"
+            "guid": "c55dd03a-c097-487c-a60c-bf3fa8abea5b"
         }
     },
 	"handlingUnits": 
     [
         {
             "gtin": "1234567890123",
-            "productDescription": "Antibiotic X",
             "lot": "U4654",
             "quantity": 5,
             "unitOfMeasure" : "pallet",
@@ -231,7 +221,6 @@ Attualmente sono nell'area di Carico A1 che è una zona non refrigerata.
         },
         {
             "gtin": "1234567890123",
-            "productDescription": "Antibiotic X",
             "lot": "U4655",
             "quantity": 3,
             "unitOfMeasure" : "pallet",
@@ -240,14 +229,13 @@ Attualmente sono nell'area di Carico A1 che è una zona non refrigerata.
         },
         {
             "gtin": "1234567890125",
-            "productDescription": "Antibiotic Y",
             "lot": "U7655",
             "quantity": 200,
             "unitOfMeasure" : "cartoni",
             "TOR" : 7200000 ,
             "maxTOR" : 5600000
         }
-	]
+    ]
 }
 ```
 
