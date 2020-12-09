@@ -53,7 +53,7 @@ class OLTNotificationPrepare {
                 },
             },
             handlingUnits: handlingUnitData,
-            alarmType: notification.notificationType,
+            alarmType: notification.alertType,
             details: {
                 measurementUnit: MEASURE_UNIT,
                 eventTemperature: "20.00",

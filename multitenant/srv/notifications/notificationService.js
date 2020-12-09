@@ -37,9 +37,9 @@ class Notification {
             tenant,
             alertBusinessTime,
             alertCode,
+            alertType,
             alertLevel,
             payload,
-            notificationType: alertType,
         };
         this.logger.logObject(`BEGIN OF ALERT - OBJECT :`, alertNotificationData);
         this.notificationQueue.pushToWaiting(alertNotificationData);
