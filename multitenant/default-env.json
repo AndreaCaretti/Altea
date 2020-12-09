@@ -16,7 +16,7 @@
                         {
                             "oa2": {
                                 "clientid": "sb-default-2b829ef0-bc8c-4404-b201-74e7dffbb889-clone!b61773|xbem-service-broker-!b2436",
-                                "clientsecret": "a7368bc4-a74d-4dd6-baf6-63eac0c9fb19$6ty5Yhim4hDuQ2WuWX7_q-TDQ2Q0K_cIqM1p02l1Zbc=",
+                                "clientsecret": "e90aa25b-60a3-437d-a4b0-3cf181e44dd2$q36IVI72l5sP6MhrdAudF3Vz81fUC-YxTT5-KwxCBXM=",
                                 "tokenendpoint": "https://ccp-provider-dev-qas.authentication.eu10.hana.ondemand.com/oauth/token",
                                 "granttype": "client_credentials"
                             },
@@ -28,7 +28,7 @@
                         {
                             "oa2": {
                                 "clientid": "sb-default-2b829ef0-bc8c-4404-b201-74e7dffbb889-clone!b61773|xbem-service-broker-!b2436",
-                                "clientsecret": "a7368bc4-a74d-4dd6-baf6-63eac0c9fb19$6ty5Yhim4hDuQ2WuWX7_q-TDQ2Q0K_cIqM1p02l1Zbc=",
+                                "clientsecret": "e90aa25b-60a3-437d-a4b0-3cf181e44dd2$q36IVI72l5sP6MhrdAudF3Vz81fUC-YxTT5-KwxCBXM=",
                                 "tokenendpoint": "https://ccp-provider-dev-qas.authentication.eu10.hana.ondemand.com/oauth/token",
                                 "granttype": "client_credentials"
                             },
@@ -41,7 +41,7 @@
                         {
                             "oa2": {
                                 "clientid": "sb-default-2b829ef0-bc8c-4404-b201-74e7dffbb889-clone!b61773|xbem-service-broker-!b2436",
-                                "clientsecret": "a7368bc4-a74d-4dd6-baf6-63eac0c9fb19$6ty5Yhim4hDuQ2WuWX7_q-TDQ2Q0K_cIqM1p02l1Zbc=",
+                                "clientsecret": "e90aa25b-60a3-437d-a4b0-3cf181e44dd2$q36IVI72l5sP6MhrdAudF3Vz81fUC-YxTT5-KwxCBXM=",
                                 "tokenendpoint": "https://ccp-provider-dev-qas.authentication.eu10.hana.ondemand.com/oauth/token",
                                 "granttype": "client_credentials"
                             },
@@ -54,7 +54,7 @@
                         {
                             "oa2": {
                                 "clientid": "sb-default-2b829ef0-bc8c-4404-b201-74e7dffbb889-clone!b61773|xbem-service-broker-!b2436",
-                                "clientsecret": "a7368bc4-a74d-4dd6-baf6-63eac0c9fb19$6ty5Yhim4hDuQ2WuWX7_q-TDQ2Q0K_cIqM1p02l1Zbc=",
+                                "clientsecret": "e90aa25b-60a3-437d-a4b0-3cf181e44dd2$q36IVI72l5sP6MhrdAudF3Vz81fUC-YxTT5-KwxCBXM=",
                                 "tokenendpoint": "https://ccp-provider-dev-qas.authentication.eu10.hana.ondemand.com/oauth/token",
                                 "granttype": "client_credentials"
                             },
