@@ -318,7 +318,9 @@ define entity OutOfRangeAreaDetails             as
         area.department.ID            as DepartmentID,
         area.department.name          as DepartmentName,
         area.department.location.ID   as LocationID,
-        area.department.location.name as LocationName
+        area.department.location.name as LocationName,
+        area.minWorkingTemperature    as MinWorkingTemperature,
+        area.maxWorkingTemperature    as MaxWorkingTemperature
     }
     group by
         ID,

@@ -63,8 +63,8 @@ class OLTNotificationPrepare {
                 workingTemperature: {
                     // Range di temperatura impostato nella cella nel
                     // momento della notifica (non dell'evento)
-                    min: areaInformation.MinTemperature,
-                    max: areaInformation.MaxTemperature,
+                    min: areaInformation.MinWorkingTemperature,
+                    max: areaInformation.MaxWorkingTemperature,
                 },
                 cause: "", // Non disponibile
             },
