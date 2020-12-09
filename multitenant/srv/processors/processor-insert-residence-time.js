@@ -13,15 +13,14 @@ class ProcessorInsertResidenceTime {
     }
 
     async tick() {
-        let movement;
+        setImmediate(this.tick);
+    }
 
-        try {
-            movement = await this.queueResidenceTime.getAndSetToProcessing();
-        } catch (error) {
-            this.logger.error("Connessione redis caduta, mi rimetto in attesa", error);
-            setImmediate(this.tick);
-            return;
-        }
+    async doWork(jobInfo, done) {
+        this.logger.debug("Do work");
+        console.log("Lavoro", jobInfo.data);
+
+        const movement = jobInfo.data;
 
         const technicalUser = new cds.User({
             id: movement.user,
@@ -54,7 +53,7 @@ class ProcessorInsertResidenceTime {
 
             await tx.commit();
 
-            await this.queueResidenceTime.moveToComplete(movement);
+            done();
         } catch (error) {
             if (error.stack !== "not available") {
                 this.logger.error(error.stack);
@@ -73,14 +72,6 @@ class ProcessorInsertResidenceTime {
             await tx.commit();
             await this.queueResidenceTime.moveToError(movement);
         }
-
-        setImmediate(this.tick);
-    }
-
-    async doWork(jobInfo, done) {
-        this.logger.debug("Do work");
-        console.log("Lavoro", jobInfo.data);
-        done();
     }
 
     async getNecessaryInfo(movement, tx) {
