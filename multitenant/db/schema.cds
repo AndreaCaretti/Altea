@@ -227,12 +227,12 @@ annotate Books with {
 }
 
 define entity HandlingUnitsRawMovements : cuid, managed {
-    MSG_ID   : String;
-    CP_ID    : String;
-    TE       : String;
-    TS       : String;
-    HU_ID    : String;
-    DIR      : String;
+    MSG_ID : String;
+    CP_ID  : String;
+    TE     : String;
+    TS     : String;
+    HU_ID  : String;
+    DIR    : String;
 }
 
 
@@ -324,6 +324,7 @@ define entity OutOfRangeAreaDetails             as
     group by
         ID,
         ID_DeviceIoT,
+        segmentId,
         area.ID,
         area.name,
         area.category.ID,
@@ -331,7 +332,9 @@ define entity OutOfRangeAreaDetails             as
         area.department.ID,
         area.department.name,
         area.department.location.ID,
-        area.department.location.name;
+        area.department.location.name,
+        area.minWorkingTemperature,
+        area.maxWorkingTemperature;
 
 define entity OutOfRangeHandlingUnitDetails     as
     select from OutOfRangeHandlingUnits
@@ -348,7 +351,8 @@ define entity OutOfRangeHandlingUnitDetails     as
         outOfRange.ID,
         handlingUnit.lot.name,
         handlingUnit.lot.product.gtin,
-        handlingUnit.lot.product.name;
+        handlingUnit.lot.product.name,
+        OutOfRangeHandlingUnitDetailCount.OutOfRangeHandlingUnitsIDCount;
 
 define entity OutOfRangeHandlingUnitDetailCount as
     select from OutOfRangeHandlingUnits {
