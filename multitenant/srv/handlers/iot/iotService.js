@@ -54,7 +54,7 @@ class IotService extends ZApplicationService {
             await tx.commit();
 
             if (outOfRange.data[0].action === "OPEN") {
-                await this.notificationAlert(request, outOfRange, areaID);
+                await this.notificationAlert(request, areaID);
             }
         } catch (error) {
             this.coldChainLogger.logException(
