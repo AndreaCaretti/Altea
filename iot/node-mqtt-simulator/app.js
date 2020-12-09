@@ -45,6 +45,9 @@ function sendDataViaMQTT() {
     measures: [
       //lastData.temperature, lastData.humidity, lastData.light
       lastData.temperature,
+      lastData.ErrorCode,
+      lastData.HighTemperature,
+      lastData.LowTemperature,
     ],
   };
 
