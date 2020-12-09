@@ -70,8 +70,6 @@ class IotService extends ZApplicationService {
         const outOfRange = request.data;
         const notificationService = NotificationService.getInstance(this.coldChainLogger);
 
-        notificationService.start();
-
         notificationService.alert(
             request.user.id,
             request.user.tenant,
