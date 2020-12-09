@@ -132,7 +132,7 @@ class EnterpriseMessageNotification {
                 done: () => {
                     this.logger.info(`${EMLOG_NAME} Sent`);
                     this.logger.info(`${payload} Data Sent`);
-                    callback(notificationData, logger);
+                    callback(notificationData, payload, logger);
                     resolve("Inviato");
                 },
                 failed: (oError) => {

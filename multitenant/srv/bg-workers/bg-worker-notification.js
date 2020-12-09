@@ -69,7 +69,7 @@ class BGWorkerNotification {
     }
 
     // eslint-disable-next-line class-methods-use-this
-    async submitIntoTable(data, logger) {
+    async submitIntoTable(data, payload, logger) {
         const technicalUser = new cds.User({
             id: data.user,
             tenant: data.tenant,
@@ -84,7 +84,7 @@ class BGWorkerNotification {
                 alertBusinessTime: data.alertBusinessTime,
                 alertCode: data.alertCode,
                 alertLevel: data.alertLevel,
-                payload: data.payload,
+                payload,
                 GUID: data.GUID,
             };
             logger.setTenantId(technicalUser.tenant);
