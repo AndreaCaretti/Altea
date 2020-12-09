@@ -2,11 +2,11 @@ const mqtt = require("mqtt");
 const fs = require("fs");
 
 const HOST_ADDRESS = "cfdff674-c321-4b71-9e87-752bda75d66a.eu10.cp.iot.sap"; // Replace with your IoT Service instance
-const DEVICE_ALTERNATE_ID = "Cella1";
-const SENSOR_ALTERNATE_ID = "temperatureSensor1";
-const CAPABILITY_ALTERNATE_ID = "areaData";
-const CERTIFICATE_FILE = "./certificates/Cella1_certificate.pem";
-const PASSPHRASE_FILE = "./certificates/Cella1_passphrase.txt";
+const DEVICE_ALTERNATE_ID = "CellaFrigo1";
+const SENSOR_ALTERNATE_ID = "temperatureSensorExtended";
+const CAPABILITY_ALTERNATE_ID = "areaDataExtended";
+const CERTIFICATE_FILE = "./certificates/CellaFrigo1_certificate.pem";
+const PASSPHRASE_FILE = "./certificates/CellaFrigo1_passphrase.txt";
 
 var lastData = {
   temperature: 8,
@@ -31,9 +31,9 @@ function generateData() {
 
   lastData = {
     temperature: temperature,
-    // temperature: lastData.temperature + randomInteger(-10, 10),
-    // humidity: lastData.humidity + randomInteger(10, 70),
-    // light: lastData.light + randomInteger(-85, 50)
+    ErrorCode: "001",
+    HighTemperature: 10,
+    LowTemperature: 2,
   };
 }
 
