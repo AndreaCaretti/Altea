@@ -1,7 +1,6 @@
 // const FgRed = "\x1b[31m";
 const LOG_PREFIX = `Preparo dati per invio notifica OLT - `;
 const SEVERITY = 1;
-const ALARM_TYPE = `OLT`;
 const MEASURE_UNIT = "Celsius";
 const DB = require("../../db-utilities");
 
@@ -54,7 +53,7 @@ class OLTNotificationPrepare {
                 },
             },
             handlingUnits: handlingUnitData,
-            alarmType: ALARM_TYPE,
+            alarmType: notification.notificationType,
             details: {
                 measurementUnit: MEASURE_UNIT,
                 eventTemperature: "20.00",

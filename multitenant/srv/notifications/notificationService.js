@@ -27,11 +27,11 @@ class Notification {
      * @param {*} tenant Tenant Id
      * @param {*} alertBusinessTime Momento dell'allarme
      * @param {*} alertCode
+     * @param {*} alertType Code dell'allarme
      * @param {*} alertLevel Livello dell'allarme
      * @param {*} payload Payload specifico del tipo di allarme
-     * @param {*} notificationType Code dell'allarme
      */
-    alert(user, tenant, alertBusinessTime, alertCode, alertLevel, payload, notificationType) {
+    alert(user, tenant, alertBusinessTime, alertCode, alertType, alertLevel, payload) {
         const alertNotificationData = {
             user,
             tenant,
@@ -39,7 +39,7 @@ class Notification {
             alertCode,
             alertLevel,
             payload,
-            notificationType,
+            notificationType: alertType,
         };
         this.logger.logObject(`BEGIN OF ALERT - OBJECT :`, alertNotificationData);
         this.notificationQueue.pushToWaiting(alertNotificationData);
