@@ -75,7 +75,6 @@ class IotService extends ZApplicationService {
             request.user.id,
             request.user.tenant,
             outOfRange.eventTime,
-            "LOG_ALERT",
             "OLT",
             1, // LOG_ALERT
             payload

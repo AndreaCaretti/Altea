@@ -26,17 +26,15 @@ class Notification {
      * @param {*} user Utente del tenant
      * @param {*} tenant Tenant Id
      * @param {*} alertBusinessTime Momento dell'allarme
-     * @param {*} alertCode
      * @param {*} alertType Code dell'allarme
      * @param {*} alertLevel Livello dell'allarme
      * @param {*} payload Payload specifico del tipo di allarme
      */
-    alert(user, tenant, alertBusinessTime, alertCode, alertType, alertLevel, payload) {
+    alert(user, tenant, alertBusinessTime, alertType, alertLevel, payload) {
         const alertNotificationData = {
             user,
             tenant,
             alertBusinessTime,
-            alertCode,
             alertType,
             alertLevel,
             payload,
