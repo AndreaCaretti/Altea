@@ -10,7 +10,6 @@ module.exports = (notification) => {
         const logger = Logger.getInstance();
         // Notification - Notification service
         const notificationService = NotificationService.getInstance(logger);
-        notificationService.start();
 
         // https://cap.cloud.sap/docs/node.js/authentication#cds-user
         notificationService.alert(
