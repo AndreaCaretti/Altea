@@ -89,6 +89,16 @@ class CloudFoundryAPI {
 
         return `https://${host}.${responseDomainInfo.entity.name}`;
     }
+
+    async getTarget() {
+        const targetCommandResult = await this.execCommand("cf", ["target"]);
+        const info = {};
+        targetCommandResult.split("\n").forEach((row) => {
+            const rowInfo = row.split(":");
+            info[rowInfo[0]] = rowInfo[1].trim();
+        });
+        return info;
+    }
 }
 
 module.exports = CloudFoundryAPI;
