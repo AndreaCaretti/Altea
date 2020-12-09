@@ -1,6 +1,5 @@
 // const FgRed = "\x1b[31m";
 const LOG_PREFIX = `Preparo dati per invio notifica OLT - `;
-const SEVERITY = 1;
 const MEASURE_UNIT = "Celsius";
 const DB = require("../../db-utilities");
 
@@ -29,7 +28,7 @@ class OLTNotificationPrepare {
         const valueOutPut = {
             eventGuid: await DB.getUUID(),
             // eventGuid invece che id
-            severity: SEVERITY,
+            severity: notification.alertLevel,
             eventDate: notification.alertBusinessTime,
             // invece che creationDate
             notificationDate: notification.notificationDate,
