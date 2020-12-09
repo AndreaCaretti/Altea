@@ -365,5 +365,5 @@ define entity OutOfRangeHandlingUnitDetailCount as
     }
     group by
         outOfRange.ID,
-        handlingUnit.lot.ID,
+        handlingUnit.lot.name,
         handlingUnit.lot.product.gtin;
