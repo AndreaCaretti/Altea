@@ -6,8 +6,9 @@ const QueueHandlingUnitsRawMovements = require("../queues/queue-hu-raw-movements
 const QueueResidenceTime = require("../queues/queue-residence-time");
 
 class ProcessorHuMovements {
-    constructor(logger) {
+    constructor(jobs, logger) {
         this.logger = logger;
+        this.jobs = jobs;
 
         this.queueRawMovements = new QueueHandlingUnitsRawMovements(this.logger);
         this.queueResidenceTime = new QueueResidenceTime(this.logger);
@@ -60,6 +61,8 @@ class ProcessorHuMovements {
             await tx.commit();
 
             await this.queueResidenceTime.pushToWaiting(movement);
+
+            this.jobs.addJob("customera", "residence-time", movement);
 
             await this.queueRawMovements.moveToComplete(movement);
         } catch (error) {

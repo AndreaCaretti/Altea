@@ -1,5 +1,6 @@
 const Logger = require("./logger");
 
+const Jobs = require("./jobs");
 const ProcessorHuMovements = require("./processors/processor-hu-movements");
 const ProcessorInsertResidenceTime = require("./processors/processor-insert-residence-time");
 const ProcessorUpdateResidenceTime = require("./processors/processor-update-residence-time");
@@ -21,8 +22,11 @@ class CloudColdChain {
         // Logger
         this.logger = Logger.getInstance(app);
 
+        //  Jobs
+        this.jobs = new Jobs(this.logger);
+
         // Handling Units Movements Processor
-        this.processorHuMovements = new ProcessorHuMovements(this.logger);
+        this.processorHuMovements = new ProcessorHuMovements(this.jobs, this.logger);
 
         // Residence Time Processor
         this.processorInsertResidenceTime = new ProcessorInsertResidenceTime(this.logger);
@@ -33,10 +37,10 @@ class CloudColdChain {
         // Notification - Notification BG Worker
         this.BGWorkerNotification = new BGWorkerNotification(this.logger);
 
-        // Enterprise Messaging comunicatio Layer
+        // Enterprise Messaging comunication Layer
         this.enterpriseMessageNotification = EnterpriseMessageNotification.getInstance();
 
-        // Start Enterprise Messaging comunicatio Layer
+        // Start Enterprise Messaging comunication Layer
         this.enterpriseMessageNotification.start();
 
         // Notification - Notification Service
@@ -44,6 +48,12 @@ class CloudColdChain {
 
         // Start Notification Service
         this.NotificationeService.start();
+
+        // Register processors
+        this.jobs.registerProcessor({
+            queueName: "residence-time",
+            processor: this.processorInsertResidenceTime,
+        });
 
         // Provisioning
         this.initMultitenantProvisioning(this.logger);
@@ -56,14 +66,14 @@ class CloudColdChain {
         // Handling units movements processor
         this.processorHuMovements.start();
 
-        // Insert Residence Time processor
-        this.processorInsertResidenceTime.start();
-
         // // Update Residence Time processor
         // this.processorUpdateResidenceTime.start();
 
         // Start Notification BG Worker
         this.BGWorkerNotification.start();
+
+        // Start jobs
+        this.jobs.start(["customera"]);
     }
 
     async initMultitenantProvisioning() {

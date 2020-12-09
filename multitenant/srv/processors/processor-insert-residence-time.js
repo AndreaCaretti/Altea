@@ -9,6 +9,7 @@ class ProcessorInsertResidenceTime {
         this.queueResidenceTime = new QueueResidenceTime(this.logger);
 
         this.tick = this.tick.bind(this);
+        this.doWork = this.doWork.bind(this);
     }
 
     async tick() {
@@ -74,6 +75,12 @@ class ProcessorInsertResidenceTime {
         }
 
         setImmediate(this.tick);
+    }
+
+    async doWork(jobInfo, done) {
+        this.logger.debug("Do work");
+        console.log("Lavoro", jobInfo.data);
+        done();
     }
 
     async getNecessaryInfo(movement, tx) {
