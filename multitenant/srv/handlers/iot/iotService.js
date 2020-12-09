@@ -69,6 +69,8 @@ class IotService extends ZApplicationService {
     notificationAlert(request) {
         const outOfRange = request.data;
         const notificationService = NotificationService.getInstance(this.coldChainLogger);
+        const payload = outOfRange.data[0];
+        payload.uuidDeviceIoT = outOfRange.extensions.modelId;
 
         notificationService.alert(
             request.user.id,
@@ -76,8 +78,8 @@ class IotService extends ZApplicationService {
             outOfRange.eventTime,
             "LOG_ALERT",
             1, // LOG_ALERT
-            JSON.stringify(outOfRange.data[0]),
-            outOfRange.data[0].entityId, // UUID del segmento
+            payload,
+            outOfRange.extensions.modelId, // UUID del Thing IoT
             "OLT"
         );
     }

@@ -11,7 +11,7 @@ class OLTNotificationPrepare {
         this.logger = logger;
         this.logger.info(`${LOG_PREFIX}Prepare data for OLT`);
 
-        const notificationPayload = JSON.parse(notification.payload);
+        const notificationPayload = notification.payload;
         const areaInformation = await this.getAreaInformation(notificationPayload.entityId, tx);
         const handlingUnitInformation = await this.getHandlingUnitData(areaInformation, tx);
         const handlingUnitData = [];
@@ -52,7 +52,8 @@ class OLTNotificationPrepare {
                     guid: areaInformation.LocationID,
                     description: areaInformation.LocationName,
                 },
-                guidAsset: notification.GUID, // guid dell'asset iot che ha notificato l'evento
+                // guid dell'asset iot che ha notificato l'evento
+                guidAsset: notificationPayload.uuidDeviceIoT,
             },
             handlingUnits: handlingUnitData,
             alarmType: ALARM_TYPE,
