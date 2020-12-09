@@ -80,7 +80,6 @@ class BGWorkerNotification {
         try {
             const { Notification } = cds.entities;
             const dataNotification = {
-                area: data.area,
                 alertBusinessTime: data.alertBusinessTime,
                 alertCode: data.alertCode,
                 alertLevel: data.alertLevel,

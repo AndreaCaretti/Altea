@@ -12,7 +12,7 @@ class OLTNotificationPrepare {
         this.logger.info(`${LOG_PREFIX}Prepare data for OLT`);
 
         const notificationPayload = JSON.parse(notification.payload);
-        const areaInformation = await this.getAreaInformation(notificationPayload, tx);
+        const areaInformation = await this.getAreaInformation(notificationPayload.entityId, tx);
         const handlingUnitInformation = await this.getHandlingUnitData(areaInformation, tx);
         const handlingUnitData = [];
 
@@ -73,11 +73,11 @@ class OLTNotificationPrepare {
         return valueOutPut;
     }
 
-    static async getAreaInformation(notificationPayload, tx) {
+    static async getAreaInformation(segmentID, tx) {
         const { OutOfRangeAreaDetails } = cds.entities;
         const oAreaInformation = await DB.selectOneRowWhere(
             OutOfRangeAreaDetails,
-            { SegmentID: notificationPayload.entityId },
+            { SegmentID: segmentID },
             tx,
             this.logger
         );

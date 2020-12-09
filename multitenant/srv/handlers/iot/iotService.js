@@ -54,7 +54,7 @@ class IotService extends ZApplicationService {
             await tx.commit();
 
             if (outOfRange.data[0].action === "OPEN") {
-                await this.notificationAlert(request, areaID);
+                await this.notificationAlert(request);
             }
         } catch (error) {
             this.coldChainLogger.logException(
@@ -66,14 +66,13 @@ class IotService extends ZApplicationService {
         return message;
     }
 
-    notificationAlert(request, areaID) {
+    notificationAlert(request) {
         const outOfRange = request.data;
         const notificationService = NotificationService.getInstance(this.coldChainLogger);
 
         notificationService.alert(
             request.user.id,
             request.user.tenant,
-            areaID,
             outOfRange.eventTime,
             "LOG_ALERT",
             1, // LOG_ALERT
