@@ -52,8 +52,6 @@ class OLTNotificationPrepare {
                     guid: areaInformation.LocationID,
                     description: areaInformation.LocationName,
                 },
-                // guid dell'asset iot che ha notificato l'evento
-                guidAsset: notificationPayload.uuidDeviceIoT,
             },
             handlingUnits: handlingUnitData,
             alarmType: ALARM_TYPE,
