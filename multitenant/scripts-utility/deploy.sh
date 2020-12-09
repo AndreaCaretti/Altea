@@ -13,3 +13,6 @@ date
 cf deploy mta_archives/$LAST_FILENAME -f
 echo "deploy finished"
 date
+
+echo "RICORDATI DI AGGIORNARE IL DB CON (SE SERVE):"
+echo "npm run update-db-tenants"
