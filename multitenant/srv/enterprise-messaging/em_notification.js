@@ -132,7 +132,7 @@ class EnterpriseMessageNotification {
                     reject(new Error(oError));
                 },
             };
-            this.logger.debug(`Send To Enterprise Messaging Client`);
+            this.logger.logObject(`Send To Enterprise Messaging Client`, payload);
             this.stream.write(message);
         });
     }

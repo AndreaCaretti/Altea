@@ -53,9 +53,9 @@ class BGWorkerNotification {
                 this.logger,
                 this.submitIntoTable
             );
-        } catch (Error) {
+        } catch (error) {
             // 'Todo: Open' // Gestire errore , riprendo inserimento in coda?
-            this.logger.info(Error.message);
+            this.logger.logException("Errore invio notifica", error);
             setImmediate(this.tick);
         }
 
