@@ -1,25 +1,9 @@
 // const inputValidation = require("@sap/cds-runtime/lib/common/generic/input");
 const DB = require("../db-utilities");
-const QueueResidenceTime = require("../queues/queue-residence-time");
+const JobProcessor = require("./internal/job-processor");
 
-class ProcessorInsertResidenceTime {
-    constructor(logger) {
-        this.logger = logger;
-
-        this.queueResidenceTime = new QueueResidenceTime(this.logger);
-
-        this.tick = this.tick.bind(this);
-        this.doWork = this.doWork.bind(this);
-    }
-
-    async tick() {
-        setImmediate(this.tick);
-    }
-
+class ProcessorInsertResidenceTime extends JobProcessor {
     async doWork(jobInfo, done) {
-        this.logger.debug("Do work");
-        console.log("Lavoro", jobInfo.data);
-
         const movement = jobInfo.data;
 
         const technicalUser = new cds.User({
@@ -55,20 +39,16 @@ class ProcessorInsertResidenceTime {
 
             done();
         } catch (error) {
-            if (error.stack !== "not available") {
-                this.logger.error(error.stack);
-            } else {
-                this.logger.error(JSON.stringify(error));
-            }
+            this.logger.logException("Errore aggiornamento resident time", error);
 
-            DB.updateSingleField(
-                "HandlingUnitsMovements",
-                movement.ID,
-                "STATUS",
-                false,
-                tx,
-                this.logger
-            );
+            // DB.updateSingleField(
+            //     "HandlingUnitsMovements",
+            //     movement.ID,
+            //     "STATUS",
+            //     false,
+            //     tx,
+            //     this.logger
+            // );
             await tx.commit();
             await this.queueResidenceTime.moveToError(movement);
         }
@@ -125,14 +105,6 @@ class ProcessorInsertResidenceTime {
     async getRouteStepsFromRoute(route, tx) {
         this.logger.debug("getRouteStepsFromRoute: ", route);
         return DB.selectAllWithParent(cds.entities.RouteSteps, route, tx, this.logger);
-    }
-
-    async start() {
-        this.logger.debug(`Avvio InsertResidentTime Processor...`);
-
-        this.queueResidenceTime.start();
-
-        setImmediate(this.tick);
     }
 
     async createRecordResidentTime(movement, info, tx) {

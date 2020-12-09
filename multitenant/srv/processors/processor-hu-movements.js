@@ -3,7 +3,6 @@ const inputValidation = require("@sap/cds-runtime/lib/common/generic/input");
 const DB = require("../db-utilities");
 
 const QueueHandlingUnitsRawMovements = require("../queues/queue-hu-raw-movements");
-const QueueResidenceTime = require("../queues/queue-residence-time");
 
 class ProcessorHuMovements {
     constructor(jobs, logger) {
@@ -11,7 +10,6 @@ class ProcessorHuMovements {
         this.jobs = jobs;
 
         this.queueRawMovements = new QueueHandlingUnitsRawMovements(this.logger);
-        this.queueResidenceTime = new QueueResidenceTime(this.logger);
 
         this.tick = this.tick.bind(this);
     }
@@ -60,8 +58,6 @@ class ProcessorHuMovements {
 
             await tx.commit();
 
-            await this.queueResidenceTime.pushToWaiting(movement);
-
             this.jobs.addJob("customera", "residence-time", movement);
 
             await this.queueRawMovements.moveToComplete(movement);
@@ -79,7 +75,6 @@ class ProcessorHuMovements {
         this.logger.info(`Avvio Handling Unit Movements Processor...`);
 
         this.queueRawMovements.start();
-        this.queueResidenceTime.start();
 
         setImmediate(this.tick);
     }

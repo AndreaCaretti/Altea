@@ -24,7 +24,7 @@ class Jobs {
                 const queue = await this.createQueue(
                     this.formatQueueName(customer, processorInfo.queueName)
                 );
-                queue.process(10, processorInfo.processor.doWork);
+                queue.process(processorInfo.queueName, 10, processorInfo.processor.processJob);
             });
         });
     }
@@ -36,7 +36,7 @@ class Jobs {
 
     async addJob(customer, queueName, jobInfo) {
         this.logger.logObject(
-            `Arrivata richiesta aggiunta job per cliente ${customer} coda ${queueName}`,
+            `Arrivata richiesta di aggiungere job per cliente ${customer} nome coda ${queueName}`,
             jobInfo
         );
 
@@ -52,8 +52,8 @@ class Jobs {
         }
 
         try {
-            const job = await queue.add(jobInfo, { removeOnComplete: 1000 });
-            this.logger.debug("Aggiunto job", job.id);
+            const job = await queue.add(queueName, jobInfo, { removeOnComplete: 1000 });
+            this.logger.debug(`Aggiunto job ${queueName} id ${job.id}`);
         } catch (error) {
             this.logger.logException(`Aggiunta di job rifiutata, error`, error);
             throw new Error("Aggiunta di job rifiutata");
