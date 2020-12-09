@@ -8,11 +8,7 @@ const CAPABILITY_ALTERNATE_ID = "areaDataExtended";
 const CERTIFICATE_FILE = "./certificates/CellaFrigo1_certificate.pem";
 const PASSPHRASE_FILE = "./certificates/CellaFrigo1_passphrase.txt";
 
-var lastData = {
-  temperature: 8,
-  // humidity: 8,
-  // light: 100,
-};
+var lastData = {};
 
 var mqttClient = connectToMQTT();
 
