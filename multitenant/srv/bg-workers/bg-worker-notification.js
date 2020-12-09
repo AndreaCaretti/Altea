@@ -41,15 +41,15 @@ class BGWorkerNotification {
 
         try {
             // SEND TO ENTERPRISE MESSAGE SERVICE NOTIFICATION
-            const dataForMsgService = JSON.stringify(
+            const notificationPayload = JSON.stringify(
                 await this.notificationPrepareData.prepareNotificationPayload(notification)
             );
             const date = new Date().toISOString();
             notification.notificationTime = date;
 
             await this.enterpriseMessageNotification.send(
-                dataForMsgService,
                 notification,
+                notificationPayload,
                 this.logger,
                 this.submitIntoTable
             );

@@ -6,12 +6,13 @@ const MEASURE_UNIT = "Celsius";
 const DB = require("../../db-utilities");
 
 class OLTNotificationPrepare {
-    static async prepareData(data, logger, tx) {
+    static async prepareData(notification, logger, tx) {
         // return new Promise((resolve, reject) => {
         this.logger = logger;
         this.logger.info(`${LOG_PREFIX}Prepare data for OLT`);
 
-        const areaInformation = await this.getAreaInformation(data, tx);
+        const notificationPayload = JSON.parse(notification.payload);
+        const areaInformation = await this.getAreaInformation(notificationPayload, tx);
         const handlingUnitInformation = await this.getHandlingUnitData(areaInformation, tx);
         const handlingUnitData = [];
 
@@ -30,9 +31,9 @@ class OLTNotificationPrepare {
             eventGuid: await DB.getUUID(),
             // eventGuid invece che id
             severity: SEVERITY,
-            eventDate: data.alertBusinessTime,
+            eventDate: notification.alertBusinessTime,
             // invece che creationDate
-            notificationDate: data.notificationDate,
+            notificationDate: notification.notificationDate,
             // momento in cui inseriamo la notifica nella coda verso keethings
             area: {
                 // identifica l'area impattata dall'evento
@@ -51,7 +52,7 @@ class OLTNotificationPrepare {
                     guid: areaInformation.LocationID,
                     description: areaInformation.LocationName,
                 },
-                guidAsset: data.GUID, // guid dell'asset iot che ha notificato l'evento
+                guidAsset: notification.GUID, // guid dell'asset iot che ha notificato l'evento
             },
             handlingUnits: handlingUnitData,
             alarmType: ALARM_TYPE,
@@ -72,11 +73,11 @@ class OLTNotificationPrepare {
         return valueOutPut;
     }
 
-    static async getAreaInformation(data, tx) {
+    static async getAreaInformation(notificationPayload, tx) {
         const { OutOfRangeAreaDetails } = cds.entities;
         const oAreaInformation = await DB.selectOneRowWhere(
             OutOfRangeAreaDetails,
-            { SegmentID: data.GUID },
+            { SegmentID: notificationPayload.entityId },
             tx,
             this.logger
         );

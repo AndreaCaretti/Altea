@@ -21,6 +21,18 @@ class Notification {
         this.notificationQueue.start();
     }
 
+    /**
+     *
+     * @param {*} user Utente del tenant
+     * @param {*} tenant Tenant Id
+     * @param {*} area
+     * @param {*} alertBusinessTime Momento dell'allarme
+     * @param {*} alertCode
+     * @param {*} alertLevel Livello dell'allarme
+     * @param {*} payload Payload specifico del tipo di allarme
+     * @param {*} GUID
+     * @param {*} notificationType Code dell'allarme
+     */
     alert(
         user,
         tenant,
