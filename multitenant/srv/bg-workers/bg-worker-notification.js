@@ -56,7 +56,7 @@ class BGWorkerNotification {
         } catch (error) {
             // 'Todo: Open' // Gestire errore , riprendo inserimento in coda?
             this.logger.logException("Errore invio notifica", error);
-            setImmediate(this.tick);
+            await this.notificationQueue.moveToError(notification);
         }
 
         setImmediate(this.tick);
