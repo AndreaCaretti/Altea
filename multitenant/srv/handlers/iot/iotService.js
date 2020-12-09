@@ -78,7 +78,6 @@ class IotService extends ZApplicationService {
             "LOG_ALERT",
             1, // LOG_ALERT
             payload,
-            outOfRange.extensions.modelId, // UUID del Thing IoT
             "OLT"
         );
     }

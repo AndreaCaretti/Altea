@@ -29,19 +29,9 @@ class Notification {
      * @param {*} alertCode
      * @param {*} alertLevel Livello dell'allarme
      * @param {*} payload Payload specifico del tipo di allarme
-     * @param {*} uuidDeviceIoT
      * @param {*} notificationType Code dell'allarme
      */
-    alert(
-        user,
-        tenant,
-        alertBusinessTime,
-        alertCode,
-        alertLevel,
-        payload,
-        uuidDeviceIoT,
-        notificationType
-    ) {
+    alert(user, tenant, alertBusinessTime, alertCode, alertLevel, payload, notificationType) {
         const alertNotificationData = {
             user,
             tenant,
@@ -49,7 +39,6 @@ class Notification {
             alertCode,
             alertLevel,
             payload,
-            GUID: uuidDeviceIoT,
             notificationType,
         };
         this.logger.logObject(`BEGIN OF ALERT - OBJECT :`, alertNotificationData);
