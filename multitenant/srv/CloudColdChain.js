@@ -55,12 +55,14 @@ class CloudColdChain {
         this.jobs.registerProcessor({
             queueName: QUEUE_NAMES.HANDLING_UNIT_MOVED,
             processor: this.processorHuMovements,
+            parallelJobs: 4,
         });
 
         // Register residence time processors
         this.jobs.registerProcessor({
             queueName: QUEUE_NAMES.RESIDENCE_TIME,
             processor: this.processorInsertResidenceTime,
+            parallelJobs: 4,
         });
 
         // Provisioning

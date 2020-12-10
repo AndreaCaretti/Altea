@@ -47,7 +47,11 @@ class Jobs {
                 const queue = await this.createQueue(
                     this.formatQueueName(tenant, processorInfo.queueName)
                 );
-                queue.process(processorInfo.queueName, 2, processorInfo.processor.processJob);
+                queue.process(
+                    processorInfo.queueName,
+                    processorInfo.parallelJobs,
+                    processorInfo.processor.processJob
+                );
 
                 bullBoardSetQueues([new BullAdapter(queue)]);
             });
