@@ -29,7 +29,7 @@ Content-Type: application/json
 
 ### Creazione segmento iot
 POST http://localhost:4004/iot/segment  HTTP/1.1
-Authorization: Basic Alice:Alice
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
@@ -158,9 +158,9 @@ Content-Type: application/json
 {
     "MSG_ID":"994ce6f3-283c-4a95-8470-c3664ebddbd0",
     "CP_ID": "e6bbede3-5b6a-472d-8ba6-41abbb89edf2",
-    "TE": "2020-10-14T09:01:33.763Z",
-    "TS": "2020-10-14T09:01:34.763Z",
-    "HU_ID": "123456789012345678",
+    "TE": "2020-12-10T09:01:33.763Z",
+    "TS": "2020-12-10T09:01:34.763Z",
+    "HU_ID": "223456789012345678",
     "DIR": "F"
 }
 

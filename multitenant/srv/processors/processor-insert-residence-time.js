@@ -100,7 +100,7 @@ class ProcessorInsertResidenceTime extends JobProcessor {
         const values = {
             lastKnownArea_ID: info.routeStep.destinationArea_ID,
             inAreaBusinessTime: movement.TE,
-            lastMovement_ID: movement.ID,
+            // lastMovement_ID: movement.ID,
         };
         await DB.updateSomeFields(
             cds.entities.HandlingUnits,
