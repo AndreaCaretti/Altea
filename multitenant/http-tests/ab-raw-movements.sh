@@ -1,0 +1,1 @@
+ab -A Alice:Alice -l -n 500 -c 10 -p payload-raw-movement.json -T application/json http://localhost:4004/handling-unit-moved/HandlingUnitsRawMovements
