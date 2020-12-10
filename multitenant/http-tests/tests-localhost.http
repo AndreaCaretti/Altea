@@ -161,7 +161,7 @@ Content-Type: application/json
     "TE": "2020-10-14T09:01:33.763Z",
     "TS": "2020-10-14T09:01:34.763Z",
     "HU_ID": "123456789012345678",
-    "DIR": "B"
+    "DIR": "F"
 }
 
 ### Recupera books
