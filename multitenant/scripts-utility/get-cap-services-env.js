@@ -36,8 +36,8 @@ async function getLocalRedisDefaultConfig() {
 
 async function mergeLocalRedisDefaultConfig(enviroment) {
     const redisDefaultConfig = await getLocalRedisDefaultConfig();
-    const newDataMerged = JSON.parse(JSON.stringify(enviroment));
-    newDataMerged.VCAP_SERVICES["redis-cache"][0] = redisDefaultConfig["redis-cache"];
+    const newDataMerged = enviroment;
+    newDataMerged.VCAP_SERVICES["redis-cache"] = redisDefaultConfig["redis-cache"];
     return newDataMerged;
 }
 
