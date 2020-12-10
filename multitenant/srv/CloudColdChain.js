@@ -28,7 +28,7 @@ class CloudColdChain {
         this.jobs = new Jobs(app, this.logger);
 
         // Handling Units Movements Processor
-        this.processorHuMovements = new ProcessorHuMovements(this.jobs, this.logger);
+        this.processorHuMovements = new ProcessorHuMovements(this.logger, this.jobs);
 
         // Residence Time Processor
         this.processorInsertResidenceTime = new ProcessorInsertResidenceTime(this.logger);
@@ -51,6 +51,12 @@ class CloudColdChain {
         // Start Notification Service
         this.NotificationeService.start();
 
+        // Register Handling Units Movements processors
+        this.jobs.registerProcessor({
+            queueName: QUEUE_NAMES.HANDLING_UNIT_MOVED,
+            processor: this.processorHuMovements,
+        });
+
         // Register residence time processors
         this.jobs.registerProcessor({
             queueName: QUEUE_NAMES.RESIDENCE_TIME,
@@ -67,9 +73,6 @@ class CloudColdChain {
     async start() {
         // Get all customers tenants
         this.tenants = await this.getAllTenants();
-
-        // Handling units movements processor
-        this.processorHuMovements.start();
 
         // // Update Residence Time processor
         // this.processorUpdateResidenceTime.start();

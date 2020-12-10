@@ -3,7 +3,7 @@ const DB = require("../db-utilities");
 const JobProcessor = require("./internal/job-processor");
 
 class ProcessorInsertResidenceTime extends JobProcessor {
-    async doWork(jobInfo, tx) {
+    async doWork(jobInfo, technicalUser, tx) {
         const movement = jobInfo.data;
 
         const info = await this.getNecessaryInfo(movement, tx);

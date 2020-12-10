@@ -1,21 +1,24 @@
 class JobProcessor {
-    constructor(logger) {
+    constructor(logger, jobs) {
+        this.jobs = jobs;
         this.logger = logger;
 
         this.processJob = this.processJob.bind(this);
     }
 
     async processJob(jobInfo, done) {
-        const technicalUser = this.getTechnicalUser(jobInfo.data);
+        this.technicalUser = this.getTechnicalUser(jobInfo.data);
 
-        this.prepareLogger(technicalUser);
+        this.prepareLogger(this.technicalUser);
 
         this.logger.logObject(`Inizio lavoro ${jobInfo.name} ${jobInfo.id}`, jobInfo.data);
 
-        const tx = this.getTx(technicalUser);
+        this.request = this.getRequest(this.technicalUser);
+
+        const tx = this.getTx(this.request);
 
         try {
-            await this.doWork(jobInfo, tx);
+            await this.doWork(jobInfo, this.technicalUser, tx);
             tx.commit();
         } catch (error) {
             this.logger.logException(`Errore esecuzione job ${jobInfo.name} ${jobInfo.id}`, error);
@@ -38,12 +41,13 @@ class JobProcessor {
         this.logger.setTenantId(technicalUser.tenant);
     }
 
-    getTx(technicalUser) {
-        this.logger.debug(
-            `Recupero tx per tenant ${technicalUser.tenant} utente ${technicalUser.id}`
-        );
-        const request = new cds.Request({ user: technicalUser });
+    getRequest(technicalUser) {
+        this.logger.debug(`Recupero request per technicalUser`);
+        return new cds.Request({ user: technicalUser });
+    }
 
+    getTx(request) {
+        this.logger.debug(`Recupero transaction da request`);
         return cds.transaction(request);
     }
 }

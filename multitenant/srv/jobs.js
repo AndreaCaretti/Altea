@@ -7,6 +7,8 @@ const {
 
 const xsenv = require("@sap/xsenv");
 
+let jobsInstance;
+
 class Jobs {
     constructor(app, logger) {
         this.logger = logger;
@@ -20,6 +22,15 @@ class Jobs {
 
         this.logger.info(`Jobs monitor disponibile all'url /jobs-monitor`);
         app.use("/jobs-monitor", bullBoardRouter);
+
+        jobsInstance = this;
+    }
+
+    static getInstance() {
+        if (!jobsInstance) {
+            throw new Error("L'istance della classe Jobs non era stata ancora creata");
+        }
+        return jobsInstance;
     }
 
     registerProcessor(processorInfo) {
@@ -36,7 +47,7 @@ class Jobs {
                 const queue = await this.createQueue(
                     this.formatQueueName(tenant, processorInfo.queueName)
                 );
-                queue.process(processorInfo.queueName, 10, processorInfo.processor.processJob);
+                queue.process(processorInfo.queueName, 2, processorInfo.processor.processJob);
 
                 bullBoardSetQueues([new BullAdapter(queue)]);
             });
@@ -101,12 +112,12 @@ class Jobs {
     }
 
     async createBullQueue(queueName) {
-        this.logger.info(`Creazione bull queue...`, queueName);
+        this.logger.info(`Creazione bull queue`, queueName);
 
         return new Promise((resolve, reject) => {
             const internalVideoQueue = new Queue(queueName, {
                 limiter: {
-                    max: 5000, // Numero massimo di jobs processati nell'unità di tempo
+                    max: 500, // Numero massimo di jobs processati nell'unità di tempo
                     duration: 1000, // Unità di tempo in ms
                     bounceBack: true, // Non utilizzare le code di delay
                     prefix: "coldchain",
@@ -131,7 +142,7 @@ class Jobs {
             });
 
             internalVideoQueue.client.on("ready", () => {
-                this.logger.info("Jobs - riconnesso da redis per coda", queueName);
+                this.logger.info("Jobs - connesso a redis per coda", queueName);
                 resolve(internalVideoQueue);
             });
 
