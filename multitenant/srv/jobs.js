@@ -1,11 +1,14 @@
 const Queue = require("bull");
-
-const REDIS_HOST = process.env.REDIS_HOST || "127.0.0.1";
-const REDIS_PORT = process.env.REDIS_PORT || "6379";
+const xsenv = require("@sap/xsenv");
 
 class Jobs {
     constructor(logger) {
         this.logger = logger;
+
+        xsenv.loadEnv();
+
+        this.redisCredentials = xsenv.serviceCredentials({ tag: "cache" });
+
         this.queues = new Map();
         this.processors = [];
     }
@@ -79,8 +82,8 @@ class Jobs {
                     prefix: "coldchain",
                 },
                 redis: {
-                    host: REDIS_HOST,
-                    port: REDIS_PORT,
+                    host: this.redisCredentials.hostname,
+                    port: this.redisCredentials.port,
                     enableOfflineQueue: false,
 
                     retryStrategy(times) {

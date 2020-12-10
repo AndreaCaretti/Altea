@@ -3,54 +3,22 @@ const DB = require("../db-utilities");
 const JobProcessor = require("./internal/job-processor");
 
 class ProcessorInsertResidenceTime extends JobProcessor {
-    async doWork(jobInfo, done) {
+    async doWork(jobInfo, tx) {
         const movement = jobInfo.data;
 
-        const technicalUser = new cds.User({
-            id: movement.user,
-            tenant: movement.tenant,
-        });
+        const info = await this.getNecessaryInfo(movement, tx);
 
-        this.logger.setTenantId(technicalUser.tenant);
+        await this.createRecordResidentTime(movement, info, tx);
 
-        const request = new cds.Request({ user: technicalUser });
-
-        const tx = cds.transaction(request);
-
-        try {
-            const info = await this.getNecessaryInfo(movement, tx);
-
-            await this.createRecordResidentTime(movement, info, tx);
-
-            // await this.updateMovementStatus(movement, tx);
-
-            // FIXME: Se ci sono più istanze dell'app CAP può essere che il campo TE
-            // dell'handling unit sia già stato aggiornato da un altro processo con
-            // un valore più alto e noi per errore mettiamo un movimento vecchio
-            // Inserire una gestione dei lock sull'handling unit
-            if (
-                !info.handlingUnit.inAreaBusinessTime ||
-                movement.TE > info.handlingUnit.inAreaBusinessTime
-            ) {
-                await this.updateHandlingUnitLastArea(movement, info, tx);
-            }
-
-            await tx.commit();
-
-            done();
-        } catch (error) {
-            this.logger.logException("Errore aggiornamento resident time", error);
-
-            // DB.updateSingleField(
-            //     "HandlingUnitsMovements",
-            //     movement.ID,
-            //     "STATUS",
-            //     false,
-            //     tx,
-            //     this.logger
-            // );
-            await tx.commit();
-            await this.queueResidenceTime.moveToError(movement);
+        // FIXME: Se ci sono più istanze dell'app CAP può essere che il campo TE
+        // dell'handling unit sia già stato aggiornato da un altro processo con
+        // un valore più alto e noi per errore mettiamo un movimento vecchio
+        // Inserire una gestione dei lock sull'handling unit
+        if (
+            !info.handlingUnit.inAreaBusinessTime ||
+            movement.TE > info.handlingUnit.inAreaBusinessTime
+        ) {
+            await this.updateHandlingUnitLastArea(movement, info, tx);
         }
     }
 
