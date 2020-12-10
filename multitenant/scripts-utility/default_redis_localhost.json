@@ -1,0 +1,19 @@
+{
+    "redis-cache": [
+        {
+            "label": "redis-cache",
+            "provider": null,
+            "plan": "standard",
+            "name": "mtt-redis",
+            "tags": ["cache"],
+            "instance_name": "mtt-redis",
+            "binding_name": null,
+            "credentials": {
+                "hostname": "127.0.0.1",
+                "port": 6379
+            },
+            "syslog_drain_url": null,
+            "volume_mounts": []
+        }
+    ]
+}
