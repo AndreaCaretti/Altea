@@ -58,7 +58,7 @@ class ProcessorHuMovements {
 
             await tx.commit();
 
-            this.jobs.addJob("customera", "residence-time", movement);
+            await this.jobs.addJob(technicalUser.tenant, "residence-time", movement);
 
             await this.queueRawMovements.moveToComplete(movement);
         } catch (error) {

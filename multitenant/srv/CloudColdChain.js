@@ -63,6 +63,9 @@ class CloudColdChain {
         Avvia i componenti
     */
     async start() {
+        // Get all customers tenants
+        this.tenants = await this.getAllTenants();
+
         // Handling units movements processor
         this.processorHuMovements.start();
 
@@ -73,8 +76,16 @@ class CloudColdChain {
         this.BGWorkerNotification.start();
 
         // Start jobs
-        // TODO: Togliere l'elenco hardcodato dei clienti
-        this.jobs.start(["customera"]);
+        this.jobs.start(this.tenants);
+    }
+
+    // TODO: Togliere l'elenco hardcodato dei clienti
+    async getAllTenants() {
+        this.logger.info("Recupero elenco dei tenants dei clienti... ");
+
+        const tenants = [null];
+
+        return tenants;
     }
 
     async initMultitenantProvisioning() {

@@ -27,14 +27,14 @@ class Jobs {
         this.processors.push(processorInfo);
     }
 
-    start(customers) {
+    start(tenants) {
         this.logger.info(`Avvio Jobs...`);
 
-        customers.forEach((customer) => {
-            this.logger.info(`Jobs for customer ${customer}`);
+        tenants.forEach((tenant) => {
+            this.logger.info(`Jobs for tenant ${tenant}`);
             this.processors.forEach(async (processorInfo) => {
                 const queue = await this.createQueue(
-                    this.formatQueueName(customer, processorInfo.queueName)
+                    this.formatQueueName(tenant, processorInfo.queueName)
                 );
                 queue.process(processorInfo.queueName, 10, processorInfo.processor.processJob);
 
@@ -44,24 +44,33 @@ class Jobs {
     }
 
     // eslint-disable-next-line class-methods-use-this
-    formatQueueName(customer, queueName) {
-        return `${customer}-${queueName}`;
+    formatQueueName(tenant, queueName) {
+        return `${tenant}-${queueName}`;
     }
 
-    async addJob(customer, queueName, jobInfo) {
+    async addJob(tenant, queueName, jobInfo) {
         this.logger.logObject(
-            `Arrivata richiesta di aggiungere job per cliente ${customer} nome coda ${queueName}`,
+            `Arrivata richiesta di aggiungere job per cliente ${tenant} nome coda ${queueName}`,
             jobInfo
         );
 
-        const queue = this.queues.get(this.formatQueueName(customer, queueName));
+        const queue = this.queues.get(this.formatQueueName(tenant, queueName));
+
+        if (!queue) {
+            this.logger.error(
+                `Non ho trovato la coda bull per la coda ${this.formatQueueName(tenant, queueName)}`
+            );
+            throw new Error(
+                `Non ho trovato la coda bull per la coda ${this.formatQueueName(tenant, queueName)}`
+            );
+        }
 
         if (queue.client.status !== "ready") {
             this.logger.error(
                 `Lo stato di redis è ${queue.client.status}, non è possibile aggiungere job`
             );
             throw new Error(
-                "Non connesso a redis, non è possibile aggiungere job in questo momento"
+                `Lo stato di redis è ${queue.client.status}, non è possibile aggiungere job`
             );
         }
 
