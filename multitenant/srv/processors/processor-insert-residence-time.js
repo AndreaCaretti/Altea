@@ -1,83 +1,25 @@
 // const inputValidation = require("@sap/cds-runtime/lib/common/generic/input");
 const DB = require("../db-utilities");
-const QueueResidenceTime = require("../queues/queue-residence-time");
+const JobProcessor = require("./internal/job-processor");
 
-class ProcessorInsertResidenceTime {
-    constructor(logger) {
-        this.logger = logger;
+class ProcessorInsertResidenceTime extends JobProcessor {
+    async doWork(jobInfo, technicalUser, tx) {
+        const movement = jobInfo.data;
 
-        this.queueResidenceTime = new QueueResidenceTime(this.logger);
+        const info = await this.getNecessaryInfo(movement, tx);
 
-        this.tick = this.tick.bind(this);
-    }
+        await this.createRecordResidentTime(movement, info, tx);
 
-    async tick() {
-        let movement;
-
-        try {
-            movement = await this.queueResidenceTime.getAndSetToProcessing();
-        } catch (error) {
-            this.logger.error("Connessione redis caduta, mi rimetto in attesa", error);
-            setImmediate(this.tick);
-            return;
+        // FIXME: Se ci sono più istanze dell'app CAP può essere che il campo TE
+        // dell'handling unit sia già stato aggiornato da un altro processo con
+        // un valore più alto e noi per errore mettiamo un movimento vecchio
+        // Inserire una gestione dei lock sull'handling unit
+        if (
+            !info.handlingUnit.inAreaBusinessTime ||
+            movement.TE > info.handlingUnit.inAreaBusinessTime
+        ) {
+            await this.updateHandlingUnitLastArea(movement, info, tx);
         }
-
-        const technicalUser = new cds.User({
-            id: movement.user,
-            tenant: movement.tenant,
-        });
-
-        this.logger.setTenantId(technicalUser.tenant);
-
-        const request = new cds.Request({ user: technicalUser });
-
-        const tx = cds.transaction(request);
-
-        try {
-            const info = await this.getNecessaryInfo(movement, tx);
-
-            await this.createRecordResidentTime(movement, info, tx);
-
-            // await this.updateMovementStatus(movement, tx);
-
-            // FIXME: Se ci sono più istanze dell'app CAP può essere che il campo TE
-            // dell'handling unit sia già stato aggiornato da un altro processo con
-            // un valore più alto e noi per errore mettiamo un movimento vecchio
-            // Inserire una gestione dei lock sull'handling unit
-            if (
-                !info.handlingUnit.inAreaBusinessTime ||
-                movement.TE > info.handlingUnit.inAreaBusinessTime
-            ) {
-                await this.updateHandlingUnitLastArea(movement, info, tx);
-            }
-
-            await tx.commit();
-
-            await this.queueResidenceTime.moveToComplete(movement);
-        } catch (error) {
-            if (error.stack !== "not available") {
-                this.logger.error(error.stack);
-            } else {
-                this.logger.error(JSON.stringify(error));
-            }
-
-            // try {
-            //     await DB.updateSingleField(
-            //         "HandlingUnitsMovements",
-            //         movement.ID,
-            //         "STATUS",
-            //         false,
-            //         tx,
-            //         this.logger
-            //     );
-            // } catch (oError) {
-            //     console.log(oError);
-            // }
-            await tx.commit();
-            await this.queueResidenceTime.moveToError(movement);
-        }
-
-        setImmediate(this.tick);
     }
 
     async getNecessaryInfo(movement, tx) {
@@ -131,14 +73,6 @@ class ProcessorInsertResidenceTime {
     async getRouteStepsFromRoute(route, tx) {
         this.logger.debug("getRouteStepsFromRoute: ", route);
         return DB.selectAllWithParent(cds.entities.RouteSteps, route, tx, this.logger);
-    }
-
-    async start() {
-        this.logger.debug(`Avvio InsertResidentTime Processor...`);
-
-        this.queueResidenceTime.start();
-
-        setImmediate(this.tick);
     }
 
     async createRecordResidentTime(movement, info, tx) {

@@ -58,6 +58,10 @@ class Logger {
         this.internalLogger.error(...args);
     }
 
+    warning(...args) {
+        this.internalLogger.warn(...args);
+    }
+
     logObject(msg, obj) {
         if (!obj) {
             throw new Error("obj is not an object");

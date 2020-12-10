@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
 const request = require("request");
+const residDefaultConfig = require("./default_redis_localhost.json");
 const CloudFoundryApi = require("./cloud-foundry-api");
 
 async function callService(options) {
@@ -19,11 +20,27 @@ async function getAppEnviroment(apiUrl, appGuid, accessToken) {
             Authorization: accessToken,
         },
     };
-
+    if (options.headers.Authorization === "FAILED") {
+        throw new Error(
+            `Connessione a CloudFoundry ${options.url} fallita, verifica di essere loggato allo space corretto.`
+        );
+    }
     const response = await callService(options);
     const vcapServices = JSON.parse(response.body).system_env_json.VCAP_SERVICES;
     return { VCAP_SERVICES: vcapServices };
 }
+
+async function getLocalRedisDefaultConfig() {
+    return residDefaultConfig;
+}
+
+async function mergeLocalRedisDefaultConfig(enviroment) {
+    const redisDefaultConfig = await getLocalRedisDefaultConfig();
+    const newDataMerged = enviroment;
+    newDataMerged.VCAP_SERVICES["redis-cache"] = redisDefaultConfig["redis-cache"];
+    return newDataMerged;
+}
+
 async function main(appName) {
     const cloudFoundryApi = new CloudFoundryApi();
     const accessToken = await cloudFoundryApi.getAccessToken();
@@ -32,7 +49,10 @@ async function main(appName) {
 
     const enviroment = await getAppEnviroment(apiUrl, appGuid, accessToken);
 
-    console.log(JSON.stringify(enviroment, null, 2));
+    // MERGE REDIS LOCAL CONFIG VS REMOTE
+    const enviromentMerged = await mergeLocalRedisDefaultConfig(enviroment);
+
+    console.log(JSON.stringify(enviromentMerged, null, 2));
 }
 
 // GUID dell'app mtt-cap-services preso dall'url del cockpit SCP esempio:

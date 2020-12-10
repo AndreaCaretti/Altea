@@ -20,8 +20,12 @@ annotate Services.HandlingUnits with @(UI : {
         Value : huId,
     },
     {
-        $Type : 'UI.DataField',
-        Value : lot.name,
+        < < < < < < < HEAD $Type : 'UI.DataField',
+        Value                    : lot.name,
+        = = = = = = = $Type      : 'UI.DataField',
+        ![@Common.Label]         : 'Lot Name',
+        Value                    : lot.name,
+        > > > > > > > ACARETTI -BULL
     },
     {
         $Type : 'UI.DataField',

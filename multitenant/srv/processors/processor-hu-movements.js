@@ -2,83 +2,34 @@
 const inputValidation = require("@sap/cds-runtime/lib/common/generic/input");
 const DB = require("../db-utilities");
 
-const QueueHandlingUnitsRawMovements = require("../queues/queue-hu-raw-movements");
-const QueueResidenceTime = require("../queues/queue-residence-time");
+const JobProcessor = require("./internal/job-processor");
 
-class ProcessorHuMovements {
-    constructor(logger) {
-        this.logger = logger;
+const QUEUE_NAMES = require("../queues-names");
 
-        this.queueRawMovements = new QueueHandlingUnitsRawMovements(this.logger);
-        this.queueResidenceTime = new QueueResidenceTime(this.logger);
-
-        this.tick = this.tick.bind(this);
-    }
-
-    async tick() {
-        let movement;
-        try {
-            movement = await this.queueRawMovements.getAndSetToProcessing();
-        } catch (error) {
-            this.logger.error(
-                "Connessione redis caduta, mi rimetto in attesa %j",
-                JSON.parse(error)
-            );
-            setImmediate(this.tick);
-            return;
-        }
-
-        const technicalUser = new cds.User({
-            id: movement.user,
-            tenant: movement.tenant,
-        });
-
-        this.logger.setTenantId(technicalUser.tenant);
-
-        const request = new cds.Request({ user: technicalUser });
+class ProcessorHuMovements extends JobProcessor {
+    async doWork(jobInfo, technicalUser, tx) {
+        const movement = jobInfo.data;
 
         const { HandlingUnitsMovements } = cds.entities;
 
-        const tx = cds.transaction(request);
+        // serve per far partire la validazione sul campo, non di integritá del db
+        inputValidation.call(tx, this.request);
 
-        try {
-            // serve per far partire la validazione sul campo, non di integritá del db
-            inputValidation.call(tx, request);
+        movement.handlingUnitID = await this.getHandlingUnitFromHuID(movement.HU_ID, tx);
 
-            movement.handlingUnitID = await this.getHandlingUnitFromHuID(movement.HU_ID, tx);
+        await tx.create(HandlingUnitsMovements).entries({
+            MSG_ID: movement.MSG_ID,
+            controlPoint_ID: movement.CP_ID,
+            TE: movement.TE,
+            TS: movement.TS,
+            handlingUnit_ID: movement.handlingUnitID,
+            DIR: movement.DIR,
+            rawMovement_ID: movement.ID,
+        });
 
-            await tx.create(HandlingUnitsMovements).entries({
-                MSG_ID: movement.MSG_ID,
-                controlPoint_ID: movement.CP_ID,
-                TE: movement.TE,
-                TS: movement.TS,
-                handlingUnit_ID: movement.handlingUnitID,
-                DIR: movement.DIR,
-                rawMovement_ID: movement.ID,
-            });
+        this.logger.debug("Creato record in tabella HandlingUnitsMovements");
 
-            await tx.commit();
-
-            await this.queueResidenceTime.pushToWaiting(movement);
-
-            await this.queueRawMovements.moveToComplete(movement);
-        } catch (error) {
-            this.logger.logException("Errore inserimento record in HandlingUnitsMovements", error);
-
-            await tx.rollback();
-            await this.queueRawMovements.moveToError(movement);
-        }
-
-        setImmediate(this.tick);
-    }
-
-    async start() {
-        this.logger.info(`Avvio Handling Unit Movements Processor...`);
-
-        this.queueRawMovements.start();
-        this.queueResidenceTime.start();
-
-        setImmediate(this.tick);
+        await this.jobs.addJob(technicalUser.tenant, QUEUE_NAMES.RESIDENCE_TIME, movement);
     }
 
     async getHandlingUnitFromHuID(huId, tx) {

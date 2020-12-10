@@ -1,6 +1,6 @@
 const ZApplicationService = require("./ZApplicationService");
-
-const QueueHandlingUnitsRawMovements = require("../queues/queue-hu-raw-movements");
+const Jobs = require("../jobs");
+const QUEUE_NAMES = require("../queues-names");
 
 class HandlingUnitMoved extends ZApplicationService {
     async init() {
@@ -8,8 +8,7 @@ class HandlingUnitMoved extends ZApplicationService {
 
         this.coldChainLogger.info("Init HandlingUnitMoved.js");
 
-        const queue = new QueueHandlingUnitsRawMovements(this.coldChainLogger);
-        queue.start();
+        const jobs = Jobs.getInstance();
 
         this.after("CREATE", "HandlingUnitsRawMovements", async (data, req) => {
             const record = {
@@ -23,7 +22,9 @@ class HandlingUnitMoved extends ZApplicationService {
                 tenant: req.user.tenant,
             };
 
-            if (!(await queue.pushToWaiting(record))) {
+            try {
+                await jobs.addJob(req.user.tenant, QUEUE_NAMES.HANDLING_UNIT_MOVED, record);
+            } catch (error) {
                 this.coldChainLogger.logException("Errore inserimento record in REDIS:", record);
                 throw new Error("Errore inserimento record nella lista Redis, rollback");
             }

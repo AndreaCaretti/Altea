@@ -1,11 +1,14 @@
 const Logger = require("./logger");
 
+const Jobs = require("./jobs");
 const ProcessorHuMovements = require("./processors/processor-hu-movements");
 const ProcessorInsertResidenceTime = require("./processors/processor-insert-residence-time");
 const ProcessorUpdateResidenceTime = require("./processors/processor-update-residence-time");
-const BGWorkerNotification = require("./bg-workers/bg-worker-notification");
+const ProcessorNotification = require("./processors/processor-notification");
 const NotificationeService = require("./notifications/notificationService");
 const EnterpriseMessageNotification = require("./enterprise-messaging/em_notification");
+
+const QUEUE_NAMES = require("./queues-names");
 
 class CloudColdChain {
     /*
@@ -21,8 +24,11 @@ class CloudColdChain {
         // Logger
         this.logger = Logger.getInstance(app);
 
+        //  Jobs
+        this.jobs = new Jobs(app, this.logger);
+
         // Handling Units Movements Processor
-        this.processorHuMovements = new ProcessorHuMovements(this.logger);
+        this.processorHuMovements = new ProcessorHuMovements(this.logger, this.jobs);
 
         // Residence Time Processor
         this.processorInsertResidenceTime = new ProcessorInsertResidenceTime(this.logger);
@@ -31,19 +37,37 @@ class CloudColdChain {
         this.processorUpdateResidenceTime = new ProcessorUpdateResidenceTime(this.logger);
 
         // Notification - Notification BG Worker
-        this.BGWorkerNotification = new BGWorkerNotification(this.logger);
+        this.processorNotification = new ProcessorNotification(this.logger);
 
-        // Enterprise Messaging comunicatio Layer
-        this.enterpriseMessageNotification = EnterpriseMessageNotification.getInstance();
+        // Enterprise Messaging comunication Layer
+        this.enterpriseMessageNotification = EnterpriseMessageNotification.getInstance(this.logger);
 
-        // Start Enterprise Messaging comunicatio Layer
+        // Start Enterprise Messaging comunication Layer
         this.enterpriseMessageNotification.start();
 
         // Notification - Notification Service
         this.NotificationeService = NotificationeService.getInstance(this.logger);
 
-        // Start Notification Service
-        this.NotificationeService.start();
+        // Register Handling Units Movements processors
+        this.jobs.registerProcessor({
+            queueName: QUEUE_NAMES.HANDLING_UNIT_MOVED,
+            processor: this.processorHuMovements,
+            parallelJobs: 2,
+        });
+
+        // Register residence time processors
+        this.jobs.registerProcessor({
+            queueName: QUEUE_NAMES.RESIDENCE_TIME,
+            processor: this.processorInsertResidenceTime,
+            parallelJobs: 2,
+        });
+
+        // Register residence time processors
+        this.jobs.registerProcessor({
+            queueName: QUEUE_NAMES.EXTERNAL_NOTIFICATION,
+            processor: this.processorNotification,
+            parallelJobs: 2,
+        });
 
         // Provisioning
         this.initMultitenantProvisioning(this.logger);
@@ -53,17 +77,26 @@ class CloudColdChain {
         Avvia i componenti
     */
     async start() {
-        // Handling units movements processor
-        this.processorHuMovements.start();
-
-        // Insert Residence Time processor
-        this.processorInsertResidenceTime.start();
+        // Get all customers tenants
+        this.tenants = await this.getAllTenants();
 
         // // Update Residence Time processor
         // this.processorUpdateResidenceTime.start();
 
         // Start Notification BG Worker
-        this.BGWorkerNotification.start();
+        // this.BGWorkerNotification.start();
+
+        // Start jobs
+        this.jobs.start(this.tenants);
+    }
+
+    // TODO: Togliere l'elenco hardcodato dei clienti
+    async getAllTenants() {
+        this.logger.info("Recupero elenco dei tenants dei clienti... ");
+
+        const tenants = [null];
+
+        return tenants;
     }
 
     async initMultitenantProvisioning() {
