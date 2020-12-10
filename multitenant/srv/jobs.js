@@ -1,8 +1,14 @@
 const Queue = require("bull");
+const {
+    router: bullBoardRouter,
+    setQueues: bullBoardSetQueues,
+    BullAdapter,
+} = require("bull-board");
+
 const xsenv = require("@sap/xsenv");
 
 class Jobs {
-    constructor(logger) {
+    constructor(app, logger) {
         this.logger = logger;
 
         xsenv.loadEnv();
@@ -11,6 +17,9 @@ class Jobs {
 
         this.queues = new Map();
         this.processors = [];
+
+        this.logger.info(`Jobs monitor disponibile all'url /jobs-monitor`);
+        app.use("/jobs-monitor", bullBoardRouter);
     }
 
     registerProcessor(processorInfo) {
@@ -28,6 +37,8 @@ class Jobs {
                     this.formatQueueName(customer, processorInfo.queueName)
                 );
                 queue.process(processorInfo.queueName, 10, processorInfo.processor.processJob);
+
+                bullBoardSetQueues([new BullAdapter(queue)]);
             });
         });
     }

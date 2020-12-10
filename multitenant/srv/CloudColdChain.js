@@ -23,7 +23,7 @@ class CloudColdChain {
         this.logger = Logger.getInstance(app);
 
         //  Jobs
-        this.jobs = new Jobs(this.logger);
+        this.jobs = new Jobs(app, this.logger);
 
         // Handling Units Movements Processor
         this.processorHuMovements = new ProcessorHuMovements(this.jobs, this.logger);
@@ -49,7 +49,7 @@ class CloudColdChain {
         // Start Notification Service
         this.NotificationeService.start();
 
-        // Register processors
+        // Register residence time processors
         this.jobs.registerProcessor({
             queueName: "residence-time",
             processor: this.processorInsertResidenceTime,
@@ -73,6 +73,7 @@ class CloudColdChain {
         this.BGWorkerNotification.start();
 
         // Start jobs
+        // TODO: Togliere l'elenco hardcodato dei clienti
         this.jobs.start(["customera"]);
     }
 
