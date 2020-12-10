@@ -4,6 +4,8 @@ const DB = require("../db-utilities");
 
 const QueueHandlingUnitsRawMovements = require("../queues/queue-hu-raw-movements");
 
+const QUEUE_NAMES = require("../queues-names");
+
 class ProcessorHuMovements {
     constructor(jobs, logger) {
         this.logger = logger;
@@ -58,7 +60,7 @@ class ProcessorHuMovements {
 
             await tx.commit();
 
-            await this.jobs.addJob(technicalUser.tenant, "residence-time", movement);
+            await this.jobs.addJob(technicalUser.tenant, QUEUE_NAMES.RESIDENCE_TIME, movement);
 
             await this.queueRawMovements.moveToComplete(movement);
         } catch (error) {

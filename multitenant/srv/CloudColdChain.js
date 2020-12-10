@@ -8,6 +8,8 @@ const BGWorkerNotification = require("./bg-workers/bg-worker-notification");
 const NotificationeService = require("./notifications/notificationService");
 const EnterpriseMessageNotification = require("./enterprise-messaging/em_notification");
 
+const QUEUE_NAMES = require("./queues-names");
+
 class CloudColdChain {
     /*
         Prepara i componenti senza avviarli
@@ -51,7 +53,7 @@ class CloudColdChain {
 
         // Register residence time processors
         this.jobs.registerProcessor({
-            queueName: "residence-time",
+            queueName: QUEUE_NAMES.RESIDENCE_TIME,
             processor: this.processorInsertResidenceTime,
         });
 
