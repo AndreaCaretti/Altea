@@ -1,10 +1,10 @@
-const NotificationQueue = require("../queues/queue-notification");
+const Jobs = require("../jobs");
+const QUEUE_NAMES = require("../queues-names");
 
 class Notification {
     constructor(logger) {
         this.logger = logger;
-        // PUSH TO REDIS CODE
-        this.notificationQueue = new NotificationQueue(logger);
+        this.jobs = Jobs.getInstance();
     }
 
     static getInstance(logger) {
@@ -14,11 +14,6 @@ class Notification {
             this.logger.info("NotificationService->GetInstance()");
         }
         return this.notificationIstance;
-    }
-
-    async start() {
-        this.logger.debug(`Avvio NotificationService Instance...`);
-        this.notificationQueue.start();
     }
 
     /**
@@ -39,9 +34,9 @@ class Notification {
             alertLevel,
             payload,
         };
-        this.logger.logObject(`BEGIN OF ALERT - OBJECT :`, alertNotificationData);
-        this.notificationQueue.pushToWaiting(alertNotificationData);
-        this.logger.debug(`END OF ALERT`);
+        this.logger.logObject(`BEGIN JOB FOR ALERT - OBJECT :`, alertNotificationData);
+        this.jobs.addJob(tenant, QUEUE_NAMES.EXTERNAL_NOTIFICATION, alertNotificationData);
+        this.logger.debug(`JOB SCHEDULATED FOR ALERT`);
     }
 }
 

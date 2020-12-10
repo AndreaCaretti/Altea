@@ -125,14 +125,13 @@ class EnterpriseMessageNotification {
      * @param {*} logger
      * @param {*} callback
      */
-    async send(notificationData, payload, logger, callback) {
+    async send(notificationData, payload) {
         return new Promise((resolve, reject) => {
             const message = {
                 payload: Buffer.from(payload, "utf-8"),
                 done: () => {
                     this.logger.info(`${EMLOG_NAME} Sent`);
                     this.logger.info(`${payload} Data Sent`);
-                    callback(notificationData, payload, logger);
                     resolve("Inviato");
                 },
                 failed: (oError) => {

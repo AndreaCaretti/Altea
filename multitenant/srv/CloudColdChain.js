@@ -4,7 +4,7 @@ const Jobs = require("./jobs");
 const ProcessorHuMovements = require("./processors/processor-hu-movements");
 const ProcessorInsertResidenceTime = require("./processors/processor-insert-residence-time");
 const ProcessorUpdateResidenceTime = require("./processors/processor-update-residence-time");
-const BGWorkerNotification = require("./bg-workers/bg-worker-notification");
+const ProcessorNotification = require("./processors/processor-notification");
 const NotificationeService = require("./notifications/notificationService");
 const EnterpriseMessageNotification = require("./enterprise-messaging/em_notification");
 
@@ -37,19 +37,16 @@ class CloudColdChain {
         this.processorUpdateResidenceTime = new ProcessorUpdateResidenceTime(this.logger);
 
         // Notification - Notification BG Worker
-        this.BGWorkerNotification = new BGWorkerNotification(this.logger);
+        this.processorNotification = new ProcessorNotification(this.logger);
 
         // Enterprise Messaging comunication Layer
-        this.enterpriseMessageNotification = EnterpriseMessageNotification.getInstance();
+        this.enterpriseMessageNotification = EnterpriseMessageNotification.getInstance(this.logger);
 
         // Start Enterprise Messaging comunication Layer
         this.enterpriseMessageNotification.start();
 
         // Notification - Notification Service
         this.NotificationeService = NotificationeService.getInstance(this.logger);
-
-        // Start Notification Service
-        this.NotificationeService.start();
 
         // Register Handling Units Movements processors
         this.jobs.registerProcessor({
@@ -62,6 +59,13 @@ class CloudColdChain {
         this.jobs.registerProcessor({
             queueName: QUEUE_NAMES.RESIDENCE_TIME,
             processor: this.processorInsertResidenceTime,
+            parallelJobs: 2,
+        });
+
+        // Register residence time processors
+        this.jobs.registerProcessor({
+            queueName: QUEUE_NAMES.EXTERNAL_NOTIFICATION,
+            processor: this.processorNotification,
             parallelJobs: 2,
         });
 
@@ -80,7 +84,7 @@ class CloudColdChain {
         // this.processorUpdateResidenceTime.start();
 
         // Start Notification BG Worker
-        this.BGWorkerNotification.start();
+        // this.BGWorkerNotification.start();
 
         // Start jobs
         this.jobs.start(this.tenants);

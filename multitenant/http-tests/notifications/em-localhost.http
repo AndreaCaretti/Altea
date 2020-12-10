@@ -4,30 +4,9 @@ Content-Type: application/json
 
 {"NotificationPayload" :
     {
-        "area"      : "2e0d8f14-59d7-4020-b91c-bfec1a53ff3f",
         "alertBusinessTime" : "2020-11-24T09:40:43.327Z",
-        "alertCode" : "LOG_ALERT", 
+        "alertType" : "OLT", 
         "alertLevel" : "1", 
-        "payload"  : "{\"entityType\":\"SEGMENT\",\"action\":\"OPEN\",\"entityId\":\"c8c61bc1-5076-4064-8769-8d0b78a6b71a\",\"entityURL\":\"https://sap-iot-noah-live-segment-service.cfapps.eu10.hana.ondemand.com/v1/segments/c8c61bc1-5076-4064-8769-8d0b78a6b71a\"}",
-        "GUID" : "d48014b3-ef2f-4335-976d-190e3be9ca6f",
-        "notificationType" : "OLT"
-    }
-}
-
-
-### Invio Notification
-POST  http://localhost:4004/notificaton-servive-call/prepareDataNotification  HTTP/1.1
-Authorization: Basic Alice:Alice
-Content-Type: application/json
-
-{"NotificationPayload" :
-    {
-        "area"      : "2e0d8f14-59d7-4020-b91c-bfec1a53ff3f",
-        "alertBusinessTime" : "2020-11-24T09:40:43.327Z",
-        "alertCode" : "LOG_ALERT", 
-        "alertLevel" : "1", 
-        "payload"  : "{\"entityType\":\"SEGMENT\",\"action\":\"OPEN\",\"entityId\":\"c8c61bc1-5076-4064-8769-8d0b78a6b71a\",\"entityURL\":\"https://sap-iot-noah-live-segment-service.cfapps.eu10.hana.ondemand.com/v1/segments/c8c61bc1-5076-4064-8769-8d0b78a6b71a\"}",
-        "GUID" : "{{$guid}}",
-        "notificationType" : "OLT"
+        "payload"  : "{\"entityType\":\"SEGMENT\",\"action\":\"OPEN\",\"entityId\":\"c8c61bc1-5076-4064-8769-8d0b78a6b71a\",\"entityURL\":\"https://sap-iot-noah-live-segment-service.cfapps.eu10.hana.ondemand.com/v1/segments/c8c61bc1-5076-4064-8769-8d0b78a6b71a\"}"
     }
 }
