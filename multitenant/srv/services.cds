@@ -49,9 +49,9 @@ service Services {
     @odata.draft.enabled
     entity ResidenceTime           as projection on cloudcoldchain.ResidenceTime;
 
+    @odata.draft.enabled
     entity HandlingUnits           as projection on cloudcoldchain.HandlingUnits;
-    
-    entity outOfRange              as projection on cloudcoldchain.outOfRange;
 
-    entity HandlingUnitsMovements as projection on cloudcoldchain.HandlingUnitsMovements;
+    entity outOfRange              as projection on cloudcoldchain.outOfRange;
+    entity HandlingUnitsMovements  as projection on cloudcoldchain.HandlingUnitsMovements;
 }

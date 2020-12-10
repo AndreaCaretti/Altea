@@ -20,9 +20,11 @@ annotate Services.Routes with @(UI : {
         TypeNamePlural : 'Routes',
         Title          : {Value : name},
     },
-    HeaderFacets        : [
-                           // {$Type: 'UI.ReferenceFacet', Label: 'Identification', Target: '@UI.FieldGroup@Header'},
-                          ],
+    HeaderFacets        : [{
+        $Type  : 'UI.ReferenceFacet',
+        Label  : 'Identification',
+        Target : '@UI.FieldGroup#Header'
+    }, ],
     Facets              : [
     {
         $Type  : 'UI.ReferenceFacet',
@@ -40,9 +42,8 @@ annotate Services.Routes with @(UI : {
         Target : '@UI.FieldGroup#Admin'
     },
     ],
-    FieldGroup #Header  : {Data : [
-                                   // {Value: name}
-                                  ]},
+    FieldGroup #Header  : {Data : [ //{Value : name}
+    ]},
     FieldGroup #General : {Data : [
                                    // {Value: name}
                                   ]},
@@ -82,8 +83,9 @@ annotate Services.RouteSteps with @(UI : {LineItem : [
 {
     Value : controlPoint_ID,
     Label : 'Control Point'
-    
-},{
+
+},
+{
     Value : direction,
     Label : 'Direction'
 },

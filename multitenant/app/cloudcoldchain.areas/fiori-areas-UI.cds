@@ -13,8 +13,8 @@ annotate Services.Areas with @(UI : {
         Label : 'Category'
     },
     {
-        Value : location.name,
-        Label : 'Location'
+        Value : department.name,
+        Label : 'Department'
     },
     {
         Value : ID_DeviceIoT,
@@ -28,16 +28,16 @@ annotate Services.Areas with @(UI : {
 //	Areas Object Page
 //
 annotate Services.Areas with @(UI : {
-    Identification      : [{Value : name}],
-    HeaderInfo          : {
+    Identification          : [{Value : name}],
+    HeaderInfo              : {
         TypeName       : 'Area',
         TypeNamePlural : 'Areas',
         Title          : {Value : name}
     },
-    HeaderFacets        : [
-                           // {$Type: 'UI.ReferenceFacet', Label: 'Identification', Target: '@UI.FieldGroup@Header'},
-                          ],
-    Facets              : [
+    HeaderFacets            : [
+                               // {$Type: 'UI.ReferenceFacet', Label: 'Identification', Target: '@UI.FieldGroup@Header'},
+                              ],
+    Facets                  : [
     {
         $Type  : 'UI.ReferenceFacet',
         Label  : '{i18n>General}',
@@ -45,24 +45,31 @@ annotate Services.Areas with @(UI : {
     },
     {
         $Type  : 'UI.ReferenceFacet',
+        Label  : '{i18n>Temperature}',
+        Target : '@UI.FieldGroup#Temperature'
+    },
+    {
+        $Type  : 'UI.ReferenceFacet',
         Label  : '{i18n>Admin}',
         Target : '@UI.FieldGroup#Admin'
     },
     ],
-    FieldGroup #Header  : {Data : [
-                                   // {Value: name}
-                                  ]},
-    FieldGroup #General : {Data : [
+    FieldGroup #Header      : {Data : [
+                                       // {Value: name}
+                                      ]},
+    FieldGroup #General     : {Data : [
     {Value : category_ID},
-    {Value : location_ID},
+    {Value : department_ID},
     {Value : ID_DeviceIoT}
     ]},
-    FieldGroup #Admin   : {Data : [
+    FieldGroup #Temperature : {Data : [
+    {Value : minWorkingTemperature},
+    {Value : maxWorkingTemperature},
+    ]},
+    FieldGroup #Admin       : {Data : [
     {Value : createdBy},
     {Value : createdAt},
     {Value : modifiedBy},
     {Value : modifiedAt}
     ]}
-
-
 });
