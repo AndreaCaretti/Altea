@@ -63,6 +63,11 @@ define entity ControlPoints : cuid, managed {
     category    : Association to one ControlPointsCategories;
 }
 
+annotate cloudcoldchain.ControlPoints with {
+    @title       : '{i18n>DeviceGUID}'
+    @description : '{i18n>DeviceGUID}'
+    ID;
+}
 
 @cds.autoexpose
 @cds.odata.valuelist

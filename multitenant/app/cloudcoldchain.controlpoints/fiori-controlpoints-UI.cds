@@ -6,12 +6,15 @@ using Services from '../../srv/services';
 //
 annotate Services.ControlPoints with @(UI : {
     SelectionFields : [
+    ID,
     name,
     description
     ],
     LineItem        : [
     {Value : name},
-    {Value : description}
+    {Value : description},
+    {Value : ID},
+    {Value : category_ID}
     ]
 });
 
@@ -43,16 +46,17 @@ annotate Services.ControlPoints with @(UI : {
         Label  : '{i18n>General}',
         Target : '@UI.FieldGroup#Admin'
     }, ],
-    FieldGroup #Header                  : {Data : [
-                                                   // {Value: name}
-                                                  ]},
 
-    FieldGroup #ControlPointsCategories : {Data : [{Value : category_ID,
-                                                                         //Label : '{i18n>category}'	//se non presente, lo recupera dallo SCHEMA.CDS
-                                                            }],
-
+    FieldGroup #ControlPointsCategories : {Data : [
+    {
+        $Type : 'UI.DataField',
+        Value : ID,
     },
-
+    {
+        $Type : 'UI.DataField',
+        Value : category_ID,
+    },
+    ]},
 
     FieldGroup #Admin                   : {Data : [
     {Value : createdBy},
