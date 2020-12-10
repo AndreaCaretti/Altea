@@ -56,10 +56,7 @@ annotate Services.Products with @(UI : {
         Value : temperatureRange_ID,
         Label : 'Temperature Range'
     },
-    {
-        Value : route_ID,
-        Label : 'Route'
-    }
+    {Value : route_ID}
     ]},
     FieldGroup #Admin   : {Data : [
     {Value : createdBy},
