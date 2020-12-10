@@ -55,7 +55,7 @@ async function main(params) {
 
     console.log("Connected");
     try {
-        for (let index = 0; index < 10; index++) {
+        for (let index = 0; index < 1; index++) {
             const now = new Date().toJSON();
 
             const message = JSON.stringify({
