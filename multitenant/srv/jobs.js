@@ -49,19 +49,29 @@ class Jobs {
     }
 
     async addJob(tenant, queueName, jobInfo) {
+        this.logger.warning("Non abbiamo ancora gestito code bull divise per cliente");
+
+        const queueTenant = null;
+
         this.logger.logObject(
-            `Arrivata richiesta di aggiungere job per cliente ${tenant} nome coda ${queueName}`,
+            `Arrivata richiesta di aggiungere job per cliente ${queueTenant} nome coda ${queueName}`,
             jobInfo
         );
 
-        const queue = this.queues.get(this.formatQueueName(tenant, queueName));
+        const queue = this.queues.get(this.formatQueueName(queueTenant, queueName));
 
         if (!queue) {
             this.logger.error(
-                `Non ho trovato la coda bull per la coda ${this.formatQueueName(tenant, queueName)}`
+                `Non ho trovato la coda bull per la coda ${this.formatQueueName(
+                    queueTenant,
+                    queueName
+                )}`
             );
             throw new Error(
-                `Non ho trovato la coda bull per la coda ${this.formatQueueName(tenant, queueName)}`
+                `Non ho trovato la coda bull per la coda ${this.formatQueueName(
+                    queueTenant,
+                    queueName
+                )}`
             );
         }
 
