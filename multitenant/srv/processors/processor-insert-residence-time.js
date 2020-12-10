@@ -61,14 +61,18 @@ class ProcessorInsertResidenceTime {
                 this.logger.error(JSON.stringify(error));
             }
 
-            DB.updateSingleField(
-                "HandlingUnitsMovements",
-                movement.ID,
-                "STATUS",
-                false,
-                tx,
-                this.logger
-            );
+            // try {
+            //     await DB.updateSingleField(
+            //         "HandlingUnitsMovements",
+            //         movement.ID,
+            //         "STATUS",
+            //         false,
+            //         tx,
+            //         this.logger
+            //     );
+            // } catch (oError) {
+            //     console.log(oError);
+            // }
             await tx.commit();
             await this.queueResidenceTime.moveToError(movement);
         }
