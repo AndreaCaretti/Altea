@@ -1,0 +1,1 @@
+cf service-manager-service-instances --credentials

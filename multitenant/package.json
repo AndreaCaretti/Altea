@@ -55,7 +55,8 @@
         "lint": "eslint srv",
         "postlint": "echo ✅ lint valid",
         "export-db-to-csv": "scripts-utility/export-db-to-csv.sh",
-        "print-deployed-version": "scripts-utility/print-deployed-version.sh"
+        "print-deployed-version": "scripts-utility/print-deployed-version.sh",
+        "get-hana-credentials": "scripts-utility/get-hana-credentials.sh"
     },
     "husky": {
         "hooks": {

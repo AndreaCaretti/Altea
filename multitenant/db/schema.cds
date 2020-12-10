@@ -50,6 +50,8 @@ define entity Customers : cuid, managed {
 @cds.odata.valuelist
 @UI.Identification : [{Value : name}]
 define entity ControlPoints : cuid, managed {
+    @title       : '{i18n>ControlPointTitle}'
+    @description : '{i18n>ControlPointDescripion}'
     name        : String(50);
     description : String(200);
     @title       : '{i18n>category}'
@@ -61,6 +63,11 @@ define entity ControlPoints : cuid, managed {
     category    : Association to one ControlPointsCategories;
 }
 
+annotate cloudcoldchain.ControlPoints with {
+    @title       : '{i18n>DeviceGUID}'
+    @description : '{i18n>DeviceGUID}'
+    ID;
+}
 
 @cds.autoexpose
 @cds.odata.valuelist
@@ -142,12 +149,14 @@ define entity TemperatureRanges : cuid, managed {
 @UI.Identification : [{Value : gtin}]
 define entity Products : cuid, managed {
     gtin             : cloudcoldchain.GTIN;
-    @title : 'Product'
+    @title       : 'Product'
     name             : String(100);
     erpProductCode   : String(50);
-    @title : 'Max TOR (min)'
+    @title       : 'Max TOR (min)'
     maxTor           : Integer;
     temperatureRange : Association to one TemperatureRanges;
+    @title       : '{i18n>RouteTitle}'
+    @description : '{i18n>RouteDescription}'
     route            : Association to one Routes;
 }
 
@@ -170,6 +179,8 @@ define entity Lots : cuid, managed {
 @cds.odata.valuelist
 @UI.Identification : [{Value : name}]
 define entity Routes : cuid, managed {
+    @title       : '{i18n>RouteTitle}'
+    @description : '{i18n>RouteDescripion}'
     name  : String(50);
     steps : Composition of many RouteSteps
                 on steps.parent = $self;
@@ -197,6 +208,10 @@ define entity RouteSteps : cuid {
 @UI.Identification : [{Value : ID}]
 define entity HandlingUnits : cuid, managed {
     huId               : cloudcoldchain.HU_ID;
+    @Common : {
+        Text            : lot.name,
+        TextArrangement : #TextOnly
+    }
     lot                : Association to one Lots;
     typology           : Composition of one HandlingUnitTypology;
     lastKnownArea      : Association to one Areas;

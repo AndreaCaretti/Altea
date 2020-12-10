@@ -1,0 +1,41 @@
+{
+    "destinations": [
+        {
+            "forwardAuthToken": true,
+            "name": "srv_api",
+            "timeout": 60000,
+            "url": "http://localhost:4004"
+        }
+    ],
+    "VCAP_SERVICES": {
+        "xsuaa": [
+            {
+                "label": "xsuaa",
+                "provider": null,
+                "plan": "application",
+                "name": "mtt-xsuaa",
+                "tags": ["xsuaa"],
+                "instance_name": "mtt-xsuaa",
+                "binding_name": null,
+                "credentials": {
+                    "tenantmode": "dedicated",
+                    "sburl": "https://internal-xsuaa.authentication.eu10.hana.ondemand.com",
+                    "subaccountid": "a1d03e7f-53e4-414b-aca0-c4d44157f2a0",
+                    "clientid": "sb-ccp-provider-dev-qas-dev-cloud-cold-chain!t61773",
+                    "xsappname": "ccp-provider-dev-qas-dev-cloud-cold-chain!t61773",
+                    "clientsecret": "oEPmeoq3s9kvPuGZsd89POK9Eo8=",
+                    "url": "https://ccp-customera.authentication.eu10.hana.ondemand.com",
+                    "uaadomain": "authentication.eu10.hana.ondemand.com",
+                    "verificationkey": "-----BEGIN PUBLIC KEY-----MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAq7WZ6XNkzobHEY7s+HY8XTCfLJekHS5HnnU8m2BUVM58f4d6VotrFYoKgZSlJeLFKMpIASYnwNcbbWHCRm4sDtn/ZhpNfd1QuBxxfq7cW3K2zZt3hx8FGffYWDyzVX9vg1PxX0oH/cA1Cg6AAOBX4c4vN0CxScU+KLw3/NvwTMVjxgAY8c/2jSqXslvPaXURzl1zHENkYna0FnqgvEwPVtpLcjycFxboO8wGu1eabdkeNglPVE5i1Gvsxg70qmmGIPHvmsfFdaedBRMIQa8MRwUQ7ek/4qrGTJNr2uLZDKUwyqObkloNeEwt3onSVhcbiw8ODeoNSEzpCz8tKZjRQwIDAQAB-----END PUBLIC KEY-----",
+                    "apiurl": "https://api.authentication.eu10.hana.ondemand.com",
+                    "identityzone": "ccp-provider-dev-qas",
+                    "identityzoneid": "a1d03e7f-53e4-414b-aca0-c4d44157f2a0",
+                    "tenantid": "a1d03e7f-53e4-414b-aca0-c4d44157f2a0",
+                    "zoneid": "a1d03e7f-53e4-414b-aca0-c4d44157f2a0"
+                },
+                "syslog_drain_url": null,
+                "volume_mounts": []
+            }
+        ]
+    }
+}
