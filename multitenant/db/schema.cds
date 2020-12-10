@@ -208,14 +208,36 @@ define entity RouteSteps : cuid {
 @UI.Identification : [{Value : ID}]
 define entity HandlingUnits : cuid, managed {
     huId               : cloudcoldchain.HU_ID;
-    @Common : {
+    @Common      : {
         Text            : lot.name,
         TextArrangement : #TextOnly
     }
+    @title       : '{i18n>Lot}'
+    @description : '{i18n>Lot}'
     lot                : Association to one Lots;
+    @Common      : {
+        Text            : typology.name,
+        TextArrangement : #TextOnly
+    }
+    @title       : '{i18n>HandlingUnitTypology}'
+    @description : '{i18n>HandlingUnitTypology}'
     typology           : Composition of one HandlingUnitTypology;
+    @Common      : {
+        Text            : lastKnownArea.name,
+        TextArrangement : #TextOnly
+    }
+    @title       : '{i18n>LastKnowArea}'
+    @description : '{i18n>LastKnowArea}'
     lastKnownArea      : Association to one Areas;
+    @title       : '{i18n>ArrivedInAreaAt}'
+    @description : '{i18n>ArrivedInAreaAt}'
     inAreaBusinessTime : Timestamp;
+    @Common      : {
+        Text            : lastKnownArea.name,
+        TextArrangement : #TextOnly
+    }
+    @title       : '{i18n>LastMovement}'
+    @description : '{i18n>LastMovement}'
     lastMovement       : Association to one HandlingUnitsMovements;
     jsonSummary        : LargeString;
     blockchainHash     : String(100);

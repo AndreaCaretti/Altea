@@ -20,9 +20,8 @@ annotate Services.HandlingUnits with @(UI : {
         Value : huId,
     },
     {
-        $Type            : 'UI.DataField',
-        ![@Common.Label] : 'Lot Name',
-        Value            : lot.name,
+        $Type : 'UI.DataField',
+        Value : lot.name,
     },
     {
         $Type : 'UI.DataField',
@@ -54,16 +53,46 @@ annotate Services.HandlingUnits with @(UI : {
         TypeNamePlural : 'HandlingUnits',
         Title          : {Value : huId},
     },
-    HeaderFacets        : [{
-        $Type  : 'UI.ReferenceFacet',
-        Label  : 'Identification',
-        Target : '@UI.FieldGroup#Header'
-    }, ],
-    Facets              : [{
+    Facets              : [
+    {
         $Type  : 'UI.ReferenceFacet',
         Label  : '{i18n>General}',
         Target : '@UI.FieldGroup#General'
-    }, ],
-    FieldGroup #Header  : {Data : []},
-    FieldGroup #General : {Data : [{Value : lot_ID}]}
+    },
+    {
+        $Type  : 'UI.ReferenceFacet',
+        Label  : '{i18n>Admin}',
+        Target : '@UI.FieldGroup#Admin'
+    },
+    ],
+
+    FieldGroup #General : {Data : [
+    {
+        $Type : 'UI.DataField',
+        Value : lot_ID,
+    },
+    {
+        $Type : 'UI.DataField',
+        Value : typology_ID,
+    },
+    {
+        $Type : 'UI.DataField',
+        Value : lastKnownArea_ID,
+    },
+    {
+        $Type : 'UI.DataField',
+        Value : inAreaBusinessTime,
+    },
+    {
+        $Type : 'UI.DataField',
+        Value : lastMovement_ID,
+    }
+    ]},
+
+    FieldGroup #Admin   : {Data : [
+    {Value : createdBy},
+    {Value : createdAt},
+    {Value : modifiedBy},
+    {Value : modifiedAt}
+    ]}
 });
