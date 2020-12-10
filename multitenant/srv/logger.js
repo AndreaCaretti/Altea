@@ -9,7 +9,7 @@ class Logger {
     constructor() {
         this.internalLogger = InternalLogger.createLogger();
 
-        this.internalLogger.setLoggingLevel("warning");
+        this.internalLogger.setLoggingLevel("debug");
 
         this.SIMPLE_LOG = process.env.SIMPLE_LOG;
 
