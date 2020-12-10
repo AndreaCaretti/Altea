@@ -44,6 +44,10 @@ sudo service redis-server start
 echo -e "${GREEN}Configurazione approuter per test in locale:${NC}"
 cp cloud-foundry/approuter/xs-app-local.json cloud-foundry/approuter/xs-app.json -v
 
+# Configurazione autenticazione approuter per test in locale 
+echo -e "${GREEN}Configurazione autenticazione approuter per test in locale:${NC}"
+cp cloud-foundry/approuter/default-env-local.json cloud-foundry/approuter/default-env.json -v
+
 # Avvia app router
 (cd cloud-foundry/approuter/ ; npm start &)
 
