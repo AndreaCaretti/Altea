@@ -1,15 +1,23 @@
+const xsenv = require("@sap/xsenv");
 const Queue = require("bull");
+
 const {
     router: bullBoardRouter,
     setQueues: bullBoardSetQueues,
     BullAdapter,
 } = require("bull-board");
 
-const xsenv = require("@sap/xsenv");
+// eslint-disable-next-line no-unused-vars
+const Logger = require("./logger");
 
 let jobsInstance;
 
 class Jobs {
+    /**
+     *
+     * @param {*} app
+     * @param {Logger} logger
+     */
     constructor(app, logger) {
         this.logger = logger;
 
@@ -28,6 +36,9 @@ class Jobs {
 
         this.queues = new Map();
         this.processors = [];
+        this.onRedisReady = this.onRedisReady.bind(this);
+        this.onRedisError = this.onRedisError.bind(this);
+        this.retryStrategy = this.retryStrategy.bind(this);
 
         this.logger.info(`Jobs monitor disponibile all'url /jobs-monitor`);
         app.use("/jobs-monitor", bullBoardRouter);
@@ -50,12 +61,22 @@ class Jobs {
         this.processors.push(processorInfo);
     }
 
-    start(tenants) {
+    async start(tenants) {
         this.logger.info(`Avvio Jobs...`);
 
-        tenants.forEach((tenant) => {
+        for (let indexTenant = 0; indexTenant < tenants.length; indexTenant++) {
+            const tenant = tenants[indexTenant];
+
             this.logger.info(`Jobs for tenant ${tenant}`);
-            this.processors.forEach(async (processorInfo) => {
+
+            for (
+                let indexProcessor = 0;
+                indexProcessor < this.processors.length;
+                indexProcessor++
+            ) {
+                const processorInfo = this.processors[indexProcessor];
+
+                // eslint-disable-next-line no-await-in-loop
                 const queue = await this.createQueue(
                     this.formatQueueName(tenant, processorInfo.queueName)
                 );
@@ -66,8 +87,8 @@ class Jobs {
                 );
 
                 bullBoardSetQueues([new BullAdapter(queue)]);
-            });
-        });
+            }
+        }
     }
 
     // eslint-disable-next-line class-methods-use-this
@@ -145,30 +166,42 @@ class Jobs {
                     port: this.redisCredentials.port,
                     enableOfflineQueue: false,
 
-                    retryStrategy(times) {
-                        const maxMilliseconds = 1000 * 60 * 2;
-                        const randomWait = Math.floor(Math.random() * 1000);
-
-                        const delay = Math.min(times * 50000 + randomWait, maxMilliseconds);
-                        this.logger.warning(
-                            `Jobs- Reconnecting to redis after ${delay} milliseconds`
-                        );
-
-                        return delay;
-                    },
+                    retryStrategy: this.retryStrategy,
                 },
             });
 
             internalVideoQueue.client.on("ready", () => {
-                this.logger.info("Jobs - connesso a redis per coda", queueName);
-                resolve(internalVideoQueue);
+                this.onRedisReady(queueName, internalVideoQueue, resolve);
             });
 
             internalVideoQueue.client.on("error", (error) => {
-                this.logger.warning("Jobs - disconnesso da redis per coda", queueName, error);
-                reject(error);
+                this.onRedisError(error, queueName, reject);
             });
         });
+    }
+
+    onRedisReady(queueName, internalVideoQueue, resolve) {
+        this.logger.info("Jobs - connesso a redis per coda", queueName);
+        if (resolve) {
+            resolve(internalVideoQueue);
+        }
+    }
+
+    onRedisError(error, queueName, reject) {
+        this.logger.warning("Jobs - disconnesso da redis per coda", queueName, error);
+        if (reject) {
+            reject(error);
+        }
+    }
+
+    retryStrategy(times) {
+        const maxMilliseconds = 1000 * 60 * 2;
+        const randomWait = Math.floor(Math.random() * 1000);
+
+        const delay = Math.min(times * 1000 + randomWait, maxMilliseconds);
+        this.logger.warning(`Jobs- Reconnecting to redis after ${delay} milliseconds`);
+
+        return delay;
     }
 }
 
