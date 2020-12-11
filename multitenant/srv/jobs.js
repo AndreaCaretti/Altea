@@ -17,6 +17,13 @@ class Jobs {
 
         this.redisCredentials = xsenv.serviceCredentials({ tag: "cache" });
 
+        if (this.redisCredentials.cluster_mode) {
+            this.redisCredentials.host =
+                "rg-b1d65754-56bd-4059-bfc2-e113c2bad9e0-0001-001.rg-b1d65754-56bd-4059-bfc2-e113c2bad9e0.iroxbd.euc1.cache.amazonaws.com";
+            this.redisCredentials.port = "1205";
+            this.redisCredentials.password = "GaJoFOorxmiPONZjZPabLYQLlcmgzAGU";
+        }
+
         this.queues = new Map();
         this.processors = [];
 
