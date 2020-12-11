@@ -68,7 +68,7 @@ class Jobs {
         for (let indexTenant = 0; indexTenant < tenants.length; indexTenant++) {
             const tenant = tenants[indexTenant];
 
-            this.logger.info(`Jobs for tenant ${tenant}`);
+            this.logger.info(`Avvio jobs for tenant ${tenant}`);
 
             for (
                 let indexProcessor = 0;
