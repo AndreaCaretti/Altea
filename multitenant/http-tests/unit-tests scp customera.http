@@ -1,0 +1,69 @@
+@customera-subdomain = ccp-customera
+@provider-subdomain = ccp-provider-dev-qas
+@space = dev
+@cap-service-url = mtt-cap-services
+@token = {{getToken.response.body.$.access_token}}
+
+
+### Get token
+# @name getToken
+GET https://{{customera-subdomain}}.authentication.eu10.hana.ondemand.com/oauth/token?grant_type=client_credentials&response_type=token HTTP/1.1
+Authorization: Basic sb-ccp-provider-dev-qas-dev-cloud-cold-chain!t61773 oEPmeoq3s9kvPuGZsd89POK9Eo8=
+
+
+### Invio raw moment autenticazione token
+POST https://{{provider-subdomain}}-{{space}}-{{cap-service-url}}.cfapps.eu10.hana.ondemand.com/handling-unit-moved/HandlingUnitsRawMovements HTTP/1.1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+ 
+{
+    "MSG_ID":"994ce6f3-283c-4a95-8470-c3664ebddbd0",
+    "CP_ID": "e6bbede3-5b6a-472d-8ba6-41abbb89edf2",
+    "TE": "2020-10-14T09:01:33.763Z",
+    "TS": "2020-10-14T09:01:34.763Z",
+    "HU_ID": "123456789012345678",
+    "DIR": "F"
+}
+
+
+### Invio raw moment autenticazione token
+POST https://{{provider-subdomain}}-{{space}}-{{cap-service-url}}.cfapps.eu10.hana.ondemand.com/handling-unit-moved/HandlingUnitsRawMovements HTTP/1.1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+ 
+{
+    "MSG_ID":"994ce6f3-283c-4a95-8470-c3664ebddbd0",
+    "CP_ID": "e6bbede3-5b6a-472d-8ba6-41abbb89edf2",
+    "TE": "2020-10-14T09:01:33.763Z",
+    "TS": "2020-10-14T09:01:34.763Z",
+    "HU_ID": "223456789012345678",
+    "DIR": "F"
+}
+
+
+### Creazione segmento iot
+POST https://{{provider-subdomain}}-{{space}}-{{cap-service-url}}.cfapps.eu10.hana.ondemand.com/iot/segment  HTTP/1.1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "cloudEventsVersion": "1.0",
+    "eventID": "SRL-B3AC20A58D7A47B6937073DA40CA95AC",
+    "eventType": "com.sap.appiot.eventtypes:SegmentNotifications",
+    "source": "IOT-BSV-SEG",
+    "eventTime": "2020-10-15T09:13:13.113Z",
+    "contentType": "application/json",
+    "extensions": {
+        "modelId": "592D9BEA5FD74E3DBF2C9BF5BD7CDA26",
+        "dataModel": "Thing",
+        "correlationId": "b3ac20a5-8d7a-47b6-9370-73da40ca95ac"
+    },
+    "data": [
+        {
+            "entityType": "SEGMENT",
+            "action": "OPEN",
+            "entityId": "205f253b-0575-4e94-84b4-5ee5906c20e4",
+            "entityURL": "https://sap-iot-noah-live-segment-service.cfapps.eu10.hana.ondemand.com/v1/segments/205f253b-0575-4e94-84b4-5ee5906c20e4"
+        }
+    ]
+}
