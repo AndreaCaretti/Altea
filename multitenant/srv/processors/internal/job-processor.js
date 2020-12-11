@@ -1,4 +1,12 @@
+// eslint-disable-next-line no-unused-vars
+const Logger = require("../../logger");
+
 class JobProcessor {
+    /**
+     *
+     * @param {Logger} logger
+     * @param {*} jobs
+     */
     constructor(logger, jobs) {
         this.jobs = jobs;
         this.logger = logger;
