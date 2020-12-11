@@ -382,6 +382,7 @@ define entity OutOfRangeHandlingUnitDetails     as
         handlingUnit.lot.name                                            as LotID,
         handlingUnit.lot.product.gtin                                    as GTIN,
         handlingUnit.lot.product.name                                    as ProductName,
+        handlingUnit.typology.uom                                        as UOM,
         OutOfRangeHandlingUnitDetailCount.OutOfRangeHandlingUnitsIDCount as CountHandlingUnit
     }
     group by
@@ -389,6 +390,7 @@ define entity OutOfRangeHandlingUnitDetails     as
         handlingUnit.lot.name,
         handlingUnit.lot.product.gtin,
         handlingUnit.lot.product.name,
+        handlingUnit.typology.uom,
         OutOfRangeHandlingUnitDetailCount.OutOfRangeHandlingUnitsIDCount;
 
 define entity OutOfRangeHandlingUnitDetailCount as
