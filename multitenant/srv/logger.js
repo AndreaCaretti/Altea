@@ -82,7 +82,7 @@ class Logger {
             errorMessage = JSON.stringify(error, null, 2);
         }
 
-        this.internalLogger.error(FgRed + msg + FfNormal, errorMessage);
+        this.internalLogger.error(`🥺${FgRed}${msg}${FfNormal}`, errorMessage);
     }
 
     setTenantId(tenantId) {
