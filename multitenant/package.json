@@ -21,6 +21,7 @@
         "cf-nodejs-logging-support": "^6.5.4",
         "express": "^4",
         "ioredis": "^4.19.2",
+        "moment": "^2.29.1",
         "passport": "^0",
         "request": "^2",
         "uuid": "^8.3.2"

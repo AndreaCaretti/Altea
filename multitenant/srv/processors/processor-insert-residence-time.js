@@ -1,4 +1,5 @@
 // const inputValidation = require("@sap/cds-runtime/lib/common/generic/input");
+const moment = require("moment");
 const DB = require("../db-utilities");
 const JobProcessor = require("./internal/job-processor");
 
@@ -25,7 +26,7 @@ class ProcessorInsertResidenceTime extends JobProcessor {
     async getNecessaryInfo(movement, tx) {
         const handlingUnit = await this.getHandlingUnitInfo(movement.handlingUnitID, tx);
         const product = await this.getProductFromLot(handlingUnit.lot_ID, tx);
-        const route = await this.getRouteFromProduct(product, tx);
+        const route = await this.getRouteFromProduct(product.ID, tx);
         const routeSteps = await this.getRouteStepsFromRoute(route, tx);
         const routeStep = this.getRouteStepFromControlPoint(
             routeSteps,
@@ -63,7 +64,14 @@ class ProcessorInsertResidenceTime extends JobProcessor {
 
     async getProductFromLot(lot, tx) {
         this.logger.debug("getProductFromLot: ", lot);
-        return DB.selectOneField(cds.entities.Lots, "product_ID", lot, tx, this.logger);
+        const productID = await DB.selectOneField(
+            cds.entities.Lots,
+            "product_ID",
+            lot,
+            tx,
+            this.logger
+        );
+        return DB.selectOneRecord(cds.entities.Products, productID, tx, this.logger);
     }
 
     async getRouteFromProduct(product, tx) {
@@ -79,8 +87,9 @@ class ProcessorInsertResidenceTime extends JobProcessor {
     async createRecordResidentTime(movement, info, tx) {
         this.logger.debug(`Create record resident time ${JSON.stringify(info)}`);
 
-        const TorLimit = this.getTorLimit(movement, info, tx);
+        const TorLimit = await this.getTorLimit(movement, info, tx);
 
+        // TODO: il TORLIMIT va calcolato solamente per le AREE a temperatura NON controllata!!!
         await tx.create(cds.entities.ResidenceTime).entries({
             handlingUnit_ID: movement.handlingUnitID,
             stepNr: info.routeStep.stepNr,
@@ -90,8 +99,8 @@ class ProcessorInsertResidenceTime extends JobProcessor {
     }
 
     async getTorLimit(movement, info) {
-        this.logger.debug("getTorLimit: ");
-        return new Date(movement.TE.getTime() + info.product.maxTor * 60000);
+        this.logger.debug("getTorLimit + add minutes:", info.product.maxTor);
+        return moment(new Date(movement.TE)).add(info.product.maxTor, "m").utc(0).format();
     }
 
     async updateMovementStatus(movement, tx) {
