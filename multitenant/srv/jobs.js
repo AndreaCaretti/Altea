@@ -24,6 +24,8 @@ class Jobs {
             this.redisCredentials.password = "GaJoFOorxmiPONZjZPabLYQLlcmgzAGU";
         }
 
+        this.logger.logObject("Credenziali Redis", this.redisCredentials);
+
         this.queues = new Map();
         this.processors = [];
 
@@ -33,6 +35,9 @@ class Jobs {
         jobsInstance = this;
     }
 
+    /**
+     * @returns {Jobs} : Jobs Instance
+     */
     static getInstance() {
         if (!jobsInstance) {
             throw new Error("L'istance della classe Jobs non era stata ancora creata");
@@ -71,12 +76,14 @@ class Jobs {
     }
 
     async addJob(tenant, queueName, jobInfo) {
-        this.logger.warning("Non abbiamo ancora gestito code bull divise per cliente");
+        this.logger.warning(
+            "Non abbiamo ancora gestito code bull divise per tenant, il tenant viene forzato a null"
+        );
 
         const queueTenant = null;
 
         this.logger.logObject(
-            `Arrivata richiesta di aggiungere job per cliente ${queueTenant} nome coda ${queueName}`,
+            `Arrivata richiesta di aggiungere job per tenant ${queueTenant} nome coda ${queueName}`,
             jobInfo
         );
 
