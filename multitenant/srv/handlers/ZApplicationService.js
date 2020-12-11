@@ -9,7 +9,6 @@ class ZApplicationService extends cds.ApplicationService {
     }
 
     async dispatch(req, ...etc) {
-        this.coldChainLogger.debug("🤷‍♂️ Called custom dispatcher...");
         req.on("failed", (e) => {
             this.onValidationError(e, req);
         });
