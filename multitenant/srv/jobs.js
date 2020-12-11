@@ -1,11 +1,11 @@
 const xsenv = require("@sap/xsenv");
 const Queue = require("bull");
 
-const {
-    router: bullBoardRouter,
-    setQueues: bullBoardSetQueues,
-    BullAdapter,
-} = require("bull-board");
+// const {
+//     router: bullBoardRouter,
+//     setQueues: bullBoardSetQueues,
+//     BullAdapter,
+// } = require("bull-board");
 
 // eslint-disable-next-line no-unused-vars
 const Logger = require("./logger");
@@ -28,6 +28,9 @@ class Jobs {
         if (this.redisCredentials.cluster_mode) {
             this.redisCredentials.uri =
                 "rediss://no-user-name-for-redis:GaJoFOorxmiPONZjZPabLYQLlcmgzAGU@rg-b1d65754-56bd-4059-bfc2-e113c2bad9e0-0001-001.rg-b1d65754-56bd-4059-bfc2-e113c2bad9e0.iroxbd.euc1.cache.amazonaws.com:1205";
+        } else {
+            this.redisCredentials.uri =
+                "rediss://no-user-name-for-redis:GaJoFOorxmiPONZjZPabLYQLlcmgzAGU@127.0.0.1:6380";
         }
 
         this.logger.logObject("Credenziali Redis", this.redisCredentials);
@@ -38,8 +41,8 @@ class Jobs {
         this.onRedisError = this.onRedisError.bind(this);
         this.retryStrategy = this.retryStrategy.bind(this);
 
-        this.logger.info(`Jobs monitor disponibile all'url /jobs-monitor`);
-        app.use("/jobs-monitor", bullBoardRouter);
+        // this.logger.info(`Jobs monitor disponibile all'url /jobs-monitor`);
+        // app.use("/jobs-monitor", bullBoardRouter);
 
         jobsInstance = this;
     }
@@ -84,7 +87,7 @@ class Jobs {
                     processorInfo.processor.processJob
                 );
 
-                bullBoardSetQueues([new BullAdapter(queue)]);
+                // bullBoardSetQueues([new BullAdapter(queue)]);
             }
         }
     }
