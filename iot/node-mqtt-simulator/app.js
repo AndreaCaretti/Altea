@@ -15,21 +15,24 @@ var mqttClient = connectToMQTT();
 setInterval(() => {
   generateData();
   sendDataViaMQTT();
-}, 3000);
+}, 5000);
 
 function generateData() {
-  //  const temperature;
-  if (lastData.temperature < 4) {
-    temperature = randomInteger(4, 18);
-  } else {
-    temperature = randomInteger(0, 3);
+  let errorCode = "";
+  let lowTemperature = "";
+  let highTemperature = "";
+  if (lastData.ErrorCode === "") {
+    errorCode = "OLT";
+    highTemperature = "18";
+    lowTemperature = "4";
   }
+  temperature = randomInteger(4, 18);
 
   lastData = {
     temperature: temperature,
-    ErrorCode: "001",
-    HighTemperature: 10,
-    LowTemperature: 2,
+    ErrorCode: errorCode,
+    HighTemperature: highTemperature,
+    LowTemperature: lowTemperature,
   };
 }
 
@@ -39,7 +42,6 @@ function sendDataViaMQTT() {
     capabilityAlternateId: CAPABILITY_ALTERNATE_ID,
     //timestamp: 1605007476277,       // se non lo inviamo, prende quello di default = timestamp attuale
     measures: [
-      //lastData.temperature, lastData.humidity, lastData.light
       lastData.temperature,
       lastData.ErrorCode,
       lastData.HighTemperature,
