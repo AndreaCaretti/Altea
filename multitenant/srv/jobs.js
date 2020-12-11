@@ -152,7 +152,7 @@ class Jobs {
         this.logger.info(`Creazione bull queue`, queueName);
 
         return new Promise((resolve, reject) => {
-            const internalVideoQueue = new Queue(queueName, {
+            const internalVideoQueue = new Queue(queueName, this.redisCredentials.uri, {
                 limiter: {
                     max: 500, // Numero massimo di jobs processati nell'unità di tempo
                     duration: 1000, // Unità di tempo in ms
@@ -160,7 +160,6 @@ class Jobs {
                     prefix: "coldchain",
                 },
                 redis: {
-                    uri: this.redisCredentials.uri,
                     enableOfflineQueue: false,
 
                     retryStrategy: this.retryStrategy,
