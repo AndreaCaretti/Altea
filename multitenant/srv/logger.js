@@ -67,7 +67,7 @@ class Logger {
             throw new Error("obj is not an object");
         }
 
-        this.debug(msg, JSON.stringify(obj, null, 2));
+        this.debug(`${msg}:\n`, JSON.stringify(obj, null, 2));
     }
 
     logException(msg, error) {

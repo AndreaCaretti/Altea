@@ -24,8 +24,9 @@ class DB {
             throw Error(`SelectOneField - Empty field: ${tableName.name}/${idValue}/${fieldName}`);
         }
 
-        logger.debug(
-            `SelectOneField: ${tableName.name}/${idValue}/${fieldName} -> '${fieldValue[fieldName]}'`
+        logger.logObject(
+            `SelectOneField: ${tableName.name}/${idValue}/${fieldName}'`,
+            fieldValue[fieldName]
         );
 
         return fieldValue[fieldName];
@@ -42,10 +43,9 @@ class DB {
             );
         }
 
-        logger.debug(
-            `SelectOneRowWhere: ${tableName.name} where ${JSON.stringify(
-                whereClause
-            )} -> '${JSON.stringify(singleRow)}'`
+        logger.logObject(
+            `SelectOneRowWhere: ${tableName.name} where ${JSON.stringify(whereClause)}`,
+            singleRow
         );
 
         return singleRow[0];
@@ -56,16 +56,15 @@ class DB {
 
         if (allRows.length === 0) {
             throw Error(
-                `selectAllRowsWhere - Record not found: ${
-                    tableName.name
-                } where where ${JSON.stringify(whereClause)} -> '${JSON.stringify(allRows)}'`
+                `selectAllRowsWhere - Record not found: ${tableName.name} where ${JSON.stringify(
+                    whereClause
+                )} -> '${JSON.stringify(allRows)}'`
             );
         }
 
-        logger.debug(
-            `selectAllRowsWhere: ${tableName.name} where ${JSON.stringify(
-                whereClause
-            )} -> '${JSON.stringify(allRows)}'`
+        logger.logObject(
+            `selectAllRowsWhere: ${tableName.name} where ${JSON.stringify(whereClause)}`,
+            allRows
         );
 
         return allRows;
@@ -96,10 +95,11 @@ class DB {
             );
         }
 
-        logger.debug(
-            `selectOneFieldWhere: ${tableName.name}/${JSON.stringify(where)}/${fieldName} -> '${
-                fieldValue[fieldName]
-            }'`
+        logger.logObject(
+            `selectOneFieldWhere: table ${tableName.name} where ${JSON.stringify(
+                where
+            )} field ${fieldName}`,
+            fieldValue[fieldName]
         );
 
         return fieldValue[fieldName];
@@ -119,9 +119,7 @@ class DB {
             throw Error(`selectOneRecord - Record not found: ${tableName.name}/${idValue}`);
         }
 
-        logger.debug(
-            `selectOneRecord: ${tableName.name}/${idValue} -> '${JSON.stringify(record)}'`
-        );
+        logger.logObject(`selectOneRecord: ${tableName.name}/${idValue}'`, record);
 
         return record;
     }
@@ -209,11 +207,19 @@ class DB {
         return cds.transaction(new cds.Request({ user: technicalUser }));
     }
 
+    /**
+     *
+     * @param {String} tableName
+     * @param {*} row
+     * @param {*} tx
+     * @param {*} logger
+     * @returns {Number} Numero di record inseriti
+     */
     static async insertIntoTable(tableName, row, tx, logger) {
         let recordsCount;
         try {
             recordsCount = await tx.create(tableName).entries(row);
-            logger.debug(`Record append: ${tableName.name}/ ${JSON.stringify(row)}}`);
+            logger.logObject(`Inserito record in tabella: ${tableName.name}`, row);
         } catch (error) {
             throw Error(`Wrong insert: ${error}/ ${JSON.stringify(row)}}`);
         }
