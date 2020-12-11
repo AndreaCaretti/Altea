@@ -309,7 +309,7 @@ define entity outOfRange : cuid, managed {
 define entity Notification : cuid, managed {
     alertBusinessTime : Timestamp;
     notificationTime  : Timestamp;
-    alertCode         : String(20);
+    alertType         : String(20);
     alertLevel        : LogLevel;
     payload           : String;
     GUID              : UUID;
