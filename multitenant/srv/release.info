@@ -1,6 +1,6 @@
-BUILD Fri Dec 11 15:03:12 CET 2020 sbarzaghi@N2008
+BUILD Fri Dec 11 15:57:35 CET 2020 sbarzaghi@N2008
 
-VERSIONE MTA version: 0.0.47-0d14e10baf2a70aab1b2645dfbab84dead3f3ca9
+VERSIONE MTA version: 0.0.48-a2b792958c18f07ec47f0e5d83acd8c512a91396
 
 On branch main
 Your branch is up to date with 'origin/main'.
@@ -8,4 +8,4 @@ Your branch is up to date with 'origin/main'.
 nothing to commit, working tree clean
 
 Git Commit:
-0d14e10baf2a70aab1b2645dfbab84dead3f3ca9 refs/remotes/origin/main
+a2b792958c18f07ec47f0e5d83acd8c512a91396 refs/remotes/origin/main
