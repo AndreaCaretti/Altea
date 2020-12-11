@@ -30,7 +30,7 @@ modules:
       type: nodejs
       path: gen/srv
       parameters:
-          disk-quota: 512M
+          disk-quota: 640M
           memory: 130M
           buildpack: nodejs_buildpack
       build-parameters:
