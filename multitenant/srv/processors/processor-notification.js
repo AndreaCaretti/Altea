@@ -48,7 +48,7 @@ class ProcessorrNotification extends JobProcessor {
         const { Notification } = cds.entities;
         const dataNotification = {
             alertBusinessTime: notificationData.alertBusinessTime,
-            alertCode: notificationData.alertType,
+            alertType: notificationData.alertType,
             alertLevel: notificationData.alertLevel,
             payload: notificationPayload,
             GUID: notificationData.GUID,
