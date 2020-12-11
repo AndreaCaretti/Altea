@@ -343,7 +343,7 @@ define entity OutOfRangeHandlingUnits : cuid, managed {
  */
 
 define entity OutOfRangeAreaDetails             as
-    select from outOfRange {
+    select from outOfRange distinct {
         ID                            as OutOfRangeID,
         segmentId                     as SegmentID,
         ID_DeviceIoT                  as ID_DeviceIoT,
@@ -377,7 +377,7 @@ define entity OutOfRangeHandlingUnitDetails     as
     select from OutOfRangeHandlingUnits
     left join OutOfRangeHandlingUnitDetailCount
         on OutOfRangeHandlingUnitDetailCount.OutOfRangeID = OutOfRangeHandlingUnits.outOfRange.ID
-    {
+    distinct {
         outOfRange.ID                                                    as OutOfRangeID,
         handlingUnit.lot.name                                            as LotID,
         handlingUnit.lot.product.gtin                                    as GTIN,
@@ -392,7 +392,7 @@ define entity OutOfRangeHandlingUnitDetails     as
         OutOfRangeHandlingUnitDetailCount.OutOfRangeHandlingUnitsIDCount;
 
 define entity OutOfRangeHandlingUnitDetailCount as
-    select from OutOfRangeHandlingUnits {
+    select from OutOfRangeHandlingUnits distinct {
         count(
             handlingUnit.ID
         )                             as OutOfRangeHandlingUnitsIDCount,
