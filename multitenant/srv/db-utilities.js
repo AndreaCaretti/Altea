@@ -230,11 +230,14 @@ class DB {
         return uuidv4();
     }
 
-    static async checkDuplicateRecords(tableName, whereClause, tx) {
+    static async checkDuplicateRecords(tableName, whereClause, tx, logger) {
         const record = await tx.run(SELECT.one(tableName).where(whereClause));
         if (record) {
             throw Error(`Record Duplicato per ${tableName.name}/ where ${whereClause}`);
         }
+
+        logger.debug(`Record non duplicato: ${tableName.name} ${JSON.stringify(whereClause)}`);
+
         return false;
     }
 }

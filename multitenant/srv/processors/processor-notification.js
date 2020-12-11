@@ -21,20 +21,20 @@ class ProcessorrNotification extends JobProcessor {
     async sendNotificationDataInternal(notificationData, technicalUser, tx) {
         const notification = notificationData;
         // GET NOTIFICATION FOR TABLE INSERT
-        this.logger.info(`Notification retrieved : ${JSON.stringify(notification)}`);
+        this.logger.logObject(`Notification retrieved`, notification);
 
         // SEND TO ENTERPRISE MESSAGE SERVICE NOTIFICATION
         const notificationPayload = JSON.stringify(
-            await this.notificationPrepareData.prepareNotificationPayload(notification)
+            await this.notificationPrepareData.prepareNotificationPayload(notification),
+            null,
+            2
         );
+
         const date = new Date().toISOString();
         notification.notificationTime = date;
 
-        await this.enterpriseMessageNotification.send(
-            notification,
-            notificationPayload,
-            this.logger
-        );
+        await this.enterpriseMessageNotification.send(notificationPayload);
+
         await this.submitIntoTable(
             notification,
             notificationPayload,
@@ -44,14 +44,15 @@ class ProcessorrNotification extends JobProcessor {
         );
     }
 
-    async submitIntoTable(data, payload, logger, technicalUser, tx) {
+    async submitIntoTable(notificationData, notificationPayload, logger, technicalUser, tx) {
         const { Notification } = cds.entities;
         const dataNotification = {
-            alertBusinessTime: data.alertBusinessTime,
-            alertCode: data.alertCode,
-            alertLevel: data.alertLevel,
-            payload,
-            GUID: data.GUID,
+            alertBusinessTime: notificationData.alertBusinessTime,
+            alertCode: notificationData.alertType,
+            alertLevel: notificationData.alertLevel,
+            payload: notificationPayload,
+            GUID: notificationData.GUID,
+            notificationTime: notificationData.notificationTime,
         };
         await DB.insertIntoTable(Notification, dataNotification, tx, this.logger, true);
     }
