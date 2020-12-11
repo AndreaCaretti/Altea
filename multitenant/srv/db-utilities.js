@@ -230,10 +230,10 @@ class DB {
         return uuidv4();
     }
 
-    static async checkDuplicateRecords(tableName, fieldName, fieldValue) {
-        const record = SELECT.one(tableName).columns(fieldName).where({ fieldName: fieldValue });
+    static async checkDuplicateRecords(tableName, whereClause, tx) {
+        const record = await tx.run(SELECT.one(tableName).where(whereClause));
         if (record) {
-            throw Error(`Record Duplicato per ${tableName.name}/${fieldName}: ${fieldValue}`);
+            throw Error(`Record Duplicato per ${tableName.name}/ where ${whereClause}`);
         }
         return false;
     }

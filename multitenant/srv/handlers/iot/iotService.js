@@ -185,8 +185,8 @@ result = await tx.run(
 
         const duplicateRecord = await DB.checkDuplicateRecords(
             cds.entities.outOfRange,
-            "segmentId",
-            outOfRange.data[0].entityId
+            { segmentId: outOfRange.data[0].entityId },
+            tx
         );
 
         if (!duplicateRecord) {
