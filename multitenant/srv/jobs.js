@@ -28,6 +28,9 @@ class Jobs {
         if (this.redisCredentials.cluster_mode) {
             this.redisCredentials.uri =
                 "rediss://no-user-name-for-redis:GaJoFOorxmiPONZjZPabLYQLlcmgzAGU@rg-b1d65754-56bd-4059-bfc2-e113c2bad9e0-0001-001.rg-b1d65754-56bd-4059-bfc2-e113c2bad9e0.iroxbd.euc1.cache.amazonaws.com:1205";
+        } else {
+            this.redisCredentials.uri =
+                "rediss://no-user-name-for-redis:GaJoFOorxmiPONZjZPabLYQLlcmgzAGU@127.0.0.1:6380";
         }
 
         this.logger.logObject("Credenziali Redis", this.redisCredentials);
@@ -91,7 +94,7 @@ class Jobs {
 
     // eslint-disable-next-line class-methods-use-this
     formatQueueName(tenant, queueName) {
-        return `${tenant}-${queueName}`;
+        return `{${tenant}}-${queueName}`;
     }
 
     async addJob(tenant, queueName, jobInfo) {
