@@ -280,11 +280,12 @@ define entity ResidenceTime : cuid, managed {
     inBusinessTime     : Timestamp;
     outBusinessTime    : Timestamp;
     residenceTime      : Integer;
-    singleTOR          : Integer;
-    totalTOR           : Integer;
+    // singleTOR          : Integer;
+    //  totalTOR           : Integer;
     tmin               : Decimal;
     tmax               : Decimal;
     torElaborationTime : Timestamp;
+    torLimit           : Timestamp;
 }
 
 

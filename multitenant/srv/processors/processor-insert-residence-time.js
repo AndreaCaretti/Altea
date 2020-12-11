@@ -36,6 +36,7 @@ class ProcessorInsertResidenceTime extends JobProcessor {
         return {
             handlingUnit,
             routeStep,
+            product,
         };
     }
 
@@ -78,11 +79,19 @@ class ProcessorInsertResidenceTime extends JobProcessor {
     async createRecordResidentTime(movement, info, tx) {
         this.logger.debug(`Create record resident time ${JSON.stringify(info)}`);
 
+        const TorLimit = this.getTorLimit(movement, info, tx);
+
         await tx.create(cds.entities.ResidenceTime).entries({
             handlingUnit_ID: movement.handlingUnitID,
             stepNr: info.routeStep.stepNr,
             inBusinessTime: movement.TE,
+            torLimit: TorLimit,
         });
+    }
+
+    async getTorLimit(movement, info) {
+        this.logger.debug("getTorLimit: ");
+        return new Date(movement.TE.getTime() + info.product.maxTor * 60000);
     }
 
     async updateMovementStatus(movement, tx) {
