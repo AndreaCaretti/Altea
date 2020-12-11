@@ -22,7 +22,7 @@ class CloudColdChain {
         this.cds = cds;
 
         // Logger
-        this.logger = Logger.getInstance(app);
+        this.logger = new Logger(app);
 
         //  Jobs
         this.jobs = new Jobs(app, this.logger);
