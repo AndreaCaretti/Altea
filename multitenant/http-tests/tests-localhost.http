@@ -29,7 +29,7 @@ Content-Type: application/json
 
 ### Creazione segmento iot
 POST http://localhost:4004/iot/segment  HTTP/1.1
-Authorization: Bearer {{token}}
+Authorization: Basic Alice:Alice
 Content-Type: application/json
 
 {
