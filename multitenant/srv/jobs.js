@@ -26,10 +26,8 @@ class Jobs {
         this.redisCredentials = xsenv.serviceCredentials({ tag: "cache" });
 
         if (this.redisCredentials.cluster_mode) {
-            this.redisCredentials.hostname =
-                "rg-b1d65754-56bd-4059-bfc2-e113c2bad9e0-0001-001.rg-b1d65754-56bd-4059-bfc2-e113c2bad9e0.iroxbd.euc1.cache.amazonaws.com";
-            this.redisCredentials.port = "1205";
-            this.redisCredentials.password = "GaJoFOorxmiPONZjZPabLYQLlcmgzAGU";
+            this.redisCredentials.uri =
+                "rediss://no-user-name-for-redis:GaJoFOorxmiPONZjZPabLYQLlcmgzAGU@rg-b1d65754-56bd-4059-bfc2-e113c2bad9e0-0001-001.rg-b1d65754-56bd-4059-bfc2-e113c2bad9e0.iroxbd.euc1.cache.amazonaws.com:1205";
         }
 
         this.logger.logObject("Credenziali Redis", this.redisCredentials);
@@ -162,8 +160,7 @@ class Jobs {
                     prefix: "coldchain",
                 },
                 redis: {
-                    host: this.redisCredentials.hostname,
-                    port: this.redisCredentials.port,
+                    uri: this.redisCredentials.uri,
                     enableOfflineQueue: false,
 
                     retryStrategy: this.retryStrategy,

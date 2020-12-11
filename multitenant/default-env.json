@@ -61,8 +61,7 @@
         "instance_name": "mtt-redis",
         "binding_name": null,
         "credentials": {
-          "hostname": "127.0.0.1",
-          "port": 6379
+            "uri": "redis://127.0.0.1:6379"
         },
         "syslog_drain_url": null,
         "volume_mounts": []
