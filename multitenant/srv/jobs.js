@@ -1,4 +1,6 @@
 const xsenv = require("@sap/xsenv");
+
+const Redis = require("ioredis");
 const Queue = require("bull");
 
 // const {
@@ -155,17 +157,20 @@ class Jobs {
         this.logger.info(`Creazione bull queue`, queueName);
 
         return new Promise((resolve, reject) => {
-            const internalVideoQueue = new Queue(queueName, this.redisCredentials.uri, {
+            const internalVideoQueue = new Queue(queueName, {
                 limiter: {
                     max: 500, // Numero massimo di jobs processati nell'unità di tempo
                     duration: 1000, // Unità di tempo in ms
                     bounceBack: true, // Non utilizzare le code di delay
-                    prefix: "coldchain",
                 },
                 redis: {
                     enableOfflineQueue: false,
 
                     retryStrategy: this.retryStrategy,
+                },
+                createClient: (type, opts) => {
+                    this.logger.debug("Chiamata da bull verso creazione coda");
+                    return this.createRedisClient(type, opts);
                 },
             });
 
@@ -177,6 +182,34 @@ class Jobs {
                 this.onRedisError(error, queueName, reject);
             });
         });
+    }
+
+    createRedisClient(_type, _opts) {
+        this.logger.debug("Creazione client redis");
+        const redisClient = new Redis.Cluster(
+            [
+                {
+                    host:
+                        "rg-b1d65754-56bd-4059-bfc2-e113c2bad9e0-0001-001.rg-b1d65754-56bd-4059-bfc2-e113c2bad9e0.iroxbd.euc1.cache.amazonaws.com",
+                    port: "1205",
+                },
+            ],
+            {
+                // slotsRefreshTimeout: 1000,
+                // dnsLookup: (address, callback) => callback(null, address),
+                maxRedirections: 32,
+                redisOptions: {
+                    tls: {
+                        host:
+                            "rg-b1d65754-56bd-4059-bfc2-e113c2bad9e0-0001-001.rg-b1d65754-56bd-4059-bfc2-e113c2bad9e0.iroxbd.euc1.cache.amazonaws.com",
+                        port: "1205",
+                    },
+                    password: "GaJoFOorxmiPONZjZPabLYQLlcmgzAGU",
+                },
+            }
+        );
+
+        return redisClient;
     }
 
     onRedisReady(queueName, internalVideoQueue, resolve) {
