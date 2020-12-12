@@ -30,9 +30,6 @@ class Jobs {
         if (this.redisCredentials.cluster_mode) {
             this.redisCredentials.uri =
                 "rediss://no-user-name-for-redis:GaJoFOorxmiPONZjZPabLYQLlcmgzAGU@rg-b1d65754-56bd-4059-bfc2-e113c2bad9e0-0001-001.rg-b1d65754-56bd-4059-bfc2-e113c2bad9e0.iroxbd.euc1.cache.amazonaws.com:1205";
-        } else {
-            this.redisCredentials.uri =
-                "rediss://no-user-name-for-redis:GaJoFOorxmiPONZjZPabLYQLlcmgzAGU@127.0.0.1:6380";
         }
 
         this.logger.logObject("Credenziali Redis", this.redisCredentials);
@@ -157,7 +154,9 @@ class Jobs {
         this.logger.info(`Creazione bull queue`, queueName);
 
         return new Promise((resolve, reject) => {
-            const internalVideoQueue = new Queue(queueName, {
+            let bullQueue;
+
+            const bullOptions = {
                 limiter: {
                     max: 500, // Numero massimo di jobs processati nell'unità di tempo
                     duration: 1000, // Unità di tempo in ms
@@ -168,17 +167,23 @@ class Jobs {
 
                     retryStrategy: this.retryStrategy,
                 },
-                createClient: (type, opts) => {
+            };
+
+            if (this.redisCredentials.cluster_mode) {
+                bullOptions.createClient = (type, opts) => {
                     this.logger.debug("Chiamata da bull verso creazione coda");
                     return this.createRedisClient(type, opts);
-                },
+                };
+                bullQueue = new Queue(queueName, bullOptions);
+            } else {
+                bullQueue = new Queue(queueName, this.redisCredentials.uri, bullOptions);
+            }
+
+            bullQueue.client.on("ready", () => {
+                this.onRedisReady(queueName, bullQueue, resolve);
             });
 
-            internalVideoQueue.client.on("ready", () => {
-                this.onRedisReady(queueName, internalVideoQueue, resolve);
-            });
-
-            internalVideoQueue.client.on("error", (error) => {
+            bullQueue.client.on("error", (error) => {
                 this.onRedisError(error, queueName, reject);
             });
         });
