@@ -91,15 +91,15 @@ _Nel frattempo la piattaforma tiene monitorate le connessioni con i gateway edge
 
 Per calcolare il TOR durante la permanenza in area a temperatura anomala vengono sommati tutti i minuti in cui l'handling unit era in una area con anomalia di temperatura:
 
-| Caso |    T0    |   T1   | T2 INIZIO ANOMALIA |    T3    | T4  |   T5   | T6 FINE ANOMALIA |    T7    |   T8   | Tn (anomalia non finiti) |
-| :--: | :------: | :----: | :----------------: | :------: | :-: | :----: | :--------------: | :------: | :----: | :----------------------: |
-|  1°  | INGRESSO | USCITA |                    |          |     |        |                  |          |        |                          |
-|  2°  | INGRESSO |        |                    |          |     | USCITA |                  |          |        |                          |
-|  3°  |          |        |                    | INGRESSO |     | USCITA |                  |          |        |                          |
-|  4°  |          |        |                    | INGRESSO |     |        |                  |          | USCITA |                          |
-|  5°  |          |        |                    |          |     |        |                  | INGRESSO | USCITA |                          |
-|  6°  | INGRESSO |        |                    |          |     |        |                  |          | USCITA |                          |
-|  7°  | INGRESSO |        |                    |          |     |        |                  |          |        |                          |
+| Caso  |    T0    |   T1   | T2 INIZIO ANOMALIA |    T3    |  T4   |   T5   | T6 FINE ANOMALIA |    T7    |   T8   | Tn (anomalia non finiti) |
+| :---: | :------: | :----: | :----------------: | :------: | :---: | :----: | :--------------: | :------: | :----: | :----------------------: |
+|  1°   | INGRESSO | USCITA |                    |          |       |        |                  |          |        |                          |
+|  2°   | INGRESSO |        |                    |          |       | USCITA |                  |          |        |                          |
+|  3°   |          |        |                    | INGRESSO |       | USCITA |                  |          |        |                          |
+|  4°   |          |        |                    | INGRESSO |       |        |                  |          | USCITA |                          |
+|  5°   |          |        |                    |          |       |        |                  | INGRESSO | USCITA |                          |
+|  6°   | INGRESSO |        |                    |          |       |        |                  |          | USCITA |                          |
+|  7°   | INGRESSO |        |                    |          |       |        |                  |          |        |                          |
 
 | Regola                                              | Caso coperto | Inizio TOR | Fine TOR |
 | --------------------------------------------------- | ------------ | ---------- | -------- |
@@ -431,23 +431,24 @@ Passaggi Handling Unit da Control Point, campi controllati
 -   elaborationTime indica in quale momento il movimento è stato elaborato dalla routine che gestisce gli spostamenti cioè che aggiorna il campo lastKnowArea nella tabella HandlingUnits
     e aggiorna la tabella HandlingUnitsResidenceTime
 
+
 ## Tabella ResidenceTime
 
 Permanenza Handling Unit in area
 
-| _ID_   | HandlingUnit (HandlingUnits) | step | area (Area)                  | inBusinessTime           | outBusinessTime          | residenceTime (Integer) | tor   | failureIn | failureOut |               | tmin | tmax | torElaborationTime (Timestamp) | TorLimit(Timestamp) |
-| ------ | ---------------------------- | ---- | ---------------------------- | ------------------------ | ------------------------ | ----------------------- | ----- | --------- | ---------- | ------------- | :--: | :--: | ------------------------------ | ------------------- |
-| _GUID_ | 123456789012345678           | 1    | Produzione Plant A           | 2020-10-14T09:01:33.763Z | 2020-10-14T09:02:33.763Z | 1600                    | 1600  |           |            |               |      |      | 2020-10-14T09:01:33.763Z       |
-| _GUID_ | 123456789012345678           | 2    | Cold Room                    | 2020-10-14T09:02:33.763Z | 2020-10-14T09:03:33.763Z | 3600                    | 30    |           |            |               |  4   |  20  | 2020-10-14T09:01:33.763Z       |
-| _GUID_ | 123456789012345678           | 3    | Uscita merci                 | 2020-10-14T09:03:33.763Z | 2020-10-14T09:04:33.763Z | 1600                    | 1600  |           |            |               |      |      | 2020-10-14T09:01:33.763Z       |
-| _GUID_ | 123456789012345678           | 2    | Cold Room                    | 2020-10-14T09:04:33.763Z | 2020-10-14T09:05:33.763Z | 3600                    | 30    |           |            |               |  4   |  20  | 2020-10-14T09:01:33.763Z       |
-| _GUID_ | 123456789012345678           | 3    | Uscita merci                 | 2020-10-14T09:05:33.763Z | 2020-10-14T09:06:33.763Z | 1600                    |       |           |            |               |      |      |                                |
-| _GUID_ | 123456789012345678           | 4    | Piazzale esterno             | 2020-10-14T09:06:33.763Z | 2020-10-14T09:07:33.763Z | 2000                    | 2000  |           |            |               |      |      |                                |
-| _GUID_ | 123456789012345678           | 5    | Truck                        | 2020-10-14T09:07:33.763Z | 2020-10-14T09:08:33.763Z | 20                      |       |           |            |               |      |      |                                |
-| _GUID_ | 123456789012345678           | 6    | Piazzale esterno depositario | 2020-10-14T09:08:33.763Z | 2020-10-14T09:09:33.763Z | 20                      |       |           |            |               |      |      |                                |
-| _GUID_ | 123456789012345678           | 7    | Depositario                  | 2020-10-14T09:09:33.763Z |                          | 20                      |       |           |            |               |      |      |                                |
-| _GUID_ | 123456789012345699           | 1    | Esterno Magazzino            | 2020-10-14T09:09:33.763Z | 2020-10-15T09:09:33.763Z | 1 day                   | 1 day |           |            | 1 day         |      |      |                                |
-| _GUID_ | 123456789012345699           | 2    | Esterno Magazzino 2          | 2020-10-15T09:09:33.763Z |                          |                         |       |           |            | 2 day + diff. |      |      |                                |
+| _ID_   | HandlingUnit (HandlingUnits) | step | area (Area)                  | inBusinessTime           | outBusinessTime          | residenceTime (Integer) | tor   | failureIn | failureOut |               | tmin  | tmax  | torElaborationTime (Timestamp) | TorLimit(Timestamp) |
+| ------ | ---------------------------- | ---- | ---------------------------- | ------------------------ | ------------------------ | ----------------------- | ----- | --------- | ---------- | ------------- | :---: | :---: | ------------------------------ | ------------------- |
+| _GUID_ | 123456789012345678           | 1    | Produzione Plant A           | 2020-10-14T09:01:33.763Z | 2020-10-14T09:02:33.763Z | 1600                    | 1600  |           |            |               |       |       | 2020-10-14T09:01:33.763Z       |
+| _GUID_ | 123456789012345678           | 2    | Cold Room                    | 2020-10-14T09:02:33.763Z | 2020-10-14T09:03:33.763Z | 3600                    | 30    |           |            |               |   4   |  20   | 2020-10-14T09:01:33.763Z       |
+| _GUID_ | 123456789012345678           | 3    | Uscita merci                 | 2020-10-14T09:03:33.763Z | 2020-10-14T09:04:33.763Z | 1600                    | 1600  |           |            |               |       |       | 2020-10-14T09:01:33.763Z       |
+| _GUID_ | 123456789012345678           | 2    | Cold Room                    | 2020-10-14T09:04:33.763Z | 2020-10-14T09:05:33.763Z | 3600                    | 30    |           |            |               |   4   |  20   | 2020-10-14T09:01:33.763Z       |
+| _GUID_ | 123456789012345678           | 3    | Uscita merci                 | 2020-10-14T09:05:33.763Z | 2020-10-14T09:06:33.763Z | 1600                    |       |           |            |               |       |       |                                |
+| _GUID_ | 123456789012345678           | 4    | Piazzale esterno             | 2020-10-14T09:06:33.763Z | 2020-10-14T09:07:33.763Z | 2000                    | 2000  |           |            |               |       |       |                                |
+| _GUID_ | 123456789012345678           | 5    | Truck                        | 2020-10-14T09:07:33.763Z | 2020-10-14T09:08:33.763Z | 20                      |       |           |            |               |       |       |                                |
+| _GUID_ | 123456789012345678           | 6    | Piazzale esterno depositario | 2020-10-14T09:08:33.763Z | 2020-10-14T09:09:33.763Z | 20                      |       |           |            |               |       |       |                                |
+| _GUID_ | 123456789012345678           | 7    | Depositario                  | 2020-10-14T09:09:33.763Z |                          | 20                      |       |           |            |               |       |       |                                |
+| _GUID_ | 123456789012345699           | 1    | Esterno Magazzino            | 2020-10-14T09:09:33.763Z | 2020-10-15T09:09:33.763Z | 1 day                   | 1 day |           |            | 1 day         |       |       |                                |
+| _GUID_ | 123456789012345699           | 2    | Esterno Magazzino 2          | 2020-10-15T09:09:33.763Z |                          |                         |       |           |            | 2 day + diff. |       |       |                                |
 
 -   inBusinessTime è l'ora di ingresso dell'handling unit nell'area
 -   outBusinessTime è l'ora di uscita dell'handling unit dall'area
@@ -921,19 +922,14 @@ Solo sottoscrizione alla cloud cold chain e portale, CF non attivato
 -   processo in background che attende il messaggio sulla coda redis e crea il record del movimento nella tabella HandlingUnitMovements
 -   scrive nella coda redis `RESIDENCE_TIME:WAITING` i dati del movimento
 -   processo in background che attende il messaggio sulla coda redis `RESIDENCE_TIME:WAITING`, quando riceve un messaggio:
-    -   ricerca il lotto collegato all'SSCC nella tabella `HandlingUnits`
-    -   ricerca il prodotto collegato al lotto nella tabella `Lots`
-    -   ricerca nella tabella `Products` le route collegate
-    -   ricerca nella tabella `Routes` con controlPoint e direction per determinare l'area di destinazione della scatola
-    -   inserisce nella tabella `HandlingUnitsResidenceTime` un record con: `sscc`, `step`, `area`, `inBusinessTime` con il t del movimento
-    -   aggiorna il campo `ResidenceTimeStatus` della tabella `HandlingUnitMovements` a `OK`
-    -   se il TE del movimento è maggiore di `HandlingUnits-inAreaBusinessTime` aggiorna `lastKnowArea` e `inAreaBusinessTime`
-
-## Determinazione HandlingUnitsResidenceTime-outBusinessTime e residenceTime
-
--   ogni n minuti parte un processo per un singolo cliente
--   processo che ricerca tutti i record in `HandlingUnitsResidenceTime` senza `outBusinessTime`
--   per ogni record cerca un record con T > del T movimento (piu vicino) e con step = step del record + 1 oppure step del record - 1
+-   ricerca il lotto collegato all'SSCC nella tabella `HandlingUnits`
+-   ricerca il prodotto collegato al lotto nella tabella `Lots`
+-   ricerca nella tabella `Products` le route collegate
+-   ricerca nella tabella `Routes` con controlPoint e direction per determinare l'area di destinazione della scatola
+-   inserisce nella tabella `HandlingUnitsResidenceTime` un record con: `sscc`, `step`, `area`, `inBusinessTime` con il t del movimento
+-   aggiorna il campo `ResidenceTimeStatus` della tabella `HandlingUnitMovements` a `OK` (PROBLEMA NON ABBIAMO L'ID DELL'HANDLING UNIT MOVEMENT DOPO AGGIORNAMENTO CDS)
+-   se il TE del movimento è maggiore di `HandlingUnits-inAreaBusinessTime` aggiorna `lastKnowArea` e `inAreaBusinessTime`
+-   cerca un record con T > del T movimento (piu vicino) e con step = step del record + 1 oppure step del record - 1
 -   se lo trova aggiorna il campo `outBusinessTime` con `inBusinessTime` del record trovato
 -   se ho `outBusinessTime` calcola la differenza in minuti di `outBusinessTime` - `inBusinessTime` e aggiorna il campo `residenceTime`
 -   se l'area è l'area in cui è in questo momento la handling unit (campendolo leggendo la tabella `HandlingUnits`) aggiorna il campo `residenceTime = current time - inBusinessTime`
