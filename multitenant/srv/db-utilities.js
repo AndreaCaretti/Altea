@@ -1,5 +1,6 @@
 const { v4: uuidv4 } = require("uuid");
 const cds = require("@sap/cds");
+// eslint-disable-next-line no-unused-vars
 const Logger = require("./logger");
 /**
  * DB utilities methods
