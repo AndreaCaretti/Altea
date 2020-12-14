@@ -436,23 +436,22 @@ Passaggi Handling Unit da Control Point, campi controllati
 
 Permanenza Handling Unit in area
 
-| _ID_   | HandlingUnit (HandlingUnits) | step | area (Area)                  | inBusinessTime           | outBusinessTime          | residenceTime (Integer) | tor   | failureIn | failureOut |               | tmin  | tmax  | torElaborationTime (Timestamp) | TorLimit(Timestamp) |
-| ------ | ---------------------------- | ---- | ---------------------------- | ------------------------ | ------------------------ | ----------------------- | ----- | --------- | ---------- | ------------- | :---: | :---: | ------------------------------ | ------------------- |
-| _GUID_ | 123456789012345678           | 1    | Produzione Plant A           | 2020-10-14T09:01:33.763Z | 2020-10-14T09:02:33.763Z | 1600                    | 1600  |           |            |               |       |       | 2020-10-14T09:01:33.763Z       |
-| _GUID_ | 123456789012345678           | 2    | Cold Room                    | 2020-10-14T09:02:33.763Z | 2020-10-14T09:03:33.763Z | 3600                    | 30    |           |            |               |   4   |  20   | 2020-10-14T09:01:33.763Z       |
-| _GUID_ | 123456789012345678           | 3    | Uscita merci                 | 2020-10-14T09:03:33.763Z | 2020-10-14T09:04:33.763Z | 1600                    | 1600  |           |            |               |       |       | 2020-10-14T09:01:33.763Z       |
-| _GUID_ | 123456789012345678           | 2    | Cold Room                    | 2020-10-14T09:04:33.763Z | 2020-10-14T09:05:33.763Z | 3600                    | 30    |           |            |               |   4   |  20   | 2020-10-14T09:01:33.763Z       |
-| _GUID_ | 123456789012345678           | 3    | Uscita merci                 | 2020-10-14T09:05:33.763Z | 2020-10-14T09:06:33.763Z | 1600                    |       |           |            |               |       |       |                                |
-| _GUID_ | 123456789012345678           | 4    | Piazzale esterno             | 2020-10-14T09:06:33.763Z | 2020-10-14T09:07:33.763Z | 2000                    | 2000  |           |            |               |       |       |                                |
-| _GUID_ | 123456789012345678           | 5    | Truck                        | 2020-10-14T09:07:33.763Z | 2020-10-14T09:08:33.763Z | 20                      |       |           |            |               |       |       |                                |
-| _GUID_ | 123456789012345678           | 6    | Piazzale esterno depositario | 2020-10-14T09:08:33.763Z | 2020-10-14T09:09:33.763Z | 20                      |       |           |            |               |       |       |                                |
-| _GUID_ | 123456789012345678           | 7    | Depositario                  | 2020-10-14T09:09:33.763Z |                          | 20                      |       |           |            |               |       |       |                                |
-| _GUID_ | 123456789012345699           | 1    | Esterno Magazzino            | 2020-10-14T09:09:33.763Z | 2020-10-15T09:09:33.763Z | 1 day                   | 1 day |           |            | 1 day         |       |       |                                |
-| _GUID_ | 123456789012345699           | 2    | Esterno Magazzino 2          | 2020-10-15T09:09:33.763Z |                          |                         |       |           |            | 2 day + diff. |       |       |                                |
+| _ID_   | HandlingUnit (HandlingUnits) | step | area (Area)                  | inBusinessTime           | outBusinessTime          | tor   | failureIn | failureOut |               | tmin  | tmax  | torElaborationTime (Timestamp) | TorLimit(Timestamp) |
+| ------ | ---------------------------- | ---- | ---------------------------- | ------------------------ | ------------------------ | ----- | --------- | ---------- | ------------- | :---: | :---: | ------------------------------ | ------------------- |
+| _GUID_ | 123456789012345678           | 1    | Produzione Plant A           | 2020-10-14T09:01:33.763Z | 2020-10-14T09:02:33.763Z | 1600  |           |            |               |       |       | 2020-10-14T09:01:33.763Z       |                     |
+| _GUID_ | 123456789012345678           | 2    | Cold Room                    | 2020-10-14T09:02:33.763Z | 2020-10-14T09:03:33.763Z | 30    |           |            |               |   4   |  20   | 2020-10-14T09:01:33.763Z       |                     |
+| _GUID_ | 123456789012345678           | 3    | Uscita merci                 | 2020-10-14T09:03:33.763Z | 2020-10-14T09:04:33.763Z | 1600  |           |            |               |       |       | 2020-10-14T09:01:33.763Z       |                     |
+| _GUID_ | 123456789012345678           | 2    | Cold Room                    | 2020-10-14T09:04:33.763Z | 2020-10-14T09:05:33.763Z | 30    |           |            |               |   4   |  20   | 2020-10-14T09:01:33.763Z       |                     |
+| _GUID_ | 123456789012345678           | 3    | Uscita merci                 | 2020-10-14T09:05:33.763Z | 2020-10-14T09:06:33.763Z |       |           |            |               |       |       |                                |                     |
+| _GUID_ | 123456789012345678           | 4    | Piazzale esterno             | 2020-10-14T09:06:33.763Z | 2020-10-14T09:07:33.763Z | 2000  |           |            |               |       |       |                                |                     |
+| _GUID_ | 123456789012345678           | 5    | Truck                        | 2020-10-14T09:07:33.763Z | 2020-10-14T09:08:33.763Z |       |           |            |               |       |       |                                |                     |
+| _GUID_ | 123456789012345678           | 6    | Piazzale esterno depositario | 2020-10-14T09:08:33.763Z | 2020-10-14T09:09:33.763Z |       |           |            |               |       |       |                                |                     |
+| _GUID_ | 123456789012345678           | 7    | Depositario                  | 2020-10-14T09:09:33.763Z |                          |       |           |            |               |       |       |                                |                     |
+| _GUID_ | 123456789012345699           | 1    | Esterno Magazzino            | 2020-10-14T09:09:33.763Z | 2020-10-15T09:09:33.763Z | 1 day |           |            | 1 day         |       |       |                                |                     |
+| _GUID_ | 123456789012345699           | 2    | Esterno Magazzino 2          | 2020-10-15T09:09:33.763Z |                          |       |           |            | 2 day + diff. |       |       |                                |                     |
 
 -   inBusinessTime è l'ora di ingresso dell'handling unit nell'area
 -   outBusinessTime è l'ora di uscita dell'handling unit dall'area
--   ResidenceTime è il numero di minuti di permanenza dell'handling unit nell'area
 -   TOR è il numero di minuti di permanenza nell'area con temperatura fuori range
 -   tmin
 -   tman
@@ -931,10 +930,6 @@ Solo sottoscrizione alla cloud cold chain e portale, CF non attivato
 -   se il TE del movimento è maggiore di `HandlingUnits-inAreaBusinessTime` aggiorna `lastKnowArea` e `inAreaBusinessTime`
 -   cerca un record con T > del T movimento (piu vicino) e con step = step del record + 1 oppure step del record - 1
 -   se lo trova aggiorna il campo `outBusinessTime` con `inBusinessTime` del record trovato
--   se ho `outBusinessTime` calcola la differenza in minuti di `outBusinessTime` - `inBusinessTime` e aggiorna il campo `residenceTime`
--   se l'area è l'area in cui è in questo momento la handling unit (campendolo leggendo la tabella `HandlingUnits`) aggiorna il campo `residenceTime = current time - inBusinessTime`
--   se l'area non è a temperatura controllata riporta il campo `residenceTime` nel campo `singleTOR` e imposta il `torElaborationTime`
--   se l'area è a temperatura controllata, non modifico il TOR che dovrebbe essere 0 oppure pari al valore calcolato da un'altro processo che intercetta gli alert sui segmenti delle celle.
 
 ## Ingestion dati temperatura IoT
 
