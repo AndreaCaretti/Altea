@@ -48,9 +48,7 @@ class ProcessorInsertResidenceTime extends JobProcessor {
             throw Error(`Route step non trovata: ${CP_ID}/${DIR}`);
         }
 
-        this.logger.debug(
-            `getRouteStepFromControlPoint: ${CP_ID}/${DIR} -> ${JSON.stringify(routeStep)}`
-        );
+        this.logger.logObject(`getRouteStepFromControlPoint: ${CP_ID}/${DIR}`, routeStep);
 
         return routeStep;
     }
@@ -76,13 +74,16 @@ class ProcessorInsertResidenceTime extends JobProcessor {
     }
 
     async createRecordResidentTime(movement, info, tx) {
-        this.logger.debug(`Create record resident time ${JSON.stringify(info)}`);
-
-        await tx.create(cds.entities.ResidenceTime).entries({
+        const row = {
             handlingUnit_ID: movement.handlingUnitID,
             stepNr: info.routeStep.stepNr,
             inBusinessTime: movement.TE,
-        });
+            area_ID: info.routeStep.destinationArea_ID,
+        };
+
+        this.logger.logObject("Creazione record resindence_time", row);
+
+        await DB.insertIntoTable(cds.entities.ResidenceTime, row, tx, this.logger);
     }
 
     async updateMovementStatus(movement, tx) {

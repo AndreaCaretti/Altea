@@ -987,7 +987,7 @@ https://sap-iot-noah-live-estimator-ui.cfapps.eu10.hana.ondemand.com/estimator-u
 
 ## Esempio 1
 
-450€:
+425€:
 
 -   100 celle che inviano temperatura ogni minuto
 -   backend che ogni 5 minuti interroga IoT per avere i dati sulla temperatura di ogni cella
@@ -995,7 +995,19 @@ https://sap-iot-noah-live-estimator-ui.cfapps.eu10.hana.ondemand.com/estimator-u
 -   3 mesi warm
 -   24 mesi cold
 
-Feature Capacity Units
+Dettaglio Capacity Units:
+-   Number of devices 100
+
+-   Number of data sets ingested per device per hour 60
+-   Number of measures in a data set 5
+-   Number of application queries on stored sensor data per hour 3000
+-   Typical application query result size in bytes 10000
+
+-   Number of months, aggregates are kept in hot store 12
+-   Number of months, time series data is kept in warm store 3
+-   Number of months, time series data is kept in cold store 24
+
+Feature Capacity Units:
 
 -   SAP IoT, connectivity 37
 -   SAP IoT, business services 63

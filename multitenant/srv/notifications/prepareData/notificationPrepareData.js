@@ -23,10 +23,9 @@ class PrepareDataForNotification {
 
     async prepareNotificationPayload(dataToSend) {
         this.logger.info(`${LOG_PREFIX}Verifico tabella Configurazione`);
-        let dataToPrepare = {};
+        let preparedData = {};
 
         if (dataToSend) {
-            this.logger.info("Prepare data for Keetings");
             const technicalUser = new cds.User({
                 id: dataToSend.user,
                 tenant: dataToSend.tenant,
@@ -36,21 +35,28 @@ class PrepareDataForNotification {
             try {
                 const { NotificationPayloadPrepare } = cds.entities;
                 // READ CONFIGURATION TABLE
-                const data = await DB.selectOneRowWhere(
+                const preparationStrategyInfo = await DB.selectOneRowWhere(
                     NotificationPayloadPrepare,
                     { value: dataToSend.alertType },
                     tx,
                     this.logger
                 );
+                this.logger.info(
+                    `Prepare data for notification, class ${preparationStrategyInfo.preparationClass} method ${preparationStrategyInfo.method}`
+                );
                 // BASED ON CONFIGURATION TABLE PREPARE PAYLOAD
-                const preparation = this.GlobalNotificationPrepare[data.preparationClass];
-                if (typeof preparation[data.preparationMethod] === "function") {
-                    dataToPrepare = await preparation[data.preparationMethod](
-                        dataToSend,
-                        this.logger,
-                        tx
-                    );
-                }
+                const preparation = this.GlobalNotificationPrepare[
+                    preparationStrategyInfo.preparationClass
+                ];
+
+                preparedData = await preparation[preparationStrategyInfo.preparationMethod](
+                    dataToSend,
+                    this.logger,
+                    tx
+                );
+
+                this.logger.logObject("Prepared data", preparedData);
+
                 tx.rollback();
             } catch (error) {
                 tx.rollback();
@@ -59,7 +65,7 @@ class PrepareDataForNotification {
         } else {
             throw new Error(`${LOG_PREFIX} - Nessun dato da iniviare fornito`);
         }
-        return dataToPrepare;
+        return preparedData;
     }
 }
 

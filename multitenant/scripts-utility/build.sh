@@ -28,7 +28,7 @@ function checkGitStatus() {
 function checkGitPush() {
     UPTODATE=`git status | grep "Your branch is up to date with 'origin/main'"`
 
-    if [ -z $UPTODATE ]; then
+    if [ -z "$UPTODATE" ]; then
         echo -e "${RED}Prima fare il push delle modifiche nella branch 'origin/main'${NC}\n"
         exit 3
     fi

@@ -6,7 +6,7 @@
 ID: cloud-cold-chain-multitenant
 _schema-version: 3.2.0
 description: Cloud Cold Chain - Multitenant
-version: 0.0.43-479c06c143ac2fbdd4d0fa7549860ab782b396c7
+version: 0.0.56-b4a9246d0c4e94f5bbe800a55df6e39bf9128d46
 parameters:
     enable-parallel-deployments: true
     keep-existing-routes: true
@@ -30,7 +30,7 @@ modules:
       type: nodejs
       path: gen/srv
       parameters:
-          disk-quota: 512M
+          disk-quota: 640M
           memory: 130M
           buildpack: nodejs_buildpack
       build-parameters:
