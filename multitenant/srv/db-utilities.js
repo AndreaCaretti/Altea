@@ -111,15 +111,14 @@ class DB {
      * @param {*} logger
      */
     static async selectOneFieldWhere(tableName, fieldName, where, tx, logger) {
-        const fieldValue = await tx.run(SELECT.one(tableName).columns(fieldName).where(where));
+        const record = await tx.run(SELECT.one(tableName).columns(fieldName).where(where));
 
-        if (!fieldValue) {
+        if (!record) {
             throw Error(
                 `selectOneFieldWhere - Record not found: ${tableName.name}/${JSON.stringify(where)}`
             );
         }
-
-        if (!fieldValue[fieldName]) {
+        if (record[fieldName] === null) {
             throw Error(
                 `selectOneFieldWhere - Empty field: ${tableName.name}/${JSON.stringify(
                     where
@@ -131,10 +130,10 @@ class DB {
             `selectOneFieldWhere: table ${tableName.name} where ${JSON.stringify(
                 where
             )} field ${fieldName}`,
-            fieldValue[fieldName]
+            record[fieldName]
         );
 
-        return fieldValue[fieldName];
+        return record[fieldName];
     }
 
     /**

@@ -297,11 +297,12 @@ define entity ResidenceTime : cuid, managed {
     inBusinessTime     : Timestamp;
     outBusinessTime    : Timestamp;
     residenceTime      : Integer;
-    singleTOR          : Integer;
-    totalTOR           : Integer;
+    // singleTOR          : Integer;
+    //  totalTOR           : Integer;
     tmin               : Decimal;
     tmax               : Decimal;
     torElaborationTime : Timestamp;
+    maxResidenceTime   : Timestamp;
 }
 
 
@@ -423,3 +424,17 @@ define entity OutOfRangeHandlingUnitDetailCount as
         outOfRange.ID,
         handlingUnit.lot.name,
         handlingUnit.lot.product.gtin;
+
+
+define entity AreaDetails                       as
+    select from Areas distinct {
+        Areas.ID                             as areaID,
+        Areas.name                           as areaName,
+        Areas.department.name                as departmentName,
+        Areas.ID_DeviceIoT                   as ID_DeviceIoT,
+        Areas.minWorkingTemperature          as minWorkingTemperature,
+        Areas.maxWorkingTemperature          as maxWorkingTemperature,
+        Areas.category.name                  as categoryName,
+        Areas.category.description           as categoryDescription,
+        Areas.category.controlledTemperature as controlledTemperature,
+    };
