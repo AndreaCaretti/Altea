@@ -64,7 +64,7 @@ class Logger {
     }
 
     logObject(msg, obj) {
-        if (!obj) {
+        if (typeof obj === "undefined") {
             throw new Error("obj is not an object");
         }
 
