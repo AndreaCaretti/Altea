@@ -1,7 +1,7 @@
 const express = require("express");
 
-const Logger = require("../srv/logger");
-const Jobs = require("../srv/jobs");
+const Logger = require("./logger");
+const Jobs = require("./jobs");
 
 const PORT = process.env.PORT || 8089;
 
