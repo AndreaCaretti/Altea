@@ -81,25 +81,6 @@ class IotService extends ZApplicationService {
         );
     }
 
-    // async pushToQueueIotService(request, outOfRange, areaID) {
-    //     const record = {
-    //         user: request.user.id,
-    //         tenant: request.user.tenant,
-    //         area: areaID,
-    //         alertBusinessTime: outOfRange.eventTime,
-    //         alertCode: "LOG_ALERT",
-    //         alertLevel: 1, // LOG_ALERT
-    //         payload: JSON.stringify(outOfRange.data[0]),
-    //         GUID: outOfRange.data[0].entityId, // UUID del segmento
-    //         notificationType: "OLT",
-    //     };
-
-    //     if (!(await this.queue.pushToWaiting(record))) {
-    //         this.coldChainLogger.logException("Errore inserimento record in REDIS:", record);
-    //         throw new Error("Errore inserimento record nella lista Redis, rollback");
-    //     }
-    // }
-
     // eslint-disable-next-line class-methods-use-this
     async createOutOfRangeHandlingUnits(request, oorID, areaID, tx) {
         const outOfRange = request.data;
@@ -149,12 +130,6 @@ class IotService extends ZApplicationService {
         let result;
 
         try {
-            /*
-result = await tx.run(
-                `SELECT * FROM cloudcoldchain_ResidenceTime WHERE inBusinessTime < '${segmentTime}'
-                and ( outBusinessTime > '${segmentTime}' or outBusinessTime ISNULL)`
-          );
-        */
             result = await tx.run(
                 SELECT("handlingUnit_ID")
                     .from(cds.entities.ResidenceTime)
