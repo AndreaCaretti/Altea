@@ -5,7 +5,7 @@ const Jobs = require("./jobs");
 
 const PORT = process.env.PORT || 8089;
 
-const QUEUE_NAMES = require("../srv/queues-names");
+const QUEUE_NAMES = require("./queues-names");
 
 /**
  *
