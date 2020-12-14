@@ -1,4 +1,6 @@
 const { v4: uuidv4 } = require("uuid");
+const cds = require("@sap/cds");
+const Logger = require("./logger");
 /**
  * DB utilities methods
  */
@@ -51,6 +53,14 @@ class DB {
         return singleRow[0];
     }
 
+    /**
+     *
+     * @param {} Tabella da cds.entities
+     * @param {JSON} condizione estrazione
+     * @param {} classe transaction
+     * @param {logger} classe logger
+     */
+
     static async selectAllRowsWhere(tableName, whereClause, tx, logger) {
         const allRows = await tx.read(tableName).where(whereClause);
 
@@ -66,6 +76,27 @@ class DB {
             `selectAllRowsWhere: ${tableName.name} where ${JSON.stringify(whereClause)}`,
             allRows
         );
+
+        return allRows;
+    }
+
+    /**
+     *
+     * @param {} Tabella da cds.entities
+     * @param {} classe transaction
+     * @param {logger} classe logger
+     */
+    static async selectAllRows(tableName, tx, logger) {
+        const allRows = await tx.read(tableName);
+
+        if (allRows.length === 0) {
+            throw Error(
+                `selectAllRowsWhere - Record not found: ${tableName.name}
+                )} -> '${JSON.stringify(allRows)}'`
+            );
+        }
+
+        logger.logObject(`selectAllRowsWhere: ${tableName.name}`, allRows);
 
         return allRows;
     }
@@ -201,6 +232,12 @@ class DB {
 
         return recordsCount;
     }
+
+    /**
+     *
+     * @param {$user} Utente tecnico
+     * @param {Logger} Classe di logger
+     */
 
     static getTransaction(technicalUser, logger) {
         logger.logObject("Get transaction for user: ", technicalUser);

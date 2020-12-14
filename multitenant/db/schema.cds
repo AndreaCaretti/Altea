@@ -34,17 +34,29 @@ define entity CustomerCategories : cuid, managed {
 
 @cds.odata.valuelist
 @UI.Identification : [{Value : name}]
+@cds.autoexpose
 define entity Customers : cuid, managed {
     @title  : 'Customers'
-    name               : String(50);
+    name     : String(50);
     @title  : 'Category'
     @Common : {
         Text            : category.name,
         TextArrangement : #TextOnly
     }
-    category           : Association to one CustomerCategories;
-    @title  : 'GS1 Company Prefix'
-    gs1_company_prefix : String(10)
+    category : Association to one CustomerCategories;
+}
+
+@cds.odata.valuelist
+/**
+ * GS1CompanyPrefix Prefissi Company tipo GS1
+ */
+define entity GS1CompanyPrefix : cuid, managed {
+    @title       : '{i18n>gs1CompanyPrefixsNameTitle}'
+    @description : '{i18n>gs1CompanyPrefixsNameDescription}'
+    name        : String(50);
+    @title       : '{i18n>gs1CompanyPrefixsDescTitle}'
+    @description : '{i18n>gs1CompanyPrefixsDescription}'
+    description : String(200);
 }
 
 @cds.odata.valuelist
@@ -109,6 +121,7 @@ define entity Areas : cuid, managed {
     ID_DeviceIoT          : String;
     minWorkingTemperature : Decimal;
     maxWorkingTemperature : Decimal;
+    assetManager          : String(50);
 }
 
 
@@ -131,6 +144,8 @@ define entity Department : cuid, managed {
     name        : String(50);
     description : localized String(200);
     location    : Association to one Locations;
+    areas       : Association to many Areas
+                      on areas.department = $self;
 }
 
 @cds.autoexpose
@@ -158,6 +173,8 @@ define entity Products : cuid, managed {
     @title       : '{i18n>RouteTitle}'
     @description : '{i18n>RouteDescription}'
     route            : Association to one Routes;
+    QAManager        : String(50);
+    productManager   : String(50);
 }
 
 @cds.autoexpose

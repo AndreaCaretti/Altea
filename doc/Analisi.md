@@ -276,6 +276,12 @@ Dati anagrafici cliente, siccome i dati dei clienti sono separati a livello di t
 
 ## Tabella Areas
 
+| _ID_                                 | name                    | category                             | department                       | ID_DeviceIoT                         | minWorkingTemperature | maxWorkingTemperature | assetManager         |
+| ------------------------------------ | ----------------------- | ------------------------------------ | -------------------------------- | ------------------------------------ | --------------------- | --------------------- | -------------------- |
+| 00ff1f4e-9292-4743-9573-678a9663272e | "Cella1 Plant A"        | 66f18636-3000-11eb-adc1-0242ac120002 | 592D9BEA5FD74E3DBF2C9BF5BD7CDA26 | 59f89a92-87b8-4ad1-9209-5dde5cdb77d2 | 0                     | -10                   | coldroom1@domain.com |
+| 060432be-3001-11eb-adc1-0242ac120002 | "Magazzino Plant A"     | c07a1434-3000-11eb-adc1-0242ac120002 | 88888                            | f888bf1e-8f6e-4185-a62a-8240b3050d30 | 0                     | -10                   | coldroom2@domain.com |
+| 2e0d8f14-59d7-4020-b91c-bfec1a53ff3f | "Magazzino Due Plant A" | c07a1434-3000-11eb-adc1-0242ac120002 | 77777                            | b1c9aa03-daa0-4c5d-a202-5b403d1f13f7 | 0                     | -10                   | coldroom3@domain.com |
+
 ### Produttore
 
 | _ID_   | name               | category (AreaCategories) | location (Locations) | Department   | ID Device IoT |
@@ -341,15 +347,16 @@ Tabelle anagrafiche con dati specifici di un singolo cliente, i dati dei clienti
 
 ## Tabella Products
 
-| _ID_   | _gtin_ (GTIN) | erpProductCode (50) | denomination (100) | max_tor | temperatureRange | route  |
-| ------ | ------------- | ------------------- | ------------------ | ------- | ---------------- | ------ |
-| _GUID_ | 1234567890123 | PROD-001            | Sacca di sangue    | 200     | 12-18            | _GUID_ |
+| _ID_   | _gtin_ (GTIN) | erpProductCode (50) | denomination (100) | max_tor | temperatureRange | route  | QAManager             |
+| ------ | ------------- | ------------------- | ------------------ | ------- | ---------------- | ------ | --------------------- |
+| _GUID_ | 1234567890123 | PROD-001            | Sacca di sangue    | 200     | 12-18            | _GUID_ | qamanager2@domain.com |
 
 -   01-09 Prefisso aziendale GS1
 -   10-12 Codide prodotto
 -   13 Cifra di controllo
 
 -   max_tor è il numero di minuti massimo fuori dal range di temperatura
+-   QAManager -> manager della qualità riferito al prodotto, utilizzato all'interno dell' [invio configurazione](#views-invio-configurazione)
 
 ## Tabella Routes
 
@@ -549,6 +556,96 @@ Tabelle di auditing della configurazione della piattaforma:
 | 2020-10-14T09:01:33.763Z | Products | PROD-001 | CREATE |              |          |          | SBARZAGHI |
 | 2020-10-14T09:01:33.763Z | Products | PROD-001 | UPDATE | TOR          | 18       | 20       | SBARZAGHI |
 | 2020-10-14T09:01:33.763Z | Products | PROD-001 | UPDATE | DESCRIZIONE  | aaaa     | AAAA     | SBARZAGHI |
+
+
+# Views invio configurazione
+
+View di estrazione dati per invio configurazione, utilizzano le tabelle anagafiche di base per esporre il seguente Tracciato ;
+
+## Invio configurazione piattaforma centrale
+
+### Descrizione
+
+Invio al communication frontend delle locations/departments/aree e dei prodotti configurati nella piattaforma centrale, con i rispettivi responsabili assegnati
+
+### Quando viene inviato
+
+Premendo un tasto nell'applicazione di configurazione della piattaforma viene richiamato un webservice REST esposto dal communication frontend.
+Nella piattaforma vengono tracciati le invii effettuati (data, ora, payload, result).
+
+### Tracciato
+```json
+{
+    "customer" : {
+        "guid" : "d532b292-a03c-4530-af37-6732dc5c7758",
+        "companyName": "...",
+        "customerTenant" : {
+            "tokenEndpoint" : "https://ccp-customera.authentication.eu10.hana.ondemand.com/oauth/token",
+            "uri" : "https://ccp-provider-dev-qas.dev.cfapps.eu10.hana.ondemand.com"
+        },
+        "gs1CompanyPrefixs" : [
+            "123456789",
+            "123456789"
+        ],
+        "locations" : [
+            {
+                "guid" : "eff08cb8-57fc-4863-bb1e-e898479e0fe2",
+                "description" : "Plant A",
+                "departments" : [
+                    {
+                        "guid" : "9dcc35bf-1bb5-411a-b6b0-0527465ec900",
+                        "description" : "Packaging Area A",
+                        "areas" : [
+                            {
+                                "guid" : "a6fe9383-13c5-48b6-94a5-fe0a69f362ee",
+                                "description" : "Cold Room 1",
+				                 "category": "COLD_ROOM",
+                                "assetManager" : "coldroom1@domain.com"
+                            },
+                            {
+                                "guid" : "a7dac933-2b2a-4dde-b0ac-cc1c328b25da",
+                                "description" : "Cold Room 2",
+				                "category": "COLD_ROOM",
+                                "assetManager" : "coldroom2@domain.com"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "products" : [
+            {
+                "gtin" : "1234567890123",
+                "description" : "...",
+                "productManager" : "productmanager1@domain.com",
+                "QAManager" : "qamanager1@domain.com"
+            },
+            {
+                "gtin" : "1234567890199",
+                "description" : "...",
+                "productManager" : "productmanager1@domain.com",
+                "QAManager" : "qamanager2@domain.com"
+            }
+        ]
+    }
+}
+```
+
+Sono state create le seguenti view :
+
+* CustomerView     
+  **View di esposizione informazioni cliente (una riga per tenant- schema)**
+* GS1CompanyPrefixsView  
+  **View di esposizione informazioni cliente (una riga per tenant- schema)**
+* LocationView  
+  **View di esposizione dati Location / Plant**
+* DepartmentView  
+  **View di esposizione dati Dipeartimento / reparto**
+* AreasView  
+  **view di esposizione dati per Area**
+* ProductsView  
+  **View di esposizione dati relativa ai prodotti**
+
 
 # Log piattaforma
 
