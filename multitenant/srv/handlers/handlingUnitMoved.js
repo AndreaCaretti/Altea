@@ -22,12 +22,9 @@ class HandlingUnitMoved extends ZApplicationService {
                 tenant: req.user.tenant,
             };
 
-            try {
-                await jobs.addJob(req.user.tenant, QUEUE_NAMES.HANDLING_UNIT_MOVED, record);
-            } catch (error) {
-                this.coldChainLogger.logException("Errore inserimento record in REDIS:", record);
-                throw new Error("Errore inserimento record nella lista Redis, rollback");
-            }
+            this.coldChainLogger.logObject("Arrivata movimentazione handling unit", record);
+
+            await jobs.addJob(req.user.tenant, QUEUE_NAMES.HANDLING_UNIT_MOVED, record);
         });
     }
 

@@ -310,7 +310,7 @@ define entity outOfRange : cuid, managed {
 define entity Notification : cuid, managed {
     alertBusinessTime : Timestamp;
     notificationTime  : Timestamp;
-    alertCode         : String(20);
+    alertType         : String(20);
     alertLevel        : LogLevel;
     payload           : String;
     GUID              : UUID;
@@ -344,7 +344,7 @@ define entity OutOfRangeHandlingUnits : cuid, managed {
  */
 
 define entity OutOfRangeAreaDetails             as
-    select from outOfRange {
+    select from outOfRange distinct {
         ID                            as OutOfRangeID,
         segmentId                     as SegmentID,
         ID_DeviceIoT                  as ID_DeviceIoT,
@@ -378,11 +378,12 @@ define entity OutOfRangeHandlingUnitDetails     as
     select from OutOfRangeHandlingUnits
     left join OutOfRangeHandlingUnitDetailCount
         on OutOfRangeHandlingUnitDetailCount.OutOfRangeID = OutOfRangeHandlingUnits.outOfRange.ID
-    {
+    distinct {
         outOfRange.ID                                                    as OutOfRangeID,
         handlingUnit.lot.name                                            as LotID,
         handlingUnit.lot.product.gtin                                    as GTIN,
         handlingUnit.lot.product.name                                    as ProductName,
+        handlingUnit.typology.uom                                        as UOM,
         OutOfRangeHandlingUnitDetailCount.OutOfRangeHandlingUnitsIDCount as CountHandlingUnit
     }
     group by
@@ -390,10 +391,11 @@ define entity OutOfRangeHandlingUnitDetails     as
         handlingUnit.lot.name,
         handlingUnit.lot.product.gtin,
         handlingUnit.lot.product.name,
+        handlingUnit.typology.uom,
         OutOfRangeHandlingUnitDetailCount.OutOfRangeHandlingUnitsIDCount;
 
 define entity OutOfRangeHandlingUnitDetailCount as
-    select from OutOfRangeHandlingUnits {
+    select from OutOfRangeHandlingUnits distinct {
         count(
             handlingUnit.ID
         )                             as OutOfRangeHandlingUnitsIDCount,

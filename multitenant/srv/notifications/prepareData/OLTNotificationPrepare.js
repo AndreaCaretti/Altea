@@ -17,42 +17,21 @@ class OLTNotificationPrepare {
         handlingUnitInformation.forEach((element) => {
             const handlingUnitSingleRow = {
                 gtin: element.GTIN,
-                productDescription: element.ProductName,
                 lot: element.LotID,
                 quantity: element.CountHandlingUnit,
+                unitOfMeasure: element.UOM,
             };
             handlingUnitData.push(handlingUnitSingleRow);
         });
 
         // UTILIZZO GUUID DEVICE IOT PER LEGGERE TABELLA
         const valueOutPut = {
-            eventGuid: await DB.getUUID(),
+            guid: await DB.getUUID(),
             // eventGuid invece che id
             severity: notification.alertLevel,
             eventDate: notification.alertBusinessTime,
             // invece che creationDate
             notificationDate: notification.notificationDate,
-            // momento in cui inseriamo la notifica nella coda verso keethings
-            area: {
-                // identifica l'area impattata dall'evento
-                // (per area intendiamo cella frigorifera ma in futuro anche un truck)
-                guid: areaInformation.AreaID,
-                description: areaInformation.AreaName,
-                category: areaInformation.AreaCategoryName,
-                // categoria dell'area impattata (COLD_ROOM, TRUCK, ...)
-                department: {
-                    // identifica il department in cui è contenuta l'area
-                    guid: areaInformation.DepartmentID,
-                    description: areaInformation.DepartmentName,
-                },
-                location: {
-                    // identifica il plant in cui è contenuta l'area
-                    guid: areaInformation.LocationID,
-                    description: areaInformation.LocationName,
-                },
-            },
-            handlingUnits: handlingUnitData,
-            alarmType: notification.alertType,
             details: {
                 measurementUnit: MEASURE_UNIT,
                 eventTemperature: "20.00",
@@ -65,6 +44,27 @@ class OLTNotificationPrepare {
                 },
                 cause: "", // Non disponibile
             },
+            // momento in cui inseriamo la notifica nella coda verso keethings
+            area: {
+                // identifica l'area impattata dall'evento
+                // (per area intendiamo cella frigorifera ma in futuro anche un truck)
+                guid: areaInformation.AreaID,
+                // categoria dell'area impattata (COLD_ROOM, TRUCK, ...)
+                department: {
+                    // identifica il department in cui è contenuta l'area
+                    guid: areaInformation.DepartmentID,
+                },
+                location: {
+                    // identifica il plant in cui è contenuta l'area
+                    guid: areaInformation.LocationID,
+                },
+                asset: {
+                    // identifica il plant in cui è contenuta l'area
+                    guid: areaInformation.ID_DeviceIoT,
+                },
+            },
+            handlingUnits: handlingUnitData,
+            alarmType: notification.alertType,
         };
 
         return valueOutPut;

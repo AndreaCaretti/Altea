@@ -6,7 +6,7 @@ const FfNormal = "\x1b[0m";
 let loggerInstance;
 
 class Logger {
-    constructor() {
+    constructor(app) {
         this.internalLogger = InternalLogger.createLogger();
 
         this.internalLogger.setLoggingLevel("debug");
@@ -17,26 +17,27 @@ class Logger {
             InternalLogger.setLogPattern("{{msg}}");
         }
 
+        app.get("/logdebugon", (req, res) => {
+            loggerInstance.setLevelDebug();
+            loggerInstance.info("LOG DEBUG ATTIVATO");
+            res.send("LOG ATTIVATO");
+        });
+
+        app.get("/logdebugoff", (req, res) => {
+            loggerInstance.setLevelWarning();
+            loggerInstance.info("LOG DEBUG DISATTIVATO");
+            res.send("LOG DISATTIVATO");
+        });
+
         loggerInstance = this;
     }
 
-    static getInstance(app) {
+    /**
+     * @returns {Logger} : Logger Instance
+     */
+    static getInstance() {
         if (!loggerInstance) {
-            loggerInstance = new Logger(app);
-
-            if (app) {
-                app.get("/logdebugon", (req, res) => {
-                    loggerInstance.setLevelDebug();
-                    loggerInstance.info("LOG DEBUG ATTIVATO");
-                    res.send("LOG ATTIVATO");
-                });
-
-                app.get("/logdebugoff", (req, res) => {
-                    loggerInstance.setLevelWarning();
-                    loggerInstance.info("LOG DEBUG DISATTIVATO");
-                    res.send("LOG DISATTIVATO");
-                });
-            }
+            throw new Error("Istanza logger non ancora creata");
         }
 
         return loggerInstance;
@@ -67,7 +68,7 @@ class Logger {
             throw new Error("obj is not an object");
         }
 
-        this.debug(msg, JSON.stringify(obj, null, 2));
+        this.debug(`${msg}:\n`, JSON.stringify(obj, null, 2));
     }
 
     logException(msg, error) {
@@ -81,7 +82,7 @@ class Logger {
             errorMessage = JSON.stringify(error, null, 2);
         }
 
-        this.internalLogger.error(FgRed + msg + FfNormal, errorMessage);
+        this.internalLogger.error(`🥺${FgRed}${msg}${FfNormal}`, errorMessage);
     }
 
     setTenantId(tenantId) {

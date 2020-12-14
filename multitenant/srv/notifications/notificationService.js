@@ -34,9 +34,8 @@ class Notification {
             alertLevel,
             payload,
         };
-        this.logger.logObject(`BEGIN JOB FOR ALERT - OBJECT :`, alertNotificationData);
+
         this.jobs.addJob(tenant, QUEUE_NAMES.EXTERNAL_NOTIFICATION, alertNotificationData);
-        this.logger.debug(`JOB SCHEDULATED FOR ALERT`);
     }
 }
 

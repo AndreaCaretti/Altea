@@ -50,9 +50,7 @@ class ProcessorInsertResidenceTime extends JobProcessor {
             throw Error(`Route step non trovata: ${CP_ID}/${DIR}`);
         }
 
-        this.logger.debug(
-            `getRouteStepFromControlPoint: ${CP_ID}/${DIR} -> ${JSON.stringify(routeStep)}`
-        );
+        this.logger.logObject(`getRouteStepFromControlPoint: ${CP_ID}/${DIR}`, routeStep);
 
         return routeStep;
     }

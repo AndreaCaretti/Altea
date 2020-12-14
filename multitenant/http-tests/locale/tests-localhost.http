@@ -29,7 +29,7 @@ Content-Type: application/json
 
 ### Creazione segmento iot
 POST http://localhost:4004/iot/segment  HTTP/1.1
-Authorization: Bearer {{token}}
+Authorization: Basic Alice:Alice
 Content-Type: application/json
 
 {
@@ -91,7 +91,7 @@ GET  http://localhost:4004/services/HandlingUnits  HTTP/1.1
 Authorization: Basic Alice:Alice
 Content-Type: application/json
 
-### Create HandlingUnitsRawMovements
+### Invio raw moment autenticazione alice
 POST http://localhost:4004/handling-unit-moved/HandlingUnitsRawMovements HTTP/1.1
 Authorization: Basic Alice:Alice
 Content-Type: application/json
@@ -141,7 +141,7 @@ Content-Type: application/json
 
 @token = {{getToken.response.body.$.access_token}}
 
-### Get bearer token
+### Get token
 # @name getToken
 GET https://{{customera-subdomain}}.authentication.eu10.hana.ondemand.com/oauth/token?grant_type=client_credentials&response_type=token HTTP/1.1
 Authorization: Basic sb-ccp-provider-dev-qas-dev-cloud-cold-chain!t61773 oEPmeoq3s9kvPuGZsd89POK9Eo8=
@@ -150,7 +150,9 @@ Authorization: Basic sb-ccp-provider-dev-qas-dev-cloud-cold-chain!t61773 oEPmeoq
 GET http://localhost:4004/handling-unit-moved/HandlingUnitsRawMovements/$count HTTP/1.1
 Authorization: Bearer {{token}}
 
-### Create HandlingUnitsRawMovements nel db hana in cloud
+
+
+### Invio raw moment autenticazione token
 POST http://localhost:4004/handling-unit-moved/HandlingUnitsRawMovements HTTP/1.1
 Authorization: Bearer {{token}}
 Content-Type: application/json

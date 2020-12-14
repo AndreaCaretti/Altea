@@ -22,7 +22,7 @@ class CloudColdChain {
         this.cds = cds;
 
         // Logger
-        this.logger = Logger.getInstance(app);
+        this.logger = new Logger(app);
 
         //  Jobs
         this.jobs = new Jobs(app, this.logger);
@@ -87,7 +87,10 @@ class CloudColdChain {
         // this.BGWorkerNotification.start();
 
         // Start jobs
-        this.jobs.start(this.tenants);
+        await this.jobs.start(this.tenants);
+
+        // Engine Started
+        this.logger.info("😀 Cloud Cold Chain Platform Engine Started");
     }
 
     // TODO: Togliere l'elenco hardcodato dei clienti

@@ -121,24 +121,23 @@ class EnterpriseMessageNotification {
     /**
      *
      * @param {*} notificationData Dati di testata della notifica
-     * @param {*} payload Payload inviato verso Enterprise Messaging
+     * @param {String} payload Payload inviato verso Enterprise Messaging
      * @param {*} logger
      * @param {*} callback
      */
-    async send(notificationData, payload) {
+    async send(payload) {
         return new Promise((resolve, reject) => {
             const message = {
                 payload: Buffer.from(payload, "utf-8"),
                 done: () => {
-                    this.logger.info(`${EMLOG_NAME} Sent`);
-                    this.logger.info(`${payload} Data Sent`);
+                    this.logger.debug(`${EMLOG_NAME} data Sent`, payload);
                     resolve("Inviato");
                 },
                 failed: (oError) => {
                     reject(new Error(oError));
                 },
             };
-            this.logger.logObject(`Send To Enterprise Messaging Client`, payload);
+            this.logger.debug(`Send To Enterprise Messaging Client`, payload);
             this.stream.write(message);
         });
     }
