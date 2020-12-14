@@ -11,10 +11,9 @@ let jobsInstance;
 class Jobs {
     /**
      *
-     * @param {*} app
      * @param {Logger} logger
      */
-    constructor(app, logger) {
+    constructor(logger) {
         this.logger = logger;
 
         xsenv.loadEnv();
@@ -52,7 +51,7 @@ class Jobs {
         this.processors.push(processorInfo);
     }
 
-    async start(tenants) {
+    async start(tenants, cb) {
         this.logger.info(`Avvio Jobs...`);
 
         for (let indexTenant = 0; indexTenant < tenants.length; indexTenant++) {
@@ -71,12 +70,20 @@ class Jobs {
                 const queue = await this.createQueue(
                     this.formatQueueName(tenant, processorInfo.queueName)
                 );
+                // eslint-disable-next-line max-len
+                // Il metodo start viene richiamato anche dal job-monitor che però non deve processare i job
+                // quindi richiama il metodo start senza passare il processor
                 if (processorInfo.processor) {
                     queue.process(
                         processorInfo.queueName,
                         processorInfo.parallelJobs,
                         processorInfo.processor.processJob
                     );
+                }
+
+                // Callback richiamato dopo l'avvio di una coda
+                if (cb) {
+                    cb(queue);
                 }
             }
         }

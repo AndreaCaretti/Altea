@@ -1,5 +1,11 @@
 const express = require("express");
 
+const {
+    router: bullBoardRouter,
+    setQueues: bullBoardSetQueues,
+    BullAdapter,
+} = require("bull-board");
+
 const Logger = require("./logger");
 const Jobs = require("./jobs");
 
@@ -27,18 +33,23 @@ async function main() {
     // Init Express
     const app = express();
 
+    // Mount jobs monitor
+    app.use("/jobs-monitor", bullBoardRouter);
+
     // Init Logger
     const logger = new Logger(app);
 
     // Init Jobs
-    const jobs = new Jobs(app, logger);
+    const jobs = new Jobs(logger);
 
     // Create queues
     createQueues(jobs, logger);
 
     // Start queues
     try {
-        await jobs.start([null]);
+        await jobs.start([null], (startedQueue) => {
+            bullBoardSetQueues([new BullAdapter(startedQueue)]);
+        });
     } catch (error) {
         logger.logException(error);
         process.exit(4);
@@ -46,7 +57,7 @@ async function main() {
 
     // Start
     app.listen(PORT, () => {
-        logger.info("Jobs monitor avviato");
+        logger.info("Jobs monitor avviato all'url /jobs-monitor");
     });
 }
 

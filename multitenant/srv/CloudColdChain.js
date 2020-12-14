@@ -25,7 +25,7 @@ class CloudColdChain {
         this.logger = new Logger(app);
 
         //  Jobs
-        this.jobs = new Jobs(app, this.logger);
+        this.jobs = new Jobs(this.logger);
 
         // Handling Units Movements Processor
         this.processorHuMovements = new ProcessorHuMovements(this.logger, this.jobs);
