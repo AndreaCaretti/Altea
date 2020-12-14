@@ -82,34 +82,45 @@ class ProcessorInsertResidenceTime extends JobProcessor {
         return DB.selectAllWithParent(cds.entities.RouteSteps, route, tx, this.logger);
     }
 
-    async createRecordResidentTime(movement, info, tx) {
+    async createRecordResidenceTime(movement, info, tx) {
         this.logger.debug(`Create record resident time ${JSON.stringify(info)}`);
 
-        const TorLimit = await this.getTorLimit(movement, info, tx);
+        const MaxResidenceTime = await this.getMaxResidenceTime(movement, info, tx, this.logger);
 
-        // TODO: il TORLIMIT va calcolato solamente per le AREE a temperatura NON controllata!!!
         await tx.create(cds.entities.ResidenceTime).entries({
             handlingUnit_ID: movement.handlingUnitID,
             stepNr: info.routeStep.stepNr,
+            area_ID: info.routeStep.destinationArea_ID,
             inBusinessTime: movement.TE,
-            torLimit: TorLimit,
+            maxResidenceTime: MaxResidenceTime,
         });
     }
 
-    async getTorLimit(movement, info) {
-        this.logger.debug("getTorLimit + add minutes:", info.product.maxTor);
-        return moment(new Date(movement.TE)).add(info.product.maxTor, "m").utc(0).format();
+    async getMaxResidenceTime(movement, info, tx) {
+        this.logger.debug("getMaxResidenceTime + add minutes:", info.product.maxTor);
+        const controlledTemperature = await this.getControlledTemperature(
+            info.routeStep.destinationArea_ID,
+            tx
+        );
+        let maxResidenceTime = null;
+        if (!controlledTemperature) {
+            maxResidenceTime = moment(new Date(movement.TE))
+                .add(info.product.maxTor, "m")
+                .utc(0)
+                .format();
+        }
+        return maxResidenceTime;
     }
 
-    async updateMovementStatus(movement, tx) {
-        await DB.updateSingleField(
-            cds.entities.HandlingUnitsMovements,
-            movement.ID,
-            "STATUS",
-            true,
+    async getControlledTemperature(areaID, tx) {
+        const controlledTemperature = await DB.selectOneFieldWhere(
+            cds.entities.AreaDetails,
+            "controlledTemperature",
+            { areaID },
             tx,
             this.logger
         );
+        return controlledTemperature;
     }
 
     async updateHandlingUnitLastArea(movement, info, tx) {
