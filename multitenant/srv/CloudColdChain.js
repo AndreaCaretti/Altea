@@ -48,21 +48,21 @@ class CloudColdChain {
         // Notification - Notification Service
         this.NotificationeService = NotificationeService.getInstance(this.logger);
 
-        // Register Handling Units Movements processors
+        // Register Handling Units Movements processor
         this.jobs.registerProcessor({
             queueName: QUEUE_NAMES.HANDLING_UNIT_MOVED,
             processor: this.processorHuMovements,
             parallelJobs: 2,
         });
 
-        // Register residence time processors
+        // Register residence time processor
         this.jobs.registerProcessor({
             queueName: QUEUE_NAMES.RESIDENCE_TIME,
             processor: this.processorInsertResidenceTime,
             parallelJobs: 2,
         });
 
-        // Register residence time processors
+        // Register external notification processor
         this.jobs.registerProcessor({
             queueName: QUEUE_NAMES.EXTERNAL_NOTIFICATION,
             processor: this.processorNotification,
