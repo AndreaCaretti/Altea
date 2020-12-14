@@ -64,7 +64,7 @@ modules:
     type: nodejs
     path: jobs-monitor
     parameters:
-      disk-quota: 100M
+      disk-quota: 150M
       memory: 130M
       buildpack: nodejs_buildpack
     build-parameters:
