@@ -12,15 +12,13 @@ const QUEUE_NAMES = require("./queues-names");
  * @param {*} jobs Jobs
  * @param {*} logger Logger
  */
-async function createQueues(jobs, logger) {
+async function createQueues(jobs, _logger) {
     // eslint-disable-next-line no-restricted-syntax
     for (const queueName in QUEUE_NAMES) {
         if (Object.hasOwnProperty.call(QUEUE_NAMES, queueName)) {
             jobs.registerProcessor({
                 queueName,
             });
-
-            logger.info(`Coda registrata ${queueName}`);
         }
     }
 }
@@ -36,14 +34,19 @@ async function main() {
     const jobs = new Jobs(app, logger);
 
     // Create queues
-    createQueues(jobs);
+    createQueues(jobs, logger);
 
     // Start queues
-    jobs.start([null]);
+    try {
+        await jobs.start([null]);
+    } catch (error) {
+        logger.logException(error);
+        process.exit(4);
+    }
 
     // Start
     app.listen(PORT, () => {
-        this.logger.info("Jobs monitor avviato");
+        logger.info("Jobs monitor avviato");
     });
 }
 

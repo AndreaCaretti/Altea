@@ -78,8 +78,16 @@ class Jobs {
 
                 // eslint-disable-next-line no-await-in-loop
                 const queue = await this.createQueue(
-                    this.formatQueueName(tenant, processorInfo.queueName),
+                    this.formatQueueName(tenant, processorInfo.queueName)
                 );
+
+                if (processorInfo.processor) {
+                    queue.process(
+                        processorInfo.queueName,
+                        processorInfo.parallelJobs,
+                        processorInfo.processor.processJob
+                    );
+                }
 
                 bullBoardSetQueues([new BullAdapter(queue)]);
             }
@@ -89,6 +97,53 @@ class Jobs {
     // eslint-disable-next-line class-methods-use-this
     formatQueueName(tenant, queueName) {
         return `{${tenant}}-${queueName}`;
+    }
+
+    async addJob(tenant, queueName, jobInfo) {
+        this.logger.warning(
+            "Non abbiamo ancora gestito code bull divise per tenant, il tenant viene forzato a null"
+        );
+
+        const queueTenant = null;
+
+        this.logger.logObject(
+            `Arrivata richiesta di aggiungere job per tenant ${queueTenant} nome coda ${queueName}`,
+            jobInfo
+        );
+
+        const queue = this.queues.get(this.formatQueueName(queueTenant, queueName));
+
+        if (!queue) {
+            this.logger.error(
+                `Non ho trovato la coda bull per la coda ${this.formatQueueName(
+                    queueTenant,
+                    queueName
+                )}`
+            );
+            throw new Error(
+                `Non ho trovato la coda bull per la coda ${this.formatQueueName(
+                    queueTenant,
+                    queueName
+                )}`
+            );
+        }
+
+        if (queue.client.status !== "ready") {
+            this.logger.error(
+                `Lo stato di redis è ${queue.client.status}, non è possibile aggiungere job`
+            );
+            throw new Error(
+                `Lo stato di redis è ${queue.client.status}, non è possibile aggiungere job`
+            );
+        }
+
+        try {
+            const job = await queue.add(queueName, jobInfo, { removeOnComplete: 1000 });
+            this.logger.debug(`Aggiunto job ${queueName} id ${job.id}`);
+        } catch (error) {
+            this.logger.logException(`Aggiunta di job rifiutata, error`, error);
+            throw new Error("Aggiunta di job rifiutata");
+        }
     }
 
     async createQueue(queueName) {
@@ -102,8 +157,6 @@ class Jobs {
         this.logger.info(`Creazione bull queue`, queueName);
 
         return new Promise((resolve, reject) => {
-            let bullQueue;
-
             const bullOptions = {
                 limiter: {
                     max: 500, // Numero massimo di jobs processati nell'unità di tempo
@@ -118,14 +171,10 @@ class Jobs {
             };
 
             if (this.redisCredentials.cluster_mode) {
-                bullOptions.createClient = (type, opts) => {
-                    this.logger.debug("Chiamata da bull verso creazione coda");
-                    return this.createRedisClient(type, opts);
-                };
-                bullQueue = new Queue(queueName, bullOptions);
-            } else {
-                bullQueue = new Queue(queueName, this.redisCredentials.uri, bullOptions);
+                bullOptions.createClient = (type, opts) => this.createRedisClient(type, opts);
             }
+
+            const bullQueue = new Queue(queueName, bullOptions);
 
             bullQueue.client.on("ready", () => {
                 this.onRedisReady(queueName, bullQueue, resolve);
@@ -159,7 +208,10 @@ class Jobs {
                     },
                     password: "GaJoFOorxmiPONZjZPabLYQLlcmgzAGU",
                 },
-            },
+                enableOfflineQueue: false,
+
+                clusterRetryStrategy: this.retryStrategy,
+            }
         );
 
         return redisClient;

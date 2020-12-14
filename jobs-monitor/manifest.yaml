@@ -7,3 +7,5 @@ applications:
     stack: cflinuxfs3
     buildpacks:
       - nodejs_buildpack
+    services:
+      - mtt-redis
