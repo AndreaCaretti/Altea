@@ -173,8 +173,6 @@ define entity Lots : cuid, managed {
                          on handlingUnits.lot = $self;
 }
 
-//ROUTES
-// | _ID_   | prodotto (Products) | step | controlPoint (controlPoints) | direction | destinationArea (Locations) |
 @cds.autoexpose
 @cds.odata.valuelist
 @UI.Identification : [{Value : name}]
@@ -200,7 +198,6 @@ define entity RouteSteps : cuid {
         TextArrangement : #TextOnly
     }
     destinationArea : Association to one Areas;
-
 }
 
 
@@ -332,6 +329,23 @@ define entity OutOfRangeHandlingUnits : cuid, managed {
     endReason    : cloudcoldchain.endReasonType;
     duration     : Integer;
 }
+
+@cds.autoexpose
+@cds.odata.valuelist
+@UI.Identification : [{Value : ID}]
+define entity AlertsErrorTor : cuid, managed {
+    jobStartTime          : Timestamp;
+    alertsErrorTorDetails : Composition of many AlertsErrorTorDetails
+                                on alertsErrorTorDetails.parent = $self;
+}
+
+define entity AlertsErrorTorDetails : cuid {
+    parent        : Association to AlertsErrorTor;
+    residenceTime : Timestamp;
+    tor           : Integer
+
+}
+
 
 /**
  * #
