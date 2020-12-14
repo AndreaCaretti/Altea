@@ -436,47 +436,50 @@ Passaggi Handling Unit da Control Point, campi controllati
 
 Permanenza Handling Unit in area
 
-| _ID_   | HandlingUnit (HandlingUnits) | step | area (Area)                  | inBusinessTime           | outBusinessTime          | tor   | failureIn | failureOut |               | tmin  | tmax  | torElaborationTime (Timestamp) | TorLimit(Timestamp) |
-| ------ | ---------------------------- | ---- | ---------------------------- | ------------------------ | ------------------------ | ----- | --------- | ---------- | ------------- | :---: | :---: | ------------------------------ | ------------------- |
-| _GUID_ | 123456789012345678           | 1    | Produzione Plant A           | 2020-10-14T09:01:33.763Z | 2020-10-14T09:02:33.763Z | 1600  |           |            |               |       |       | 2020-10-14T09:01:33.763Z       |                     |
-| _GUID_ | 123456789012345678           | 2    | Cold Room                    | 2020-10-14T09:02:33.763Z | 2020-10-14T09:03:33.763Z | 30    |           |            |               |   4   |  20   | 2020-10-14T09:01:33.763Z       |                     |
-| _GUID_ | 123456789012345678           | 3    | Uscita merci                 | 2020-10-14T09:03:33.763Z | 2020-10-14T09:04:33.763Z | 1600  |           |            |               |       |       | 2020-10-14T09:01:33.763Z       |                     |
-| _GUID_ | 123456789012345678           | 2    | Cold Room                    | 2020-10-14T09:04:33.763Z | 2020-10-14T09:05:33.763Z | 30    |           |            |               |   4   |  20   | 2020-10-14T09:01:33.763Z       |                     |
-| _GUID_ | 123456789012345678           | 3    | Uscita merci                 | 2020-10-14T09:05:33.763Z | 2020-10-14T09:06:33.763Z |       |           |            |               |       |       |                                |                     |
-| _GUID_ | 123456789012345678           | 4    | Piazzale esterno             | 2020-10-14T09:06:33.763Z | 2020-10-14T09:07:33.763Z | 2000  |           |            |               |       |       |                                |                     |
-| _GUID_ | 123456789012345678           | 5    | Truck                        | 2020-10-14T09:07:33.763Z | 2020-10-14T09:08:33.763Z |       |           |            |               |       |       |                                |                     |
-| _GUID_ | 123456789012345678           | 6    | Piazzale esterno depositario | 2020-10-14T09:08:33.763Z | 2020-10-14T09:09:33.763Z |       |           |            |               |       |       |                                |                     |
-| _GUID_ | 123456789012345678           | 7    | Depositario                  | 2020-10-14T09:09:33.763Z |                          |       |           |            |               |       |       |                                |                     |
-| _GUID_ | 123456789012345699           | 1    | Esterno Magazzino            | 2020-10-14T09:09:33.763Z | 2020-10-15T09:09:33.763Z | 1 day |           |            | 1 day         |       |       |                                |                     |
-| _GUID_ | 123456789012345699           | 2    | Esterno Magazzino 2          | 2020-10-15T09:09:33.763Z |                          |       |           |            | 2 day + diff. |       |       |                                |                     |
+| _ID_                                 | HandlingUnit (HandlingUnits) | step | area (Area)                  | inBusinessTime           | outBusinessTime          | maxResidenceTime         | lastAlertErrorTor (AlertsErrorTor)   | failureIn | failureOut |
+| ------------------------------------ | ---------------------------- | ---- | ---------------------------- | ------------------------ | ------------------------ | ------------------------ | ------------------------------------ | --------- | ---------- |
+| a575140a-38d4-4b1b-9f3d-7e12fa4fe1be | 123456789012345678           | 1    | Produzione Plant A           | 2020-10-14T09:01:33.763Z | 2020-10-14T09:02:33.763Z | 2020-10-14T10:01:33.763Z | 7a6ac1d3-83b2-417d-83fd-244889b92e31 |           |            |
+| _GUID_                               | 123456789012345678           | 2    | Cold Room                    | 2020-10-14T09:02:33.763Z | 2020-10-14T09:03:33.763Z |                          |                                      |           |            |
+| _GUID_                               | 123456789012345678           | 3    | Uscita merci                 | 2020-10-14T09:03:33.763Z | 2020-10-14T09:04:33.763Z |                          |                                      |           |            |
+| _GUID_                               | 123456789012345678           | 2    | Cold Room                    | 2020-10-14T09:04:33.763Z | 2020-10-14T09:05:33.763Z |                          |                                      |           |            |
+| _GUID_                               | 123456789012345678           | 3    | Uscita merci                 | 2020-10-14T09:05:33.763Z | 2020-10-14T09:06:33.763Z |                          |                                      |           |            |
+| _GUID_                               | 123456789012345678           | 4    | Piazzale esterno             | 2020-10-14T09:06:33.763Z | 2020-10-14T09:07:33.763Z |                          |                                      |           |            |
+| _GUID_                               | 123456789012345678           | 5    | Truck                        | 2020-10-14T09:07:33.763Z | 2020-10-14T09:08:33.763Z |                          |                                      |           |            |
+| _GUID_                               | 123456789012345678           | 6    | Piazzale esterno depositario | 2020-10-14T09:08:33.763Z | 2020-10-14T09:09:33.763Z |                          |                                      |           |            |
+| _GUID_                               | 123456789012345678           | 7    | Depositario                  | 2020-10-14T09:09:33.763Z |                          |                          |                                      |           |            |
+| _GUID_                               | 123456789012345699           | 1    | Esterno Magazzino            | 2020-10-14T09:09:33.763Z | 2020-10-15T09:09:33.763Z |                          |                                      |           |            |
+| _GUID_                               | 123456789012345699           | 2    | Esterno Magazzino 2          | 2020-10-15T09:09:33.763Z |                          |                          |                                      |           |            |
 
--   inBusinessTime è l'ora di ingresso dell'handling unit nell'area
--   outBusinessTime è l'ora di uscita dell'handling unit dall'area
--   TOR è il numero di minuti di permanenza nell'area con temperatura fuori range
--   tmin
--   tman
--   elaborationTimeTor momento in cui sono stati recuperati di dati di temperatura e calcolo TOR
--   TorLimit - dataora limite per TOR - calcolata da data movimento + TOR prodotto
+-   `inBusinessTime` : è l'ora di ingresso dell'handling unit nell'area
+-   `outBusinessTime`: è l'ora di uscita dell'handling unit dall'area
+-   `maxResidenceTime` : indica l'ora massima superata la quale scatta un problema di TOR
+-   `lastAlertErrorTor` : collegamento con l'ultimo job che ha rilevato un problema di TOR
 
-(per recuperare i range di temperatura dei soggetti esterni verrà esposto un servizio esterno alla piattaforma)
+## Tabella AlertsErrorTor
 
-## Tabella temperatura monitorata in area
+Tabella dei problemi di TOR determinati dalla piattaforma
 
-I dati di temperatura sono salvati nel Data Lake IoT, la tabella viene riportata qui per promemoria, i campi sono provvisori
+| _ID_                                 | jobStartTime             |
+| ------------------------------------ | ------------------------ |
+| 7a6ac1d3-83b2-417d-83fd-244889b92e31 | 2020-10-14T09:01:33.763Z |
 
-| _Area_     | _Ora_ | Temperatura °C |
-| ---------- | ----- | -------------- |
-| Stoccaggio | 16:00 | 4              |
-| Stoccaggio | 16:15 | 4              |
-| Stoccaggio | 16:30 | 20             |
-| Stoccaggio | 16:35 | 20             |
-| Stoccaggio | 16:40 | 20             |
-| Stoccaggio | 16:45 | 20             |
-| Stoccaggio | 16:50 | 20             |
-| Stoccaggio | 16:55 | 4              |
-| Stoccaggio | 17:00 | 4              |
+-   `jobStartTime`: è l'ora in cui è stato rilevato il problema
 
-# Tabella OutOfRange
+## Tabella AlertsErrorTorDetails
+
+Taballe del dettaglio dei residenceTime collegati al problema di alerts errors tor
+
+| _ID_                                 | alertErrorTor (AlertsErrorTor)       | residenceTime (ResidenceTime)        | tor |
+| ------------------------------------ | ------------------------------------ | ------------------------------------ | --- |
+| 8e69dda6-4c4b-441c-a966-89be10924843 | 7a6ac1d3-83b2-417d-83fd-244889b92e31 | a575140a-38d4-4b1b-9f3d-7e12fa4fe1be | 300 |
+|                                      | 7a6ac1d3-83b2-417d-83fd-244889b92e31 | a575140a-38d4-4b1b-9f3d-7e12fa4fe1be | 300 |
+|                                      | 7a6ac1d3-83b2-417d-83fd-244889b92e31 | a575140a-38d4-4b1b-9f3d-7e12fa4fe1be | 300 |
+
+-   `alertErrorTor`: ID del job che ha rilevato il problema
+-   `residenceTime` : ID del record delle tabella `ResidenceTime` con il problema
+-   `tor`: TOR attuale calcolato dal Job
+
+## Tabella OutOfRange
 
 Tabella delle segnalazioni ricevute dal iot per alert di temperatura out of range e calcolo del TOR
 
@@ -492,7 +495,7 @@ Tabella delle segnalazioni ricevute dal iot per alert di temperatura out of rang
 -   `area`: area collegata al device IoT nel momento in cui abbiamo ricevuto la segnalazione
 -   `segmentId`: ID del segmento IoT collegato alla segnalazione
 
-# Tabella OutOfRangeHandlingUnits
+## Tabella OutOfRangeHandlingUnits
 
 Tabella delle handling units collegate alla segnalazione di out of range
 
@@ -513,17 +516,32 @@ Tabella delle handling units collegate alla segnalazione di out of range
     -   `END_PROBLEM`: il problema è stato risolto
 -   `duration`: durata in minuti in cui il problema ha avuto impatti sull'handling unit
 
-# Tabella Notifications
+## Tabella temperatura monitorata in area
+
+I dati di temperatura sono salvati nel Data Lake IoT, la tabella viene riportata qui per promemoria, i campi sono provvisori
+
+| _Area_     | _Ora_ | Temperatura °C |
+| ---------- | ----- | -------------- |
+| Stoccaggio | 16:00 | 4              |
+| Stoccaggio | 16:15 | 4              |
+| Stoccaggio | 16:30 | 20             |
+| Stoccaggio | 16:35 | 20             |
+| Stoccaggio | 16:40 | 20             |
+| Stoccaggio | 16:45 | 20             |
+| Stoccaggio | 16:50 | 20             |
+| Stoccaggio | 16:55 | 4              |
+| Stoccaggio | 17:00 | 4              |
+
+## Tabella Notifications
 
 Tabelle di alert applicativi rilevati dalla piattaforma segnalati verso Keethings, che a sua volta invia alle chatroom:
 
-| _ID_   | _alertBusinessTime_      | area                                 | notificationTime         | alertCode | alertLevel (AlertLevel) | payload (String JSON)              | GUID                                 |
-| ------ | ------------------------ | ------------------------------------ | ------------------------ | --------- | ----------------------- | ---------------------------------- | ------------------------------------ |
-| _GUID_ | 2020-10-14T09:01:31.763Z | 8b78d720-e240-4912-92dd-6e654474a694 | 2020-10-14T09:01:32.763Z |           | Grave                   | { "msg" : "RFID XXX già esistente" | 10d2f997-1e9c-4b21-8817-d48171ead166 |
-| _GUID_ | 2020-10-14T09:01:33.763Z | 8b78d720-e240-4912-92dd-6e654474a69  | 2020-10-14T09:01:34.763Z | OUT       | Alert                   | { "msg": "Temperatura cella..."}   | 10d2f997-1e9c-4b21-8817-d48171ead166 |
+| _ID_   | _alertBusinessTime_      | notificationTime         | alertCode | alertLevel (AlertLevel) | payload (String JSON)              | GUID                                 |
+| ------ | ------------------------ | ------------------------ | --------- | ----------------------- | ---------------------------------- | ------------------------------------ |
+| _GUID_ | 2020-10-14T09:01:31.763Z | 2020-10-14T09:01:32.763Z |           | Grave                   | { "msg" : "RFID XXX già esistente" | 10d2f997-1e9c-4b21-8817-d48171ead166 |
+| _GUID_ | 2020-10-14T09:01:33.763Z | 2020-10-14T09:01:34.763Z | OLT       | Alert                   | { "msg": "Temperatura cella..."}   | 10d2f997-1e9c-4b21-8817-d48171ead166 |
 
--   `area` : area relativa a avvenimento di notifica
--   `alertBusinessTime`: è l'ora in cui è successo l'evento (esempio per le celle esempio lo start time del problema sulla cella)
+-   `alertBusinessTime`: è l'ora in cui è successo l'evento (esempio per le celle è lo start time del problema sulla cella)
 -   `notificationTime`: è l'ora in cui abbiamo aggiunto la notifica alla coda enterprise messaging
 -   `alertCode`: codice fisso dell'alert, valori possibile aggiungere man mano
 -   `alertLevel`: livello di alert syslog:
@@ -538,7 +556,7 @@ Tabelle di alert applicativi rilevati dalla piattaforma segnalati verso Keething
 -   `payload`: JSON contente i dettagli dell'alert che verrà inviato alla coda
 -   `GUID`: guid del record scatenante l'evento, potrebbe anche non esserci, per le celle è il guid della tabella outOfRange
 
-# Tabella Audits
+## Tabella Audits
 
 Tabelle di auditing della configurazione della piattaforma:
 
@@ -925,11 +943,23 @@ Solo sottoscrizione alla cloud cold chain e portale, CF non attivato
 -   ricerca il prodotto collegato al lotto nella tabella `Lots`
 -   ricerca nella tabella `Products` le route collegate
 -   ricerca nella tabella `Routes` con controlPoint e direction per determinare l'area di destinazione della scatola
--   inserisce nella tabella `HandlingUnitsResidenceTime` un record con: `sscc`, `step`, `area`, `inBusinessTime` con il t del movimento
+-   se l'area non è a temperatura controllata calcola il tempo di permanenza ammesso nell'area sommando `inBusinessTime` + max TOR del prodotto
+-   inserisce nella tabella `HandlingUnitsResidenceTime` un record con: `sscc`, `step`, `area`, `inBusinessTime`, `maxResidenceTime` con il t del movimento
 -   aggiorna il campo `ResidenceTimeStatus` della tabella `HandlingUnitMovements` a `OK` (PROBLEMA NON ABBIAMO L'ID DELL'HANDLING UNIT MOVEMENT DOPO AGGIORNAMENTO CDS)
 -   se il TE del movimento è maggiore di `HandlingUnits-inAreaBusinessTime` aggiorna `lastKnowArea` e `inAreaBusinessTime`
 -   cerca un record con T > del T movimento (piu vicino) e con step = step del record + 1 oppure step del record - 1
 -   se lo trova aggiorna il campo `outBusinessTime` con `inBusinessTime` del record trovato
+
+## Controllo problemi TOR delle handling units e alerting
+
+Ricerca tutte le handling units rimaste nell'area troppo tempo e crea l'alert
+
+-   Ogni n minuti parte un job che:
+-   estra dalla tabella `ResidenceTime` tutti i record con `outBusinessTime` vuoto, `maxResidenceTime` < ora attuale, `lastAlertErrorTor` vuoto
+-   se ci sono problemi inserisce un record nella tabella di testata `AlertsErrorTor` e inserisce i records nella tabella `AlertsErrorTor` l'elenco dei residence time con il problema
+-   richiama il metodo `Notification->Alert()`, `payload` è l'ID della tabella `AlertsErrorTor`
+-   aggiorna il campo `lastAlertErrorTor` di tutti i record nell'area
+-   commit work
 
 ## Ingestion dati temperatura IoT
 
