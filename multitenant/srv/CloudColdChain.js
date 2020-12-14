@@ -3,7 +3,6 @@ const Logger = require("./logger");
 const Jobs = require("./jobs");
 const ProcessorHuMovements = require("./processors/processor-hu-movements");
 const ProcessorInsertResidenceTime = require("./processors/processor-insert-residence-time");
-const ProcessorUpdateResidenceTime = require("./processors/processor-update-residence-time");
 const ProcessorNotification = require("./processors/processor-notification");
 const NotificationeService = require("./notifications/notificationService");
 const EnterpriseMessageNotification = require("./enterprise-messaging/em_notification");
@@ -32,9 +31,6 @@ class CloudColdChain {
 
         // Residence Time Processor
         this.processorInsertResidenceTime = new ProcessorInsertResidenceTime(this.logger);
-
-        // Update Time Processor
-        this.processorUpdateResidenceTime = new ProcessorUpdateResidenceTime(this.logger);
 
         // Notification - Notification BG Worker
         this.processorNotification = new ProcessorNotification(this.logger);
