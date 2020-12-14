@@ -3,12 +3,6 @@ const xsenv = require("@sap/xsenv");
 const Redis = require("ioredis");
 const Queue = require("bull");
 
-const {
-    router: bullBoardRouter,
-    setQueues: bullBoardSetQueues,
-    BullAdapter,
-} = require("bull-board");
-
 // eslint-disable-next-line no-unused-vars
 const Logger = require("./logger");
 
@@ -39,9 +33,6 @@ class Jobs {
         this.onRedisReady = this.onRedisReady.bind(this);
         this.onRedisError = this.onRedisError.bind(this);
         this.retryStrategy = this.retryStrategy.bind(this);
-
-        this.logger.info(`Jobs monitor disponibile all'url /jobs-monitor`);
-        app.use("/jobs-monitor", bullBoardRouter);
 
         jobsInstance = this;
     }
@@ -87,8 +78,6 @@ class Jobs {
                         processorInfo.processor.processJob
                     );
                 }
-
-                bullBoardSetQueues([new BullAdapter(queue)]);
             }
         }
     }
