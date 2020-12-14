@@ -37,13 +37,15 @@ define entity CustomerCategories : cuid, managed {
 @cds.autoexpose
 define entity Customers : cuid, managed {
     @title  : 'Customers'
-    name     : String(50);
+    name                         : String(50);
     @title  : 'Category'
     @Common : {
         Text            : category.name,
         TextArrangement : #TextOnly
     }
-    category : Association to one CustomerCategories;
+    category                     : Association to one CustomerCategories;
+    customerTennantTokenEndpoint : String;
+    customerTennantUri           : String;
 }
 
 @cds.odata.valuelist

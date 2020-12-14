@@ -5,7 +5,7 @@ using {cloudcoldchain} from './schema';
 @cds.autoexpose
 context DatatoExternalTools {
     entity CustomerView          as projection on cloudcoldchain.Customers {
-        Customers.ID as guid, Customers.name as companyName
+        Customers.ID as guid, Customers.name as companyName, customerTennantTokenEndpoint as tokenEndpoint, customerTennantUri as uri
     };
 
     @cds.autoexpose

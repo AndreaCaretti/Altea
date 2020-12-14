@@ -28,7 +28,11 @@ class Configuration {
             this.logger
         );
 
-        const customerDataLine = customerData[0];
+        const customerDataLine = {
+            guid: customerData[0].guid,
+            companyName: customerData[0].name,
+            customerTenant: this.setCustomerTennantData(customerData[0]),
+        };
 
         configurationData.customer = customerDataLine;
 
@@ -135,6 +139,14 @@ class Configuration {
             });
         });
         return oLocationToReturn;
+    }
+
+    setCustomerTennantData(data) {
+        this.logger.info("Set Tennant information for Cstomer");
+        return {
+            tokenEndpoint: data.tokenEndpoint,
+            uri: data.uri,
+        };
     }
 }
 

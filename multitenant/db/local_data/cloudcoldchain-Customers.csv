@@ -1,2 +1,2 @@
-ID,name
-d3bf914b-4e33-4059-8abe-a3561d4bebc8,Customer A
+ID,name,customerTennantTokenEndpoint,customerTennantUri
+d3bf914b-4e33-4059-8abe-a3561d4bebc8,Customer A,https://ccp-customera.authentication.eu10.hana.ondemand.com/oauth/token,https://ccp-provider-dev-qas.dev.cfapps.eu10.hana.ondemand.com
