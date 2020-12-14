@@ -1,11 +1,11 @@
 const express = require("express");
 
-const Logger = require("./logger");
-const Jobs = require("./jobs");
+const Logger = require("../srv/logger");
+const Jobs = require("../srv/jobs");
 
 const PORT = process.env.PORT || 8089;
 
-const QUEUE_NAMES = require("./queues-names");
+const QUEUE_NAMES = require("../srv/queues-names");
 
 /**
  *

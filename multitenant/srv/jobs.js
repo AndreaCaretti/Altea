@@ -80,11 +80,13 @@ class Jobs {
                 const queue = await this.createQueue(
                     this.formatQueueName(tenant, processorInfo.queueName)
                 );
-                queue.process(
-                    processorInfo.queueName,
-                    processorInfo.parallelJobs,
-                    processorInfo.processor.processJob
-                );
+                if (processorInfo.processor) {
+                    queue.process(
+                        processorInfo.queueName,
+                        processorInfo.parallelJobs,
+                        processorInfo.processor.processJob
+                    );
+                }
 
                 bullBoardSetQueues([new BullAdapter(queue)]);
             }
@@ -154,8 +156,6 @@ class Jobs {
         this.logger.info(`Creazione bull queue`, queueName);
 
         return new Promise((resolve, reject) => {
-            let bullQueue;
-
             const bullOptions = {
                 limiter: {
                     max: 500, // Numero massimo di jobs processati nell'unità di tempo
@@ -174,10 +174,9 @@ class Jobs {
                     this.logger.debug("Chiamata da bull verso creazione coda");
                     return this.createRedisClient(type, opts);
                 };
-                bullQueue = new Queue(queueName, bullOptions);
-            } else {
-                bullQueue = new Queue(queueName, this.redisCredentials.uri, bullOptions);
             }
+
+            const bullQueue = new Queue(queueName, bullOptions);
 
             bullQueue.client.on("ready", () => {
                 this.onRedisReady(queueName, bullQueue, resolve);
@@ -211,6 +210,9 @@ class Jobs {
                     },
                     password: "GaJoFOorxmiPONZjZPabLYQLlcmgzAGU",
                 },
+                enableOfflineQueue: false,
+
+                clusterRetryStrategy: this.retryStrategy,
             }
         );
 
