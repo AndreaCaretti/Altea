@@ -14,10 +14,10 @@ const QUEUE_NAMES = require("./queues-names");
  */
 async function createQueues(jobs, _logger) {
     // eslint-disable-next-line no-restricted-syntax
-    for (const queueName in QUEUE_NAMES) {
-        if (Object.hasOwnProperty.call(QUEUE_NAMES, queueName)) {
+    for (const queueKeyName in QUEUE_NAMES) {
+        if (Object.hasOwnProperty.call(QUEUE_NAMES, queueKeyName)) {
             jobs.registerProcessor({
-                queueName,
+                queueName: QUEUE_NAMES[queueKeyName],
             });
         }
     }
