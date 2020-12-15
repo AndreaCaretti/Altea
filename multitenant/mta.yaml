@@ -31,7 +31,7 @@ modules:
     path: gen/srv
     parameters:
       disk-quota: 640M
-      memory: 130M
+      memory: 300M
       buildpack: nodejs_buildpack
     build-parameters:
       ignore: ["default-env.json", "node_modules/"]
