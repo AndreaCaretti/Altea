@@ -1,8 +1,6 @@
 const NotificationService = require("../../notifications/notificationService");
 const DB = require("../../db-utilities");
 const ZApplicationService = require("../ZApplicationService");
-// const QueueIotService = require("../../queues/queue-iotService");
-// const ProcessorInsertResidenceTime = require("../../processors/processor-insert-residence-time");
 
 class IotService extends ZApplicationService {
     async init() {
@@ -146,7 +144,6 @@ class IotService extends ZApplicationService {
     }
 
     async createOutOfRange(outOfRange, areaID, tx) {
-        let oorID;
         let Status = outOfRange.data[0].action;
         let startEvent;
         let endEvent;
@@ -164,23 +161,23 @@ class IotService extends ZApplicationService {
             tx,
             this.coldChainLogger
         );
-
+        let oorID;
         if (!duplicateRecord) {
-            try {
-                const res = await tx.create(cds.entities.outOfRange).entries({
-                    ID_DeviceIoT: outOfRange.extensions.modelId,
-                    area_ID: areaID,
-                    startEventTS: startEvent,
-                    endEventTS: endEvent,
-                    status: Status,
-                    segmentId: outOfRange.data[0].entityId,
-                });
-                oorID = res.req.data.ID;
-                // await tx.commit();
-            } catch (error) {
-                this.coldChainLogger.logException("ERRORE CREATE OutOfRange - iotService: ", error);
-                await tx.rollback();
-            }
+            const dataOutOfRange = {
+                ID_DeviceIoT: outOfRange.extensions.modelId,
+                area_ID: areaID,
+                startEventTS: startEvent,
+                endEventTS: endEvent,
+                status: Status,
+                segmentId: outOfRange.data[0].entityId,
+            };
+            const res = await DB.insertIntoTable(
+                cds.entities.outOfRange,
+                dataOutOfRange,
+                tx,
+                this.logger
+            );
+            oorID = res.req.data.ID;
         }
         return oorID;
     }
@@ -188,7 +185,6 @@ class IotService extends ZApplicationService {
     async updateOutOfRange(outOfRange, areaID, outOfRangeToUpdate, tx) {
         let startEvent;
         let endEvent;
-        let oorID;
         if (outOfRange.data[0].action === "OPEN") {
             startEvent = outOfRange.eventTime;
             endEvent = outOfRangeToUpdate.endEventTS;
@@ -197,19 +193,19 @@ class IotService extends ZApplicationService {
             startEvent = outOfRangeToUpdate.startEventTS;
             endEvent = outOfRange.eventTime;
         }
-        try {
-            await tx.update(cds.entities.outOfRange, outOfRangeToUpdate.ID).with({
-                status: "CLOSE",
-                startEventTS: startEvent,
-                endEventTS: endEvent,
-            });
-            oorID = outOfRangeToUpdate.ID;
-            //  await tx.commit();
-        } catch (error) {
-            this.coldChainLogger.logException("ERRORE UPDATE OutOfRange - iotService: ", error);
-            await tx.rollback();
-        }
-        return oorID;
+        const values = {
+            status: "CLOSE",
+            startEventTS: startEvent,
+            endEventTS: endEvent,
+        };
+        await DB.updateSomeFields(
+            cds.entities.outOfRange,
+            outOfRangeToUpdate.ID,
+            values,
+            tx,
+            this.logger
+        );
+        return outOfRangeToUpdate.ID;
     }
 
     // eslint-disable-next-line class-methods-use-this
