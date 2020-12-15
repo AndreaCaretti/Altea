@@ -302,6 +302,16 @@ define entity outOfRange : cuid, managed {
     segmentId    : UUID;
 }
 
+define entity OutOfRangeHandlingUnits : cuid, managed {
+    outOfRange   : Association to outOfRange;
+    handlingUnit : Association to HandlingUnits;
+    startTime    : Timestamp;
+    endTime      : Timestamp;
+    startReason  : cloudcoldchain.startReasonType;
+    endReason    : cloudcoldchain.endReasonType;
+    duration     : Integer;
+}
+
 define entity Notification : cuid, managed {
     alertBusinessTime : Timestamp;
     notificationTime  : Timestamp;
@@ -318,16 +328,6 @@ define entity NotificationPayloadPrepare : cuid, managed {
     preparationMethod : String(20);
 }
 
-define entity OutOfRangeHandlingUnits : cuid, managed {
-    outOfRange   : Association to outOfRange;
-    handlingUnit : Association to HandlingUnits;
-    startTime    : Timestamp;
-    endTime      : Timestamp;
-    startReason  : cloudcoldchain.startReasonType;
-    endReason    : cloudcoldchain.endReasonType;
-    duration     : Integer;
-}
-
 @cds.autoexpose
 @cds.odata.valuelist
 @UI.Identification : [{Value : ID}]
@@ -339,7 +339,7 @@ define entity AlertsErrorTor : cuid, managed {
 
 define entity AlertsErrorTorDetails : cuid {
     parent        : Association to AlertsErrorTor;
-    residenceTime : Timestamp;
+    residenceTime : Association to one ResidenceTime;
     tor           : Integer
 }
 
