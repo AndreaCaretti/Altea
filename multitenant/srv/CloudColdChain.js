@@ -37,7 +37,7 @@ class CloudColdChain {
         this.processorUpdateResidenceTime = new ProcessorUpdateResidenceTime(this.logger);
 
         // Notification - Notification BG Worker
-        this.processorNotification = new ProcessorNotification(this.logger);
+        this.processorNotification = new ProcessorNotification(this.logger, this.jobs);
 
         // Enterprise Messaging comunication Layer
         this.enterpriseMessageNotification = EnterpriseMessageNotification.getInstance(this.logger);
