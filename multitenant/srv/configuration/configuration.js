@@ -1,4 +1,5 @@
 const cds = require("@sap/cds");
+const fetch = require("node-fetch");
 const DB = require("../db-utilities");
 
 class Configuration {
@@ -30,7 +31,7 @@ class Configuration {
 
         const customerDataLine = {
             guid: customerData[0].guid,
-            companyName: customerData[0].name,
+            companyName: customerData[0].companyName,
             customerTenant: this.setCustomerTennantData(customerData[0]),
         };
 
@@ -147,6 +148,44 @@ class Configuration {
             tokenEndpoint: data.tokenEndpoint,
             uri: data.uri,
         };
+    }
+
+    async sendConfigurationData(tx) {
+        try {
+            const configurationTosend = await this.getConfigurationData(tx);
+            const returnCode = await this.sendWithNodeFetch(configurationTosend, tx);
+            return returnCode;
+        } catch (oError) {
+            this.logger.logException(`Errore invio configurazione, HTTP Code`, new Error(oError));
+            return oError;
+        } finally {
+            tx.commit();
+        }
+    }
+
+    async getServiceConfiguration() {
+        this.logger.info("Recupero informazioni Endpoit invio configurazione");
+        return {
+            uri: "https://cld-dev-smarty.keethings.app/api/coldchain/config",
+        };
+    }
+
+    async sendWithNodeFetch(data, tx) {
+        const configurationEndpoint = await this.getServiceConfiguration(tx);
+        this.logger.logObject(`Data Send to configuration endpoint`, configurationEndpoint);
+        return new Promise((resolve, reject) => {
+            fetch(configurationEndpoint.uri, {
+                method: "POST",
+                body: JSON.stringify(data),
+                headers: { "Content-Type": "application/json" },
+            }).then((res) => {
+                if (res.status === 201) {
+                    resolve(res.status);
+                } else {
+                    reject(res.status);
+                }
+            });
+        });
     }
 }
 

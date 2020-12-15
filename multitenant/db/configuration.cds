@@ -43,6 +43,6 @@ context DatatoExternalTools {
 
     @cds.autoexpose
     entity ProductsView          as projection on cloudcoldchain.Products {
-        Products.gtin as gtin, Products.name as description, Products.QAManager as QAManager, Products.productManager as productMagaer
+        Products.gtin as gtin, Products.name as description, Products.QAManager as QAManager, Products.productManager as productManager
     };
 };

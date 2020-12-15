@@ -1,4 +1,4 @@
 ### Invio Notification
-POST  http://localhost:4004/configuration-servive-call/getConfiguration  HTTP/1.1
+POST  http://localhost:4004/configuration-servive-call/sendConfiguration  HTTP/1.1
 Content-Type: application/json
 Authorization: Basic Alice:Alice
