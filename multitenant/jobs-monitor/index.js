@@ -9,7 +9,7 @@ const {
 const Logger = require("./logger");
 const Jobs = require("./jobs");
 
-const PORT = process.env.PORT || 8089;
+const PORT = process.env.PORT || 8189;
 
 const QUEUE_NAMES = require("./queues-names");
 

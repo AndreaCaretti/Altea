@@ -31,7 +31,7 @@ class OLTNotificationPrepare {
             severity: notification.alertLevel,
             eventDate: notification.alertBusinessTime,
             // invece che creationDate
-            notificationDate: notification.notificationDate,
+            notificationDate: new Date().toISOString(),
             details: {
                 measurementUnit: MEASURE_UNIT,
                 eventTemperature: "20.00",

@@ -26,6 +26,13 @@ if [ $? -eq 0 ]; then
     kill -9 $approuter_process
 fi
 
+# Stop processo jobs-monitor già attivo in ascolto sulla porta 5000
+jobs_monitor_process=$(lsof -t -i:8189)
+if [ $? -eq 0 ]; then
+    echo -e "${GREEN}Kill Jobs Monitor già in esecuzione $jobs_monitor_process${NC}"
+    kill -9 $jobs_monitor_process
+fi
+
 # Blocca lo script se un comando restituisce exitcode diverso da 0
 set -o errexit
 
@@ -56,7 +63,7 @@ echo -e "\n${GREEN}App router all'indirizzo http://localhost:5000${NC}\n"
 # Avvia jobs monitor
 (cd jobs-monitor ; npm start &)
 
-echo -e "${GREEN}Jobs monitor all'indirizzo http://localhost:8089/jobs-monitor${NC}\n"
+echo -e "${GREEN}Jobs monitor all'indirizzo http://localhost:8189/jobs-monitor${NC}\n"
 
 # Recupera comando cds da avviare
 cds_command=$(which cds)
