@@ -341,7 +341,6 @@ define entity AlertsErrorTorDetails : cuid {
     parent        : Association to AlertsErrorTor;
     residenceTime : Timestamp;
     tor           : Integer
-
 }
 
 
