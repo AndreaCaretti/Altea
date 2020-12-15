@@ -53,7 +53,7 @@ class DB {
 
     static async selectAllRowsWhere(tableName, whereClause, andClause, tx, logger) {
         let allRows;
-        if (andClause) {
+        if (!andClause) {
             allRows = await tx.read(tableName).where(whereClause);
         } else {
             allRows = await tx.read(tableName).where(whereClause).and(andClause);
@@ -66,13 +66,14 @@ class DB {
                 )} -> '${JSON.stringify(allRows)}'`
             );
         }
+        let logString = `selectAllRowsWhere: ${tableName.name} where ${JSON.stringify(
+            whereClause
+        )}`;
+        if (andClause) {
+            logString += ` and ${JSON.stringify(andClause)}`;
+        }
 
-        logger.logObject(
-            `selectAllRowsWhere: ${tableName.name} where ${JSON.stringify(
-                whereClause
-            )} and ${JSON.stringify(andClause)}`,
-            allRows
-        );
+        logger.logObject(logString, allRows);
 
         return allRows;
     }
