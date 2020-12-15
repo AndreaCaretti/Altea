@@ -24,7 +24,7 @@ function main() {
 
     checkTarget
 
-    LAST_FILENAME=`ls mta_archives/ -t | head -n 1`
+    LAST_FILENAME=`ls mta_archives/ -1 -t | head -n 1`
 
     echo -e "${GREEN}Deploy del file MTA..."
     ls -lh mta_archives/$LAST_FILENAME
