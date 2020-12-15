@@ -383,7 +383,6 @@ define entity OutOfRangeHandlingUnitDetails     as
         handlingUnit.lot.product.gtin                                    as GTIN,
         handlingUnit.lot.product.name                                    as ProductName,
         handlingUnit.typology.uom                                        as UOM,
-        handlingUnit.typology.uom                                        as UOM2,
         OutOfRangeHandlingUnitDetailCount.OutOfRangeHandlingUnitsIDCount as CountHandlingUnit
     }
     group by
