@@ -42,17 +42,21 @@ async function mergeLocalRedisDefaultConfig(enviroment) {
 }
 
 async function main(appName) {
-    const cloudFoundryApi = new CloudFoundryApi();
-    const accessToken = await cloudFoundryApi.getAccessToken();
-    const appGuid = await cloudFoundryApi.getAppGuid(appName);
-    const apiUrl = await cloudFoundryApi.getApiUrl();
+    try {
+        const cloudFoundryApi = new CloudFoundryApi();
+        const accessToken = await cloudFoundryApi.getAccessToken();
+        const appGuid = await cloudFoundryApi.getAppGuid(appName);
+        const apiUrl = await cloudFoundryApi.getApiUrl();
 
-    const enviroment = await getAppEnviroment(apiUrl, appGuid, accessToken);
+        const enviroment = await getAppEnviroment(apiUrl, appGuid, accessToken);
 
-    // MERGE REDIS LOCAL CONFIG VS REMOTE
-    const enviromentMerged = await mergeLocalRedisDefaultConfig(enviroment);
+        // MERGE REDIS LOCAL CONFIG VS REMOTE
+        const enviromentMerged = await mergeLocalRedisDefaultConfig(enviroment);
 
-    console.log(JSON.stringify(enviromentMerged, null, 2));
+        console.log(JSON.stringify(enviromentMerged, null, 2));
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 // GUID dell'app mtt-cap-services preso dall'url del cockpit SCP esempio:
