@@ -51,8 +51,8 @@ class DB {
         return singleRow[0];
     }
 
-    static async selectAllRowsWhere(tableName, whereClause, tx, logger) {
-        const allRows = await tx.read(tableName).where(whereClause);
+    static async selectAllRowsWhere(tableName, whereClause, andClause, tx, logger) {
+        const allRows = await tx.read(tableName).where(whereClause).and(andClause);
 
         if (allRows.length === 0) {
             throw Error(
@@ -63,7 +63,9 @@ class DB {
         }
 
         logger.logObject(
-            `selectAllRowsWhere: ${tableName.name} where ${JSON.stringify(whereClause)}`,
+            `selectAllRowsWhere: ${tableName.name} where ${JSON.stringify(
+                whereClause
+            )} and ${JSON.stringify(andClause)}`,
             allRows
         );
 
