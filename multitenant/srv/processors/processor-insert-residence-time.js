@@ -155,7 +155,7 @@ class ProcessorInsertResidenceTime extends JobProcessor {
                     .orderBy([{ ref: ["inBusinessTime"], sort: "asc" }])
             );
         } catch (error) {
-            this.logger.logException(error);
+            this.logger.logException("Errore select NearResidenceTime: ", error);
         }
         return record;
     }
