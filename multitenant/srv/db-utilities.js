@@ -52,7 +52,12 @@ class DB {
     }
 
     static async selectAllRowsWhere(tableName, whereClause, andClause, tx, logger) {
-        const allRows = await tx.read(tableName).where(whereClause).and(andClause);
+        let allRows;
+        if (andClause) {
+            allRows = await tx.read(tableName).where(whereClause);
+        } else {
+            allRows = await tx.read(tableName).where(whereClause).and(andClause);
+        }
 
         if (allRows.length === 0) {
             throw Error(
