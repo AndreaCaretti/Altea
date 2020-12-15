@@ -1,62 +1,5 @@
 {
   "VCAP_SERVICES": {
-    "service-manager": [
-      {
-        "label": "service-manager",
-        "provider": null,
-        "plan": "container",
-        "name": "mtt-service-manager",
-        "tags": [],
-        "instance_name": "mtt-service-manager",
-        "binding_name": null,
-        "credentials": {
-          "sm_url": "https://service-manager.cfapps.eu10.hana.ondemand.com",
-          "url": "https://ccp-provider-dev-qas.authentication.eu10.hana.ondemand.com",
-          "clientid": "sb-beb3268a-52b1-45d5-aeff-670892b5fa16!b61773|service-manager!b8989",
-          "clientsecret": "3+A6de11GqnZ1A9kazEjPUOy3/w=",
-          "xsappname": "beb3268a-52b1-45d5-aeff-670892b5fa16!b61773|service-manager!b8989"
-        },
-        "syslog_drain_url": null,
-        "volume_mounts": []
-      }
-    ],
-    "redis-cache": [
-      {
-        "label": "redis-cache",
-        "provider": null,
-        "plan": "standard",
-        "name": "mtt-redis",
-        "tags": [
-          "cache"
-        ],
-        "instance_name": "mtt-redis",
-        "binding_name": null,
-        "credentials": {
-          "hostname": "127.0.0.1",
-          "port": 6379
-        },
-        "syslog_drain_url": null,
-        "volume_mounts": []
-      }
-    ],
-    "application-logs": [
-      {
-        "label": "application-logs",
-        "provider": null,
-        "plan": "lite",
-        "name": "mtt-application-logging",
-        "tags": [],
-        "instance_name": "mtt-application-logging",
-        "binding_name": null,
-        "credentials": {
-          "metrics_collector_url": "https://metrics-collector.cf.eu10.hana.ondemand.com/",
-          "metrics_collector_client_id": "9ae6f773-3cde-4736-bd58-569487c14df9",
-          "metrics_collector_client_secret": "OWFkZDUwYmItMTRhNS00Y2Q3LTk2OGItYmQyN2FiODIzNDhmL210dC1jYXAtc2VydmljZXMvNjhlYzkxZjYtM2IyNi00ZmNhLThiOGQtOWMwMzA4NWFiNDU4L2Rldi9kODI3NzNjMy01YjQwLTRkZWItOWU5Zi0xNWM4Y2UxYjY3OTkvY2NwLXByb3ZpZGVyLWRldi1xYXMvMDVjMmM2NDctZWI2MC00MGI0LWI4YmItNjUxMmEwZWZkNjYyL2FwcGxpY2F0aW9uLWxvZ3MvM2U0NjZmYzYtODMzZS00MzBhLWE1YTEtYjlhYTIzMTk1MGM4L2xpdGUvYTJmMDQ0NjMtOWRmZS00NjlmLWJjZjctMjhkYzAwMWJkOWY4L210dC1hcHBsaWNhdGlvbi1sb2dnaW5nLzVlMzExZWNhM2RkNjQxMTM4ZDM4NzU2NzhiMmIyODBlZjg1OWRjODM0Mzc1NDM4MDNkYzI1Y2U0ZWNmODJlMmQ"
-        },
-        "syslog_drain_url": null,
-        "volume_mounts": []
-      }
-    ],
     "enterprise-messaging": [
       {
         "label": "enterprise-messaging",
@@ -75,7 +18,7 @@
             {
               "oa2": {
                 "clientid": "sb-default-2b829ef0-bc8c-4404-b201-74e7dffbb889-clone!b61773|xbem-service-broker-!b2436",
-                "clientsecret": "7be57c9c-be77-409d-ad75-8359291b1b69$QTZgTcZ3KJlXBkc5f25MYbpJanjB-DyAvlYnXExuR38=",
+                "clientsecret": "a9efae60-61c2-4c79-b2d3-a17ed7b777a6$wYyWDXMFnbiLeW-ChkC0M73KJ-dZNgnQ7PK6xJj4iO4=",
                 "tokenendpoint": "https://ccp-provider-dev-qas.authentication.eu10.hana.ondemand.com/oauth/token",
                 "granttype": "client_credentials"
               },
@@ -87,7 +30,7 @@
             {
               "oa2": {
                 "clientid": "sb-default-2b829ef0-bc8c-4404-b201-74e7dffbb889-clone!b61773|xbem-service-broker-!b2436",
-                "clientsecret": "7be57c9c-be77-409d-ad75-8359291b1b69$QTZgTcZ3KJlXBkc5f25MYbpJanjB-DyAvlYnXExuR38=",
+                "clientsecret": "a9efae60-61c2-4c79-b2d3-a17ed7b777a6$wYyWDXMFnbiLeW-ChkC0M73KJ-dZNgnQ7PK6xJj4iO4=",
                 "tokenendpoint": "https://ccp-provider-dev-qas.authentication.eu10.hana.ondemand.com/oauth/token",
                 "granttype": "client_credentials"
               },
@@ -102,7 +45,7 @@
             {
               "oa2": {
                 "clientid": "sb-default-2b829ef0-bc8c-4404-b201-74e7dffbb889-clone!b61773|xbem-service-broker-!b2436",
-                "clientsecret": "7be57c9c-be77-409d-ad75-8359291b1b69$QTZgTcZ3KJlXBkc5f25MYbpJanjB-DyAvlYnXExuR38=",
+                "clientsecret": "a9efae60-61c2-4c79-b2d3-a17ed7b777a6$wYyWDXMFnbiLeW-ChkC0M73KJ-dZNgnQ7PK6xJj4iO4=",
                 "tokenendpoint": "https://ccp-provider-dev-qas.authentication.eu10.hana.ondemand.com/oauth/token",
                 "granttype": "client_credentials"
               },
@@ -117,7 +60,7 @@
             {
               "oa2": {
                 "clientid": "sb-default-2b829ef0-bc8c-4404-b201-74e7dffbb889-clone!b61773|xbem-service-broker-!b2436",
-                "clientsecret": "7be57c9c-be77-409d-ad75-8359291b1b69$QTZgTcZ3KJlXBkc5f25MYbpJanjB-DyAvlYnXExuR38=",
+                "clientsecret": "a9efae60-61c2-4c79-b2d3-a17ed7b777a6$wYyWDXMFnbiLeW-ChkC0M73KJ-dZNgnQ7PK6xJj4iO4=",
                 "tokenendpoint": "https://ccp-provider-dev-qas.authentication.eu10.hana.ondemand.com/oauth/token",
                 "granttype": "client_credentials"
               },
@@ -130,6 +73,26 @@
               "uri": "https://enterprise-messaging-pubsub.cfapps.eu10.hana.ondemand.com"
             }
           ]
+        },
+        "syslog_drain_url": null,
+        "volume_mounts": []
+      }
+    ],
+    "service-manager": [
+      {
+        "label": "service-manager",
+        "provider": null,
+        "plan": "container",
+        "name": "mtt-service-manager",
+        "tags": [],
+        "instance_name": "mtt-service-manager",
+        "binding_name": null,
+        "credentials": {
+          "sm_url": "https://service-manager.cfapps.eu10.hana.ondemand.com",
+          "url": "https://ccp-provider-dev-qas.authentication.eu10.hana.ondemand.com",
+          "clientid": "sb-beb3268a-52b1-45d5-aeff-670892b5fa16!b61773|service-manager!b8989",
+          "clientsecret": "3+A6de11GqnZ1A9kazEjPUOy3/w=",
+          "xsappname": "beb3268a-52b1-45d5-aeff-670892b5fa16!b61773|service-manager!b8989"
         },
         "syslog_drain_url": null,
         "volume_mounts": []
@@ -168,6 +131,43 @@
           "tenantid": "8da3ba0a-5a8a-436a-bfe7-fb7eb40a3b6e",
           "zoneid": "8da3ba0a-5a8a-436a-bfe7-fb7eb40a3b6e",
           "category": "Cloud Cold Chain"
+        },
+        "syslog_drain_url": null,
+        "volume_mounts": []
+      }
+    ],
+    "redis-cache": [
+      {
+        "label": "redis-cache",
+        "provider": null,
+        "plan": "standard",
+        "name": "mtt-redis",
+        "tags": [
+          "cache"
+        ],
+        "instance_name": "mtt-redis",
+        "binding_name": null,
+        "credentials": {
+          "hostname": "127.0.0.1",
+          "port": 6379
+        },
+        "syslog_drain_url": null,
+        "volume_mounts": []
+      }
+    ],
+    "application-logs": [
+      {
+        "label": "application-logs",
+        "provider": null,
+        "plan": "lite",
+        "name": "mtt-application-logging",
+        "tags": [],
+        "instance_name": "mtt-application-logging",
+        "binding_name": null,
+        "credentials": {
+          "metrics_collector_url": "https://metrics-collector.cf.eu10.hana.ondemand.com/",
+          "metrics_collector_client_id": "8a04b110-a87f-4927-a150-43106c00cc03",
+          "metrics_collector_client_secret": "OWFkZDUwYmItMTRhNS00Y2Q3LTk2OGItYmQyN2FiODIzNDhmL210dC1jYXAtc2VydmljZXMvNjhlYzkxZjYtM2IyNi00ZmNhLThiOGQtOWMwMzA4NWFiNDU4L2Rldi9kODI3NzNjMy01YjQwLTRkZWItOWU5Zi0xNWM4Y2UxYjY3OTkvY2NwLXByb3ZpZGVyLWRldi1xYXMvMDVjMmM2NDctZWI2MC00MGI0LWI4YmItNjUxMmEwZWZkNjYyL2FwcGxpY2F0aW9uLWxvZ3MvM2U0NjZmYzYtODMzZS00MzBhLWE1YTEtYjlhYTIzMTk1MGM4L2xpdGUvYTJmMDQ0NjMtOWRmZS00NjlmLWJjZjctMjhkYzAwMWJkOWY4L210dC1hcHBsaWNhdGlvbi1sb2dnaW5nLzVlMzExZWNhM2RkNjQxMTM4ZDM4NzU2NzhiMmIyODBlZjg1OWRjODM0Mzc1NDM4MDNkYzI1Y2U0ZWNmODJlMmQ"
         },
         "syslog_drain_url": null,
         "volume_mounts": []
