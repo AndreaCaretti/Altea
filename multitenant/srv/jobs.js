@@ -3,12 +3,6 @@ const xsenv = require("@sap/xsenv");
 const Redis = require("ioredis");
 const Queue = require("bull");
 
-const {
-    router: bullBoardRouter,
-    setQueues: bullBoardSetQueues,
-    BullAdapter,
-} = require("bull-board");
-
 // eslint-disable-next-line no-unused-vars
 const Logger = require("./logger");
 
@@ -17,10 +11,9 @@ let jobsInstance;
 class Jobs {
     /**
      *
-     * @param {*} app
      * @param {Logger} logger
      */
-    constructor(app, logger) {
+    constructor(logger) {
         this.logger = logger;
 
         xsenv.loadEnv();
@@ -40,9 +33,6 @@ class Jobs {
         this.onRedisError = this.onRedisError.bind(this);
         this.retryStrategy = this.retryStrategy.bind(this);
 
-        this.logger.info(`Jobs monitor disponibile all'url /jobs-monitor`);
-        app.use("/jobs-monitor", bullBoardRouter);
-
         jobsInstance = this;
     }
 
@@ -61,7 +51,7 @@ class Jobs {
         this.processors.push(processorInfo);
     }
 
-    async start(tenants) {
+    async start(tenants, cb) {
         this.logger.info(`Avvio Jobs...`);
 
         for (let indexTenant = 0; indexTenant < tenants.length; indexTenant++) {
@@ -80,13 +70,21 @@ class Jobs {
                 const queue = await this.createQueue(
                     this.formatQueueName(tenant, processorInfo.queueName)
                 );
-                queue.process(
-                    processorInfo.queueName,
-                    processorInfo.parallelJobs,
-                    processorInfo.processor.processJob
-                );
+                // eslint-disable-next-line max-len
+                // Il metodo start viene richiamato anche dal job-monitor che però non deve processare i job
+                // quindi richiama il metodo start senza passare il processor
+                if (processorInfo.processor) {
+                    queue.process(
+                        processorInfo.queueName,
+                        processorInfo.parallelJobs,
+                        processorInfo.processor.processJob
+                    );
+                }
 
-                bullBoardSetQueues([new BullAdapter(queue)]);
+                // Callback richiamato dopo l'avvio di una coda
+                if (cb) {
+                    cb(queue);
+                }
             }
         }
     }
@@ -154,8 +152,6 @@ class Jobs {
         this.logger.info(`Creazione bull queue`, queueName);
 
         return new Promise((resolve, reject) => {
-            let bullQueue;
-
             const bullOptions = {
                 limiter: {
                     max: 500, // Numero massimo di jobs processati nell'unità di tempo
@@ -174,10 +170,9 @@ class Jobs {
                     this.logger.debug("Chiamata da bull verso creazione coda");
                     return this.createRedisClient(type, opts);
                 };
-                bullQueue = new Queue(queueName, bullOptions);
-            } else {
-                bullQueue = new Queue(queueName, this.redisCredentials.uri, bullOptions);
             }
+
+            const bullQueue = new Queue(queueName, bullOptions);
 
             bullQueue.client.on("ready", () => {
                 this.onRedisReady(queueName, bullQueue, resolve);
@@ -211,6 +206,9 @@ class Jobs {
                     },
                     password: "GaJoFOorxmiPONZjZPabLYQLlcmgzAGU",
                 },
+                enableOfflineQueue: false,
+
+                clusterRetryStrategy: this.retryStrategy,
             }
         );
 

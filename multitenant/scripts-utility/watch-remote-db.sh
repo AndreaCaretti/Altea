@@ -26,6 +26,13 @@ if [ $? -eq 0 ]; then
     kill -9 $approuter_process
 fi
 
+# Stop processo jobs-monitor già attivo in ascolto sulla porta 5000
+jobs_monitor_process=$(lsof -t -i:8189)
+if [ $? -eq 0 ]; then
+    echo -e "${GREEN}Kill Jobs Monitor già in esecuzione $jobs_monitor_process${NC}"
+    kill -9 $jobs_monitor_process
+fi
+
 # Blocca lo script se un comando restituisce exitcode diverso da 0
 set -o errexit
 
@@ -41,17 +48,22 @@ export SIMPLE_LOG=true
 sudo service redis-server start
 
 # Configurazione route approuter per test in locale
-echo -e "${GREEN}Configurazione route approuter per test in locale:${NC}"
+echo -e "Configurazione route approuter per test in locale:"
 cp cloud-foundry/approuter/xs-app-local-with-xsuaa.json cloud-foundry/approuter/xs-app.json -v
 
 # Configurazione xsuaa approuter per test in locale che punta a customera
-echo -e "${GREEN}Configurazione xsuaa approuter per test in locale:${NC}"
+echo -e "Configurazione xsuaa approuter per test in locale:"
 cp cloud-foundry/approuter/default-env-xsuaa-customera.json cloud-foundry/approuter/default-env.json -v
 
 # Avvia app router
 (cd cloud-foundry/approuter/ ; npm start &)
 
-echo -e "${GREEN}Apri il browser all'indirizzo http://localhost:5000${NC}"
+echo -e "\n${GREEN}App router all'indirizzo http://localhost:5000${NC}\n"
+
+# Avvia jobs monitor
+(cd jobs-monitor ; npm start &)
+
+echo -e "${GREEN}Jobs monitor all'indirizzo http://localhost:8189/jobs-monitor${NC}\n"
 
 # Recupera comando cds da avviare
 cds_command=$(which cds)

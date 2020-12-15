@@ -60,7 +60,7 @@ class PrepareDataForNotification {
                 tx.commit();
             } catch (error) {
                 tx.rollback();
-                throw new Error(error);
+                throw error;
             }
         } else {
             throw new Error(`${LOG_PREFIX} - Nessun dato da iniviare fornito`);

@@ -1,7 +1,7 @@
 const InternalLogger = require("cf-nodejs-logging-support");
 
-const FgRed = "\x1b[31m";
-const FfNormal = "\x1b[0m";
+let FgRed = "\x1b[31m";
+let FgNormal = "\x1b[0m";
 
 let loggerInstance;
 
@@ -15,6 +15,9 @@ class Logger {
 
         if (this.SIMPLE_LOG === "true") {
             InternalLogger.setLogPattern("{{msg}}");
+        } else {
+            FgRed = "";
+            FgNormal = "";
         }
 
         app.get("/logdebugon", (req, res) => {
@@ -82,7 +85,7 @@ class Logger {
             errorMessage = JSON.stringify(error, null, 2);
         }
 
-        this.internalLogger.error(`🥺${FgRed}${msg}${FfNormal}`, errorMessage);
+        this.internalLogger.error(`🥺 ${FgRed}${msg}${FgNormal}\n`, errorMessage);
     }
 
     setTenantId(tenantId) {
