@@ -26,7 +26,7 @@ Content-Type: application/json
 }
 
 
-### Invio raw moment autenticazione token
+### Invio raw moment con autenticazione token
 POST https://{{provider-subdomain}}-{{space}}-{{cap-service-url}}.cfapps.eu10.hana.ondemand.com/handling-unit-moved/HandlingUnitsRawMovements HTTP/1.1
 Authorization: Bearer {{token}}
 Content-Type: application/json
