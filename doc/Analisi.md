@@ -1066,7 +1066,7 @@ Ricerca tutte le handling units rimaste nell'area troppo tempo e crea l'alert
 -   rule `inRange` di tipo streaming rule cloud toggle che determina se la temperatura è in range
 -   IoT invia i dati di apertura e chiusura segmento in enterprise messaging nel topic fisso deciso da SAP `sap/liot/svc/segments`
 -   enterprise messaging ha la coda `sap/liot/svc/TemperatureRange` (TODO: meglio rinominarla in `sap/liot/svc/segments`) con subscription su `sap/liot/svc/segments`
--   enterprise messaging invia i dati al webhook che punta al servizio cap `/iot/segment`
+-   enterprise messaging invia i dati al webhook che punta al servizio cap `/iot/segment`, vedi immagine per [esempio creazione.](Esempio%20Wekhook%20per%20Keethings.png)
 -   il servizio cap aggiorna la tabella `OutOfRange`
 -   chiama il metodo `alert` della classe `Notifications`
 -   inserisce nella coda `OUT_OF_RANGE` un record per indicare la creazione o la fine di un segmento
