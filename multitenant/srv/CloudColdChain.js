@@ -1,9 +1,12 @@
 const Logger = require("./logger");
 
 const Jobs = require("./jobs");
+
 const ProcessorHuMovements = require("./processors/processor-hu-movements");
 const ProcessorInsertResidenceTime = require("./processors/processor-insert-residence-time");
 const ProcessorNotification = require("./processors/processor-notification");
+const ProcessorAlertErrorTOR = require("./processors/processor-alert-error-tor");
+
 const NotificationeService = require("./notifications/notificationService");
 const EnterpriseMessageNotification = require("./enterprise-messaging/em_notification");
 
@@ -35,6 +38,9 @@ class CloudColdChain {
         // Notification - Notification BG Worker
         this.processorNotification = new ProcessorNotification(this.logger);
 
+        // Alert Error TOR Processor
+        this.processorAlertErrorTOR = new ProcessorAlertErrorTOR(this.logger);
+
         // Enterprise Messaging comunication Layer
         this.enterpriseMessageNotification = EnterpriseMessageNotification.getInstance(this.logger);
 
@@ -65,6 +71,13 @@ class CloudColdChain {
             parallelJobs: 2,
         });
 
+        // Register alert error tor processor
+        this.jobs.registerProcessor({
+            queueName: QUEUE_NAMES.ALERT_ERROR_TOR,
+            processor: this.processorAlertErrorTOR,
+            parallelJobs: 1,
+        });
+
         // Provisioning
         this.initMultitenantProvisioning(this.logger);
     }
@@ -76,14 +89,17 @@ class CloudColdChain {
         // Get all customers tenants
         this.tenants = await this.getAllTenants();
 
-        // // Update Residence Time processor
-        // this.processorUpdateResidenceTime.start();
-
-        // Start Notification BG Worker
-        // this.BGWorkerNotification.start();
-
         // Start jobs
         await this.jobs.start(this.tenants);
+
+        // FIXME: TOGLIERE IL TENANT HARDCODE DEL CUSTOMER A
+        // Schedule Alert Error TOR Jobs
+        await this.jobs.scheduleJob(
+            "a1d03e7f-53e4-414b-aca0-c4d44157f2a0",
+            QUEUE_NAMES.ALERT_ERROR_TOR,
+            "JOB_ALERT_ERROR_TOR",
+            "*/1 * * * *"
+        );
 
         // Engine Started
         this.logger.info("😀 Cloud Cold Chain Platform Engine Started");

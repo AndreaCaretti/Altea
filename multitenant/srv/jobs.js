@@ -149,7 +149,12 @@ class Jobs {
      * @param {*} cronScheduling CRON schedule
      */
     // esempio ogni cinque minuti "*/5 * * * *"
-    async scheduleJob(tenant, queueName, jobInfo, cronScheduling) {
+    async scheduleJob(tenant, queueName, jobUser, cronScheduling) {
+        const jobInfo = {
+            user: jobUser,
+            tenant,
+        };
+
         this.logger.warning(
             "Non abbiamo ancora gestito code bull divise per tenant, il tenant viene forzato a null"
         );
@@ -188,7 +193,10 @@ class Jobs {
         }
 
         try {
-            const job = await queue.add(queueName, jobInfo, { removeOnComplete: 1000 });
+            const job = await queue.add(queueName, jobInfo, {
+                removeOnComplete: 1000,
+                repeat: { cron: cronScheduling },
+            });
             this.logger.debug(
                 `Aggiunto job schedulato ${cronScheduling} ${queueName} id ${job.id}`
             );
