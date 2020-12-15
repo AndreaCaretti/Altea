@@ -1,5 +1,83 @@
 {
   "VCAP_SERVICES": {
+    "enterprise-messaging": [
+      {
+        "label": "enterprise-messaging",
+        "provider": null,
+        "plan": "default",
+        "name": "mtt-enterprise-messaging",
+        "tags": [
+          "enterprise-messaging"
+        ],
+        "instance_name": "mtt-enterprise-messaging",
+        "binding_name": null,
+        "credentials": {
+          "namespace": "coldchainplatform/mtt/central",
+          "xsappname": "default-2b829ef0-bc8c-4404-b201-74e7dffbb889-clone!b61773|xbem-service-broker-!b2436",
+          "management": [
+            {
+              "oa2": {
+                "clientid": "sb-default-2b829ef0-bc8c-4404-b201-74e7dffbb889-clone!b61773|xbem-service-broker-!b2436",
+                "clientsecret": "a9efae60-61c2-4c79-b2d3-a17ed7b777a6$wYyWDXMFnbiLeW-ChkC0M73KJ-dZNgnQ7PK6xJj4iO4=",
+                "tokenendpoint": "https://ccp-provider-dev-qas.authentication.eu10.hana.ondemand.com/oauth/token",
+                "granttype": "client_credentials"
+              },
+              "uri": "https://enterprise-messaging-hub-backend.cfapps.eu10.hana.ondemand.com"
+            }
+          ],
+          "serviceinstanceid": "2b829ef0-bc8c-4404-b201-74e7dffbb889",
+          "messaging": [
+            {
+              "oa2": {
+                "clientid": "sb-default-2b829ef0-bc8c-4404-b201-74e7dffbb889-clone!b61773|xbem-service-broker-!b2436",
+                "clientsecret": "a9efae60-61c2-4c79-b2d3-a17ed7b777a6$wYyWDXMFnbiLeW-ChkC0M73KJ-dZNgnQ7PK6xJj4iO4=",
+                "tokenendpoint": "https://ccp-provider-dev-qas.authentication.eu10.hana.ondemand.com/oauth/token",
+                "granttype": "client_credentials"
+              },
+              "protocol": [
+                "amqp10ws"
+              ],
+              "broker": {
+                "type": "sapmgw"
+              },
+              "uri": "wss://enterprise-messaging-messaging-gateway.cfapps.eu10.hana.ondemand.com/protocols/amqp10ws"
+            },
+            {
+              "oa2": {
+                "clientid": "sb-default-2b829ef0-bc8c-4404-b201-74e7dffbb889-clone!b61773|xbem-service-broker-!b2436",
+                "clientsecret": "a9efae60-61c2-4c79-b2d3-a17ed7b777a6$wYyWDXMFnbiLeW-ChkC0M73KJ-dZNgnQ7PK6xJj4iO4=",
+                "tokenendpoint": "https://ccp-provider-dev-qas.authentication.eu10.hana.ondemand.com/oauth/token",
+                "granttype": "client_credentials"
+              },
+              "protocol": [
+                "mqtt311ws"
+              ],
+              "broker": {
+                "type": "sapmgw"
+              },
+              "uri": "wss://enterprise-messaging-messaging-gateway.cfapps.eu10.hana.ondemand.com/protocols/mqtt311ws"
+            },
+            {
+              "oa2": {
+                "clientid": "sb-default-2b829ef0-bc8c-4404-b201-74e7dffbb889-clone!b61773|xbem-service-broker-!b2436",
+                "clientsecret": "a9efae60-61c2-4c79-b2d3-a17ed7b777a6$wYyWDXMFnbiLeW-ChkC0M73KJ-dZNgnQ7PK6xJj4iO4=",
+                "tokenendpoint": "https://ccp-provider-dev-qas.authentication.eu10.hana.ondemand.com/oauth/token",
+                "granttype": "client_credentials"
+              },
+              "protocol": [
+                "httprest"
+              ],
+              "broker": {
+                "type": "saprestmgw"
+              },
+              "uri": "https://enterprise-messaging-pubsub.cfapps.eu10.hana.ondemand.com"
+            }
+          ]
+        },
+        "syslog_drain_url": null,
+        "volume_mounts": []
+      }
+    ],
     "service-manager": [
       {
         "label": "service-manager",
@@ -15,37 +93,6 @@
           "clientid": "sb-beb3268a-52b1-45d5-aeff-670892b5fa16!b61773|service-manager!b8989",
           "clientsecret": "3+A6de11GqnZ1A9kazEjPUOy3/w=",
           "xsappname": "beb3268a-52b1-45d5-aeff-670892b5fa16!b61773|service-manager!b8989"
-        },
-        "syslog_drain_url": null,
-        "volume_mounts": []
-      }
-    ],
-    "xsuaa": [
-      {
-        "label": "xsuaa",
-        "provider": null,
-        "plan": "application",
-        "name": "mtt-xsuaa",
-        "tags": [
-          "xsuaa"
-        ],
-        "instance_name": "mtt-xsuaa",
-        "binding_name": null,
-        "credentials": {
-          "tenantmode": "shared",
-          "sburl": "https://internal-xsuaa.authentication.eu10.hana.ondemand.com",
-          "subaccountid": "8da3ba0a-5a8a-436a-bfe7-fb7eb40a3b6e",
-          "clientid": "sb-ccp-provider-dev-qas-dev-cloud-cold-chain!t61773",
-          "xsappname": "ccp-provider-dev-qas-dev-cloud-cold-chain!t61773",
-          "clientsecret": "oEPmeoq3s9kvPuGZsd89POK9Eo8=",
-          "url": "https://ccp-provider-dev-qas.authentication.eu10.hana.ondemand.com",
-          "uaadomain": "authentication.eu10.hana.ondemand.com",
-          "verificationkey": "-----BEGIN PUBLIC KEY-----MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAq7WZ6XNkzobHEY7s+HY8XTCfLJekHS5HnnU8m2BUVM58f4d6VotrFYoKgZSlJeLFKMpIASYnwNcbbWHCRm4sDtn/ZhpNfd1QuBxxfq7cW3K2zZt3hx8FGffYWDyzVX9vg1PxX0oH/cA1Cg6AAOBX4c4vN0CxScU+KLw3/NvwTMVjxgAY8c/2jSqXslvPaXURzl1zHENkYna0FnqgvEwPVtpLcjycFxboO8wGu1eabdkeNglPVE5i1Gvsxg70qmmGIPHvmsfFdaedBRMIQa8MRwUQ7ek/4qrGTJNr2uLZDKUwyqObkloNeEwt3onSVhcbiw8ODeoNSEzpCz8tKZjRQwIDAQAB-----END PUBLIC KEY-----",
-          "apiurl": "https://api.authentication.eu10.hana.ondemand.com",
-          "identityzone": "ccp-provider-dev-qas",
-          "identityzoneid": "8da3ba0a-5a8a-436a-bfe7-fb7eb40a3b6e",
-          "tenantid": "8da3ba0a-5a8a-436a-bfe7-fb7eb40a3b6e",
-          "zoneid": "8da3ba0a-5a8a-436a-bfe7-fb7eb40a3b6e"
         },
         "syslog_drain_url": null,
         "volume_mounts": []
@@ -108,84 +155,6 @@
         "volume_mounts": []
       }
     ],
-    "enterprise-messaging": [
-      {
-        "label": "enterprise-messaging",
-        "provider": null,
-        "plan": "default",
-        "name": "mtt-enterprise-messaging",
-        "tags": [
-          "enterprise-messaging"
-        ],
-        "instance_name": "mtt-enterprise-messaging",
-        "binding_name": null,
-        "credentials": {
-          "namespace": "coldchainplatform/mtt/central",
-          "xsappname": "default-2b829ef0-bc8c-4404-b201-74e7dffbb889-clone!b61773|xbem-service-broker-!b2436",
-          "management": [
-            {
-              "oa2": {
-                "clientid": "sb-default-2b829ef0-bc8c-4404-b201-74e7dffbb889-clone!b61773|xbem-service-broker-!b2436",
-                "clientsecret": "1fcdaba0-3f64-4bbf-b190-2712270b14ed$Rsk30pVfTDGJ0YYO_UZo0jBWGWD1vbLIV1jwjsY_E30=",
-                "tokenendpoint": "https://ccp-provider-dev-qas.authentication.eu10.hana.ondemand.com/oauth/token",
-                "granttype": "client_credentials"
-              },
-              "uri": "https://enterprise-messaging-hub-backend.cfapps.eu10.hana.ondemand.com"
-            }
-          ],
-          "serviceinstanceid": "2b829ef0-bc8c-4404-b201-74e7dffbb889",
-          "messaging": [
-            {
-              "oa2": {
-                "clientid": "sb-default-2b829ef0-bc8c-4404-b201-74e7dffbb889-clone!b61773|xbem-service-broker-!b2436",
-                "clientsecret": "1fcdaba0-3f64-4bbf-b190-2712270b14ed$Rsk30pVfTDGJ0YYO_UZo0jBWGWD1vbLIV1jwjsY_E30=",
-                "tokenendpoint": "https://ccp-provider-dev-qas.authentication.eu10.hana.ondemand.com/oauth/token",
-                "granttype": "client_credentials"
-              },
-              "protocol": [
-                "amqp10ws"
-              ],
-              "broker": {
-                "type": "sapmgw"
-              },
-              "uri": "wss://enterprise-messaging-messaging-gateway.cfapps.eu10.hana.ondemand.com/protocols/amqp10ws"
-            },
-            {
-              "oa2": {
-                "clientid": "sb-default-2b829ef0-bc8c-4404-b201-74e7dffbb889-clone!b61773|xbem-service-broker-!b2436",
-                "clientsecret": "1fcdaba0-3f64-4bbf-b190-2712270b14ed$Rsk30pVfTDGJ0YYO_UZo0jBWGWD1vbLIV1jwjsY_E30=",
-                "tokenendpoint": "https://ccp-provider-dev-qas.authentication.eu10.hana.ondemand.com/oauth/token",
-                "granttype": "client_credentials"
-              },
-              "protocol": [
-                "mqtt311ws"
-              ],
-              "broker": {
-                "type": "sapmgw"
-              },
-              "uri": "wss://enterprise-messaging-messaging-gateway.cfapps.eu10.hana.ondemand.com/protocols/mqtt311ws"
-            },
-            {
-              "oa2": {
-                "clientid": "sb-default-2b829ef0-bc8c-4404-b201-74e7dffbb889-clone!b61773|xbem-service-broker-!b2436",
-                "clientsecret": "1fcdaba0-3f64-4bbf-b190-2712270b14ed$Rsk30pVfTDGJ0YYO_UZo0jBWGWD1vbLIV1jwjsY_E30=",
-                "tokenendpoint": "https://ccp-provider-dev-qas.authentication.eu10.hana.ondemand.com/oauth/token",
-                "granttype": "client_credentials"
-              },
-              "protocol": [
-                "httprest"
-              ],
-              "broker": {
-                "type": "saprestmgw"
-              },
-              "uri": "https://enterprise-messaging-pubsub.cfapps.eu10.hana.ondemand.com"
-            }
-          ]
-        },
-        "syslog_drain_url": null,
-        "volume_mounts": []
-      }
-    ],
     "application-logs": [
       {
         "label": "application-logs",
@@ -197,8 +166,39 @@
         "binding_name": null,
         "credentials": {
           "metrics_collector_url": "https://metrics-collector.cf.eu10.hana.ondemand.com/",
-          "metrics_collector_client_id": "aa7fa329-a60f-412f-9eaf-629c982523b9",
+          "metrics_collector_client_id": "8a04b110-a87f-4927-a150-43106c00cc03",
           "metrics_collector_client_secret": "OWFkZDUwYmItMTRhNS00Y2Q3LTk2OGItYmQyN2FiODIzNDhmL210dC1jYXAtc2VydmljZXMvNjhlYzkxZjYtM2IyNi00ZmNhLThiOGQtOWMwMzA4NWFiNDU4L2Rldi9kODI3NzNjMy01YjQwLTRkZWItOWU5Zi0xNWM4Y2UxYjY3OTkvY2NwLXByb3ZpZGVyLWRldi1xYXMvMDVjMmM2NDctZWI2MC00MGI0LWI4YmItNjUxMmEwZWZkNjYyL2FwcGxpY2F0aW9uLWxvZ3MvM2U0NjZmYzYtODMzZS00MzBhLWE1YTEtYjlhYTIzMTk1MGM4L2xpdGUvYTJmMDQ0NjMtOWRmZS00NjlmLWJjZjctMjhkYzAwMWJkOWY4L210dC1hcHBsaWNhdGlvbi1sb2dnaW5nLzVlMzExZWNhM2RkNjQxMTM4ZDM4NzU2NzhiMmIyODBlZjg1OWRjODM0Mzc1NDM4MDNkYzI1Y2U0ZWNmODJlMmQ"
+        },
+        "syslog_drain_url": null,
+        "volume_mounts": []
+      }
+    ],
+    "xsuaa": [
+      {
+        "label": "xsuaa",
+        "provider": null,
+        "plan": "application",
+        "name": "mtt-xsuaa",
+        "tags": [
+          "xsuaa"
+        ],
+        "instance_name": "mtt-xsuaa",
+        "binding_name": null,
+        "credentials": {
+          "tenantmode": "shared",
+          "sburl": "https://internal-xsuaa.authentication.eu10.hana.ondemand.com",
+          "subaccountid": "8da3ba0a-5a8a-436a-bfe7-fb7eb40a3b6e",
+          "clientid": "sb-ccp-provider-dev-qas-dev-cloud-cold-chain!t61773",
+          "xsappname": "ccp-provider-dev-qas-dev-cloud-cold-chain!t61773",
+          "clientsecret": "oEPmeoq3s9kvPuGZsd89POK9Eo8=",
+          "url": "https://ccp-provider-dev-qas.authentication.eu10.hana.ondemand.com",
+          "uaadomain": "authentication.eu10.hana.ondemand.com",
+          "verificationkey": "-----BEGIN PUBLIC KEY-----MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAq7WZ6XNkzobHEY7s+HY8XTCfLJekHS5HnnU8m2BUVM58f4d6VotrFYoKgZSlJeLFKMpIASYnwNcbbWHCRm4sDtn/ZhpNfd1QuBxxfq7cW3K2zZt3hx8FGffYWDyzVX9vg1PxX0oH/cA1Cg6AAOBX4c4vN0CxScU+KLw3/NvwTMVjxgAY8c/2jSqXslvPaXURzl1zHENkYna0FnqgvEwPVtpLcjycFxboO8wGu1eabdkeNglPVE5i1Gvsxg70qmmGIPHvmsfFdaedBRMIQa8MRwUQ7ek/4qrGTJNr2uLZDKUwyqObkloNeEwt3onSVhcbiw8ODeoNSEzpCz8tKZjRQwIDAQAB-----END PUBLIC KEY-----",
+          "apiurl": "https://api.authentication.eu10.hana.ondemand.com",
+          "identityzone": "ccp-provider-dev-qas",
+          "identityzoneid": "8da3ba0a-5a8a-436a-bfe7-fb7eb40a3b6e",
+          "tenantid": "8da3ba0a-5a8a-436a-bfe7-fb7eb40a3b6e",
+          "zoneid": "8da3ba0a-5a8a-436a-bfe7-fb7eb40a3b6e"
         },
         "syslog_drain_url": null,
         "volume_mounts": []
