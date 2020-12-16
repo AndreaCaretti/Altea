@@ -21,9 +21,55 @@ class ProcessorAlertErrorTOR extends JobProcessor {
             this.logger.info("Nessun handling units ha raggiunto il TOR");
             return;
         }
+        const torToElaborate = await this.checkExistingTOR(expiredTorData, tx);
+        if (torToElaborate.length === 0) {
+            this.logger.info(
+                "Tutte le handling units che hanno superato il TOR hanno giá inviato un ALERT"
+            );
+            return;
+        }
 
-        await this.insertIntoAlertsErrorTor(now, expiredTorData, tx);
-        // await this.notificationAlert(now, expiredTorData, technicalUser);
+        const alertsErrorTorID = await this.insertIntoAlertsErrorTor(now, torToElaborate, tx);
+        await this.notificationAlert(now, alertsErrorTorID, technicalUser);
+    }
+
+    async checkExistingTOR(expiredTorData, tx) {
+        let torToElaborate = [];
+
+        // eslint-disable-next-line no-restricted-syntax
+        for (const element of expiredTorData) {
+            // eslint-disable-next-line no-await-in-loop
+            torToElaborate = await this.getTorToElaborate(element, torToElaborate, tx);
+        }
+        return torToElaborate;
+    }
+
+    async getTorToElaborate(element, torToElaborate, tx) {
+        const { AlertsErrorTorDetails } = cds.entities;
+        // eslint-disable-next-line no-await-in-loop
+        const duplicateRecord = await DB.checkDuplicateRecords(
+            AlertsErrorTorDetails,
+            { residenceTime_ID: element.ID },
+            tx,
+            this.logger
+        );
+        if (!duplicateRecord) {
+            const torToElaborateSingleRow = {
+                ID: element.ID,
+                handlingUnit_ID: element.handlingUnit_ID,
+                stepNr: element.stepNr,
+                area_ID: element.area_ID,
+                inBusinessTime: element.inBusinessTime,
+                outBusinessTime: element.outBusinessTime,
+                residenceTime: element.residenceTime,
+                tmin: element.tmin,
+                tmax: element.tmax,
+                torElaborationTime: element.torElaborationTime,
+                maxResidenceTime: element.maxResidenceTime,
+            };
+            torToElaborate.push(torToElaborateSingleRow);
+        }
+        return torToElaborate;
     }
 
     async insertIntoAlertsErrorTor(now, expiredTorData, tx) {
@@ -50,23 +96,24 @@ class ProcessorAlertErrorTOR extends JobProcessor {
         }));
 
         await DB.insertIntoTable(AlertsErrorTorDetails, alertsErrorTorDetails, tx, this.logger);
-
+        tx.commit();
         return resultHeader.req.data.ID;
     }
 
-    notificationAlert(now, data, technicalUser) {
+    notificationAlert(now, alertsErrorTorID, technicalUser) {
         const notificationService = NotificationService.getInstance(this.coldChainLogger);
-        this.logger.debug("inizio Notification Alert - record da elaborare: ", data.length);
-        data.forEach((element) => {
-            notificationService.alert(
-                technicalUser.id,
-                technicalUser.tenant,
-                now,
-                "TOR",
-                1, // LOG_ALERT
-                element
-            );
-        });
+        this.logger.debug("inizio Notification Alert - record da elaborare: ", alertsErrorTorID);
+        const element = {
+            alertsErrorTorID,
+        };
+        notificationService.alert(
+            technicalUser.id,
+            technicalUser.tenant,
+            now,
+            "TOR",
+            1, // LOG_ALERT
+            element
+        );
     }
 
     async getExpiredTOR(now, tx) {
