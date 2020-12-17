@@ -1,6 +1,6 @@
 const cds = require("@sap/cds");
-const fetch = require("node-fetch");
 const DB = require("../db-utilities");
+const WS = require("../ws-utilities");
 
 class Configuration {
     constructor(logger) {
@@ -143,7 +143,7 @@ class Configuration {
     }
 
     setCustomerTennantData(data) {
-        this.logger.info("Set Tennant information for Cstomer");
+        this.logger.info("Set Tennant information for Customer");
         return {
             tokenEndpoint: data.tokenEndpoint,
             uri: data.uri,
@@ -153,11 +153,19 @@ class Configuration {
     async sendConfigurationData(tx) {
         try {
             const configurationTosend = await this.getConfigurationData(tx);
-            const returnCode = await this.sendWithNodeFetch(configurationTosend, tx);
-            return returnCode;
+            const configurationEndpoint = await this.getServiceConfiguration(tx);
+            // LOG INVIO
+            const returnData = await WS.send(
+                configurationEndpoint.uri,
+                configurationEndpoint.method,
+                this.logger,
+                configurationEndpoint.headers,
+                JSON.stringify(configurationTosend)
+            );
+
+            return returnData;
         } catch (oError) {
-            this.logger.logException(`Errore invio configurazione, HTTP Code`, new Error(oError));
-            return oError;
+            return JSON.parse(oError.message);
         } finally {
             tx.commit();
         }
@@ -167,25 +175,9 @@ class Configuration {
         this.logger.info("Recupero informazioni Endpoit invio configurazione");
         return {
             uri: "https://cld-dev-smarty.keethings.app/api/coldchain/config",
+            headers: { "Content-Type": WS.CONTENT_TYPE.JSON },
+            method: WS.METHODS.POST,
         };
-    }
-
-    async sendWithNodeFetch(data, tx) {
-        const configurationEndpoint = await this.getServiceConfiguration(tx);
-        this.logger.logObject(`Data Send to configuration endpoint`, configurationEndpoint);
-        return new Promise((resolve, reject) => {
-            fetch(configurationEndpoint.uri, {
-                method: "POST",
-                body: JSON.stringify(data),
-                headers: { "Content-Type": "application/json" },
-            }).then((res) => {
-                if (res.status === 201) {
-                    resolve(res.status);
-                } else {
-                    reject(res.status);
-                }
-            });
-        });
     }
 }
 

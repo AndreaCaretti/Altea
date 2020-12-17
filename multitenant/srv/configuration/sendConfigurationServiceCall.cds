@@ -1,9 +1,11 @@
 service ConfigurationServiveCall {
 
-    action sendConfiguration() returns resultCode;
+    action sendConfiguration() returns ServiceResultCall;
 
-    type resultCode : {
-        ResultCode : Integer
+    type ServiceResultCall : {
+        HTTPStatus : Integer;
+        body       : String;
+        headers    : String;
     };
 
 }

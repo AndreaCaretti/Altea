@@ -56,10 +56,11 @@ class DB {
 
     /**
      *
-     * @param {} Tabella da cds.entities
-     * @param {JSON} condizione estrazione
-     * @param {} classe transaction
-     * @param {logger} classe logger
+     * @param {*} tableName
+     * @param {*} whereClause
+     * @param {*} andClause
+     * @param {*} tx
+     * @param {*} logger
      */
     static async selectAllRowsWhere(tableName, whereClause, andClause, tx, logger) {
         let allRows;
