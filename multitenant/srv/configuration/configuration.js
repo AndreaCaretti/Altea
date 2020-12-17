@@ -1,6 +1,6 @@
 const cds = require("@sap/cds");
 const DB = require("../db-utilities");
-const WS = require("../eews-utilities");
+const WS = require("../ws-utilities");
 
 class Configuration {
     constructor(logger) {
