@@ -16,7 +16,6 @@ class ProcessorAlertErrorTOR extends JobProcessor {
         const expiredTorData = await this.getExpiredTOR(now, tx);
 
         if (expiredTorData.length === 0) {
-            this.logger.info("Nessun handling units ha raggiunto il TOR");
             return;
         }
         const alertsErrorTorID = await this.insertIntoAlertsErrorTor(now, expiredTorData, tx);
@@ -93,7 +92,7 @@ class ProcessorAlertErrorTOR extends JobProcessor {
                 this.logger
             );
         } catch (error) {
-            this.logger.debug("Nessun prodotto ha superato il TOR: ", now);
+            this.logger.info("Nessun prodotto ha superato il TOR");
         }
         return expiredTORs;
     }
