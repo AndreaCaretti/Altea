@@ -80,4 +80,5 @@ class WSUtilities {
         return dataToReturn;
     }
 }
+
 module.exports = WSUtilities;
