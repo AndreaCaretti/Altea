@@ -140,15 +140,6 @@ class ProcessorAlertErrorTOR extends JobProcessor {
                 tx,
                 this.logger
             );
-
-            //    // TODO: gestire con DB-UTILITIES
-            //    expiredTORs = await tx.run(
-            //     SELECT("handlingUnit_ID")
-            //         .from(ResidenceTimeAlertsErrorTor)
-            //         .where("torID IS NULL}`)
-            //         .and("outBusinessTime IS NULL")
-            //         .or("outBusinessTime >= ", `${segmentTime}`)
-            // );
         } catch (error) {
             // Giusto, è possibile che non ci siano problemi tor
         }
