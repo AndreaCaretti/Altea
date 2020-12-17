@@ -436,24 +436,26 @@ Passaggi Handling Unit da Control Point, campi controllati
 
 Permanenza Handling Unit in area
 
-| _ID_                                 | HandlingUnit (HandlingUnits) | step | area (Area)                  | inBusinessTime           | outBusinessTime          | maxResidenceTime         | lastAlertErrorTor (AlertsErrorTor)   | failureIn | failureOut |
-| ------------------------------------ | ---------------------------- | ---- | ---------------------------- | ------------------------ | ------------------------ | ------------------------ | ------------------------------------ | --------- | ---------- |
-| a575140a-38d4-4b1b-9f3d-7e12fa4fe1be | 123456789012345678           | 1    | Produzione Plant A           | 2020-10-14T09:01:33.763Z | 2020-10-14T09:02:33.763Z | 2020-10-14T10:01:33.763Z | 7a6ac1d3-83b2-417d-83fd-244889b92e31 |           |            |
-| _GUID_                               | 123456789012345678           | 2    | Cold Room                    | 2020-10-14T09:02:33.763Z | 2020-10-14T09:03:33.763Z |                          |                                      |           |            |
-| _GUID_                               | 123456789012345678           | 3    | Uscita merci                 | 2020-10-14T09:03:33.763Z | 2020-10-14T09:04:33.763Z |                          |                                      |           |            |
-| _GUID_                               | 123456789012345678           | 2    | Cold Room                    | 2020-10-14T09:04:33.763Z | 2020-10-14T09:05:33.763Z |                          |                                      |           |            |
-| _GUID_                               | 123456789012345678           | 3    | Uscita merci                 | 2020-10-14T09:05:33.763Z | 2020-10-14T09:06:33.763Z |                          |                                      |           |            |
-| _GUID_                               | 123456789012345678           | 4    | Piazzale esterno             | 2020-10-14T09:06:33.763Z | 2020-10-14T09:07:33.763Z |                          |                                      |           |            |
-| _GUID_                               | 123456789012345678           | 5    | Truck                        | 2020-10-14T09:07:33.763Z | 2020-10-14T09:08:33.763Z |                          |                                      |           |            |
-| _GUID_                               | 123456789012345678           | 6    | Piazzale esterno depositario | 2020-10-14T09:08:33.763Z | 2020-10-14T09:09:33.763Z |                          |                                      |           |            |
-| _GUID_                               | 123456789012345678           | 7    | Depositario                  | 2020-10-14T09:09:33.763Z |                          |                          |                                      |           |            |
-| _GUID_                               | 123456789012345699           | 1    | Esterno Magazzino            | 2020-10-14T09:09:33.763Z | 2020-10-15T09:09:33.763Z |                          |                                      |           |            |
-| _GUID_                               | 123456789012345699           | 2    | Esterno Magazzino 2          | 2020-10-15T09:09:33.763Z |                          |                          |                                      |           |            |
+| _ID_                                 | HandlingUnit (HandlingUnits) | step | area (Area)                  | inBusinessTime           | outBusinessTime          | maxResidenceTime         | lastAlertErrorTor (AlertsErrorTor)   | tmin | tmax | failureIn | failureOut |
+| ------------------------------------ | ---------------------------- | ---- | ---------------------------- | ------------------------ | ------------------------ | ------------------------ | ------------------------------------ | ---- | ---- | --------- | ---------- |
+| a575140a-38d4-4b1b-9f3d-7e12fa4fe1be | 123456789012345678           | 1    | Produzione Plant A           | 2020-10-14T09:01:33.763Z | 2020-10-14T09:02:33.763Z | 2020-10-14T10:01:33.763Z | 7a6ac1d3-83b2-417d-83fd-244889b92e31 |      |      |           |            |
+| _GUID_                               | 123456789012345678           | 2    | Cold Room                    | 2020-10-14T09:02:33.763Z | 2020-10-14T09:03:33.763Z |                          |                                      |      |      |           |            |
+| _GUID_                               | 123456789012345678           | 3    | Uscita merci                 | 2020-10-14T09:03:33.763Z | 2020-10-14T09:04:33.763Z |                          |                                      |      |      |           |            |
+| _GUID_                               | 123456789012345678           | 2    | Cold Room                    | 2020-10-14T09:04:33.763Z | 2020-10-14T09:05:33.763Z |                          |                                      |      |      |           |            |
+| _GUID_                               | 123456789012345678           | 3    | Uscita merci                 | 2020-10-14T09:05:33.763Z | 2020-10-14T09:06:33.763Z |                          |                                      |      |      |           |            |
+| _GUID_                               | 123456789012345678           | 4    | Piazzale esterno             | 2020-10-14T09:06:33.763Z | 2020-10-14T09:07:33.763Z |                          |                                      |      |      |           |            |
+| _GUID_                               | 123456789012345678           | 5    | Truck                        | 2020-10-14T09:07:33.763Z | 2020-10-14T09:08:33.763Z |                          |                                      |      |      |           |            |
+| _GUID_                               | 123456789012345678           | 6    | Piazzale esterno depositario | 2020-10-14T09:08:33.763Z | 2020-10-14T09:09:33.763Z |                          |                                      |      |      |           |            |
+| _GUID_                               | 123456789012345678           | 7    | Depositario                  | 2020-10-14T09:09:33.763Z |                          |                          |                                      |      |      |           |            |
+| _GUID_                               | 123456789012345699           | 1    | Esterno Magazzino            | 2020-10-14T09:09:33.763Z | 2020-10-15T09:09:33.763Z |                          |                                      |      |      |           |            |
+| _GUID_                               | 123456789012345699           | 2    | Esterno Magazzino 2          | 2020-10-15T09:09:33.763Z |                          |                          |                                      |      |      |           |            |
 
 -   `inBusinessTime` : è l'ora di ingresso dell'handling unit nell'area
 -   `outBusinessTime`: è l'ora di uscita dell'handling unit dall'area
 -   `maxResidenceTime` : indica l'ora massima superata la quale scatta un problema di TOR
 -   `lastAlertErrorTor` : collegamento con l'ultimo job che ha rilevato un problema di TOR
+-   `tmin` : temperatura minima rilevata dall momento dell'ingresso al momento dell'uscita
+-   `tmax` : temperatura massima rilevata dall momento dell'ingresso al momento dell'uscita
 
 ## Tabella AlertsErrorTor
 
@@ -472,12 +474,13 @@ Taballe del dettaglio dei residenceTime collegati al problema di alerts errors t
 | _ID_                                 | alertErrorTor (AlertsErrorTor)       | residenceTime (ResidenceTime)        | tor |
 | ------------------------------------ | ------------------------------------ | ------------------------------------ | --- |
 | 8e69dda6-4c4b-441c-a966-89be10924843 | 7a6ac1d3-83b2-417d-83fd-244889b92e31 | a575140a-38d4-4b1b-9f3d-7e12fa4fe1be | 300 |
-|                                      | 7a6ac1d3-83b2-417d-83fd-244889b92e31 | a575140a-38d4-4b1b-9f3d-7e12fa4fe1be | 300 |
-|                                      | 7a6ac1d3-83b2-417d-83fd-244889b92e31 | a575140a-38d4-4b1b-9f3d-7e12fa4fe1be | 300 |
+| 5ed11ecb-3110-4d22-9246-35c6307a3902 | 7a6ac1d3-83b2-417d-83fd-244889b92e31 | b575140a-38d4-4b1b-9f3d-7e12fa4fe1be | 300 |
+| 71aa0ac6-1ec3-4f8d-8928-edfa1df90373 | 7a6ac1d3-83b2-417d-83fd-244889b92e31 | d575140a-38d4-4b1b-9f3d-7e12fa4fe1be | 300 |
+
 
 -   `alertErrorTor`: ID del job che ha rilevato il problema
 -   `residenceTime` : ID del record delle tabella `ResidenceTime` con il problema
--   `tor`: TOR attuale calcolato dal Job
+-   `tor`: TOR attuale in minuti calcolato dal Job
 
 ## Tabella OutOfRange
 
