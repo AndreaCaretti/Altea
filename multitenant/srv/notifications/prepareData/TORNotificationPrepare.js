@@ -27,6 +27,8 @@ class TORNotificationPrepare {
         // wait until all promises are resolved
         const TORDataToSend = await Promise.all(promises);
 
+        this.logger.logObject("Test", TORDataToSend);
+
         const valueOutPut = {
             guid: "ada49efe-c732-4ed3-a7a9-cb7275ae5c5e",
             severity: 1,
@@ -87,6 +89,7 @@ class TORNotificationPrepare {
             this.tx,
             this.logger
         );
+        this.logger.logObject("HUData for TOR Header", TORHUData);
         const singleOutPut = {
             guid: TORRowData.guid,
             severity,
