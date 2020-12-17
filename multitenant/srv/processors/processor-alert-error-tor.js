@@ -1,8 +1,6 @@
 const moment = require("moment");
 const DB = require("../db-utilities");
 
-// const cds = require("@sap/cds");
-// const QUEUE_NAMES = require("../queues-names");
 const NotificationService = require("../notifications/notificationService");
 const JobProcessor = require("./internal/job-processor");
 
@@ -21,9 +19,20 @@ class ProcessorAlertErrorTOR extends JobProcessor {
             this.logger.info("Nessun handling units ha raggiunto il TOR");
             return;
         }
+        const alertsErrorTorID = await this.insertIntoAlertsErrorTor(now, expiredTorData, tx);
+        tx.commit();
+        await this.notificationAlert(now, alertsErrorTorID, technicalUser);
+    }
 
-        await this.insertIntoAlertsErrorTor(now, expiredTorData, tx);
-        // await this.notificationAlert(now, expiredTorData, technicalUser);
+    async checkExistingTOR(expiredTorData, tx) {
+        let torToElaborate = [];
+
+        // eslint-disable-next-line no-restricted-syntax
+        for (const element of expiredTorData) {
+            // eslint-disable-next-line no-await-in-loop
+            torToElaborate = await this.getTorToElaborate(element, torToElaborate, tx);
+        }
+        return torToElaborate;
     }
 
     async insertIntoAlertsErrorTor(now, expiredTorData, tx) {
@@ -45,7 +54,7 @@ class ProcessorAlertErrorTOR extends JobProcessor {
 
         const alertsErrorTorDetails = expiredTorData.map((recordResidenceTime) => ({
             parent_ID: resultHeader.req.data.ID,
-            residenceTime_ID: recordResidenceTime.ID,
+            residenceTime_ID: recordResidenceTime.residenceTimeID,
             tor: nowMoment.diff(recordResidenceTime.inBusinessTime, "minutes"),
         }));
 
@@ -54,35 +63,37 @@ class ProcessorAlertErrorTOR extends JobProcessor {
         return resultHeader.req.data.ID;
     }
 
-    notificationAlert(now, data, technicalUser) {
+    notificationAlert(now, alertsErrorTorID, technicalUser) {
         const notificationService = NotificationService.getInstance(this.coldChainLogger);
-        this.logger.debug("inizio Notification Alert - record da elaborare: ", data.length);
-        data.forEach((element) => {
-            notificationService.alert(
-                technicalUser.id,
-                technicalUser.tenant,
-                now,
-                "TOR",
-                1, // LOG_ALERT
-                element
-            );
-        });
+        this.logger.debug("inizio Notification Alert - record da elaborare: ", alertsErrorTorID);
+        const element = {
+            alertsErrorTorID,
+        };
+        notificationService.alert(
+            technicalUser.id,
+            technicalUser.tenant,
+            now,
+            "TOR",
+            1, // LOG_ALERT
+            element
+        );
     }
 
     async getExpiredTOR(now, tx) {
-        this.logger.debug("getExpiredTOR to : ", now);
-        const { ResidenceTime } = cds.entities;
         let expiredTORs = [];
+        this.logger.debug("getExpiredTOR to : ", now);
+        const { ResidenceTimeAlertsErrorTor } = cds.entities;
+
         try {
             expiredTORs = await DB.selectAllRowsWhere(
-                ResidenceTime,
-                { outBusinessTime: null },
+                ResidenceTimeAlertsErrorTor,
+                ["outBusinessTime IS NULL", "AND", "TorID IS NULL"],
                 `maxResidenceTime <= '${now}'`,
                 tx,
                 this.logger
             );
         } catch (error) {
-            // Giusto, è possibile che non ci siano problemi tor
+            this.logger.debug("Nessun prodotto ha superato il TOR: ", now);
         }
         return expiredTORs;
     }

@@ -238,14 +238,20 @@ class DB {
     }
 
     static async checkDuplicateRecords(tableName, whereClause, tx, logger) {
+        let returnvalue;
         const record = await tx.run(SELECT.one(tableName).where(whereClause));
         if (record) {
-            throw Error(`Record Duplicato per ${tableName.name}/ where ${whereClause}`);
+            logger.debug(
+                `Record Duplicato per : ${tableName.name} where ${JSON.stringify(whereClause)}`
+            );
+            returnvalue = true;
+        } else {
+            logger.debug(
+                `Record NON duplicato per : ${tableName.name} where ${JSON.stringify(whereClause)}`
+            );
+            returnvalue = false;
         }
-
-        logger.debug(`Record non duplicato: ${tableName.name} ${JSON.stringify(whereClause)}`);
-
-        return false;
+        return returnvalue;
     }
 }
 
