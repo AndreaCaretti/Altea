@@ -93,7 +93,7 @@ class ProcessorAlertErrorTOR extends JobProcessor {
                 this.logger
             );
         } catch (error) {
-            // Giusto, è possibile che non ci siano problemi tor
+            this.logger.debug("Nessun prodotto ha superato il TOR: ", now);
         }
         return expiredTORs;
     }
