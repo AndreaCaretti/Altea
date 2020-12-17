@@ -105,7 +105,7 @@ class CloudColdChain {
         this.logger.info("😀 Cloud Cold Chain Platform Engine Started");
     }
 
-    // TODO: Togliere l'elenco hardcodato dei clienti
+    // FIXME: Togliere l'elenco hardcodato dei clienti
     async getAllTenants() {
         this.logger.info("Recupero elenco dei tenants dei clienti... ");
 
