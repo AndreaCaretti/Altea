@@ -36,7 +36,7 @@ class CloudColdChain {
         this.processorInsertResidenceTime = new ProcessorInsertResidenceTime(this.logger);
 
         // Notification - Notification BG Worker
-        this.processorNotification = new ProcessorNotification(this.logger);
+        this.processorNotification = new ProcessorNotification(this.logger, this.jobs);
 
         // Alert Error TOR Processor
         this.processorAlertErrorTOR = new ProcessorAlertErrorTOR(this.logger);
