@@ -22,7 +22,7 @@ class WSUtilities {
 
     static get CONTENT_TYPE() {
         return {
-            JSON: { "Content-Type": "application/json" },
+            JSON: "application/json",
         };
     }
 

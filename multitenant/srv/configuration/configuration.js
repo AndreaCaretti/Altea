@@ -175,7 +175,7 @@ class Configuration {
         this.logger.info("Recupero informazioni Endpoit invio configurazione");
         return {
             uri: "https://cld-dev-smarty.keethings.app/api/coldchain/config",
-            headers: WS.CONTENT_TYPE.JSON,
+            headers: { "Content-Type": WS.CONTENT_TYPE.JSON },
             method: WS.METHODS.POST,
         };
     }
