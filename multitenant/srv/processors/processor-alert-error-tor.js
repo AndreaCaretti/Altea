@@ -1,8 +1,6 @@
 const moment = require("moment");
 const DB = require("../db-utilities");
 
-// const cds = require("@sap/cds");
-// const QUEUE_NAMES = require("../queues-names");
 const NotificationService = require("../notifications/notificationService");
 const JobProcessor = require("./internal/job-processor");
 
@@ -36,34 +34,6 @@ class ProcessorAlertErrorTOR extends JobProcessor {
         }
         return torToElaborate;
     }
-
-    // async getTorToElaborate(element, torToElaborate, tx) {
-    //     const { AlertsErrorTorDetails } = cds.entities;
-    //     // eslint-disable-next-line no-await-in-loop
-    //     const duplicateRecord = await DB.checkDuplicateRecords(
-    //         AlertsErrorTorDetails,
-    //         { residenceTime_ID: element.ID },
-    //         tx,
-    //         this.logger
-    //     );
-    //     if (!duplicateRecord) {
-    //         const torToElaborateSingleRow = {
-    //             ID: element.ID,
-    //             handlingUnit_ID: element.handlingUnit_ID,
-    //             stepNr: element.stepNr,
-    //             area_ID: element.area_ID,
-    //             inBusinessTime: element.inBusinessTime,
-    //             outBusinessTime: element.outBusinessTime,
-    //             residenceTime: element.residenceTime,
-    //             tmin: element.tmin,
-    //             tmax: element.tmax,
-    //             torElaborationTime: element.torElaborationTime,
-    //             maxResidenceTime: element.maxResidenceTime,
-    //         };
-    //         torToElaborate.push(torToElaborateSingleRow);
-    //     }
-    //     return torToElaborate;
-    // }
 
     async insertIntoAlertsErrorTor(now, expiredTorData, tx) {
         this.logger.debug("insertIntoAlertsErrorTor to : ", now);
@@ -108,24 +78,6 @@ class ProcessorAlertErrorTOR extends JobProcessor {
             element
         );
     }
-
-    // async getExpiredTOR(now, tx) {
-    //     this.logger.debug("getExpiredTOR to : ", now);
-    //     const { ResidenceTime } = cds.entities;
-    //     let expiredTORs = [];
-    //     try {
-    //         expiredTORs = await DB.selectAllRowsWhere(
-    //             ResidenceTime,
-    //             { outBusinessTime: null },
-    //             `maxResidenceTime <= '${now}'`,
-    //             tx,
-    //             this.logger
-    //         );
-    //     } catch (error) {
-    //         // Giusto, è possibile che non ci siano problemi tor
-    //     }
-    //     return expiredTORs;
-    // }
 
     async getExpiredTOR(now, tx) {
         let expiredTORs = [];
