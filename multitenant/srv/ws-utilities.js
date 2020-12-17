@@ -74,7 +74,7 @@ class WSUtilities {
     static formatResolvePromise(result, bodyText) {
         const dataToReturn = {
             HTTPStatus: result.status,
-            headers: JSON.stringify([...result.headers]),
+            headers: result.headers,
             body: bodyText,
         };
         return dataToReturn;

@@ -12,6 +12,7 @@ module.exports = (configuration) => {
         const tx = oDB.getTransaction(user, logger);
         const JSONConfig = oConfiguration.getInstance(logger);
         const ServiceResult = await JSONConfig.sendConfigurationData(tx);
+        ServiceResult.headers = JSON.stringify([...ServiceResult.headers]);
         return ServiceResult;
     });
 };
