@@ -21,15 +21,8 @@ class ProcessorAlertErrorTOR extends JobProcessor {
             this.logger.info("Nessun handling units ha raggiunto il TOR");
             return;
         }
-        const torToElaborate = await this.checkExistingTOR(expiredTorData, tx);
-        if (torToElaborate.length === 0) {
-            this.logger.info(
-                "Tutte le handling units che hanno superato il TOR hanno giá inviato un ALERT"
-            );
-            return;
-        }
-
-        const alertsErrorTorID = await this.insertIntoAlertsErrorTor(now, torToElaborate, tx);
+        const alertsErrorTorID = await this.insertIntoAlertsErrorTor(now, expiredTorData, tx);
+        tx.commit();
         await this.notificationAlert(now, alertsErrorTorID, technicalUser);
     }
 
@@ -44,33 +37,33 @@ class ProcessorAlertErrorTOR extends JobProcessor {
         return torToElaborate;
     }
 
-    async getTorToElaborate(element, torToElaborate, tx) {
-        const { AlertsErrorTorDetails } = cds.entities;
-        // eslint-disable-next-line no-await-in-loop
-        const duplicateRecord = await DB.checkDuplicateRecords(
-            AlertsErrorTorDetails,
-            { residenceTime_ID: element.ID },
-            tx,
-            this.logger
-        );
-        if (!duplicateRecord) {
-            const torToElaborateSingleRow = {
-                ID: element.ID,
-                handlingUnit_ID: element.handlingUnit_ID,
-                stepNr: element.stepNr,
-                area_ID: element.area_ID,
-                inBusinessTime: element.inBusinessTime,
-                outBusinessTime: element.outBusinessTime,
-                residenceTime: element.residenceTime,
-                tmin: element.tmin,
-                tmax: element.tmax,
-                torElaborationTime: element.torElaborationTime,
-                maxResidenceTime: element.maxResidenceTime,
-            };
-            torToElaborate.push(torToElaborateSingleRow);
-        }
-        return torToElaborate;
-    }
+    // async getTorToElaborate(element, torToElaborate, tx) {
+    //     const { AlertsErrorTorDetails } = cds.entities;
+    //     // eslint-disable-next-line no-await-in-loop
+    //     const duplicateRecord = await DB.checkDuplicateRecords(
+    //         AlertsErrorTorDetails,
+    //         { residenceTime_ID: element.ID },
+    //         tx,
+    //         this.logger
+    //     );
+    //     if (!duplicateRecord) {
+    //         const torToElaborateSingleRow = {
+    //             ID: element.ID,
+    //             handlingUnit_ID: element.handlingUnit_ID,
+    //             stepNr: element.stepNr,
+    //             area_ID: element.area_ID,
+    //             inBusinessTime: element.inBusinessTime,
+    //             outBusinessTime: element.outBusinessTime,
+    //             residenceTime: element.residenceTime,
+    //             tmin: element.tmin,
+    //             tmax: element.tmax,
+    //             torElaborationTime: element.torElaborationTime,
+    //             maxResidenceTime: element.maxResidenceTime,
+    //         };
+    //         torToElaborate.push(torToElaborateSingleRow);
+    //     }
+    //     return torToElaborate;
+    // }
 
     async insertIntoAlertsErrorTor(now, expiredTorData, tx) {
         this.logger.debug("insertIntoAlertsErrorTor to : ", now);
@@ -91,12 +84,12 @@ class ProcessorAlertErrorTOR extends JobProcessor {
 
         const alertsErrorTorDetails = expiredTorData.map((recordResidenceTime) => ({
             parent_ID: resultHeader.req.data.ID,
-            residenceTime_ID: recordResidenceTime.ID,
+            residenceTime_ID: recordResidenceTime.residenceTimeID,
             tor: nowMoment.diff(recordResidenceTime.inBusinessTime, "minutes"),
         }));
 
         await DB.insertIntoTable(AlertsErrorTorDetails, alertsErrorTorDetails, tx, this.logger);
-        tx.commit();
+
         return resultHeader.req.data.ID;
     }
 
@@ -116,18 +109,46 @@ class ProcessorAlertErrorTOR extends JobProcessor {
         );
     }
 
+    // async getExpiredTOR(now, tx) {
+    //     this.logger.debug("getExpiredTOR to : ", now);
+    //     const { ResidenceTime } = cds.entities;
+    //     let expiredTORs = [];
+    //     try {
+    //         expiredTORs = await DB.selectAllRowsWhere(
+    //             ResidenceTime,
+    //             { outBusinessTime: null },
+    //             `maxResidenceTime <= '${now}'`,
+    //             tx,
+    //             this.logger
+    //         );
+    //     } catch (error) {
+    //         // Giusto, è possibile che non ci siano problemi tor
+    //     }
+    //     return expiredTORs;
+    // }
+
     async getExpiredTOR(now, tx) {
-        this.logger.debug("getExpiredTOR to : ", now);
-        const { ResidenceTime } = cds.entities;
         let expiredTORs = [];
+        this.logger.debug("getExpiredTOR to : ", now);
+        const { ResidenceTimeAlertsErrorTor } = cds.entities;
+
         try {
             expiredTORs = await DB.selectAllRowsWhere(
-                ResidenceTime,
-                { outBusinessTime: null },
+                ResidenceTimeAlertsErrorTor,
+                ["outBusinessTime IS NULL", "AND", "TorID IS NULL"],
                 `maxResidenceTime <= '${now}'`,
                 tx,
                 this.logger
             );
+
+            //    // TODO: gestire con DB-UTILITIES
+            //    expiredTORs = await tx.run(
+            //     SELECT("handlingUnit_ID")
+            //         .from(ResidenceTimeAlertsErrorTor)
+            //         .where("torID IS NULL}`)
+            //         .and("outBusinessTime IS NULL")
+            //         .or("outBusinessTime >= ", `${segmentTime}`)
+            // );
         } catch (error) {
             // Giusto, è possibile che non ci siano problemi tor
         }

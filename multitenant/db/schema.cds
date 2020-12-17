@@ -432,3 +432,26 @@ define entity AreaDetails                       as
         Areas.category.description           as categoryDescription,
         Areas.category.controlledTemperature as controlledTemperature,
     };
+
+define entity ResidenceTimeAlertsErrorTor       as
+    select from ResidenceTime
+    left join AlertsErrorTorDetails
+        on ResidenceTime.ID = AlertsErrorTorDetails.residenceTime.ID
+    {
+        ResidenceTime.ID                          as residenceTimeID,
+        // handlingUnit       : Association to one HandlingUnits;
+        ResidenceTime.stepNr                      as stepNr,
+        // area               : Association to one Areas;
+        ResidenceTime.inBusinessTime              as inBusinessTime,
+        ResidenceTime.outBusinessTime             as outBusinessTime,
+        ResidenceTime.residenceTime               as residenceTime,
+        ResidenceTime.tmin                        as tmin,
+        ResidenceTime.tmax                        as tma,
+        ResidenceTime.torElaborationTime          as torElaborationTime,
+        ResidenceTime.maxResidenceTime            as maxResidenceTime,
+        AlertsErrorTorDetails.parent.ID           as torID,
+        AlertsErrorTorDetails.parent.jobStartTime as torJobStartTime,
+        AlertsErrorTorDetails.ID                  as alertsErrorTorDetailsID,
+        AlertsErrorTorDetails.tor                 as tor,
+
+    };

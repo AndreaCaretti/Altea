@@ -128,6 +128,7 @@ class IotService extends ZApplicationService {
         let result;
 
         try {
+            // TODO: gestire con DB-UTILITIES
             result = await tx.run(
                 SELECT("handlingUnit_ID")
                     .from(cds.entities.ResidenceTime)

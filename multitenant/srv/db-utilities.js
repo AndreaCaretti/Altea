@@ -52,25 +52,33 @@ class DB {
     }
 
     static async selectAllRowsWhere(tableName, whereClause, andClause, tx, logger) {
-        let allRows;
-        if (!andClause) {
-            allRows = await tx.read(tableName).where(whereClause);
-        } else {
-            allRows = await tx.read(tableName).where(whereClause).and(andClause);
-        }
-
-        if (allRows.length === 0) {
+        let allRows = [];
+        try {
+            if (!andClause) {
+                allRows = await tx.read(tableName).where(whereClause);
+            } else {
+                allRows = await tx.read(tableName).where(whereClause).and(andClause);
+            }
+        } catch (error) {
             throw Error(
-                `selectAllRowsWhere - Record not found: ${tableName.name} where ${JSON.stringify(
+                `Error on selectAllRowsWhere -: ${tableName.name}/${JSON.stringify(
                     whereClause
-                )} -> '${JSON.stringify(allRows)}'`
+                )}  // Error: ${error}`
             );
         }
-        let logString = `selectAllRowsWhere: ${tableName.name} where ${JSON.stringify(
-            whereClause
-        )}`;
-        if (andClause) {
-            logString += ` and ${JSON.stringify(andClause)}`;
+
+        let logString;
+        if (allRows.length === 0) {
+            logString = `selectAllRowsWhere - Record not found: ${
+                tableName.name
+            } where ${JSON.stringify(whereClause)} -> '${JSON.stringify(allRows)}'`;
+        } else {
+            logString = `selectAllRowsWhere: ${tableName.name} where ${JSON.stringify(
+                whereClause
+            )}`;
+            if (andClause) {
+                logString += ` and ${JSON.stringify(andClause)}`;
+            }
         }
 
         logger.logObject(logString, allRows);
@@ -228,6 +236,7 @@ class DB {
             recordsCount = await tx.create(tableName).entries(row);
             logger.logObject(`Inserito record in tabella: ${tableName.name}`, row);
         } catch (error) {
+            tx.rollback();
             throw Error(`Wrong insert: ${error}/ ${JSON.stringify(row)}}`);
         }
         return recordsCount;
