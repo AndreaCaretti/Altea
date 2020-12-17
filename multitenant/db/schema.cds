@@ -192,8 +192,6 @@ define entity Lots : cuid, managed {
                          on handlingUnits.lot = $self;
 }
 
-//ROUTES
-// | _ID_   | prodotto (Products) | step | controlPoint (controlPoints) | direction | destinationArea (Locations) |
 @cds.autoexpose
 @cds.odata.valuelist
 @UI.Identification : [{Value : name}]
@@ -219,7 +217,6 @@ define entity RouteSteps : cuid {
         TextArrangement : #TextOnly
     }
     destinationArea : Association to one Areas;
-
 }
 
 
@@ -299,8 +296,6 @@ define entity ResidenceTime : cuid, managed {
     inBusinessTime     : Timestamp;
     outBusinessTime    : Timestamp;
     residenceTime      : Integer;
-    // singleTOR          : Integer;
-    //  totalTOR           : Integer;
     tmin               : Decimal;
     tmax               : Decimal;
     torElaborationTime : Timestamp;
@@ -326,6 +321,16 @@ define entity outOfRange : cuid, managed {
     segmentId    : UUID;
 }
 
+define entity OutOfRangeHandlingUnits : cuid, managed {
+    outOfRange   : Association to outOfRange;
+    handlingUnit : Association to HandlingUnits;
+    startTime    : Timestamp;
+    endTime      : Timestamp;
+    startReason  : cloudcoldchain.startReasonType;
+    endReason    : cloudcoldchain.endReasonType;
+    duration     : Integer;
+}
+
 define entity Notification : cuid, managed {
     alertBusinessTime : Timestamp;
     notificationTime  : Timestamp;
@@ -342,15 +347,21 @@ define entity NotificationPayloadPrepare : cuid, managed {
     preparationMethod : String(20);
 }
 
-define entity OutOfRangeHandlingUnits : cuid, managed {
-    outOfRange   : Association to outOfRange;
-    handlingUnit : Association to HandlingUnits;
-    startTime    : Timestamp;
-    endTime      : Timestamp;
-    startReason  : cloudcoldchain.startReasonType;
-    endReason    : cloudcoldchain.endReasonType;
-    duration     : Integer;
+@cds.autoexpose
+@cds.odata.valuelist
+@UI.Identification : [{Value : ID}]
+define entity AlertsErrorTor : cuid, managed {
+    jobStartTime          : Timestamp;
+    alertsErrorTorDetails : Composition of many AlertsErrorTorDetails
+                                on alertsErrorTorDetails.parent = $self;
 }
+
+define entity AlertsErrorTorDetails : cuid {
+    parent        : Association to AlertsErrorTor;
+    residenceTime : Association to one ResidenceTime;
+    tor           : Integer
+}
+
 
 /**
  * #

@@ -54,16 +54,13 @@ class DB {
         return singleRow[0];
     }
 
-    /**
-     *
-     * @param {} Tabella da cds.entities
-     * @param {JSON} condizione estrazione
-     * @param {} classe transaction
-     * @param {logger} classe logger
-     */
-
-    static async selectAllRowsWhere(tableName, whereClause, tx, logger) {
-        const allRows = await tx.read(tableName).where(whereClause);
+    static async selectAllRowsWhere(tableName, whereClause, andClause, tx, logger) {
+        let allRows;
+        if (!andClause) {
+            allRows = await tx.read(tableName).where(whereClause);
+        } else {
+            allRows = await tx.read(tableName).where(whereClause).and(andClause);
+        }
 
         if (allRows.length === 0) {
             throw Error(
@@ -72,11 +69,14 @@ class DB {
                 )} -> '${JSON.stringify(allRows)}'`
             );
         }
+        let logString = `selectAllRowsWhere: ${tableName.name} where ${JSON.stringify(
+            whereClause
+        )}`;
+        if (andClause) {
+            logString += ` and ${JSON.stringify(andClause)}`;
+        }
 
-        logger.logObject(
-            `selectAllRowsWhere: ${tableName.name} where ${JSON.stringify(whereClause)}`,
-            allRows
-        );
+        logger.logObject(logString, allRows);
 
         return allRows;
     }
@@ -268,14 +268,20 @@ class DB {
     }
 
     static async checkDuplicateRecords(tableName, whereClause, tx, logger) {
+        let returnvalue;
         const record = await tx.run(SELECT.one(tableName).where(whereClause));
         if (record) {
-            throw Error(`Record Duplicato per ${tableName.name}/ where ${whereClause}`);
+            logger.debug(
+                `Record Duplicato per : ${tableName.name} where ${JSON.stringify(whereClause)}`
+            );
+            returnvalue = true;
+        } else {
+            logger.debug(
+                `Record NON duplicato per : ${tableName.name} where ${JSON.stringify(whereClause)}`
+            );
+            returnvalue = false;
         }
-
-        logger.debug(`Record non duplicato: ${tableName.name} ${JSON.stringify(whereClause)}`);
-
-        return false;
+        return returnvalue;
     }
 }
 

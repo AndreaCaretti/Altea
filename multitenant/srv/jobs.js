@@ -141,6 +141,71 @@ class Jobs {
         }
     }
 
+    /**
+     *
+     * @param {*} tenant
+     * @param {*} queueName
+     * @param {*} jobInfo
+     * @param {*} cronScheduling CRON schedule
+     */
+    // esempio ogni cinque minuti "*/5 * * * *"
+    async scheduleJob(tenant, queueName, jobUser, cronScheduling) {
+        const jobInfo = {
+            user: jobUser,
+            tenant,
+        };
+
+        this.logger.warning(
+            "Non abbiamo ancora gestito code bull divise per tenant, il tenant viene forzato a null"
+        );
+
+        const queueTenant = null;
+
+        this.logger.logObject(
+            `Arrivata richiesta di aggiungere job schedulato ${cronScheduling} per tenant ${queueTenant} nome coda ${queueName}`,
+            jobInfo
+        );
+
+        const queue = this.queues.get(this.formatQueueName(queueTenant, queueName));
+
+        if (!queue) {
+            this.logger.error(
+                `Non ho trovato la coda bull per la coda ${this.formatQueueName(
+                    queueTenant,
+                    queueName
+                )}`
+            );
+            throw new Error(
+                `Non ho trovato la coda bull per la coda ${this.formatQueueName(
+                    queueTenant,
+                    queueName
+                )}`
+            );
+        }
+
+        if (queue.client.status !== "ready") {
+            this.logger.error(
+                `Lo stato di redis è ${queue.client.status}, non è possibile aggiungere job`
+            );
+            throw new Error(
+                `Lo stato di redis è ${queue.client.status}, non è possibile aggiungere job`
+            );
+        }
+
+        try {
+            const job = await queue.add(queueName, jobInfo, {
+                removeOnComplete: 1000,
+                repeat: { cron: cronScheduling },
+            });
+            this.logger.debug(
+                `Aggiunto job schedulato ${cronScheduling} ${queueName} id ${job.id}`
+            );
+        } catch (error) {
+            this.logger.logException(`Aggiunta di job schedulato rifiutata, error`, error);
+            throw new Error("Aggiunta di job schedulato rifiutata");
+        }
+    }
+
     async createQueue(queueName) {
         const queue = await this.createBullQueue(queueName);
         this.queues.set(queueName, queue);

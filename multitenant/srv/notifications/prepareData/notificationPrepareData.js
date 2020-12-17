@@ -57,7 +57,7 @@ class PrepareDataForNotification {
 
                 this.logger.logObject("Prepared data", preparedData);
 
-                tx.rollback();
+                tx.commit();
             } catch (error) {
                 tx.rollback();
                 throw error;

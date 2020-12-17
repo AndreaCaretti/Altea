@@ -1,8 +1,6 @@
 const NotificationService = require("../../notifications/notificationService");
 const DB = require("../../db-utilities");
 const ZApplicationService = require("../ZApplicationService");
-// const QueueIotService = require("../../queues/queue-iotService");
-// const ProcessorInsertResidenceTime = require("../../processors/processor-insert-residence-time");
 
 class IotService extends ZApplicationService {
     async init() {
@@ -81,25 +79,6 @@ class IotService extends ZApplicationService {
         );
     }
 
-    // async pushToQueueIotService(request, outOfRange, areaID) {
-    //     const record = {
-    //         user: request.user.id,
-    //         tenant: request.user.tenant,
-    //         area: areaID,
-    //         alertBusinessTime: outOfRange.eventTime,
-    //         alertCode: "LOG_ALERT",
-    //         alertLevel: 1, // LOG_ALERT
-    //         payload: JSON.stringify(outOfRange.data[0]),
-    //         GUID: outOfRange.data[0].entityId, // UUID del segmento
-    //         notificationType: "OLT",
-    //     };
-
-    //     if (!(await this.queue.pushToWaiting(record))) {
-    //         this.coldChainLogger.logException("Errore inserimento record in REDIS:", record);
-    //         throw new Error("Errore inserimento record nella lista Redis, rollback");
-    //     }
-    // }
-
     // eslint-disable-next-line class-methods-use-this
     async createOutOfRangeHandlingUnits(request, oorID, areaID, tx) {
         const outOfRange = request.data;
@@ -149,12 +128,6 @@ class IotService extends ZApplicationService {
         let result;
 
         try {
-            /*
-result = await tx.run(
-                `SELECT * FROM cloudcoldchain_ResidenceTime WHERE inBusinessTime < '${segmentTime}'
-                and ( outBusinessTime > '${segmentTime}' or outBusinessTime ISNULL)`
-          );
-        */
             result = await tx.run(
                 SELECT("handlingUnit_ID")
                     .from(cds.entities.ResidenceTime)
@@ -171,7 +144,6 @@ result = await tx.run(
     }
 
     async createOutOfRange(outOfRange, areaID, tx) {
-        let oorID;
         let Status = outOfRange.data[0].action;
         let startEvent;
         let endEvent;
@@ -189,23 +161,23 @@ result = await tx.run(
             tx,
             this.coldChainLogger
         );
-
+        let oorID;
         if (!duplicateRecord) {
-            try {
-                const res = await tx.create(cds.entities.outOfRange).entries({
-                    ID_DeviceIoT: outOfRange.extensions.modelId,
-                    area_ID: areaID,
-                    startEventTS: startEvent,
-                    endEventTS: endEvent,
-                    status: Status,
-                    segmentId: outOfRange.data[0].entityId,
-                });
-                oorID = res.req.data.ID;
-                // await tx.commit();
-            } catch (error) {
-                this.coldChainLogger.logException("ERRORE CREATE OutOfRange - iotService: ", error);
-                await tx.rollback();
-            }
+            const dataOutOfRange = {
+                ID_DeviceIoT: outOfRange.extensions.modelId,
+                area_ID: areaID,
+                startEventTS: startEvent,
+                endEventTS: endEvent,
+                status: Status,
+                segmentId: outOfRange.data[0].entityId,
+            };
+            const res = await DB.insertIntoTable(
+                cds.entities.outOfRange,
+                dataOutOfRange,
+                tx,
+                this.logger
+            );
+            oorID = res.req.data.ID;
         }
         return oorID;
     }
@@ -213,7 +185,6 @@ result = await tx.run(
     async updateOutOfRange(outOfRange, areaID, outOfRangeToUpdate, tx) {
         let startEvent;
         let endEvent;
-        let oorID;
         if (outOfRange.data[0].action === "OPEN") {
             startEvent = outOfRange.eventTime;
             endEvent = outOfRangeToUpdate.endEventTS;
@@ -222,19 +193,19 @@ result = await tx.run(
             startEvent = outOfRangeToUpdate.startEventTS;
             endEvent = outOfRange.eventTime;
         }
-        try {
-            await tx.update(cds.entities.outOfRange, outOfRangeToUpdate.ID).with({
-                status: "CLOSE",
-                startEventTS: startEvent,
-                endEventTS: endEvent,
-            });
-            oorID = outOfRangeToUpdate.ID;
-            //  await tx.commit();
-        } catch (error) {
-            this.coldChainLogger.logException("ERRORE UPDATE OutOfRange - iotService: ", error);
-            await tx.rollback();
-        }
-        return oorID;
+        const values = {
+            status: "CLOSE",
+            startEventTS: startEvent,
+            endEventTS: endEvent,
+        };
+        await DB.updateSomeFields(
+            cds.entities.outOfRange,
+            outOfRangeToUpdate.ID,
+            values,
+            tx,
+            this.logger
+        );
+        return outOfRangeToUpdate.ID;
     }
 
     // eslint-disable-next-line class-methods-use-this
