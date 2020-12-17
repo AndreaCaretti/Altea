@@ -33,9 +33,6 @@ if [ $? -eq 0 ]; then
     kill -9 $jobs_monitor_process
 fi
 
-# Blocca lo script se un comando restituisce exitcode diverso da 0
-set -o errexit
-
 # Utilizzo del DB locale (toglie se c'è l'env CDS_ENV=production)
 echo -e "${GREEN}DB Locale${NC}"
 unset CDS_ENV
@@ -44,8 +41,14 @@ unset CDS_ENV
 # 2020-10-26T20:50:49.608Z - 200 - message
 export SIMPLE_LOG=true
 
-# Avvia redis
-sudo service redis-server start
+# Avvia redis (se stoppato)
+redis_answer=$(redis-cli ping 2>/dev/null)
+if [ "$redis_answer" != "PONG" ]; then
+    sudo service redis-server start
+fi
+
+# Blocca lo script se un comando restituisce exitcode diverso da 0
+set -o errexit
 
 # Configurazione approuter per test in locale
 echo -e "Configurazione approuter per test in locale:"

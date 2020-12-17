@@ -33,9 +33,6 @@ if [ $? -eq 0 ]; then
     kill -9 $jobs_monitor_process
 fi
 
-# Blocca lo script se un comando restituisce exitcode diverso da 0
-set -o errexit
-
 # Configurazione per collegamento a DB Remoto
 echo -e "${GREEN}Configurazione per collegamento a DB Remoto${NC}"
 export CDS_ENV=production
@@ -44,8 +41,14 @@ export CDS_ENV=production
 # 2020-10-26T20:50:49.608Z - 200 - message
 export SIMPLE_LOG=true
 
-# Avvia redis
-sudo service redis-server start
+# Avvia redis (se stoppato)
+redis_answer=$(redis-cli ping 2>/dev/null)
+if [ "$redis_answer" != "PONG" ]; then
+    sudo service redis-server start
+fi
+
+# Blocca lo script se un comando restituisce exitcode diverso da 0
+set -o errexit
 
 # Configurazione route approuter per test in locale
 echo -e "Configurazione route approuter per test in locale:"
