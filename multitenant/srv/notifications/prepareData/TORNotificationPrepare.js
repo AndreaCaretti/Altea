@@ -1,87 +1,141 @@
 // const FgRed = "\x1b[31m";
-// const LOG_PREFIX = `Preparo dati per invio notifica TOR - `;
+const LOG_PREFIX = `Preparo dati per invio notifica TOR - `;
+const cds = require("@sap/cds");
 const DB = require("../../db-utilities");
 
+const alarmType = "TOR";
+const severity = 1;
+
 class TORNotificationPrepare {
-    static async prepareData(data) {
-        this.logger.info("Prepare data for Keetings");
-        const technicalUser = new cds.User({
-            id: data.user,
-            tenant: data.tenant,
-        });
+    static async prepareData(notification, logger, tx) {
+        this.logger = logger;
+        this.logger.info(`${LOG_PREFIX} Inizio`);
 
-        const tx = DB.getTransaction(technicalUser, this.logger);
+        const notificationPayload = notification.payload;
 
-        // UTILIZZO GUUID DEVICE IOT PER LEGGERE TABELLA
+        const TORHeaderData = await DB.selectAllRowsWhere(
+            cds.entities.AlertTORData,
+            { AlertsErrorTorID: notificationPayload.alertsErrorTorID },
+            undefined,
+            tx,
+            logger
+        );
+        this.notificationDate = new Date().toISOString();
+        this.tx = tx;
 
-        // const valueInput = JSON.parse(JSON.stringify(data));
+        const promises = TORHeaderData.map(this.loopOverTORHeader.bind(this));
+        // wait until all promises are resolved
+        const TORDataToSend = await Promise.all(promises);
+
         const valueOutPut = {
-            eventGuid: await DB.getUUID(),
-            // eventGuid invece che id
+            guid: "ada49efe-c732-4ed3-a7a9-cb7275ae5c5e",
             severity: 1,
-            eventDate: data.alertBusinessTime,
-            // invece che creationDate
-            notificationDate: data.notificationDate,
-            // momento in cui inseriamo la notifica nella coda verso keethings
-            area: {
-                // identifica l'area impattata dall'evento
-                // (per area intendiamo cella frigorifera ma in futuro anche un truck)
+            alarmType: "TOR",
+            eventDate: "2020-11-17T12:00:00Z",
+            notificationDate: "2020-11-17T12:05:00Z",
+            gtin: "1234567890123",
+            TOR: 7200000,
+            maxTOR: 3600000,
+            fromArea: {
                 guid: "c7163657-20c8-4fc3-925a-9028bc6b0d8f",
-                description: "Cold Room 1",
-                category: "COLD_ROOM",
-                // categoria dell'area impattata (COLD_ROOM, TRUCK, ...)
                 department: {
-                    // identifica il department in cui è contenuta l'area
                     guid: "c55dd03a-c097-487c-a60c-bf3fa8abea5b",
-                    description: "Packging",
                 },
                 location: {
-                    // identifica il plant in cui è contenuta l'area
                     guid: "c55dd03a-c097-487c-a60c-bf3fa8abea5b",
-                    description: "Plant A",
                 },
-                guidAsset: data.GUID, // guid dell'asset iot che ha notificato l'evento
+            },
+            toArea: {
+                guid: "d7163657-20c8-4fc3-925a-9028bc6b0d8f",
+                department: {
+                    guid: "c55dd03a-c097-487c-a60c-bf3fa8abea5b",
+                },
+                location: {
+                    guid: "c55dd03a-c097-487c-a60c-bf3fa8abea5b",
+                },
             },
             handlingUnits: [
-                // Stiamo ragionando per     "handling unit"
-                // contenute nell'area, dati aggregati per prodotto/lotto
                 {
                     gtin: "1234567890123",
-                    // gtin invece che       "unit"      "productDescription": "”Antibiotic X",
-                    // productDescription inve che       "description", non in lingua
                     lot: "U4654",
-                    quantity: "200", // potrebbe essere utile avere la quantità di handling unit presenti nell'area nel momento dell'evento
+                    quantity: 5,
+                    unitOfMeasure: "pallet",
                 },
                 {
                     gtin: "1234567890123",
-                    productDescription: "Antibiotic X",
                     lot: "U4655",
-                    quantity: "200",
+                    quantity: 3,
+                    unitOfMeasure: "pallet",
                 },
                 {
-                    gtin: "1234567890125",
-                    productDescription: "Antibiotic Y",
+                    gtin: "1234567890123",
                     lot: "U7655",
-                    quantity: "200",
+                    quantity: 200,
+                    unitOfMeasure: "cartoni",
                 },
             ],
-            alarmType: "OLT",
-            details: {
-                measurementUnit: "Celsius",
-                eventTemperature: "20.00",
-                // eventTemperature invece che currentTemperatura, nel momento dell'evento
-                workingTemperature: {
-                    // Range di temperatura impostato nella cella nel
-                    // momento della notifica (non dell'evento)
-                    min: "-20.00",
-                    max: "0.00",
-                },
-                cause: "", // Non disponibile
-            },
         };
 
-        tx.rollback();
         return valueOutPut;
+    }
+
+    static async loopOverTORHeader(TORRowData) {
+        const TORHUData = await DB.selectAllRowsWhere(
+            cds.entities.AlertTORResidenceTimeHUData,
+            { ResidenceTimeID: TORRowData.ResidenceTimeID },
+            undefined,
+            this.tx,
+            this.logger
+        );
+        const singleOutPut = {
+            guid: TORRowData.guid,
+            severity,
+            alarmType,
+            eventDate: TORRowData.eventDate,
+            notificationDate: this.notificationDate,
+            gtin: "1234567890123",
+            TOR: TORRowData.TOR,
+            maxTOR: 3600000,
+            fromArea: {
+                guid: "c7163657-20c8-4fc3-925a-9028bc6b0d8f",
+                department: {
+                    guid: "c55dd03a-c097-487c-a60c-bf3fa8abea5b",
+                },
+                location: {
+                    guid: "c55dd03a-c097-487c-a60c-bf3fa8abea5b",
+                },
+            },
+            toArea: {
+                guid: "d7163657-20c8-4fc3-925a-9028bc6b0d8f",
+                department: {
+                    guid: "c55dd03a-c097-487c-a60c-bf3fa8abea5b",
+                },
+                location: {
+                    guid: "c55dd03a-c097-487c-a60c-bf3fa8abea5b",
+                },
+            },
+            handlingUnits: [
+                {
+                    gtin: "1234567890123",
+                    lot: "U4654",
+                    quantity: 5,
+                    unitOfMeasure: "pallet",
+                },
+                {
+                    gtin: "1234567890123",
+                    lot: "U4655",
+                    quantity: 3,
+                    unitOfMeasure: "pallet",
+                },
+                {
+                    gtin: "1234567890123",
+                    lot: "U7655",
+                    quantity: 200,
+                    unitOfMeasure: "cartoni",
+                },
+            ],
+        };
+        return singleOutPut;
     }
 }
 

@@ -42,7 +42,7 @@ class PrepareDataForNotification {
                     this.logger
                 );
                 this.logger.info(
-                    `Prepare data for notification, class ${preparationStrategyInfo.preparationClass} method ${preparationStrategyInfo.method}`
+                    `Prepare data for notification, class ${preparationStrategyInfo.preparationClass} method ${preparationStrategyInfo.preparationMethod}`
                 );
                 // BASED ON CONFIGURATION TABLE PREPARE PAYLOAD
                 const preparation = this.GlobalNotificationPrepare[
@@ -57,9 +57,9 @@ class PrepareDataForNotification {
 
                 this.logger.logObject("Prepared data", preparedData);
 
-                tx.commit();
+                await tx.commit();
             } catch (error) {
-                tx.rollback();
+                await tx.rollback();
                 throw error;
             }
         } else {

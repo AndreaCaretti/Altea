@@ -237,7 +237,7 @@ define entity HandlingUnits : cuid, managed {
     }
     @title       : '{i18n>HandlingUnitTypology}'
     @description : '{i18n>HandlingUnitTypology}'
-    typology           : Composition of one HandlingUnitTypology;
+    typology           : Association to one HandlingUnitTypology;
     @Common      : {
         Text            : lastKnownArea.name,
         TextArrangement : #TextOnly
@@ -362,13 +362,35 @@ define entity AlertsErrorTorDetails : cuid {
     tor           : Integer
 }
 
+/**
+ * #
+ *
+ * # ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
+ *
+ * # View Defintions - General
+ *
+ * # ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+ */
+
+define entity AreaDetails                       as
+    select from Areas distinct {
+        Areas.ID                             as areaID,
+        Areas.name                           as areaName,
+        Areas.department.name                as departmentName,
+        Areas.ID_DeviceIoT                   as ID_DeviceIoT,
+        Areas.minWorkingTemperature          as minWorkingTemperature,
+        Areas.maxWorkingTemperature          as maxWorkingTemperature,
+        Areas.category.name                  as categoryName,
+        Areas.category.description           as categoryDescription,
+        Areas.category.controlledTemperature as controlledTemperature,
+    };
 
 /**
  * #
  *
  * # ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
  *
- * # View Defintions
+ * # View Defintions - OLT
  *
  * # ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
  */
@@ -438,21 +460,62 @@ define entity OutOfRangeHandlingUnitDetailCount as
         handlingUnit.lot.name,
         handlingUnit.lot.product.gtin;
 
+/**
+ * #
+ *
+ * # ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
+ *
+ * # View Defintions - TOR
+ *
+ * # ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+ */
 
-define entity AreaDetails                       as
-    select from Areas distinct {
-        Areas.ID                             as areaID,
-        Areas.name                           as areaName,
-        Areas.department.name                as departmentName,
-        Areas.ID_DeviceIoT                   as ID_DeviceIoT,
-        Areas.minWorkingTemperature          as minWorkingTemperature,
-        Areas.maxWorkingTemperature          as maxWorkingTemperature,
-        Areas.category.name                  as categoryName,
-        Areas.category.description           as categoryDescription,
-        Areas.category.controlledTemperature as controlledTemperature,
+entity AlertTORData                             as
+    select from cloudcoldchain.AlertsErrorTor distinct {
+        AlertsErrorTor.ID                      as AlertsErrorTorID,
+        alertsErrorTorDetails.ID               as guid,
+        AlertsErrorTor.modifiedAt              as eventDate,
+        alertsErrorTorDetails.tor              as TOR,
+        alertsErrorTorDetails.residenceTime.ID as ResidenceTimeID
+    }
+    group by
+        AlertsErrorTor.ID,
+        alertsErrorTorDetails.ID,
+        AlertsErrorTor.modifiedAt,
+        alertsErrorTorDetails.tor,
+        alertsErrorTorDetails.residenceTime.ID;
+
+entity AlertTORResidenceTimeHUData              as
+    select from cloudcoldchain.ResidenceTime
+    inner join cloudcoldchain.AlertTORData
+        on AlertTORData.ResidenceTimeID = ResidenceTime.ID
+    {
+        ResidenceTime.ID                            as ResidenceTimeID,
+        ResidenceTime.handlingUnit.ID               as HU_ID,
+        ResidenceTime.handlingUnit.lot.ID           as lot,
+        ResidenceTime.handlingUnit.lot.product.gtin as gtin,
+        ResidenceTime.handlingUnit.typology.uom     as unitOfMeasure
     };
 
 
+entity AlertTORResidenceTimeHUDataHeader        as
+    select from cloudcoldchain.AlertTORResidenceTimeHUData distinct {
+        ResidenceTimeID,
+        HU_ID,
+        lot,
+        gtin,
+        unitOfMeasure
+    };
+
+/**
+ * #
+ *
+ * # ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
+ *
+ * # View Defintions - SEND TO EXTERNAL SYSTEMA - CONFIGURATION
+ *
+ * # ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+ */
 @cds.autoexpose
 context DatatoExternalTools {
     entity CustomerView          as projection on cloudcoldchain.Customers {
@@ -496,4 +559,5 @@ context DatatoExternalTools {
     entity ProductsView          as projection on cloudcoldchain.Products {
         Products.gtin as gtin, Products.name as description, Products.QAManager as QAManager, Products.productManager as productManager
     };
+
 };

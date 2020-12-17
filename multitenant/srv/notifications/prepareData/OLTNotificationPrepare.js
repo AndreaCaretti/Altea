@@ -5,7 +5,6 @@ const DB = require("../../db-utilities");
 
 class OLTNotificationPrepare {
     static async prepareData(notification, logger, tx) {
-        // return new Promise((resolve, reject) => {
         this.logger = logger;
         this.logger.info(`${LOG_PREFIX}Prepare data for OLT`);
 

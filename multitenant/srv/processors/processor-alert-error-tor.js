@@ -96,7 +96,7 @@ class ProcessorAlertErrorTOR extends JobProcessor {
         }));
 
         await DB.insertIntoTable(AlertsErrorTorDetails, alertsErrorTorDetails, tx, this.logger);
-        tx.commit();
+        await tx.commit();
         return resultHeader.req.data.ID;
     }
 
