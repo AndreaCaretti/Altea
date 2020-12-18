@@ -151,6 +151,7 @@ define entity Products : cuid, managed {
     gtin             : cloudcoldchain.GTIN;
     @title       : 'Product'
     name             : String(100);
+    @title       : 'ERP Product Code'
     erpProductCode   : String(50);
     @title       : 'Max TOR (minutes)'
     maxTor           : Integer;
