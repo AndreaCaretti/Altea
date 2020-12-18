@@ -13,7 +13,6 @@ annotate cloudcoldchain.Customers with {
 }
 
 annotate cloudcoldchain.ControlPoints with {
-    ID @Core.Computed;
 }
 
 annotate cloudcoldchain.ControlPointsCategories with {
