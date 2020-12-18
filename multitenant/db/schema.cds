@@ -152,9 +152,19 @@ define entity Products : cuid, managed {
     @title       : 'Product'
     name             : String(100);
     erpProductCode   : String(50);
-    @title       : 'Max TOR (min)'
+    @title       : 'Max TOR (minutes)'
     maxTor           : Integer;
+    @Common      : {
+        Text            : temperatureRange.name,
+        TextArrangement : #TextOnly
+    }
+    @title       : '{i18n>TemperatureRanges}'
+    @description : '{i18n>TemperatureRanges}'
     temperatureRange : Association to one TemperatureRanges;
+    @Common      : {
+        Text            : route.name,
+        TextArrangement : #TextOnly
+    }
     @title       : '{i18n>RouteTitle}'
     @description : '{i18n>RouteDescription}'
     route            : Association to one Routes;
