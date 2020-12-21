@@ -1,2 +1,2 @@
-ID,createdAt,createdBy,modifiedAt,modifiedBy,gtin,name,erpProductCode,maxTor,QAManager,productManager,temperatureRange_ID,route_ID
+ID,createdAt,createdBy,modifiedAt,modifiedBy,gtin,name,erpProductCode,maxTor,productManager,QAManager,temperatureRange_ID,route_ID
 bcd1d512-9e0f-4417-ab71-253d1ec13440,2020-12-21T16:46:42.700Z,alice,2020-12-21T16:53:59.432Z,alice,0340092697146,"Aspirina 1000mg",ASP001,120,,,d0134f5e-afbd-42bc-b850-7a6fb5a0b707,df0bf605-bec6-4ee8-91fc-d4b02931b1e4
