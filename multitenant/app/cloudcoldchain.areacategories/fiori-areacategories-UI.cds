@@ -30,17 +30,22 @@ annotate Services.AreaCategories with @(UI : {
     HeaderFacets        : [
                            // {$Type: 'UI.ReferenceFacet', Label: 'Identification', Target: '@UI.FieldGroup@Header'},
                           ],
-    Facets              : [{
+    Facets              : [
+    {
+        $Type  : 'UI.ReferenceFacet',
+        Label  : '{i18n>General}',
+        Target : '@UI.FieldGroup#General'
+    },
+    {
         $Type  : 'UI.ReferenceFacet',
         Label  : '{i18n>Admin}',
         Target : '@UI.FieldGroup#Admin'
-    }, ],
+    },
+    ],
     FieldGroup #Header  : {Data : [
                                    // {Value: name}
                                   ]},
-    FieldGroup #General : {Data : [
-                                   // {Value: name}
-                                  ]},
+    FieldGroup #General : {Data : [{Value : controlledTemperature}]},
     FieldGroup #Admin   : {Data : [
     {Value : createdBy},
     {Value : createdAt},

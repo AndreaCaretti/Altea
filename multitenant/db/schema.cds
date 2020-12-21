@@ -105,6 +105,7 @@ define entity AreaCategories : cuid, managed {
     @title : 'Area Category'
     name                  : String(50);
     description           : localized String(200);
+    @title : 'Controlled Temperature'
     controlledTemperature : Boolean;
 }
 
@@ -337,6 +338,7 @@ define entity ResidenceTime : cuid, managed {
     tmin               : Decimal;
     tmax               : Decimal;
     torElaborationTime : Timestamp;
+    @title  : '{i18n>MaxResidenceTime}'
     maxResidenceTime   : Timestamp;
 }
 
