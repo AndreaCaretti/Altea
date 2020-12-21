@@ -239,14 +239,13 @@ Range di temperature
 | _GUID_ | Cartoni   | cartoni  |
 | _GUID_ | Blister   | blister  |
 
-
 ## Tabella Mapping tipo Notifica funzione di preparazione Payload NotificationPayloadPrepare
+
 | _ID_ | value String(20) | preparationClass String(20) | preparationMethod String(20) |
 | ---- | ---------------- | --------------------------- | ---------------------------- |
 | GUID | OLT              | OLTNotificationPrepare      | prepareData                  |
 | GUID | TOR              | TORNotificationPrepare      | prepareData                  |
 | GUID | EOD              | EODotificationPrepare       | prepareData                  |
-
 
 # Tabelle parametriche/customizing singolo cliente
 
@@ -275,6 +274,12 @@ Dati anagrafici cliente, siccome i dati dei clienti sono separati a livello di t
 | _GUID_ | DEPARTMENT B | Description 2 | PlantB   |
 
 ## Tabella Areas
+
+| _ID_                                 | name                    | category                             | department                       | ID_DeviceIoT                         | minWorkingTemperature | maxWorkingTemperature | assetManager         |
+| ------------------------------------ | ----------------------- | ------------------------------------ | -------------------------------- | ------------------------------------ | --------------------- | --------------------- | -------------------- |
+| 00ff1f4e-9292-4743-9573-678a9663272e | "Cella1 Plant A"        | 66f18636-3000-11eb-adc1-0242ac120002 | 592D9BEA5FD74E3DBF2C9BF5BD7CDA26 | 59f89a92-87b8-4ad1-9209-5dde5cdb77d2 | 0                     | -10                   | coldroom1@domain.com |
+| 060432be-3001-11eb-adc1-0242ac120002 | "Magazzino Plant A"     | c07a1434-3000-11eb-adc1-0242ac120002 | 88888                            | f888bf1e-8f6e-4185-a62a-8240b3050d30 | 0                     | -10                   | coldroom2@domain.com |
+| 2e0d8f14-59d7-4020-b91c-bfec1a53ff3f | "Magazzino Due Plant A" | c07a1434-3000-11eb-adc1-0242ac120002 | 77777                            | b1c9aa03-daa0-4c5d-a202-5b403d1f13f7 | 0                     | -10                   | coldroom3@domain.com |
 
 ### Produttore
 
@@ -334,22 +339,22 @@ Dati anagrafici cliente, siccome i dati dei clienti sono separati a livello di t
 | _GUID_ | Stoccaggio     | Gate RFID                          |
 | _GUID_ | Uscita Merci A | Gate RFID                          |
 
-
 # Tabelle anagrafiche
 
 Tabelle anagrafiche con dati specifici di un singolo cliente, i dati dei clienti sono suddivisi a livello tenant
 
 ## Tabella Products
 
-| _ID_   | _gtin_ (GTIN) | erpProductCode (50) | denomination (100) | max_tor | temperatureRange | route  |
-| ------ | ------------- | ------------------- | ------------------ | ------- | ---------------- | ------ |
-| _GUID_ | 1234567890123 | PROD-001            | Sacca di sangue    | 200     | 12-18            | _GUID_ |
+| _ID_   | _gtin_ (GTIN) | erpProductCode (50) | denomination (100) | max_tor | temperatureRange | route  | QAManager             |
+| ------ | ------------- | ------------------- | ------------------ | ------- | ---------------- | ------ | --------------------- |
+| _GUID_ | 1234567890123 | PROD-001            | Sacca di sangue    | 200     | 12-18            | _GUID_ | qamanager2@domain.com |
 
 -   01-09 Prefisso aziendale GS1
 -   10-12 Codide prodotto
 -   13 Cifra di controllo
 
 -   max_tor è il numero di minuti massimo fuori dal range di temperatura
+-   QAManager -> manager della qualità riferito al prodotto, utilizzato all'interno dell' [invio configurazione](#views-invio-configurazione)
 
 ## Tabella Routes
 
@@ -433,34 +438,93 @@ Passaggi Handling Unit da Control Point, campi controllati
 -   elaborationTime indica in quale momento il movimento è stato elaborato dalla routine che gestisce gli spostamenti cioè che aggiorna il campo lastKnowArea nella tabella HandlingUnits
     e aggiorna la tabella HandlingUnitsResidenceTime
 
+
 ## Tabella ResidenceTime
 
 Permanenza Handling Unit in area
 
-| _ID_   | HandlingUnit (HandlingUnits) | step | area (Area)                  | inBusinessTime           | outBusinessTime          | residenceTime (Integer) | tor   | failureIn | failureOut | totalTor      | tmin  | tmax  | torElaborationTime (Timestamp) |
-| ------ | ---------------------------- | ---- | ---------------------------- | ------------------------ | ------------------------ | ----------------------- | ----- | --------- | ---------- | ------------- | :---: | :---: | ------------------------------ |
-| _GUID_ | 123456789012345678           | 1    | Produzione Plant A           | 2020-10-14T09:01:33.763Z | 2020-10-14T09:02:33.763Z | 1600                    | 1600  |           |            |               |       |       | 2020-10-14T09:01:33.763Z       |
-| _GUID_ | 123456789012345678           | 2    | Cold Room                    | 2020-10-14T09:02:33.763Z | 2020-10-14T09:03:33.763Z | 3600                    | 30    |           |            |               |   4   |  20   | 2020-10-14T09:01:33.763Z       |
-| _GUID_ | 123456789012345678           | 3    | Uscita merci                 | 2020-10-14T09:03:33.763Z | 2020-10-14T09:04:33.763Z | 1600                    | 1600  |           |            |               |       |       | 2020-10-14T09:01:33.763Z       |
-| _GUID_ | 123456789012345678           | 2    | Cold Room                    | 2020-10-14T09:04:33.763Z | 2020-10-14T09:05:33.763Z | 3600                    | 30    |           |            |               |   4   |  20   | 2020-10-14T09:01:33.763Z       |
-| _GUID_ | 123456789012345678           | 3    | Uscita merci                 | 2020-10-14T09:05:33.763Z | 2020-10-14T09:06:33.763Z | 1600                    |       |           |            |               |       |       |                                |
-| _GUID_ | 123456789012345678           | 4    | Piazzale esterno             | 2020-10-14T09:06:33.763Z | 2020-10-14T09:07:33.763Z | 2000                    | 2000  |           |            |               |       |       |                                |
-| _GUID_ | 123456789012345678           | 5    | Truck                        | 2020-10-14T09:07:33.763Z | 2020-10-14T09:08:33.763Z | 20                      |       |           |            |               |       |       |                                |
-| _GUID_ | 123456789012345678           | 6    | Piazzale esterno depositario | 2020-10-14T09:08:33.763Z | 2020-10-14T09:09:33.763Z | 20                      |       |           |            |               |       |       |                                |
-| _GUID_ | 123456789012345678           | 7    | Depositario                  | 2020-10-14T09:09:33.763Z |                          | 20                      |       |           |            |               |       |       |                                |
-| _GUID_ | 123456789012345699           | 1    | Esterno Magazzino            | 2020-10-14T09:09:33.763Z | 2020-10-15T09:09:33.763Z | 1 day                   | 1 day |           |            | 1 day         |       |       |                                |
-| _GUID_ | 123456789012345699           | 2    | Esterno Magazzino 2          | 2020-10-15T09:09:33.763Z |                          |                         |       |           |            | 2 day + diff. |       |       |                                |
+| _ID_                                 | HandlingUnit (HandlingUnits) | step | area (Area)                  | inBusinessTime           | outBusinessTime          | maxResidenceTime         | lastAlertErrorTor (AlertsErrorTor)   | tmin | tmax | failureIn | failureOut |
+| ------------------------------------ | ---------------------------- | ---- | ---------------------------- | ------------------------ | ------------------------ | ------------------------ | ------------------------------------ | ---- | ---- | --------- | ---------- |
+| a575140a-38d4-4b1b-9f3d-7e12fa4fe1be | 123456789012345678           | 1    | Produzione Plant A           | 2020-10-14T09:01:33.763Z | 2020-10-14T09:02:33.763Z | 2020-10-14T10:01:33.763Z | 7a6ac1d3-83b2-417d-83fd-244889b92e31 |      |      |           |            |
+| _GUID_                               | 123456789012345678           | 2    | Cold Room                    | 2020-10-14T09:02:33.763Z | 2020-10-14T09:03:33.763Z |                          |                                      |      |      |           |            |
+| _GUID_                               | 123456789012345678           | 3    | Uscita merci                 | 2020-10-14T09:03:33.763Z | 2020-10-14T09:04:33.763Z |                          |                                      |      |      |           |            |
+| _GUID_                               | 123456789012345678           | 2    | Cold Room                    | 2020-10-14T09:04:33.763Z | 2020-10-14T09:05:33.763Z |                          |                                      |      |      |           |            |
+| _GUID_                               | 123456789012345678           | 3    | Uscita merci                 | 2020-10-14T09:05:33.763Z | 2020-10-14T09:06:33.763Z |                          |                                      |      |      |           |            |
+| _GUID_                               | 123456789012345678           | 4    | Piazzale esterno             | 2020-10-14T09:06:33.763Z | 2020-10-14T09:07:33.763Z |                          |                                      |      |      |           |            |
+| _GUID_                               | 123456789012345678           | 5    | Truck                        | 2020-10-14T09:07:33.763Z | 2020-10-14T09:08:33.763Z |                          |                                      |      |      |           |            |
+| _GUID_                               | 123456789012345678           | 6    | Piazzale esterno depositario | 2020-10-14T09:08:33.763Z | 2020-10-14T09:09:33.763Z |                          |                                      |      |      |           |            |
+| _GUID_                               | 123456789012345678           | 7    | Depositario                  | 2020-10-14T09:09:33.763Z |                          |                          |                                      |      |      |           |            |
+| _GUID_                               | 123456789012345699           | 1    | Esterno Magazzino            | 2020-10-14T09:09:33.763Z | 2020-10-15T09:09:33.763Z |                          |                                      |      |      |           |            |
+| _GUID_                               | 123456789012345699           | 2    | Esterno Magazzino 2          | 2020-10-15T09:09:33.763Z |                          |                          |                                      |      |      |           |            |
+
+-   `inBusinessTime` : è l'ora di ingresso dell'handling unit nell'area
+-   `outBusinessTime`: è l'ora di uscita dell'handling unit dall'area
+-   `maxResidenceTime` : indica l'ora massima superata la quale scatta un problema di TOR
+-   `lastAlertErrorTor` : collegamento con l'ultimo job che ha rilevato un problema di TOR
+-   `tmin` : temperatura minima rilevata dall momento dell'ingresso al momento dell'uscita
+-   `tmax` : temperatura massima rilevata dall momento dell'ingresso al momento dell'uscita
+
+## Tabella AlertsErrorTor
+
+Tabella dei problemi di TOR determinati dalla piattaforma
+
+| _ID_                                 | jobStartTime             |
+| ------------------------------------ | ------------------------ |
+| 7a6ac1d3-83b2-417d-83fd-244889b92e31 | 2020-10-14T09:01:33.763Z |
+
+-   `jobStartTime`: è l'ora in cui è stato rilevato il problema
+
+## Tabella AlertsErrorTorDetails
+
+Taballe del dettaglio dei residenceTime collegati al problema di alerts errors tor
+
+| _ID_                                 | alertErrorTor (AlertsErrorTor)       | residenceTime (ResidenceTime)        | tor |
+| ------------------------------------ | ------------------------------------ | ------------------------------------ | --- |
+| 8e69dda6-4c4b-441c-a966-89be10924843 | 7a6ac1d3-83b2-417d-83fd-244889b92e31 | a575140a-38d4-4b1b-9f3d-7e12fa4fe1be | 300 |
+| 5ed11ecb-3110-4d22-9246-35c6307a3902 | 7a6ac1d3-83b2-417d-83fd-244889b92e31 | b575140a-38d4-4b1b-9f3d-7e12fa4fe1be | 300 |
+| 71aa0ac6-1ec3-4f8d-8928-edfa1df90373 | 7a6ac1d3-83b2-417d-83fd-244889b92e31 | d575140a-38d4-4b1b-9f3d-7e12fa4fe1be | 300 |
 
 
--   inBusinessTime è l'ora di ingresso dell'handling unit nell'area
--   outBusinessTime è l'ora di uscita dell'handling unit dall'area
--   ResidenceTime è il numero di minuti di permanenza dell'handling unit nell'area
--   TOR è il numero di minuti di permanenza nell'area con temperatura fuori range
--   tmin
--   tman
--   elaborationTimeTor momento in cui sono stati recuperati di dati di temperatura e calcolo TOR
+-   `alertErrorTor`: ID del job che ha rilevato il problema
+-   `residenceTime` : ID del record delle tabella `ResidenceTime` con il problema
+-   `tor`: TOR attuale in minuti calcolato dal Job
 
-(per recuperare i range di temperatura dei soggetti esterni verrà esposto un servizio esterno alla piattaforma)
+## Tabella OutOfRange
+
+Tabella delle segnalazioni ricevute dal iot per alert di temperatura out of range e calcolo del TOR
+
+| _ID_                                 | ID_DeviceIot | startEventTS             | endEventTS               | area (Area) | segmentId (GUID) |
+| ------------------------------------ | ------------ | ------------------------ | ------------------------ | ----------- | ---------------- |
+| 10d2f997-1e9c-4b21-8817-d48171ead166 | cella1       | 2020-10-14T09:01:33.763Z | 2020-11-14T09:01:33.763Z |             |                  |
+| _GUID_                               | cella2       | 2020-10-14T09:01:33.763Z | 2020-10-19T09:01:33.763Z |             |                  |
+| _GUID_                               | cella3       | 2020-10-14T09:01:33.763Z |                          |             |                  |
+
+-   `ID_DeviceIot`: ID del device IoT che ha inviato la segnalazione
+-   `startEventTS`: è l'ora di inizio del problema
+-   `endEventTS`: è l'ora di fine del problema
+-   `area`: area collegata al device IoT nel momento in cui abbiamo ricevuto la segnalazione
+-   `segmentId`: ID del segmento IoT collegato alla segnalazione
+
+## Tabella OutOfRangeHandlingUnits
+
+Tabella delle handling units collegate alla segnalazione di out of range
+
+| _ID_                                 | outOfRange (OutOfRange)              | handlingUnit (HandlingUnit) | startTime                | endTime                  | startReason (enum) | endReason | duration (Integer) |     |
+| ------------------------------------ | ------------------------------------ | --------------------------- | ------------------------ | ------------------------ | ------------------ | --------- | ------------------ | --- |
+| 99d2f997-1e9c-4b21-8817-d48171ead166 | 10d2f997-1e9c-4b21-8817-d48171ead166 | _GUID_                      | 2020-10-14T09:01:33.763Z | 2020-11-14T09:01:33.763Z |                    |           |                    |
+| _GUID_                               | cella2                               |                             | 2020-10-14T09:01:33.763Z | 2020-10-19T09:01:33.763Z |                    |           |                    |
+| _GUID_                               | cella3                               |                             | 2020-10-14T09:01:33.763Z |                          |                    |           |                    |
+
+-   `outOfRange`: collegamento al segmento `OutOfRange` che ha scatenato il problema
+-   `startTime`: ora di inizio del problema oppure momento in cui la cella è entrata nella cella
+-   `startReason`: motivo dell'inizio del problema
+    -   `WAS_ALREADY_IN_AREA`: l'handling unit si trovava nell'area nel momento dell'inizio del problema
+    -   `ARRIVED_IN_AREA`: l'hangling unit è entrato nell'area durante il problema
+-   `endTime`: ora di fine del problema oppure momento in cui la cella è uscita dalla cella
+-   `endReason`: motivo della fine del problema
+    -   `EXIT_FROM_AREA`: l'handling unit è uscita dall'area
+    -   `END_PROBLEM`: il problema è stato risolto
+-   `duration`: durata in minuti in cui il problema ha avuto impatti sull'handling unit
 
 ## Tabella temperatura monitorata in area
 
@@ -478,54 +542,16 @@ I dati di temperatura sono salvati nel Data Lake IoT, la tabella viene riportata
 | Stoccaggio | 16:55 | 4              |
 | Stoccaggio | 17:00 | 4              |
 
-# Tabella OutOfRange
-
-Tabella delle segnalazioni ricevute dal iot per alert di temperatura out of range e calcolo del TOR
-
-| _ID_                                 | ID_DeviceIot | startEventTS             | endEventTS               | area (Area) | segmentId (GUID) |
-| ------------------------------------ | ------------ | ------------------------ | ------------------------ | ----------- | ---------------- |
-| 10d2f997-1e9c-4b21-8817-d48171ead166 | cella1       | 2020-10-14T09:01:33.763Z | 2020-11-14T09:01:33.763Z |             |                  |
-| _GUID_                               | cella2       | 2020-10-14T09:01:33.763Z | 2020-10-19T09:01:33.763Z |             |                  |
-| _GUID_                               | cella3       | 2020-10-14T09:01:33.763Z |                          |             |                  |
-
--   `ID_DeviceIot`: ID del device IoT che ha inviato la segnalazione
--   `startEventTS`: è l'ora di inizio del problema
--   `endEventTS`: è l'ora di fine del problema
--   `area`: area collegata al device IoT nel momento in cui abbiamo ricevuto la segnalazione
--   `segmentId`: ID del segmento IoT collegato alla segnalazione
-
-# Tabella OutOfRangeHandlingUnits
-
-Tabella delle handling units collegate alla segnalazione di out of range
-
-| _ID_                                 | outOfRange (OutOfRange)              | handlingUnit (HandlingUnit) | startTime                | endTime                  | startReason (enum) | endReason | duration (Integer) |  |
-| ------------------------------------ | ------------------------------------ | --------------------------- | ------------------------ | ------------------------ | ------------------ | --------- | ------------------ |
-| 99d2f997-1e9c-4b21-8817-d48171ead166 | 10d2f997-1e9c-4b21-8817-d48171ead166 | _GUID_                      | 2020-10-14T09:01:33.763Z | 2020-11-14T09:01:33.763Z |                    |           |                    |
-| _GUID_                               | cella2                               |                             | 2020-10-14T09:01:33.763Z | 2020-10-19T09:01:33.763Z |                    |           |                    |
-| _GUID_                               | cella3                               |                             | 2020-10-14T09:01:33.763Z |                          |                    |           |                    |
-
--   `outOfRange`: collegamento al segmento `OutOfRange` che ha scatenato il problema
--   `startTime`: ora di inizio del problema oppure momento in cui la cella è entrata nella cella
--   `startReason`: motivo dell'inizio del problema
-    -   `WAS_ALREADY_IN_AREA`: l'handling unit si trovava nell'area nel momento dell'inizio del problema
-    -   `ARRIVED_IN_AREA`: l'hangling unit è entrato nell'area durante il problema
--   `endTime`: ora di fine del problema oppure momento in cui la cella è uscita dalla cella
--   `endReason`: motivo della fine del problema
-    -   `EXIT_FROM_AREA`: l'handling unit è uscita dall'area
-    -   `END_PROBLEM`: il problema è stato risolto
--   `duration`: durata in minuti in cui il problema ha avuto impatti sull'handling unit
-
-# Tabella Notifications
+## Tabella Notifications
 
 Tabelle di alert applicativi rilevati dalla piattaforma segnalati verso Keethings, che a sua volta invia alle chatroom:
 
-| _ID_   | _alertBusinessTime_      | area                                 | notificationTime         | alertCode | alertLevel (AlertLevel) | payload (String JSON)              | GUID                                 |
-| ------ | ------------------------ | ------------------------------------ | ------------------------ | --------- | ----------------------- | ---------------------------------- | ------------------------------------ |
-| _GUID_ | 2020-10-14T09:01:31.763Z | 8b78d720-e240-4912-92dd-6e654474a694 | 2020-10-14T09:01:32.763Z |           | Grave                   | { "msg" : "RFID XXX già esistente" | 10d2f997-1e9c-4b21-8817-d48171ead166 |
-| _GUID_ | 2020-10-14T09:01:33.763Z | 8b78d720-e240-4912-92dd-6e654474a69  | 2020-10-14T09:01:34.763Z | OUT       | Alert                   | { "msg": "Temperatura cella..."}   | 10d2f997-1e9c-4b21-8817-d48171ead166 |
+| _ID_   | _alertBusinessTime_      | notificationTime         | alertCode | alertLevel (AlertLevel) | payload (String JSON)              | GUID                                 |
+| ------ | ------------------------ | ------------------------ | --------- | ----------------------- | ---------------------------------- | ------------------------------------ |
+| _GUID_ | 2020-10-14T09:01:31.763Z | 2020-10-14T09:01:32.763Z |           | Grave                   | { "msg" : "RFID XXX già esistente" | 10d2f997-1e9c-4b21-8817-d48171ead166 |
+| _GUID_ | 2020-10-14T09:01:33.763Z | 2020-10-14T09:01:34.763Z | OLT       | Alert                   | { "msg": "Temperatura cella..."}   | 10d2f997-1e9c-4b21-8817-d48171ead166 |
 
--   `area` : area relativa a avvenimento di notifica
--   `alertBusinessTime`: è l'ora in cui è successo l'evento (esempio per le celle esempio lo start time del problema sulla cella)
+-   `alertBusinessTime`: è l'ora in cui è successo l'evento (esempio per le celle è lo start time del problema sulla cella)
 -   `notificationTime`: è l'ora in cui abbiamo aggiunto la notifica alla coda enterprise messaging
 -   `alertCode`: codice fisso dell'alert, valori possibile aggiungere man mano
 -   `alertLevel`: livello di alert syslog:
@@ -540,7 +566,7 @@ Tabelle di alert applicativi rilevati dalla piattaforma segnalati verso Keething
 -   `payload`: JSON contente i dettagli dell'alert che verrà inviato alla coda
 -   `GUID`: guid del record scatenante l'evento, potrebbe anche non esserci, per le celle è il guid della tabella outOfRange
 
-# Tabella Audits
+## Tabella Audits
 
 Tabelle di auditing della configurazione della piattaforma:
 
@@ -549,6 +575,96 @@ Tabelle di auditing della configurazione della piattaforma:
 | 2020-10-14T09:01:33.763Z | Products | PROD-001 | CREATE |              |          |          | SBARZAGHI |
 | 2020-10-14T09:01:33.763Z | Products | PROD-001 | UPDATE | TOR          | 18       | 20       | SBARZAGHI |
 | 2020-10-14T09:01:33.763Z | Products | PROD-001 | UPDATE | DESCRIZIONE  | aaaa     | AAAA     | SBARZAGHI |
+
+
+# Views invio configurazione
+
+View di estrazione dati per invio configurazione, utilizzano le tabelle anagafiche di base per esporre il seguente Tracciato ;
+
+## Invio configurazione piattaforma centrale
+
+### Descrizione
+
+Invio al communication frontend delle locations/departments/aree e dei prodotti configurati nella piattaforma centrale, con i rispettivi responsabili assegnati
+
+### Quando viene inviato
+
+Premendo un tasto nell'applicazione di configurazione della piattaforma viene richiamato un webservice REST esposto dal communication frontend.
+Nella piattaforma vengono tracciati le invii effettuati (data, ora, payload, result).
+
+### Tracciato
+```json
+{
+    "customer" : {
+        "guid" : "d532b292-a03c-4530-af37-6732dc5c7758",
+        "companyName": "...",
+        "customerTenant" : {
+            "tokenEndpoint" : "https://ccp-customera.authentication.eu10.hana.ondemand.com/oauth/token",
+            "uri" : "https://ccp-provider-dev-qas.dev.cfapps.eu10.hana.ondemand.com"
+        },
+        "gs1CompanyPrefixs" : [
+            "123456789",
+            "123456789"
+        ],
+        "locations" : [
+            {
+                "guid" : "eff08cb8-57fc-4863-bb1e-e898479e0fe2",
+                "description" : "Plant A",
+                "departments" : [
+                    {
+                        "guid" : "9dcc35bf-1bb5-411a-b6b0-0527465ec900",
+                        "description" : "Packaging Area A",
+                        "areas" : [
+                            {
+                                "guid" : "a6fe9383-13c5-48b6-94a5-fe0a69f362ee",
+                                "description" : "Cold Room 1",
+				                 "category": "COLD_ROOM",
+                                "assetManager" : "coldroom1@domain.com"
+                            },
+                            {
+                                "guid" : "a7dac933-2b2a-4dde-b0ac-cc1c328b25da",
+                                "description" : "Cold Room 2",
+				                "category": "COLD_ROOM",
+                                "assetManager" : "coldroom2@domain.com"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "products" : [
+            {
+                "gtin" : "1234567890123",
+                "description" : "...",
+                "productManager" : "productmanager1@domain.com",
+                "QAManager" : "qamanager1@domain.com"
+            },
+            {
+                "gtin" : "1234567890199",
+                "description" : "...",
+                "productManager" : "productmanager1@domain.com",
+                "QAManager" : "qamanager2@domain.com"
+            }
+        ]
+    }
+}
+```
+
+Sono state create le seguenti view :
+
+* CustomerView     
+  **View di esposizione informazioni cliente (una riga per tenant- schema)**
+* GS1CompanyPrefixsView  
+  **View di esposizione informazioni cliente (una riga per tenant- schema)**
+* LocationView  
+  **View di esposizione dati Location / Plant**
+* DepartmentView  
+  **View di esposizione dati Dipeartimento / reparto**
+* AreasView  
+  **view di esposizione dati per Area**
+* ProductsView  
+  **View di esposizione dati relativa ai prodotti**
+
 
 # Log piattaforma
 
@@ -923,24 +1039,27 @@ Solo sottoscrizione alla cloud cold chain e portale, CF non attivato
 -   processo in background che attende il messaggio sulla coda redis e crea il record del movimento nella tabella HandlingUnitMovements
 -   scrive nella coda redis `RESIDENCE_TIME:WAITING` i dati del movimento
 -   processo in background che attende il messaggio sulla coda redis `RESIDENCE_TIME:WAITING`, quando riceve un messaggio:
-    -   ricerca il lotto collegato all'SSCC nella tabella `HandlingUnits`
-    -   ricerca il prodotto collegato al lotto nella tabella `Lots`
-    -   ricerca nella tabella `Products` le route collegate
-    -   ricerca nella tabella `Routes` con controlPoint e direction per determinare l'area di destinazione della scatola
-    -   inserisce nella tabella `HandlingUnitsResidenceTime` un record con: `sscc`, `step`, `area`, `inBusinessTime` con il t del movimento
-    -   aggiorna il campo `ResidenceTimeStatus` della tabella `HandlingUnitMovements` a `OK`
-    -   se il TE del movimento è maggiore di `HandlingUnits-inAreaBusinessTime` aggiorna `lastKnowArea` e `inAreaBusinessTime`
-
-## Determinazione HandlingUnitsResidenceTime-outBusinessTime e residenceTime
-
--   ogni n minuti parte un processo per un singolo cliente
--   processo che ricerca tutti i record in `HandlingUnitsResidenceTime` senza `outBusinessTime`
--   per ogni record cerca un record con T > del T movimento (piu vicino) e con step = step del record + 1 oppure step del record - 1
+-   ricerca il lotto collegato all'SSCC nella tabella `HandlingUnits`
+-   ricerca il prodotto collegato al lotto nella tabella `Lots`
+-   ricerca nella tabella `Products` le route collegate
+-   ricerca nella tabella `Routes` con controlPoint e direction per determinare l'area di destinazione della scatola
+-   se l'area non è a temperatura controllata calcola il tempo di permanenza ammesso nell'area sommando `inBusinessTime` + max TOR del prodotto
+-   inserisce nella tabella `HandlingUnitsResidenceTime` un record con: `sscc`, `step`, `area`, `inBusinessTime`, `maxResidenceTime` con il t del movimento
+-   aggiorna il campo `ResidenceTimeStatus` della tabella `HandlingUnitMovements` a `OK` (PROBLEMA NON ABBIAMO L'ID DELL'HANDLING UNIT MOVEMENT DOPO AGGIORNAMENTO CDS)
+-   se il TE del movimento è maggiore di `HandlingUnits-inAreaBusinessTime` aggiorna `lastKnowArea` e `inAreaBusinessTime`
+-   cerca un record con T > del T movimento (piu vicino) e con step = step del record + 1 oppure step del record - 1
 -   se lo trova aggiorna il campo `outBusinessTime` con `inBusinessTime` del record trovato
--   se ho `outBusinessTime` calcola la differenza in minuti di `outBusinessTime` - `inBusinessTime` e aggiorna il campo `residenceTime`
--   se l'area è l'area in cui è in questo momento la handling unit (campendolo leggendo la tabella `HandlingUnits`) aggiorna il campo `residenceTime = current time - inBusinessTime`
--   se l'area non è a temperatura controllata riporta il campo `residenceTime` nel campo `singleTOR` e imposta il `torElaborationTime`
--   se l'area è a temperatura controllata, non modifico il TOR che dovrebbe essere 0 oppure pari al valore calcolato da un'altro processo che intercetta gli alert sui segmenti delle celle.
+
+## Controllo problemi TOR delle handling units e alerting
+
+Ricerca tutte le handling units rimaste nell'area troppo tempo e crea l'alert
+
+-   Ogni n minuti parte un job che:
+-   estra dalla tabella `ResidenceTime` tutti i record con `outBusinessTime` vuoto, `maxResidenceTime` < ora attuale, `lastAlertErrorTor` vuoto
+-   se ci sono problemi inserisce un record nella tabella di testata `AlertsErrorTor` e inserisce i records nella tabella `AlertsErrorTor` l'elenco dei residence time con il problema
+-   richiama il metodo `Notification->Alert()`, `payload` è l'ID della tabella `AlertsErrorTor`
+-   aggiorna il campo `lastAlertErrorTor` di tutti i record nell'area
+-   commit work
 
 ## Ingestion dati temperatura IoT
 
@@ -950,7 +1069,7 @@ Solo sottoscrizione alla cloud cold chain e portale, CF non attivato
 -   rule `inRange` di tipo streaming rule cloud toggle che determina se la temperatura è in range
 -   IoT invia i dati di apertura e chiusura segmento in enterprise messaging nel topic fisso deciso da SAP `sap/liot/svc/segments`
 -   enterprise messaging ha la coda `sap/liot/svc/TemperatureRange` (TODO: meglio rinominarla in `sap/liot/svc/segments`) con subscription su `sap/liot/svc/segments`
--   enterprise messaging invia i dati al webhook che punta al servizio cap `/iot/segment`
+-   enterprise messaging invia i dati al webhook che punta al servizio cap `/iot/segment`, vedi immagine per [esempio creazione.](Esempio%20Wekhook%20per%20Keethings.png)
 -   il servizio cap aggiorna la tabella `OutOfRange`
 -   chiama il metodo `alert` della classe `Notifications`
 -   inserisce nella coda `OUT_OF_RANGE` un record per indicare la creazione o la fine di un segmento

@@ -1,4 +1,7 @@
 const { v4: uuidv4 } = require("uuid");
+const cds = require("@sap/cds");
+// eslint-disable-next-line no-unused-vars
+const Logger = require("./logger");
 /**
  * DB utilities methods
  */
@@ -51,8 +54,21 @@ class DB {
         return singleRow[0];
     }
 
-    static async selectAllRowsWhere(tableName, whereClause, tx, logger) {
-        const allRows = await tx.read(tableName).where(whereClause);
+    /**
+     *
+     * @param {*} tableName
+     * @param {*} whereClause
+     * @param {*} andClause
+     * @param {*} tx
+     * @param {*} logger
+     */
+    static async selectAllRowsWhere(tableName, whereClause, andClause, tx, logger) {
+        let allRows;
+        if (!andClause) {
+            allRows = await tx.read(tableName).where(whereClause);
+        } else {
+            allRows = await tx.read(tableName).where(whereClause).and(andClause);
+        }
 
         if (allRows.length === 0) {
             throw Error(
@@ -61,11 +77,35 @@ class DB {
                 )} -> '${JSON.stringify(allRows)}'`
             );
         }
+        let logString = `selectAllRowsWhere: ${tableName.name} where ${JSON.stringify(
+            whereClause
+        )}`;
+        if (andClause) {
+            logString += ` and ${JSON.stringify(andClause)}`;
+        }
 
-        logger.logObject(
-            `selectAllRowsWhere: ${tableName.name} where ${JSON.stringify(whereClause)}`,
-            allRows
-        );
+        logger.logObject(logString, allRows);
+
+        return allRows;
+    }
+
+    /**
+     *
+     * @param {} Tabella da cds.entities
+     * @param {} classe transaction
+     * @param {logger} classe logger
+     */
+    static async selectAllRows(tableName, tx, logger) {
+        const allRows = await tx.read(tableName);
+
+        if (allRows.length === 0) {
+            throw Error(
+                `selectAllRowsWhere - Record not found: ${tableName.name}
+                )} -> '${JSON.stringify(allRows)}'`
+            );
+        }
+
+        logger.logObject(`selectAllRowsWhere: ${tableName.name}`, allRows);
 
         return allRows;
     }
@@ -79,15 +119,14 @@ class DB {
      * @param {*} logger
      */
     static async selectOneFieldWhere(tableName, fieldName, where, tx, logger) {
-        const fieldValue = await tx.run(SELECT.one(tableName).columns(fieldName).where(where));
+        const record = await tx.run(SELECT.one(tableName).columns(fieldName).where(where));
 
-        if (!fieldValue) {
+        if (!record) {
             throw Error(
                 `selectOneFieldWhere - Record not found: ${tableName.name}/${JSON.stringify(where)}`
             );
         }
-
-        if (!fieldValue[fieldName]) {
+        if (record[fieldName] === null) {
             throw Error(
                 `selectOneFieldWhere - Empty field: ${tableName.name}/${JSON.stringify(
                     where
@@ -99,10 +138,10 @@ class DB {
             `selectOneFieldWhere: table ${tableName.name} where ${JSON.stringify(
                 where
             )} field ${fieldName}`,
-            fieldValue[fieldName]
+            record[fieldName]
         );
 
-        return fieldValue[fieldName];
+        return record[fieldName];
     }
 
     /**
@@ -202,6 +241,12 @@ class DB {
         return recordsCount;
     }
 
+    /**
+     *
+     * @param {$user} Utente tecnico
+     * @param {Logger} Classe di logger
+     */
+
     static getTransaction(technicalUser, logger) {
         logger.logObject("Get transaction for user: ", technicalUser);
         return cds.transaction(new cds.Request({ user: technicalUser }));
@@ -231,14 +276,20 @@ class DB {
     }
 
     static async checkDuplicateRecords(tableName, whereClause, tx, logger) {
+        let returnvalue;
         const record = await tx.run(SELECT.one(tableName).where(whereClause));
         if (record) {
-            throw Error(`Record Duplicato per ${tableName.name}/ where ${whereClause}`);
+            logger.debug(
+                `Record Duplicato per : ${tableName.name} where ${JSON.stringify(whereClause)}`
+            );
+            returnvalue = true;
+        } else {
+            logger.debug(
+                `Record NON duplicato per : ${tableName.name} where ${JSON.stringify(whereClause)}`
+            );
+            returnvalue = false;
         }
-
-        logger.debug(`Record non duplicato: ${tableName.name} ${JSON.stringify(whereClause)}`);
-
-        return false;
+        return returnvalue;
     }
 }
 
