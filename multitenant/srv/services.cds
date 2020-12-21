@@ -1,4 +1,7 @@
-using {cloudcoldchain as cloudcoldchain} from '../db/schema';
+using {
+    cloudcoldchain as cloudcoldchain,
+                      cloudcoldchain.GS1CompanyPrefix
+} from '../db/schema';
 
 @(requires : 'authenticated-user')
 @(path : '/services')
@@ -44,7 +47,8 @@ service Services {
     entity Alerts                  as projection on cloudcoldchain.Alerts;
 
     @odata.draft.enabled
-    entity ResidenceTime           as projection on cloudcoldchain.ResidenceTime order by inBusinessTime asc;
+    entity ResidenceTime           as projection on cloudcoldchain.ResidenceTime order by
+        inBusinessTime asc;
 
     @odata.draft.enabled
     entity HandlingUnits           as projection on cloudcoldchain.HandlingUnits;

@@ -1,2 +1,2 @@
-ID,gtin,route_ID,name,maxTor,QAManager,productManager
-105c5d53-9123-4775-b836-ddf8e6951bd1,1234567890123,49b7fb1b-5576-4213-8716-5d77bf9d30e1,Aspirina 1000g,120,qamanager2@domain.com,productmanager1@domain.com
+ID,createdAt,createdBy,modifiedAt,modifiedBy,gtin,name,erpProductCode,maxTor,QAManager,productManager,temperatureRange_ID,route_ID
+bcd1d512-9e0f-4417-ab71-253d1ec13440,2020-12-21T16:46:42.700Z,alice,2020-12-21T16:53:59.432Z,alice,0340092697146,"Aspirina 1000mg",ASP001,120,,,d0134f5e-afbd-42bc-b850-7a6fb5a0b707,df0bf605-bec6-4ee8-91fc-d4b02931b1e4

@@ -48,21 +48,6 @@ annotate Services.Routes with @(UI : {
                                    // {Value: name}
                                   ]},
 
-    FieldGroup #Steps   : {Data : [
-    {
-        Value : steps.controlPoint_ID,
-        Label : 'ControlPoint'
-    },
-    {
-        Value : steps.destinationArea_ID,
-        Label : 'Destination Area'
-    },
-    {
-        Value : steps.direction,
-        Label : 'Direction'
-    },
-    ]},
-
     FieldGroup #Admin   : {Data : [
     {Value : createdBy},
     {Value : createdAt},

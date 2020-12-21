@@ -1,3 +1,2 @@
-ID,name,description,
-6d332c91-30cb-4b4a-a20d-1590c87e4463,123456789,G21 - 123456789
-aa56af45-76f1-4047-8dff-bed24cf8622e,234567890,G21 - 234567890
+ID,name,description,parent_ID
+57a667a3-a39e-4c64-a4ff-48c8a3eaf902,04150567890128,"Prefisso principale",e9571d6c-f0e1-4ac5-871a-e7afa05ff17d

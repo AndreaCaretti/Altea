@@ -1,3 +1,4 @@
-ID
-90abe75c-e2c6-4e5f-a12f-fb81aa50d011
-bc5ee9e0-644e-42ae-b693-26a6c5c48486
+ID,createdAt,createdBy,modifiedAt,modifiedBy,name,description,category_ID
+90abe75c-e2c6-4e5f-a12f-fb81aa50d011,2020-12-21T16:48:28.017Z,alice,2020-12-21T16:48:43.156Z,alice,"Ingresso Cold Room A","Gate Ingresso Cold Room A",001bfca1-5ab5-42bb-ad8a-67c2d830041b
+7e2b9e36-4e31-4bc1-94e9-f7ccc224c4ca,2020-12-21T16:49:46.250Z,alice,2020-12-21T16:49:46.250Z,alice,"Uscita Cold Room A","Gate in uscita della Cold Room A",001bfca1-5ab5-42bb-ad8a-67c2d830041b
+0c7e6dab-6656-4856-8b82-7e275f22664d,2020-12-21T16:51:20.117Z,alice,2020-12-21T16:51:20.117Z,alice,"Ingresso Depositario A","Gate Ingresso Depositario A",001bfca1-5ab5-42bb-ad8a-67c2d830041b

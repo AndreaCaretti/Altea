@@ -1,4 +1,4 @@
-ID,name,description,controlledTemperature
-66f18636-3000-11eb-adc1-0242ac120002,"Cold Room","Cold Room Area",true
-c07a1434-3000-11eb-adc1-0242ac120002,"No Temperature","No Temperature Area",false
-d2720fe8-3000-11eb-adc1-0242ac120002,"Refrigerator Truck","Refrigerator Truck",true
+ID,createdAt,createdBy,modifiedAt,modifiedBy,name,description,controlledTemperature
+bb387985-3ef5-480e-9a18-2b878789ddda,2020-12-21T16:15:15.947Z,alice,2020-12-21T16:22:02.579Z,alice,COLD_ROOM,"Cold Room",
+75274572-7824-4f62-8760-2badd245c93b,2020-12-21T16:42:31.713Z,alice,2020-12-21T16:42:31.713Z,alice,GENERIC_AREA,"Area Temperatura Non Controllata",
+8474ec4b-9547-447b-b147-4e1be38413b3,2020-12-21T16:42:46.219Z,alice,2020-12-21T16:42:46.219Z,alice,DEPOSITARIO,Depositario,

@@ -6,16 +6,13 @@ using Services from '../../srv/services';
 //
 annotate Services.Customers with
 @(UI : {
-    SelectionFields : [name,
-                             //category
-                      ],
+    SelectionFields : [name, ],
     LineItem        : [
     {Value : name},
     {
         Value : category.name,
         Label : 'Category'
     },
-    {Value : gs1_company_prefix}
     ]
 });
 
@@ -42,6 +39,11 @@ annotate Services.Customers with
     },
     {
         $Type  : 'UI.ReferenceFacet',
+        Label  : '{i18n>GS1CompanyPrefixes}',
+        Target : 'gs1CompanyPrefixes/@UI.LineItem',
+    },
+    {
+        $Type  : 'UI.ReferenceFacet',
         Label  : '{i18n>Admin}',
         Target : '@UI.FieldGroup#Admin'
     },
@@ -51,7 +53,8 @@ annotate Services.Customers with
                                   ]},
     FieldGroup #General : {Data : [
     {Value : category_ID},
-    {Value : gs1_company_prefix}
+    {Value : customerTennantTokenEndpoint},
+    {Value : customerTennantUri},
     ]},
 
     FieldGroup #Admin   : {Data : [
@@ -61,3 +64,13 @@ annotate Services.Customers with
     {Value : modifiedAt}
     ]}
 });
+
+////////////////////////////////////////////////////////////////////////////
+//
+//	GS1
+//
+annotate Services.GS1CompanyPrefix with
+@(UI : {LineItem : [
+{Value : name},
+{Value : description, },
+]});

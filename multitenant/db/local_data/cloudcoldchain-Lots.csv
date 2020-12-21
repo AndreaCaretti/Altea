@@ -1,4 +1,2 @@
-ID,name,product_ID
-728985ee-301e-45be-bffa-e8b2eb7a3683,lotto1,105c5d53-9123-4775-b836-ddf8e6951bd1
-62451c65-0629-49a2-a048-09459c8d6428,lotto2,105c5d53-9123-4775-b836-ddf8e6951bd1
-728985ee-301e-45be-bffa-e8b2eb7a3684,lotto84,105c5d53-9123-4775-b836-ddf8e6951bd1
+ID,createdAt,createdBy,modifiedAt,modifiedBy,name,productionDate,expirationDate,product_ID
+6d7a74e1-fb3c-47cf-bba6-9c5a8503393c,2020-12-21T16:45:30.078Z,alice,2020-12-21T16:46:54.149Z,alice,AB12345,2020-12-20T23:00:00.000Z,2021-12-20T23:00:00.000Z,bcd1d512-9e0f-4417-ab71-253d1ec13440

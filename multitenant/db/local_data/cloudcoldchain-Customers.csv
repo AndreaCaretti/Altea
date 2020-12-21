@@ -1,2 +1,2 @@
-ID,name,customerTennantTokenEndpoint,customerTennantUri
-d3bf914b-4e33-4059-8abe-a3561d4bebc8,Customer A,https://ccp-customera.authentication.eu10.hana.ondemand.com/oauth/token,https://ccp-provider-dev-qas.dev.cfapps.eu10.hana.ondemand.com
+ID,createdAt,createdBy,modifiedAt,modifiedBy,name,customerTennantTokenEndpoint,customerTennantUri,category_ID
+e9571d6c-f0e1-4ac5-871a-e7afa05ff17d,2020-12-21T17:05:29.174Z,alice,2020-12-21T17:06:24.677Z,alice,"Customer A",https://ccp-customera.authentication.eu10.hana.ondemand.com/oauth/token,https://ccp-provider-dev-qas.dev.cfapps.eu10.hana.ondemand.com,14d76c02-d50f-4182-9f80-b84144998dce

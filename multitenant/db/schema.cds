@@ -44,15 +44,21 @@ define entity Customers : cuid, managed {
         TextArrangement : #TextOnly
     }
     category                     : Association to one CustomerCategories;
+    @title  : 'Tenant Token Endpoint'
     customerTennantTokenEndpoint : String;
+    @title  : 'Tenant Services URI'
     customerTennantUri           : String;
+    @title  : 'GS1 Company Prefixes'
+    gs1CompanyPrefixes           : Composition of many GS1CompanyPrefix
+                                       on gs1CompanyPrefixes.parent = $self;
 }
 
 @cds.odata.valuelist
 /**
  * GS1CompanyPrefix Prefissi Company tipo GS1
  */
-define entity GS1CompanyPrefix : cuid, managed {
+define entity GS1CompanyPrefix : cuid {
+    parent      : Association to Customers;
     @title       : '{i18n>gs1CompanyPrefixsNameTitle}'
     @description : '{i18n>gs1CompanyPrefixsNameDescription}'
     name        : String(50);
@@ -305,15 +311,15 @@ define entity HandlingUnitsRawMovements : cuid, managed {
 define entity ResidenceTime : cuid, managed {
     handlingUnit       : Association to one HandlingUnits;
     stepNr             : RouteStepNr;
-    @Common      : {
+    @Common : {
         Text            : area.name,
         TextArrangement : #TextOnly
     }
-    @title       : '{i18n>Area}'
+    @title  : '{i18n>Area}'
     area               : Association to one Areas;
-    @title : '{i18n>InBusinessTime}'
+    @title  : '{i18n>InBusinessTime}'
     inBusinessTime     : Timestamp;
-    @title : '{i18n>OutBusinessTime}'
+    @title  : '{i18n>OutBusinessTime}'
     outBusinessTime    : Timestamp;
     residenceTime      : Integer;
     tmin               : Decimal;
@@ -587,7 +593,7 @@ entity AlertTORResidenceTimeHUDataCount            as
         Count.HU_Quantity
     };
 
-define entity ResidenceTimeAlertsErrorTor       as
+define entity ResidenceTimeAlertsErrorTor          as
     select from ResidenceTime
     left join AlertsErrorTorDetails
         on ResidenceTime.ID = AlertsErrorTorDetails.residenceTime.ID
@@ -609,6 +615,7 @@ define entity ResidenceTimeAlertsErrorTor       as
         AlertsErrorTorDetails.tor                 as tor,
 
     };
+
 entity AlertTORResidenceTimeProductData            as
     select from cloudcoldchain.AlertTORResidenceTimeHUData distinct {
         AlertsErrorTorID,
