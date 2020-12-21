@@ -51,8 +51,8 @@ define entity Customers : cuid, managed {
 @UI.Identification : [{Value : name}]
 define entity ControlPoints : cuid, managed {
     @title       : '{i18n>ControlPointTitle}'
-    @description : '{i18n>ControlPointDescripion}'
     name        : String(50);
+    @title       : '{i18n>ControlPointDescripion}'
     description : String(200);
     @title       : '{i18n>category}'
     @description : '{i18n>category}'
