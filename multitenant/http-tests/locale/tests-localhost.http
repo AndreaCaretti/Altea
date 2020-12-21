@@ -198,3 +198,9 @@ If-Match: "2020-11-01T15:48:57.600Z"
     "DIR": "F"
 }
 
+
+### Start job del controllo tor
+
+POST http://localhost:4004/Generic/startJobCheckTor  HTTP/1.1
+Authorization: Basic Alice:Alice
+Content-Type: application/json
