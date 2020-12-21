@@ -59,3 +59,11 @@ FROM cloudcoldchain_HandlingUnits;
 .once db/local_data/cloudcoldchain-Locations.csv
 SELECT *
 FROM cloudcoldchain_Locations;
+
+.once db/local_data/cloudcoldchain-Department.csv
+SELECT *
+FROM cloudcoldchain_Department;
+
+.once db/local_data/cloudcoldchain-HandlingUnitTypology.csv
+SELECT *
+FROM cloudcoldchain_HandlingUnitTypology;
