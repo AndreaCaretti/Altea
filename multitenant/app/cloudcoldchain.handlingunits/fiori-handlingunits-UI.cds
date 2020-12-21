@@ -1,3 +1,4 @@
+using { cloudcoldchain.direction } from '../../db/global_types';
 using Services from '../../srv/services';
 
 ////////////////////////////////////////////////////////////////////////////
@@ -57,8 +58,13 @@ annotate Services.HandlingUnits with @(UI : {
     },
     {
         $Type  : 'UI.ReferenceFacet',
-        Label  : '{i18n>Movements}',
+        Label  : '{i18n>ResidenceTimes}',
         Target : 'residenceTimes/@UI.LineItem',
+    },
+    {
+        $Type  : 'UI.ReferenceFacet',
+        Label  : '{i18n>Movements}',
+        Target : 'movements/@UI.LineItem',
     },
     {
         $Type  : 'UI.ReferenceFacet',
@@ -68,6 +74,10 @@ annotate Services.HandlingUnits with @(UI : {
     ],
 
     FieldGroup #General : {Data : [
+    {
+        $Type : 'UI.DataField',
+        Value : lot.product_ID,
+    },
     {
         $Type : 'UI.DataField',
         Value : lot_ID,
@@ -102,15 +112,11 @@ annotate Services.HandlingUnits with @(UI : {
 annotate Services.ResidenceTime with @(UI : {LineItem : [
 {
     $Type : 'UI.DataField',
-    Value : inBusinessTime,
-},
-{
-    $Type : 'UI.DataField',
     Value : area_ID,
 },
 {
     $Type : 'UI.DataField',
-    Value : maxResidenceTime,
+    Value : inBusinessTime,
 },
 {
     $Type : 'UI.DataField',
@@ -118,6 +124,34 @@ annotate Services.ResidenceTime with @(UI : {LineItem : [
 },
 {
     $Type : 'UI.DataField',
+    Value : maxResidenceTime,
+},
+{
+    $Type : 'UI.DataField',
     Value : stepNr,
+},
+]});
+
+////////////////////////////////////////////////////////////////////////////
+//
+//	Movements List Page
+//
+
+annotate Services.HandlingUnitsMovements with @(UI : {LineItem : [
+{
+    $Type : 'UI.DataField',
+    Value : TE,
+},
+{
+    $Type : 'UI.DataField',
+    Value : controlPoint_ID,
+},
+{
+    $Type : 'UI.DataField',
+    Value : DIR,
+},
+{
+    $Type : 'UI.DataField',
+    Value : TS,
 },
 ]});

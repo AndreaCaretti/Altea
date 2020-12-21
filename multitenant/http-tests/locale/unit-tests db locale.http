@@ -1,4 +1,4 @@
-### Spostamento in cella
+### Spostamento in cella handling unit 123456789012345678
 POST http://localhost:4004/handling-unit-moved/HandlingUnitsRawMovements HTTP/1.1
 Authorization: Basic Alice:Alice
 Content-Type: application/json
@@ -9,6 +9,20 @@ Content-Type: application/json
     "TE": "2020-10-14T09:01:33.763Z",
     "TS": "2020-10-14T09:01:34.763Z",
     "HU_ID": "123456789012345678",
+    "DIR": "F"
+}
+
+### Spostamento in cella handling unit 111111111012345678
+POST http://localhost:4004/handling-unit-moved/HandlingUnitsRawMovements HTTP/1.1
+Authorization: Basic Alice:Alice
+Content-Type: application/json
+
+{
+    "MSG_ID":"3ddba231-40a6-434d-84ed-99b748d63ac9",
+    "CP_ID": "90abe75c-e2c6-4e5f-a12f-fb81aa50d011",
+    "TE": "2020-10-14T09:02:33.763Z",
+    "TS": "2020-10-14T09:02:34.763Z",
+    "HU_ID": "111111111012345678",
     "DIR": "F"
 }
 
@@ -39,7 +53,7 @@ Content-Type: application/json
     ]
 }
 
-### Spostamento in area non raffreddata
+### Spostamento in area non raffreddata 123456789012345678
 POST http://localhost:4004/handling-unit-moved/HandlingUnitsRawMovements HTTP/1.1
 Authorization: Basic Alice:Alice
 Content-Type: application/json
@@ -50,6 +64,20 @@ Content-Type: application/json
     "TE": "2020-10-16T10:00:33.763Z",
     "TS": "2020-10-16T10:00:34.763Z",
     "HU_ID": "123456789012345678",
+    "DIR": "F"
+}
+
+### Spostamento in area non raffreddata 111111111012345678
+POST http://localhost:4004/handling-unit-moved/HandlingUnitsRawMovements HTTP/1.1
+Authorization: Basic Alice:Alice
+Content-Type: application/json
+
+{
+    "MSG_ID":"3ddba231-40a6-434d-84ed-99b748d63ac9",
+    "CP_ID": "7e2b9e36-4e31-4bc1-94e9-f7ccc224c4ca",
+    "TE": "2020-10-16T10:00:33.763Z",
+    "TS": "2020-10-16T10:00:34.763Z",
+    "HU_ID": "111111111012345678",
     "DIR": "F"
 }
 

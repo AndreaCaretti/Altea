@@ -11,7 +11,10 @@ annotate Services.AlertsErrorTor with @(UI : {
     ],
     LineItem        : [
     {Value : jobStartTime},
-    {Value : ID}
+    {
+        Value : ID,
+        Label : 'Job ID',
+    }
     ]
 });
 
@@ -83,5 +86,13 @@ annotate Services.AlertsErrorTorDetails with @(UI : {LineItem : [
 {
     $Type : 'UI.DataField',
     Value : residenceTime.handlingUnit.lot.product.name,
+},
+{
+    $Type : 'UI.DataField',
+    Value : residenceTime.inBusinessTime,
+},
+{
+    $Type : 'UI.DataField',
+    Value : residenceTime.maxResidenceTime,
 },
 ]});

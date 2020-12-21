@@ -128,11 +128,11 @@ define entity Areas : cuid, managed {
     department            : Association to one Department;
     @title  : 'ID Device IoT'
     ID_DeviceIoT          : String;
-    @title : 'Min Working Temperature'
+    @title  : 'Min Working Temperature'
     minWorkingTemperature : Decimal;
-    @title : 'Max Working Temperature'
+    @title  : 'Max Working Temperature'
     maxWorkingTemperature : Decimal;
-    @title : 'Asset Manager'
+    @title  : 'Asset Manager'
     assetManager          : String(50);
 }
 
@@ -152,7 +152,7 @@ define entity Locations : cuid, managed {
 @cds.odata.valuelist
 @UI.Identification : [{Value : name}]
 define entity Department : cuid, managed {
-    @title : 'Department'
+    @title  : 'Department'
     name        : String(50);
     description : localized String(200);
     @title  : 'Location'
@@ -211,17 +211,17 @@ define entity Products : cuid, managed {
 @cds.odata.valuelist
 @UI.Identification : [{Value : name}]
 define entity Lots : cuid, managed {
-    @title : 'Lots'
+    @title  : 'Lots'
     name           : String(50);
-    @title : 'ProductionDate'
+    @title  : 'ProductionDate'
     productionDate : Timestamp;
-    @title : 'ExpirationDate'
+    @title  : 'ExpirationDate'
     expirationDate : Timestamp;
-    @Common      : {
+    @Common : {
         Text            : product.name,
         TextArrangement : #TextOnly
     }
-    @title       : '{i18n>Product}'
+    @title  : '{i18n>Product}'
     product        : Association to one Products;
     handlingUnits  : Association to many HandlingUnits
                          on handlingUnits.lot = $self;
@@ -295,6 +295,8 @@ define entity HandlingUnits : cuid, managed {
     blockchainHash     : String(100);
     residenceTimes     : Association to many ResidenceTime
                              on residenceTimes.handlingUnit = $self;
+    movements          : Association to many HandlingUnitsMovements
+                             on movements.handlingUnit = $self;
 }
 
 @cds.odata.valuelist
@@ -305,10 +307,18 @@ define entity HandlingUnitTypology : cuid, managed {
 
 define entity HandlingUnitsMovements : cuid, managed {
     MSG_ID       : UUID;
+    @Common      : {
+        Text            : controlPoint.name,
+        TextArrangement : #TextOnly
+    }
+    @title       : '{i18n>ControlPoint}'
     controlPoint : Association to one ControlPoints;
+    @title       : '{i18n>EventTime}'
     TE           : Timestamp;
+    @title       : '{i18n>NotificationTime}'
     TS           : Timestamp;
     handlingUnit : Association to one HandlingUnits;
+    @title       : '{i18n>Direction}'
     DIR          : cloudcoldchain.direction;
     STATUS       : Boolean;
     rawMovement  : Association to one HandlingUnitsRawMovements;
@@ -364,28 +374,29 @@ define entity Alerts : cuid, managed {
 
 
 define entity outOfRange : cuid, managed {
-    @title : 'ID Device IoT'
-    ID_DeviceIoT : String;
+    @title  : 'ID Device IoT'
+    ID_DeviceIoT  : String;
     @Common : {
         Text            : area.name,
         TextArrangement : #TextOnly
     }
-    @title : 'Area'
-    area         : Association to one Areas;
-    @title : 'Alert Started At'
-    startEventTS : Timestamp;
-    @title : 'Alert End At'
-    endEventTS   : Timestamp;
-    @title : 'Status'
-    status       : String;
-    @title : 'IoT Segment ID'
-    segmentId    : UUID;
-    handlingUnits: Composition of many OutOfRangeHandlingUnits on handlingUnits.outOfRange = $self;
+    @title  : 'Area'
+    area          : Association to one Areas;
+    @title  : 'Alert Started At'
+    startEventTS  : Timestamp;
+    @title  : 'Alert End At'
+    endEventTS    : Timestamp;
+    @title  : 'Status'
+    status        : String;
+    @title  : 'IoT Segment ID'
+    segmentId     : UUID;
+    handlingUnits : Composition of many OutOfRangeHandlingUnits
+                        on handlingUnits.outOfRange = $self;
 }
 
 define entity OutOfRangeHandlingUnits : cuid, managed {
     outOfRange   : Association to outOfRange;
-    @title : 'Handling Unit'
+    @title  : 'Handling Unit'
     @Common : {
         Text            : handlingUnit.huId,
         TextArrangement : #TextOnly
