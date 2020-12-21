@@ -17,6 +17,10 @@ annotate Services.Areas with @(UI : {
         Label : 'Department'
     },
     {
+        Value : department.location_ID,
+        Label : 'Location'
+    },
+    {
         Value : ID_DeviceIoT,
         Label : 'ID Device IoT'
     }
@@ -60,7 +64,9 @@ annotate Services.Areas with @(UI : {
     FieldGroup #General     : {Data : [
     {Value : category_ID},
     {Value : department_ID},
-    {Value : ID_DeviceIoT}
+    {Value : department.location_ID},
+    {Value : ID_DeviceIoT},
+    {Value : assetManager}
     ]},
     FieldGroup #Temperature : {Data : [
     {Value : minWorkingTemperature},

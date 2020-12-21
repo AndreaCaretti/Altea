@@ -127,8 +127,11 @@ define entity Areas : cuid, managed {
     department            : Association to one Department;
     @title  : 'ID Device IoT'
     ID_DeviceIoT          : String;
+    @title : 'Min Working Temperature'
     minWorkingTemperature : Decimal;
+    @title : 'Max Working Temperature'
     maxWorkingTemperature : Decimal;
+    @title : 'Asset Manager'
     assetManager          : String(50);
 }
 
@@ -151,6 +154,11 @@ define entity Department : cuid, managed {
     @title : 'Department'
     name        : String(50);
     description : localized String(200);
+    @title  : 'Location'
+    @Common : {
+        Text            : location.name,
+        TextArrangement : #TextOnly
+    }
     location    : Association to one Locations;
     areas       : Association to many Areas
                       on areas.department = $self;
@@ -192,8 +200,10 @@ define entity Products : cuid, managed {
     @title       : '{i18n>RouteTitle}'
     @description : '{i18n>RouteDescription}'
     route            : Association to one Routes;
-    QAManager        : String(50);
+    @title       : 'Product Manager'
     productManager   : String(50);
+    @title       : 'Quality Manager'
+    QAManager        : String(50);
 }
 
 @cds.autoexpose
