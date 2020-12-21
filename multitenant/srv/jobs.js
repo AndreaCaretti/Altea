@@ -137,7 +137,7 @@ class Jobs {
             this.logger.debug(`Aggiunto job ${queueName} id ${job.id}`);
         } catch (error) {
             this.logger.logException(`Aggiunta di job rifiutata, error`, error);
-            throw new Error("Aggiunta di job rifiutata");
+            throw error;
         }
     }
 
