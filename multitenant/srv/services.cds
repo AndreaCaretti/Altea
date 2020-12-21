@@ -1,6 +1,7 @@
 using {
     cloudcoldchain as cloudcoldchain,
-                      cloudcoldchain.GS1CompanyPrefix
+                      cloudcoldchain.GS1CompanyPrefix,
+                      cloudcoldchain.HandlingUnitTypology
 } from '../db/schema';
 
 @(requires : 'authenticated-user')
@@ -49,6 +50,9 @@ service Services {
     @odata.draft.enabled
     entity ResidenceTime           as projection on cloudcoldchain.ResidenceTime order by
         inBusinessTime asc;
+
+    @odata.draft.enabled
+    entity HandlingUnitTypology    as projection on cloudcoldchain.HandlingUnitTypology
 
     @odata.draft.enabled
     entity HandlingUnits           as projection on cloudcoldchain.HandlingUnits;

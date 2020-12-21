@@ -134,6 +134,15 @@ window["sap-ushell-config"] = {
             applicationType: "URL",
             url: "./cloudcoldchain.outOfRange/webapp",
             navigationMode: "embedded"
+        },
+        "HandlingUnitTypology-manage": {
+            title: "Manage HandlingUnitTypology",
+            description: "HandlingUnitTypology Maintenance",
+            icon: "sap-icon://add",
+            additionalInformation: "SAPUI5.Component=cloudcoldchain.handlingunittypology",
+            applicationType: "URL",
+            url: "./cloudcoldchain.handlingunittypology/webapp",
+            navigationMode: "embedded"
         }
     }
 }

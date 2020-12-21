@@ -99,6 +99,11 @@
               "id": "outOfRange",
               "appId": "cloudcoldchain.outOfRange",
               "vizId": "outOfRanges-manage"
+            },
+            {
+              "id": "handlingunittypology",
+              "appId": "cloudcoldchain.handlingunittypology",
+              "vizId": "HandlingUnitTypology-manage"
             }
           ]
         }

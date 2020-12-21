@@ -265,6 +265,16 @@ modules:
       supported-platforms: []
       build-result: dist
   #
+  - name: ui_handlingunittypology
+    type: html5
+    path: app/cloudcoldchain.handlingunittypology
+    build-parameters:
+      builder: custom
+      commands:
+        - npm run build
+      supported-platforms: []
+      build-result: dist
+  #
   #   ╔═══════════════════════════════════════╗   #
   #   ║            HTML5 DEPLOYER             ║   #
   #   ╚═══════════════════════════════════════╝   #
@@ -344,8 +354,13 @@ modules:
           artifacts:
             - ./uimodule*.zip
           target-path: resources/
-          #
+        #
         - name: ui_outOfRange
+          artifacts:
+            - ./uimodule*.zip
+          target-path: resources/
+        #
+        - name: ui_handlingunittypology
           artifacts:
             - ./uimodule*.zip
           target-path: resources/
