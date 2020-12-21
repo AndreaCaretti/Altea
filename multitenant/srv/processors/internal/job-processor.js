@@ -15,18 +15,18 @@ class JobProcessor {
     }
 
     async processJob(jobInfo, done) {
-        this.technicalUser = this.getTechnicalUser(jobInfo.data);
+        this.technicalUserAndTenant = this.getTechnicalUserAndTenant(jobInfo.data);
 
-        this.prepareLogger(this.technicalUser);
+        this.prepareLogger(this.technicalUserAndTenant);
 
         this.logger.logObject(`Inizio lavoro ${jobInfo.name} ${jobInfo.id}`, jobInfo.data);
 
-        this.request = this.getRequest(this.technicalUser);
+        this.request = this.getRequest(this.technicalUserAndTenant);
 
         const tx = this.getTx(this.request);
 
         try {
-            await this.doWork(jobInfo, this.technicalUser, tx);
+            await this.doWork(jobInfo, this.technicalUserAndTenant, tx);
             tx.commit();
         } catch (error) {
             this.logger.logException(`Errore esecuzione job ${jobInfo.name} ${jobInfo.id}`, error);
@@ -37,7 +37,7 @@ class JobProcessor {
         done(null);
     }
 
-    getTechnicalUser(jobData) {
+    getTechnicalUserAndTenant(jobData) {
         this.logger.logObject(`Recupero utente e tenant dal job info`, jobData);
         return new cds.User({
             id: jobData.user,
