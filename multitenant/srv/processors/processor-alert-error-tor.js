@@ -5,13 +5,11 @@ const NotificationService = require("../notifications/notificationService");
 const JobProcessor = require("./internal/job-processor");
 
 class ProcessorAlertErrorTOR extends JobProcessor {
-    // eslint-disable-next-line class-methods-use-this
     async doWork(jobInfo, technicalUser, tx) {
-        const jobInfoData = jobInfo.data;
-        await this.sendNotificationTOR(jobInfoData, technicalUser, tx);
+        await this.sendNotificationTOR(technicalUser, tx);
     }
 
-    async sendNotificationTOR(jobInfoData, technicalUser, tx) {
+    async sendNotificationTOR(technicalUser, tx) {
         const now = new Date().toISOString();
         const expiredTorData = await this.getExpiredTOR(now, tx);
 
