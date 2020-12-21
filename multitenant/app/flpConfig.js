@@ -161,6 +161,15 @@ window["sap-ushell-config"] = {
             applicationType: "URL",
             url: "./cloudcoldchain.alertserrortor/webapp",
             navigationMode: "embedded"
+        },
+        "Notification-manage": {
+            title: "Manage Notification",
+            description: "Notification Maintenance",
+            icon: "sap-icon://add",
+            additionalInformation: "SAPUI5.Component=cloudcoldchain.notification",
+            applicationType: "URL",
+            url: "./cloudcoldchain.notification/webapp",
+            navigationMode: "embedded"
         }
     }
 }

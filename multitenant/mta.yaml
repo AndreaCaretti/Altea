@@ -295,6 +295,16 @@ modules:
       supported-platforms: []
       build-result: dist
   #
+  - name: ui_notifications
+    type: html5
+    path: app/cloudcoldchain.notification
+    build-parameters:
+      builder: custom
+      commands:
+        - npm run build
+      supported-platforms: []
+      build-result: dist
+  #
   #   ╔═══════════════════════════════════════╗   #
   #   ║            HTML5 DEPLOYER             ║   #
   #   ╚═══════════════════════════════════════╝   #
@@ -391,6 +401,11 @@ modules:
           target-path: resources/
         #
         - name: ui_alertserrortor
+          artifacts:
+            - ./uimodule*.zip
+          target-path: resources/
+        #
+        - name: ui_notifications
           artifacts:
             - ./uimodule*.zip
           target-path: resources/

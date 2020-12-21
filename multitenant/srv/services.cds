@@ -1,6 +1,7 @@
 using {
   cloudcoldchain as cloudcoldchain,
-                    cloudcoldchain.AlertsErrorTor
+                    cloudcoldchain.AlertsErrorTor,
+                    cloudcoldchain.Notification
 } from '../db/schema';
 
 @(requires : 'authenticated-user')
@@ -64,4 +65,6 @@ service Services {
     entity OutOfRangeHandlingUnits as projection on cloudcoldchain.OutOfRangeHandlingUnits;
 
     entity AlertsErrorTor as projection on cloudcoldchain.AlertsErrorTor;
+
+    entity Notification as projection on cloudcoldchain.Notification;
 }

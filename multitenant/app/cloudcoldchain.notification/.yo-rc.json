@@ -1,0 +1,10 @@
+{
+  "generator-easy-ui5-extra": {
+    "namespace": "cloudcoldchain",
+    "appname": "notification",
+    "entitynameplural": "Notification",
+    "entitynamesingolar": "Notification",
+    "newdir": true,
+    "namespaceURI": "cloudcoldchain"
+  }
+}

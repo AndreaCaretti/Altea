@@ -114,6 +114,11 @@
               "id": "alertserrortor",
               "appId": "cloudcoldchain.alertserrortor",
               "vizId": "AlertsErrorTor-manage"
+            },
+            {
+              "id": "notification",
+              "appId": "cloudcoldchain.notification",
+              "vizId": "Notification-manage"
             }
           ]
         }

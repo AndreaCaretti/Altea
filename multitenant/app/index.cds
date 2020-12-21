@@ -19,3 +19,4 @@ using from './cloudcoldchain.outOfRange/fiori-outOfRange-UI';
 using from './cloudcoldchain.handlingunittypology/fiori-handlingunittypology-UI';
 using from './cloudcoldchain.department/fiori-department-UI';
 using from './cloudcoldchain.alertserrortor/fiori-alertserrortor-UI';
+using from './cloudcoldchain.notification/fiori-notification-UI';

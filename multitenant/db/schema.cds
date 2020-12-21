@@ -384,10 +384,15 @@ define entity OutOfRangeHandlingUnits : cuid, managed {
 }
 
 define entity Notification : cuid, managed {
+    @title : 'Alert Business Time'
     alertBusinessTime : Timestamp;
+    @title : 'Notification Time'
     notificationTime  : Timestamp;
+    @title : 'Alert Type'
     alertType         : String(20);
+    @title : 'Alert Level'
     alertLevel        : LogLevel;
+    @title : 'Payload'
     payload           : String;
     GUID              : UUID;
 }
