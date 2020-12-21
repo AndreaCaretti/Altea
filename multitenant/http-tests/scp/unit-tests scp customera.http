@@ -11,7 +11,7 @@ GET https://{{customera-subdomain}}.authentication.eu10.hana.ondemand.com/oauth/
 Authorization: Basic sb-ccp-provider-dev-qas-dev-cloud-cold-chain!t61773 oEPmeoq3s9kvPuGZsd89POK9Eo8=
 
 
-### Invio raw moment autenticazione token
+### Spostamento handling unit 123456789012345678 in cella
 POST https://{{provider-subdomain}}-{{space}}-{{cap-service-url}}.cfapps.eu10.hana.ondemand.com/handling-unit-moved/HandlingUnitsRawMovements HTTP/1.1
 Authorization: Bearer {{token}}
 Content-Type: application/json
@@ -26,7 +26,7 @@ Content-Type: application/json
 }
 
 
-### Invio raw moment con autenticazione token
+### Spostamento handling unit 223456789012345678 in cella
 POST https://{{provider-subdomain}}-{{space}}-{{cap-service-url}}.cfapps.eu10.hana.ondemand.com/handling-unit-moved/HandlingUnitsRawMovements HTTP/1.1
 Authorization: Bearer {{token}}
 Content-Type: application/json
@@ -40,6 +40,19 @@ Content-Type: application/json
     "DIR": "F"
 }
 
+### Spostamento handling unit 123456789012345678 in area esterna
+POST https://{{provider-subdomain}}-{{space}}-{{cap-service-url}}.cfapps.eu10.hana.ondemand.com/handling-unit-moved/HandlingUnitsRawMovements HTTP/1.1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+ 
+{
+    "MSG_ID":"89d81c9d-569b-469a-8134-46de74a4fb14",
+    "CP_ID": "ac9acda8-2efe-4910-a272-c618c85bd426",
+    "TE": "2020-10-14T09:30:33.763Z",
+    "TS": "2020-10-14T09:30:34.763Z",
+    "HU_ID": "123456789012345678",
+    "DIR": "F"
+}
 
 ### Creazione segmento iot
 POST https://{{provider-subdomain}}-{{space}}-{{cap-service-url}}.cfapps.eu10.hana.ondemand.com/iot/segment  HTTP/1.1
