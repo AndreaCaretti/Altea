@@ -1,0 +1,10 @@
+{
+  "generator-easy-ui5-extra": {
+    "namespace": "cloudcoldchain",
+    "appname": "alertserrortor",
+    "entitynameplural": "AlertsErrorTor",
+    "entitynamesingolar": "AlertErrorTor",
+    "newdir": true,
+    "namespaceURI": "cloudcoldchain"
+  }
+}

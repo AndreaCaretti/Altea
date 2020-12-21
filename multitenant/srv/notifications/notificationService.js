@@ -1,7 +1,12 @@
 const Jobs = require("../jobs");
+
 const QUEUE_NAMES = require("../queues-names");
 
 class Notification {
+    /**
+     *
+     * @param {Logger} logger
+     */
     constructor(logger) {
         this.logger = logger;
         this.jobs = Jobs.getInstance();
@@ -26,6 +31,11 @@ class Notification {
      * @param {*} payload Payload specifico del tipo di allarme
      */
     alert(user, tenant, alertBusinessTime, alertType, alertLevel, payload) {
+        this.logger.logObject(
+            `NotificationService aggiunta alert ${alertBusinessTime} ${alertType} ${alertLevel}`,
+            payload
+        );
+
         const alertNotificationData = {
             user,
             tenant,

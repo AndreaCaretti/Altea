@@ -110,6 +110,10 @@ annotate Services.ResidenceTime with @(UI : {LineItem : [
 },
 {
     $Type : 'UI.DataField',
+    Value : maxResidenceTime,
+},
+{
+    $Type : 'UI.DataField',
     Value : outBusinessTime,
 },
 {

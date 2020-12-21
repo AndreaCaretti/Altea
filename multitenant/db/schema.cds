@@ -213,8 +213,15 @@ define entity Products : cuid, managed {
 define entity Lots : cuid, managed {
     @title : 'Lots'
     name           : String(50);
+    @title : 'ProductionDate'
     productionDate : Timestamp;
+    @title : 'ExpirationDate'
     expirationDate : Timestamp;
+    @Common      : {
+        Text            : product.name,
+        TextArrangement : #TextOnly
+    }
+    @title       : '{i18n>Product}'
     product        : Association to one Products;
     handlingUnits  : Association to many HandlingUnits
                          on handlingUnits.lot = $self;
@@ -322,6 +329,11 @@ define entity HandlingUnitsRawMovements : cuid, managed {
 
 
 define entity ResidenceTime : cuid, managed {
+    @Common : {
+        Text            : handlingUnit.huId,
+        TextArrangement : #TextOnly
+    }
+    @title  : '{i18n>HandlingUnit}'
     handlingUnit       : Association to one HandlingUnits;
     stepNr             : RouteStepNr;
     @Common : {
@@ -391,6 +403,7 @@ define entity NotificationPayloadPrepare : cuid, managed {
 @cds.odata.valuelist
 @UI.Identification : [{Value : ID}]
 define entity AlertsErrorTor : cuid, managed {
+    @title : 'Job Start Time'
     jobStartTime          : Timestamp;
     alertsErrorTorDetails : Composition of many AlertsErrorTorDetails
                                 on alertsErrorTorDetails.parent = $self;

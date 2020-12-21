@@ -96,7 +96,7 @@ class ProcessorInsertResidenceTime extends JobProcessor {
             outBusinessTime: info.outBusinessTime,
         };
 
-        this.logger.logObject("Creazione record resindence_time", row);
+        this.logger.logObject("Creazione record residence_time", row);
 
         await DB.insertIntoTable(cds.entities.ResidenceTime, row, tx, this.logger);
     }

@@ -285,6 +285,16 @@ modules:
       supported-platforms: []
       build-result: dist
   #
+  - name: ui_alertserrortor
+    type: html5
+    path: app/cloudcoldchain.alertserrortor
+    build-parameters:
+      builder: custom
+      commands:
+        - npm run build
+      supported-platforms: []
+      build-result: dist
+  #
   #   ╔═══════════════════════════════════════╗   #
   #   ║            HTML5 DEPLOYER             ║   #
   #   ╚═══════════════════════════════════════╝   #
@@ -376,6 +386,11 @@ modules:
           target-path: resources/
         #
         - name: ui_departments
+          artifacts:
+            - ./uimodule*.zip
+          target-path: resources/
+        #
+        - name: ui_alertserrortor
           artifacts:
             - ./uimodule*.zip
           target-path: resources/

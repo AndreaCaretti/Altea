@@ -1,0 +1,135 @@
+{
+	"_version": "1.12.0",
+	"sap.app": {
+		"id": "cloudcoldchain.alertserrortor",
+		"type": "application",
+		"i18n": "i18n/i18n.properties",
+		"applicationVersion": {
+			"version": "1.0.0"
+		},
+		"dataSources": {
+			"CAP_Services": {
+				"uri": "/srv_api/services/",
+				"type": "OData",
+				"settings": {
+					"odataVersion": "4.0"
+				}
+			}
+		},
+		"title": "Manage AlertsErrorTor",
+		"description": "AlertsErrorTor Maintenance",
+		"crossNavigation": {
+			"inbounds": {
+				"intent1": {
+					"signature": {
+						"parameters": {},
+						"additionalParameters": "allowed"
+					},
+					"semanticObject": "AlertsErrorTor",
+					"action": "manage",
+					"title": "Manage AlertsErrorTor",
+					"description": "AlertsErrorTor Maintenance",
+					"icon": "sap-icon://add"
+				}
+			}
+		}
+	},
+	"sap.ui": {
+		"technology": "UI5",
+		"fullWidth": false,
+		"icons": {
+			"icon": "",
+			"favIcon": "",
+			"phone": "",
+			"phone@2": "",
+			"tablet": "",
+			"tablet@2": ""
+		},
+		"deviceTypes": {
+			"desktop": true,
+			"tablet": true,
+			"phone": true
+		}
+	},
+	"sap.fiori": {
+		"registrationIds": [],
+		"archeType": "transactional"
+	},
+	"sap.ui5": {
+		"dependencies": {
+			"minUI5Version": "1.78.0",
+			"libs": {
+				"sap.fe.templates": {}
+			}
+		},
+		"contentDensities": {
+			"compact": true,
+			"cozy": true
+		},
+		"models": {
+			"i18n": {
+				"type": "sap.ui.model.resource.ResourceModel",
+				"settings": {
+					"bundleName": "cloudcoldchain.alertserrortor.i18n.i18n"
+				}
+			},
+			"": {
+				"dataSource": "CAP_Services",
+				"settings": {
+					"synchronizationMode": "None",
+					"operationMode": "Server",
+					"autoExpandSelect": true,
+					"earlyRequests": true,
+					"groupProperties": {
+						"default": {
+							"submit": "Auto"
+						}
+					}
+				}
+			}
+		},
+		"routing": {
+			"routes": [
+				{
+					"pattern": ":?query:",
+					"name": "AlertsErrorTorList",
+					"target": "AlertsErrorTorList"
+				},
+				{
+					"pattern": "AlertsErrorTor({key}):?query:",
+					"name": "AlertErrorTorDetails",
+					"target": "AlertErrorTorDetails"
+				}
+			],
+			"targets": {
+				"AlertsErrorTorList": {
+					"type": "Component",
+					"id": "AlertsErrorTorList",
+					"name": "sap.fe.templates.ListReport",
+					"options": {
+						"settings": {
+							"entitySet": "AlertsErrorTor",
+							"navigation": {
+								"AlertsErrorTor": {
+									"detail": {
+										"route": "AlertErrorTorDetails"
+									}
+								}
+							}
+						}
+					}
+				},
+				"AlertErrorTorDetails": {
+					"type": "Component",
+					"id": "AlertErrorTorDetails",
+					"name": "sap.fe.templates.ObjectPage",
+					"options": {
+						"settings": {
+							"entitySet": "AlertsErrorTor"
+						}
+					}
+				}
+			}
+		}
+	}
+}

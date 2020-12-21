@@ -109,6 +109,11 @@
               "id": "department",
               "appId": "cloudcoldchain.department",
               "vizId": "Department-manage"
+            },
+            {
+              "id": "alertserrortor",
+              "appId": "cloudcoldchain.alertserrortor",
+              "vizId": "AlertsErrorTor-manage"
             }
           ]
         }

@@ -152,6 +152,15 @@ window["sap-ushell-config"] = {
             applicationType: "URL",
             url: "./cloudcoldchain.department/webapp",
             navigationMode: "embedded"
+        },
+        "AlertsErrorTor-manage": {
+            title: "Manage AlertsErrorTor",
+            description: "AlertsErrorTor Maintenance",
+            icon: "sap-icon://add",
+            additionalInformation: "SAPUI5.Component=cloudcoldchain.alertserrortor",
+            applicationType: "URL",
+            url: "./cloudcoldchain.alertserrortor/webapp",
+            navigationMode: "embedded"
         }
     }
 }

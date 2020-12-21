@@ -1,13 +1,13 @@
-### Create HandlingUnitsRawMovements
+### Spostamento in cella
 POST http://localhost:4004/handling-unit-moved/HandlingUnitsRawMovements HTTP/1.1
 Authorization: Basic Alice:Alice
 Content-Type: application/json
 
 {
-    "MSG_ID":"zz4ce6f3-283c-4a95-8470-c3664ebddbd0",
+    "MSG_ID":"3ddba231-40a6-434d-84ed-99b748d63ac9",
     "CP_ID": "90abe75c-e2c6-4e5f-a12f-fb81aa50d011",
-    "TE": "1900-10-14T09:01:33.763Z",
-    "TS": "1900-10-14T09:01:34.763Z",
+    "TE": "2020-10-14T09:01:33.763Z",
+    "TS": "2020-10-14T09:01:34.763Z",
     "HU_ID": "123456789012345678",
     "DIR": "F"
 }
@@ -38,3 +38,23 @@ Content-Type: application/json
         }
     ]
 }
+
+### Spostamento in area non raffreddata
+POST http://localhost:4004/handling-unit-moved/HandlingUnitsRawMovements HTTP/1.1
+Authorization: Basic Alice:Alice
+Content-Type: application/json
+
+{
+    "MSG_ID":"3ddba231-40a6-434d-84ed-99b748d63ac9",
+    "CP_ID": "7e2b9e36-4e31-4bc1-94e9-f7ccc224c4ca",
+    "TE": "2020-10-16T10:00:33.763Z",
+    "TS": "2020-10-16T10:00:34.763Z",
+    "HU_ID": "123456789012345678",
+    "DIR": "F"
+}
+
+### Start job del controllo tor
+
+POST http://localhost:4004/Generic/startJobCheckTor  HTTP/1.1
+Authorization: Basic Alice:Alice
+Content-Type: application/json

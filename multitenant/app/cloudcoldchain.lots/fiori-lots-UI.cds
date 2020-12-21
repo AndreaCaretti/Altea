@@ -6,7 +6,12 @@ using Services from '../../srv/services';
 //
 annotate Services.Lots with @(UI : {
     SelectionFields : [name],
-    LineItem        : [{Value : name}]
+    LineItem        : [
+    {Value : name},
+    {Value : product_ID},
+    {Value : productionDate},
+    {Value : expirationDate},
+    ]
 });
 
 ////////////////////////////////////////////////////////////////////////////
@@ -39,10 +44,19 @@ annotate Services.Lots with @(UI : {
                                    // {Value: name}
                                   ]},
     FieldGroup #General : {Data : [
-                                   {Value: productionDate, Label:'Production Date'},
-								   {Value: expirationDate, Label:'Expiration Date'},
-								   {Value : product_ID, Label:'Product'},
-                                  ]},
+    {
+        Value : productionDate,
+        Label : 'Production Date'
+    },
+    {
+        Value : expirationDate,
+        Label : 'Expiration Date'
+    },
+    {
+        Value : product_ID,
+        Label : 'Product'
+    },
+    ]},
     FieldGroup #Admin   : {Data : [
     {Value : createdBy},
     {Value : createdAt},
