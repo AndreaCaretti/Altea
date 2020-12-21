@@ -9,6 +9,42 @@ window["sap-ushell-config"] = {
         }
     },
     applications: {
+        "TemperatureRanges-manage": {
+            title: "Manage TemperatureRanges",
+            description: "TemperatureRanges Maintenance",
+            icon: "sap-icon://add",
+            additionalInformation: "SAPUI5.Component=cloudcoldchain.temperatureranges",
+            applicationType: "URL",
+            url: "./cloudcoldchain.temperatureranges/webapp",
+            navigationMode: "embedded"
+        },
+        "HandlingUnitTypology-manage": {
+            title: "Manage HandlingUnitTypology",
+            description: "HandlingUnitTypology Maintenance",
+            icon: "sap-icon://add",
+            additionalInformation: "SAPUI5.Component=cloudcoldchain.handlingunittypology",
+            applicationType: "URL",
+            url: "./cloudcoldchain.handlingunittypology/webapp",
+            navigationMode: "embedded"
+        },
+        "ControlPointsCategories-manage": {
+            title: "Manage ControlPointsCategories",
+            description: "ControlPointsCategories Maintenance",
+            icon: "sap-icon://add",
+            additionalInformation: "SAPUI5.Component=cloudcoldchain.controlpointscategories",
+            applicationType: "URL",
+            url: "./cloudcoldchain.controlpointscategories/webapp",
+            navigationMode: "embedded"
+        },
+        "AreaCategories-manage": {
+            title: "Manage AreaCategories",
+            description: "AreaCategories Maintenance",
+            icon: "sap-icon://add",
+            additionalInformation: "SAPUI5.Component=cloudcoldchain.areacategories",
+            applicationType: "URL",
+            url: "./cloudcoldchain.areacategories/webapp",
+            navigationMode: "embedded"
+        },
         "CustomerCategories-manage": {
             title: "Manage CustomerCategories",
             description: "CustomerCategories Maintenance",
@@ -36,24 +72,6 @@ window["sap-ushell-config"] = {
             url: "./cloudcoldchain.controlpoints/webapp",
             navigationMode: "embedded"
         },
-        "ControlPointsCategories-manage": {
-            title: "Manage ControlPointsCategories",
-            description: "ControlPointsCategories Maintenance",
-            icon: "sap-icon://add",
-            additionalInformation: "SAPUI5.Component=cloudcoldchain.controlpointscategories",
-            applicationType: "URL",
-            url: "./cloudcoldchain.controlpointscategories/webapp",
-            navigationMode: "embedded"
-        },
-        "AreaCategories-manage": {
-            title: "Manage AreaCategories",
-            description: "AreaCategories Maintenance",
-            icon: "sap-icon://add",
-            additionalInformation: "SAPUI5.Component=cloudcoldchain.areacategories",
-            applicationType: "URL",
-            url: "./cloudcoldchain.areacategories/webapp",
-            navigationMode: "embedded"
-        },
         "Locations-manage": {
             title: "Manage Locations",
             description: "Locations Maintenance",
@@ -61,6 +79,15 @@ window["sap-ushell-config"] = {
             additionalInformation: "SAPUI5.Component=cloudcoldchain.locations",
             applicationType: "URL",
             url: "./cloudcoldchain.locations/webapp",
+            navigationMode: "embedded"
+        },
+        "Department-manage": {
+            title: "Manage Department",
+            description: "Department Maintenance",
+            icon: "sap-icon://add",
+            additionalInformation: "SAPUI5.Component=cloudcoldchain.department",
+            applicationType: "URL",
+            url: "./cloudcoldchain.department/webapp",
             navigationMode: "embedded"
         },
         "Areas-manage": {
@@ -72,13 +99,13 @@ window["sap-ushell-config"] = {
             url: "./cloudcoldchain.areas/webapp",
             navigationMode: "embedded"
         },
-        "TemperatureRanges-manage": {
-            title: "Manage TemperatureRanges",
-            description: "TemperatureRanges Maintenance",
+        "Routes-manage": {
+            title: "Manage Routes",
+            description: "Routes Maintenance",
             icon: "sap-icon://add",
-            additionalInformation: "SAPUI5.Component=cloudcoldchain.temperatureranges",
+            additionalInformation: "SAPUI5.Component=cloudcoldchain.routes",
             applicationType: "URL",
-            url: "./cloudcoldchain.temperatureranges/webapp",
+            url: "./cloudcoldchain.routes/webapp",
             navigationMode: "embedded"
         },
         "Products-manage": {
@@ -99,15 +126,6 @@ window["sap-ushell-config"] = {
             url: "./cloudcoldchain.lots/webapp",
             navigationMode: "embedded"
         },
-        "Routes-manage": {
-            title: "Manage Routes",
-            description: "Routes Maintenance",
-            icon: "sap-icon://add",
-            additionalInformation: "SAPUI5.Component=cloudcoldchain.routes",
-            applicationType: "URL",
-            url: "./cloudcoldchain.routes/webapp",
-            navigationMode: "embedded"
-        },
         "HandlingUnits-manage": {
             title: "Manage HandlingUnits",
             description: "HandlingUnits Maintenance",
@@ -115,24 +133,6 @@ window["sap-ushell-config"] = {
             additionalInformation: "SAPUI5.Component=cloudcoldchain.handlingunits",
             applicationType: "URL",
             url: "./cloudcoldchain.handlingunits/webapp",
-            navigationMode: "embedded"
-        },
-        "HandlingUnitTypology-manage": {
-            title: "Manage HandlingUnitTypology",
-            description: "HandlingUnitTypology Maintenance",
-            icon: "sap-icon://add",
-            additionalInformation: "SAPUI5.Component=cloudcoldchain.handlingunittypology",
-            applicationType: "URL",
-            url: "./cloudcoldchain.handlingunittypology/webapp",
-            navigationMode: "embedded"
-        },
-        "Department-manage": {
-            title: "Manage Department",
-            description: "Department Maintenance",
-            icon: "sap-icon://add",
-            additionalInformation: "SAPUI5.Component=cloudcoldchain.department",
-            applicationType: "URL",
-            url: "./cloudcoldchain.department/webapp",
             navigationMode: "embedded"
         },
         "AlertsErrorTor-manage": {
@@ -144,6 +144,15 @@ window["sap-ushell-config"] = {
             url: "./cloudcoldchain.alertserrortor/webapp",
             navigationMode: "embedded"
         },
+        "outOfRange-manage": {
+            title: "Manage outOfRange",
+            description: "outOfRange Maintenance",
+            icon: "sap-icon://add",
+            additionalInformation: "SAPUI5.Component=cloudcoldchain.outofrange",
+            applicationType: "URL",
+            url: "./cloudcoldchain.outofrange/webapp",
+            navigationMode: "embedded"
+        },
         "Notification-manage": {
             title: "Manage Notification",
             description: "Notification Maintenance",
@@ -153,14 +162,5 @@ window["sap-ushell-config"] = {
             url: "./cloudcoldchain.notification/webapp",
             navigationMode: "embedded"
         },
-        "outOfRange-manage": {
-            title: "Manage outOfRange",
-            description: "outOfRange Maintenance",
-            icon: "sap-icon://add",
-            additionalInformation: "SAPUI5.Component=cloudcoldchain.outofrange",
-            applicationType: "URL",
-            url: "./cloudcoldchain.outofrange/webapp",
-            navigationMode: "embedded"
-        }
     }
 }
