@@ -35,10 +35,6 @@ annotate Services.HandlingUnits with @(UI : {
         $Type : 'UI.DataField',
         Value : inAreaBusinessTime,
     },
-    {
-        $Type : 'UI.DataField',
-        Value : lastMovement_ID,
-    }
     ]
 });
 
@@ -52,12 +48,18 @@ annotate Services.HandlingUnits with @(UI : {
         TypeName       : 'HandlingUnit',
         TypeNamePlural : 'HandlingUnits',
         Title          : {Value : huId},
+        Description    : {Value : huId},
     },
     Facets              : [
     {
         $Type  : 'UI.ReferenceFacet',
         Label  : '{i18n>General}',
         Target : '@UI.FieldGroup#General'
+    },
+    {
+        $Type  : 'UI.ReferenceFacet',
+        Label  : '{i18n>Movements}',
+        Target : 'residenceTimes/@UI.LineItem',
     },
     {
         $Type  : 'UI.ReferenceFacet',
@@ -83,10 +85,6 @@ annotate Services.HandlingUnits with @(UI : {
         $Type : 'UI.DataField',
         Value : inAreaBusinessTime,
     },
-    {
-        $Type : 'UI.DataField',
-        Value : lastMovement_ID,
-    }
     ]},
 
     FieldGroup #Admin   : {Data : [
@@ -96,3 +94,27 @@ annotate Services.HandlingUnits with @(UI : {
     {Value : modifiedAt}
     ]}
 });
+
+////////////////////////////////////////////////////////////////////////////
+//
+//	ResidenceTime List Page
+//
+
+annotate Services.ResidenceTime with @(UI : {LineItem : [
+{
+    $Type : 'UI.DataField',
+    Value : inBusinessTime,
+},
+{
+    $Type : 'UI.DataField',
+    Value : area_ID,
+},
+{
+    $Type : 'UI.DataField',
+    Value : outBusinessTime,
+},
+{
+    $Type : 'UI.DataField',
+    Value : stepNr,
+},
+]});

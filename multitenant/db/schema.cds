@@ -244,7 +244,7 @@ define entity HandlingUnits : cuid, managed {
     @description : '{i18n>ArrivedInAreaAt}'
     inAreaBusinessTime : Timestamp;
     @Common      : {
-        Text            : lastKnownArea.name,
+        Text            : lastMovement.createdBy,
         TextArrangement : #TextOnly
     }
     @title       : '{i18n>LastMovement}'
@@ -252,6 +252,8 @@ define entity HandlingUnits : cuid, managed {
     lastMovement       : Association to one HandlingUnitsMovements;
     jsonSummary        : LargeString;
     blockchainHash     : String(100);
+    residenceTimes     : Association to many ResidenceTime
+                             on residenceTimes.handlingUnit = $self;
 }
 
 define entity HandlingUnitTypology : cuid, managed {
@@ -287,8 +289,15 @@ define entity HandlingUnitsRawMovements : cuid, managed {
 define entity ResidenceTime : cuid, managed {
     handlingUnit       : Association to one HandlingUnits;
     stepNr             : RouteStepNr;
+    @Common      : {
+        Text            : area.name,
+        TextArrangement : #TextOnly
+    }
+    @title       : '{i18n>Area}'
     area               : Association to one Areas;
+    @title : '{i18n>InBusinessTime}'
     inBusinessTime     : Timestamp;
+    @title : '{i18n>OutBusinessTime}'
     outBusinessTime    : Timestamp;
     residenceTime      : Integer;
     singleTOR          : Integer;
