@@ -6,7 +6,7 @@ const GlobalUtility = require("../global-utilities");
 
 const JobProcessor = require("./internal/job-processor");
 
-class ProcessorrNotification extends JobProcessor {
+class ProcessorNotification extends JobProcessor {
     constructor(logger, jobs) {
         super(logger, jobs);
         this.jobs = jobs;
@@ -17,7 +17,7 @@ class ProcessorrNotification extends JobProcessor {
 
     async doWork(jobInfo, technicalUser, tx) {
         const jobInfoData = jobInfo.data;
-        const isLocalHost = await GlobalUtility.isRunnungInLocalHost();
+        const isLocalHost = await GlobalUtility.isRunningInLocalHost();
         await this.sendNotificationDataInternal(jobInfoData, technicalUser, tx, isLocalHost);
     }
 
@@ -84,4 +84,4 @@ class ProcessorrNotification extends JobProcessor {
     }
 }
 
-module.exports = ProcessorrNotification;
+module.exports = ProcessorNotification;
