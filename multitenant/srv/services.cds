@@ -44,7 +44,7 @@ service Services {
     entity Alerts                  as projection on cloudcoldchain.Alerts;
 
     @odata.draft.enabled
-    entity ResidenceTime           as projection on cloudcoldchain.ResidenceTime;
+    entity ResidenceTime           as projection on cloudcoldchain.ResidenceTime order by inBusinessTime asc;
 
     @odata.draft.enabled
     entity HandlingUnits           as projection on cloudcoldchain.HandlingUnits;
