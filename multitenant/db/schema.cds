@@ -372,7 +372,7 @@ define entity AlertsErrorTorDetails : cuid {
  * # ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
  */
 
-define entity AreaDetails                       as
+define entity AreaDetails                          as
     select from Areas distinct {
         Areas.ID                             as areaID,
         Areas.name                           as areaName,
@@ -395,7 +395,7 @@ define entity AreaDetails                       as
  * # ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
  */
 
-define entity OutOfRangeAreaDetails             as
+define entity OutOfRangeAreaDetails                as
     select from outOfRange distinct {
         ID                            as OutOfRangeID,
         segmentId                     as SegmentID,
@@ -426,7 +426,7 @@ define entity OutOfRangeAreaDetails             as
         area.minWorkingTemperature,
         area.maxWorkingTemperature;
 
-define entity OutOfRangeHandlingUnitDetails     as
+define entity OutOfRangeHandlingUnitDetails        as
     select from OutOfRangeHandlingUnits
     left join OutOfRangeHandlingUnitDetailCount
         on OutOfRangeHandlingUnitDetailCount.OutOfRangeID = OutOfRangeHandlingUnits.outOfRange.ID
@@ -446,19 +446,32 @@ define entity OutOfRangeHandlingUnitDetails     as
         handlingUnit.typology.uom,
         OutOfRangeHandlingUnitDetailCount.OutOfRangeHandlingUnitsIDCount;
 
-define entity OutOfRangeHandlingUnitDetailCount as
+define entity OutOfRangeHandlingUnitDetailPlain    as
     select from OutOfRangeHandlingUnits distinct {
-        count(
-            handlingUnit.ID
-        )                             as OutOfRangeHandlingUnitsIDCount,
+        handlingUnit.ID               as OutOfRangeHandlingUnitsID,
         outOfRange.ID                 as OutOfRangeID,
         handlingUnit.lot.name         as LotID,
         handlingUnit.lot.product.gtin as GTIN,
     }
     group by
+        handlingUnit.ID,
         outOfRange.ID,
         handlingUnit.lot.name,
         handlingUnit.lot.product.gtin;
+
+define entity OutOfRangeHandlingUnitDetailCount    as
+    select from OutOfRangeHandlingUnitDetailPlain distinct {
+        count(
+            OutOfRangeHandlingUnitsID
+        ) as OutOfRangeHandlingUnitsIDCount,
+        OutOfRangeID,
+        LotID,
+        GTIN,
+    }
+    group by
+        OutOfRangeID,
+        LotID,
+        GTIN;
 
 /**
  * #
@@ -470,42 +483,184 @@ define entity OutOfRangeHandlingUnitDetailCount as
  * # ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
  */
 
-entity AlertTORData                             as
+entity AlertTORData                                as
     select from cloudcoldchain.AlertsErrorTor distinct {
-        AlertsErrorTor.ID                      as AlertsErrorTorID,
-        alertsErrorTorDetails.ID               as guid,
-        AlertsErrorTor.modifiedAt              as eventDate,
-        alertsErrorTorDetails.tor              as TOR,
-        alertsErrorTorDetails.residenceTime.ID as ResidenceTimeID
+        AlertsErrorTor.ID         as AlertsErrorTorID,
+        alertsErrorTorDetails.ID  as guid,
+        AlertsErrorTor.modifiedAt as eventDate,
+        alertsErrorTorDetails.tor as TOR
     }
     group by
         AlertsErrorTor.ID,
         alertsErrorTorDetails.ID,
         AlertsErrorTor.modifiedAt,
-        alertsErrorTorDetails.tor,
-        alertsErrorTorDetails.residenceTime.ID;
+        alertsErrorTorDetails.tor;
 
-entity AlertTORResidenceTimeHUData              as
+entity AlertTORResidenceTimeHUPlain                as
     select from cloudcoldchain.ResidenceTime
-    inner join cloudcoldchain.AlertTORData
-        on AlertTORData.ResidenceTimeID = ResidenceTime.ID
-    {
-        ResidenceTime.ID                            as ResidenceTimeID,
-        ResidenceTime.handlingUnit.ID               as HU_ID,
+    inner join cloudcoldchain.AlertsErrorTorDetails
+        on AlertsErrorTorDetails.residenceTime.ID = ResidenceTime.ID
+    distinct {
+        AlertsErrorTorDetails.parent.ID             as AlertsErrorTorID,
         ResidenceTime.handlingUnit.lot.ID           as lot,
+        ResidenceTime.handlingUnit.lot.product.ID   as ProductID,
         ResidenceTime.handlingUnit.lot.product.gtin as gtin,
-        ResidenceTime.handlingUnit.typology.uom     as unitOfMeasure
-    };
+        ResidenceTime.handlingUnit.ID               as HU_ID,
+    }
+    group by
+        AlertsErrorTorDetails.parent.ID,
+        ResidenceTime.handlingUnit.lot.ID,
+        ResidenceTime.handlingUnit.lot.product.gtin,
+        ResidenceTime.handlingUnit.ID;
 
-
-entity AlertTORResidenceTimeHUDataHeader        as
-    select from cloudcoldchain.AlertTORResidenceTimeHUData distinct {
-        ResidenceTimeID,
-        HU_ID,
+entity AlertTORResidenceTimeHUCount                as
+    select from cloudcoldchain.AlertTORResidenceTimeHUPlain distinct {
+        AlertsErrorTorID,
         lot,
+        ProductID,
         gtin,
-        unitOfMeasure
+        count(
+            HU_ID
+        ) as HU_Quantity,
+    }
+    group by
+        AlertsErrorTorID,
+        lot,
+        ProductID,
+        gtin;
+
+entity AlertTORResidenceTimeHUData                 as
+    select from cloudcoldchain.ResidenceTime
+    inner join cloudcoldchain.AlertsErrorTorDetails
+        on AlertsErrorTorDetails.residenceTime.ID = ResidenceTime.ID
+    distinct {
+
+        AlertsErrorTorDetails.parent.ID               as AlertsErrorTorID,
+        ResidenceTime.handlingUnit.lot.ID             as lot,
+        ResidenceTime.handlingUnit.lot.product.ID     as ProductID,
+        ResidenceTime.handlingUnit.lot.product.gtin   as gtin,
+        ResidenceTime.handlingUnit.lot.product.maxTor as maxTOR,
+        ResidenceTime.handlingUnit.typology.uom       as unitOfMeasure,
+    }
+    group by
+        AlertsErrorTorDetails.parent.ID,
+        ResidenceTime.handlingUnit.lot.ID,
+        ResidenceTime.handlingUnit.lot.product.gtin,
+        ResidenceTime.handlingUnit.lot.product.maxTor,
+        ResidenceTime.handlingUnit.typology.uom;
+
+entity AlertTORResidenceTimeHUDataCount            as
+    select from cloudcoldchain.AlertTORResidenceTimeHUData
+    left outer join cloudcoldchain.AlertTORResidenceTimeHUCount as Count
+        on  Count.AlertsErrorTorID = AlertTORResidenceTimeHUData.AlertsErrorTorID
+        and Count.ProductID        = AlertTORResidenceTimeHUData.ProductID
+        and Count.gtin             = AlertTORResidenceTimeHUData.gtin
+        and Count.lot              = AlertTORResidenceTimeHUData.lot
+    distinct {
+
+        AlertTORResidenceTimeHUData.AlertsErrorTorID,
+        AlertTORResidenceTimeHUData.lot,
+        AlertTORResidenceTimeHUData.ProductID,
+        AlertTORResidenceTimeHUData.gtin,
+        AlertTORResidenceTimeHUData.maxTOR,
+        AlertTORResidenceTimeHUData.unitOfMeasure,
+        Count.HU_Quantity
     };
+
+entity AlertTORResidenceTimeProductData            as
+    select from cloudcoldchain.AlertTORResidenceTimeHUData distinct {
+        AlertsErrorTorID,
+        ProductID,
+        gtin,
+        maxTOR,
+    }
+    group by
+        AlertsErrorTorID,
+        gtin,
+        maxTOR;
+
+entity AlertTORResidenceTimeProductStepData        as
+    select from cloudcoldchain.AlertTORResidenceTimeProductCurrentStepData
+    // AREA DI PARTENZA
+    left outer join cloudcoldchain.ProductStepData as PreviousStep
+        on  PreviousStep.ProductID   = AlertTORResidenceTimeProductCurrentStepData.ProductID
+        and PreviousStep.RouteID     = AlertTORResidenceTimeProductCurrentStepData.RouteID
+        and PreviousStep.RouteStepNr = AlertTORResidenceTimeProductCurrentStepData.LastStepNr
+    // AREA DI ARRIVO
+    left outer join cloudcoldchain.ProductStepData as NextStep
+        on  NextStep.ProductID   = AlertTORResidenceTimeProductCurrentStepData.ProductID
+        and NextStep.RouteID     = AlertTORResidenceTimeProductCurrentStepData.RouteID
+        and NextStep.RouteStepNr = AlertTORResidenceTimeProductCurrentStepData.NextStepNr
+    distinct {
+
+        AlertTORResidenceTimeProductCurrentStepData.AlertsErrorTorID,
+        AlertTORResidenceTimeProductCurrentStepData.ProductID,
+        AlertTORResidenceTimeProductCurrentStepData.RouteID,
+        AlertTORResidenceTimeProductCurrentStepData.CurrentStepNr,
+        // AREA DI PARTENZA
+        PreviousStep.DestinatioAreaID as FromDestinatioAreaID,
+        PreviousStep.DepartmentID     as FromDepartmentID,
+        PreviousStep.LocationID       as FromLocationID,
+        // AREA DI ARRIVO
+        NextStep.DestinatioAreaID     as ToDestinatioAreaID,
+        NextStep.DepartmentID         as ToDepartmentID,
+        NextStep.LocationID           as ToLocationID,
+    }
+    group by
+        AlertTORResidenceTimeProductCurrentStepData.AlertsErrorTorID,
+        AlertTORResidenceTimeProductCurrentStepData.ProductID,
+        AlertTORResidenceTimeProductCurrentStepData.RouteID,
+        AlertTORResidenceTimeProductCurrentStepData.CurrentStepNr,
+        // AREA DI PARTENZA
+        PreviousStep.DestinatioAreaID,
+        PreviousStep.DepartmentID,
+        PreviousStep.LocationID,
+        // AREA DI ARRIVO
+        NextStep.DestinatioAreaID,
+        NextStep.DepartmentID,
+        NextStep.LocationID;
+
+entity AlertTORResidenceTimeProductCurrentStepData as
+    select from cloudcoldchain.ResidenceTime
+    inner join cloudcoldchain.AlertsErrorTorDetails
+        on AlertsErrorTorDetails.residenceTime.ID = ResidenceTime.ID
+    distinct {
+
+        AlertsErrorTorDetails.parent.ID                 as AlertsErrorTorID,
+        ResidenceTime.handlingUnit.lot.product.ID       as ProductID,
+        ResidenceTime.handlingUnit.lot.product.route.ID as RouteID,
+        ResidenceTime.stepNr                            as CurrentStepNr,
+        (
+            ResidenceTime.stepNr - 1
+        )                                               as LastStepNr,
+        (
+            ResidenceTime.stepNr + 1
+        )                                               as NextStepNr,
+    }
+    group by
+        AlertsErrorTorDetails.parent.ID,
+        ResidenceTime.handlingUnit.lot.product.ID;
+
+entity ProductStepData                             as
+    select from cloudcoldchain.Products distinct {
+        Products.ID                                                 as ProductID,
+        Products.gtin                                               as gtin,
+        Products.route.ID                                           as RouteID,
+        Products.route.steps.ID                                     as RouteStepID,
+        Products.route.steps.stepNr                                 as RouteStepNr,
+        Products.route.steps.destinationArea.ID                     as DestinatioAreaID,
+        Products.route.steps.destinationArea.department.ID          as DepartmentID,
+        Products.route.steps.destinationArea.department.location.ID as LocationID,
+    }
+    group by
+        Products.ID,
+        Products.gtin,
+        Products.route.ID,
+        Products.route.steps.ID,
+        Products.route.steps.stepNr,
+        Products.route.steps.destinationArea.ID,
+        Products.route.steps.destinationArea.department.ID,
+        Products.route.steps.destinationArea.department.location.ID;
 
 /**
  * #

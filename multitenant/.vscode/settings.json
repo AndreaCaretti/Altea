@@ -21,8 +21,8 @@
         {
             "previewLimit": 50,
             "driver": "SQLite",
-            "name": "local db",
-            "database": "local-test-data.db"
+            "database": "${workspaceFolder:multitenant}/local-test-data.db/home/user/cloud-cold-chain/multitenant/local-test-data.db",
+            "name": "local-test-data.db"
         }
     ],
     "search.exclude": {

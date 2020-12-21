@@ -27,118 +27,90 @@ class TORNotificationPrepare {
         // wait until all promises are resolved
         const TORDataToSend = await Promise.all(promises);
 
-        this.logger.logObject("Test", TORDataToSend);
-
-        const valueOutPut = {
-            guid: "ada49efe-c732-4ed3-a7a9-cb7275ae5c5e",
-            severity: 1,
-            alarmType: "TOR",
-            eventDate: "2020-11-17T12:00:00Z",
-            notificationDate: "2020-11-17T12:05:00Z",
-            gtin: "1234567890123",
-            TOR: 7200000,
-            maxTOR: 3600000,
-            fromArea: {
-                guid: "c7163657-20c8-4fc3-925a-9028bc6b0d8f",
-                department: {
-                    guid: "c55dd03a-c097-487c-a60c-bf3fa8abea5b",
-                },
-                location: {
-                    guid: "c55dd03a-c097-487c-a60c-bf3fa8abea5b",
-                },
-            },
-            toArea: {
-                guid: "d7163657-20c8-4fc3-925a-9028bc6b0d8f",
-                department: {
-                    guid: "c55dd03a-c097-487c-a60c-bf3fa8abea5b",
-                },
-                location: {
-                    guid: "c55dd03a-c097-487c-a60c-bf3fa8abea5b",
-                },
-            },
-            handlingUnits: [
-                {
-                    gtin: "1234567890123",
-                    lot: "U4654",
-                    quantity: 5,
-                    unitOfMeasure: "pallet",
-                },
-                {
-                    gtin: "1234567890123",
-                    lot: "U4655",
-                    quantity: 3,
-                    unitOfMeasure: "pallet",
-                },
-                {
-                    gtin: "1234567890123",
-                    lot: "U7655",
-                    quantity: 200,
-                    unitOfMeasure: "cartoni",
-                },
-            ],
-        };
-
-        return valueOutPut;
+        return TORDataToSend;
     }
 
     static async loopOverTORHeader(TORRowData) {
-        const TORHUData = await DB.selectAllRowsWhere(
-            cds.entities.AlertTORResidenceTimeHUData,
-            { ResidenceTimeID: TORRowData.ResidenceTimeID },
+        const TORProductData = await DB.selectAllRowsWhere(
+            cds.entities.AlertTORResidenceTimeProductData,
+            { AlertsErrorTorID: TORRowData.AlertsErrorTorID },
             undefined,
             this.tx,
             this.logger
         );
-        this.logger.logObject("HUData for TOR Header", TORHUData);
-        const singleOutPut = {
-            guid: TORRowData.guid,
-            severity,
-            alarmType,
-            eventDate: TORRowData.eventDate,
-            notificationDate: this.notificationDate,
-            gtin: "1234567890123",
-            TOR: TORRowData.TOR,
-            maxTOR: 3600000,
-            fromArea: {
-                guid: "c7163657-20c8-4fc3-925a-9028bc6b0d8f",
-                department: {
-                    guid: "c55dd03a-c097-487c-a60c-bf3fa8abea5b",
+        this.logger.logObject("ProductData for TOR", TORProductData);
+
+        const TORHUData = await DB.selectAllRowsWhere(
+            cds.entities.AlertTORResidenceTimeHUDataCount,
+            { AlertsErrorTorID: TORRowData.AlertsErrorTorID },
+            undefined,
+            this.tx,
+            this.logger
+        );
+        this.logger.logObject("HUData for TOR", TORHUData);
+
+        const FromToArea = await DB.selectAllRowsWhere(
+            cds.entities.AlertTORResidenceTimeProductStepData,
+            { AlertsErrorTorID: TORRowData.AlertsErrorTorID },
+            undefined,
+            this.tx,
+            this.logger
+        );
+        this.logger.logObject("From - To Area for TOR", FromToArea);
+
+        let singleOutPut = {};
+
+        for (let indexProduct = 0; indexProduct < TORProductData.length; indexProduct++) {
+            const HUData = [];
+            const singleTORProducData = TORProductData[indexProduct];
+
+            for (let indexHU = 0; indexHU < TORHUData.length; indexHU++) {
+                const singleHUProduct = TORHUData[indexHU];
+                if (singleHUProduct.ProductID === singleTORProducData.ProductID) {
+                    HUData.push({
+                        gtin: singleHUProduct.gtin,
+                        lot: singleHUProduct.lot,
+                        quantity: singleHUProduct.HU_Quantity,
+                        unitOfMeasure: singleHUProduct.unitOfMeasure,
+                    });
+                }
+            }
+            singleOutPut = {
+                guid: TORRowData.guid,
+                severity,
+                alarmType,
+                eventDate: TORRowData.eventDate,
+                notificationDate: this.notificationDate,
+                gtin: singleTORProducData.gtin,
+                TOR: TORRowData.TOR,
+                maxTOR: singleTORProducData.maxTOR,
+                fromArea: {
+                    guid: this.checkNullValue(FromToArea[0].FromDestinatioAreaID),
+                    department: {
+                        guid: this.checkNullValue(FromToArea[0].FromDestinatioAreaID),
+                    },
+                    location: {
+                        guid: this.checkNullValue(FromToArea[0].FromDestinatioAreaID),
+                    },
                 },
-                location: {
-                    guid: "c55dd03a-c097-487c-a60c-bf3fa8abea5b",
+                toArea: {
+                    guid: this.checkNullValue(FromToArea[0].ToDestinatioAreaID),
+                    department: {
+                        guid: this.checkNullValue(FromToArea[0].ToDepartmentID),
+                    },
+                    location: {
+                        guid: this.checkNullValue(FromToArea[0].ToLocationID),
+                    },
                 },
-            },
-            toArea: {
-                guid: "d7163657-20c8-4fc3-925a-9028bc6b0d8f",
-                department: {
-                    guid: "c55dd03a-c097-487c-a60c-bf3fa8abea5b",
-                },
-                location: {
-                    guid: "c55dd03a-c097-487c-a60c-bf3fa8abea5b",
-                },
-            },
-            handlingUnits: [
-                {
-                    gtin: "1234567890123",
-                    lot: "U4654",
-                    quantity: 5,
-                    unitOfMeasure: "pallet",
-                },
-                {
-                    gtin: "1234567890123",
-                    lot: "U4655",
-                    quantity: 3,
-                    unitOfMeasure: "pallet",
-                },
-                {
-                    gtin: "1234567890123",
-                    lot: "U7655",
-                    quantity: 200,
-                    unitOfMeasure: "cartoni",
-                },
-            ],
-        };
+                handlingUnits: HUData,
+            };
+        }
         return singleOutPut;
+    }
+
+    static checkNullValue(value) {
+        this.logger.info(`Check value : ${value}`);
+        return value !== null ? value : "";
     }
 }
 

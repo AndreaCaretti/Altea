@@ -24,7 +24,9 @@ class OLTNotificationPrepare {
         });
 
         // UTILIZZO GUUID DEVICE IOT PER LEGGERE TABELLA
-        const valueOutPut = {
+        const valueOutPut = [];
+
+        valueOutPut.push({
             guid: await DB.getUUID(),
             // eventGuid invece che id
             severity: notification.alertLevel,
@@ -64,7 +66,7 @@ class OLTNotificationPrepare {
             },
             handlingUnits: handlingUnitData,
             alarmType: notification.alertType,
-        };
+        });
 
         return valueOutPut;
     }

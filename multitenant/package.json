@@ -23,8 +23,10 @@
         "ioredis": "^4.19.4",
         "moment": "^2.29.1",
         "node-fetch": "^2.6.1",
+        "node-pre-gyp": "^0.17.0",
         "passport": "^0",
         "request": "^2",
+        "sqlite3": "^5.0.0",
         "uuid": "^8.3.2"
     },
     "devDependencies": {
@@ -34,8 +36,7 @@
         "eslint-plugin-import": "^2.22.1",
         "eslint-plugin-prettier": "^3.3.0",
         "husky": "^4.3.6",
-        "prettier": "^2.2.1",
-        "sqlite3": "^5"
+        "prettier": "^2.2.1"
     },
     "engines": {
         "node": "12.18.3",
