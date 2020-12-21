@@ -22,34 +22,25 @@ class ProcessorrNotification extends JobProcessor {
     }
 
     async sendNotificationDataInternal(notificationData, technicalUser, tx, isLocalHost) {
-        const notification = notificationData;
+        this.notification = notificationData;
+        this.technicalUser = technicalUser;
+        this.tx = tx;
+        this.isLocalHost = isLocalHost;
         // GET NOTIFICATION FOR TABLE INSERT
-        this.logger.logObject(`Notification retrieved`, notification);
+        this.logger.logObject(`Notification retrieved`, this.notification);
 
         // SEND TO ENTERPRISE MESSAGE SERVICE NOTIFICATION
-        const notificationPayload = JSON.stringify(
-            await this.notificationPrepareData.prepareNotificationPayload(notification),
-            null,
-            2
+        const notificationPayload = await this.notificationPrepareData.prepareNotificationPayload(
+            this.notification
         );
 
-        const date = new Date().toISOString();
-        notification.notificationTime = date;
+        const promises = notificationPayload.map(this.sendAndInsertRow.bind(this));
+        // wait until all promises are resolved
+        await Promise.all(promises);
 
-        if (!isLocalHost) {
-            await this.enterpriseMessageNotification.send(notificationPayload);
-        } else {
-            this.logger.info(
-                "Eseguito operazione da localhost - invio verso coda Redis non eseguita, i dati saranno inseriti in tabella Notification senza invio a Enterprise Message"
-            );
-        }
-
-        await this.submitIntoTable(
-            notification,
-            notificationPayload,
-            this.logger,
-            technicalUser,
-            tx
+        this.logger.logObject(
+            `Notification Send ended at ${new Date().toISOString()}`,
+            this.notification
         );
     }
 
@@ -64,6 +55,32 @@ class ProcessorrNotification extends JobProcessor {
             notificationTime: notificationData.notificationTime,
         };
         await DB.insertIntoTable(Notification, dataNotification, tx, this.logger, true);
+    }
+
+    async sendAndInsertRow(notificationPayload) {
+        // INSERISCO AWAIT (NON UTILE AI FINI DELLA PURA ESECUZIONE ASINCRONA)
+        // PER GESTIRE UNICO RUN TUTTA LA FUNZIONE
+        const notificationPayloadToSend = await JSON.stringify(notificationPayload, null, 2);
+
+        const date = new Date().toISOString();
+        this.notification.notificationTime = date;
+
+        if (!this.isLocalHost) {
+            await this.enterpriseMessageNotification.send(notificationPayloadToSend);
+        } else {
+            this.logger.info(
+                "Eseguito operazione da localhost - invio verso coda Redis non eseguita,i dati saranno inseriti in tabella Notification senza invio a Enterprise Message"
+            );
+        }
+
+        // INSERISCO IN TABELLA
+        await this.submitIntoTable(
+            this.notification,
+            notificationPayloadToSend,
+            this.logger,
+            this.technicalUser,
+            this.tx
+        );
     }
 }
 

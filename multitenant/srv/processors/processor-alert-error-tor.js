@@ -19,7 +19,7 @@ class ProcessorAlertErrorTOR extends JobProcessor {
             return;
         }
         const alertsErrorTorID = await this.insertIntoAlertsErrorTor(now, expiredTorData, tx);
-        tx.commit();
+        await tx.commit();
         await this.notificationAlert(now, alertsErrorTorID, technicalUser);
     }
 

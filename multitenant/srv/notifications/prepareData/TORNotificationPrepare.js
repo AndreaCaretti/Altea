@@ -1,62 +1,116 @@
 // const FgRed = "\x1b[31m";
-// const LOG_PREFIX = `Preparo dati per invio notifica TOR - `;
+const LOG_PREFIX = `Preparo dati per invio notifica TOR - `;
+const cds = require("@sap/cds");
 const DB = require("../../db-utilities");
 
+const alarmType = "TOR";
+const severity = 1;
+
 class TORNotificationPrepare {
-    static async prepareData(data, logger, _tx) {
+    static async prepareData(notification, logger, tx) {
         this.logger = logger;
-        this.logger.info("Prepare data for Keetings - TOR");
-        // const technicalUser = new cds.User({
-        //     id: data.user,
-        //     tenant: data.tenant,
-        // });
-        // const tx = DB.getTransaction(technicalUser, this.logger);
+        this.logger.info(`${LOG_PREFIX} Inizio`);
 
-        // UTILIZZO GUUID DEVICE IOT PER LEGGERE TABELLA
-        const valueOutPut = {
-            guid: await DB.getUUID(),
-            // eventGuid invece che id
-            severity: data.alertLevel,
-            eventDate: data.alertBusinessTime,
-            // invece che creationDate
-            notificationDate: new Date().toISOString(),
-            details: {
-                measurementUnit: "MEASURE_UNIT",
-                eventTemperature: "20.00",
-                // eventTemperature invece che currentTemperatura, nel momento dell'evento
-                workingTemperature: {
-                    // Range di temperatura impostato nella cella nel
-                    // momento della notifica (non dell'evento)
-                    min: "areaInformation.MinWorkingTemperature",
-                    max: "areaInformation.MaxWorkingTemperature",
-                },
-                cause: "", // Non disponibile
-            },
-            // momento in cui inseriamo la notifica nella coda verso keethings
-            area: {
-                // identifica l'area impattata dall'evento
-                // (per area intendiamo cella frigorifera ma in futuro anche un truck)
-                guid: "areaInformation.AreaID",
-                // categoria dell'area impattata (COLD_ROOM, TRUCK, ...)
-                department: {
-                    // identifica il department in cui è contenuta l'area
-                    guid: "areaInformation.DepartmentID",
-                },
-                location: {
-                    // identifica il plant in cui è contenuta l'area
-                    guid: "areaInformation.LocationID",
-                },
-                asset: {
-                    // identifica il plant in cui è contenuta l'area
-                    guid: "areaInformation.ID_DeviceIoT",
-                },
-            },
-            handlingUnits: "handlingUnitData",
-            alarmType: data.alertType,
-        };
+        const notificationPayload = notification.payload;
 
-        // tx.rollback();
-        return valueOutPut;
+        const TORHeaderData = await DB.selectAllRowsWhere(
+            cds.entities.AlertTORData,
+            { AlertsErrorTorID: notificationPayload.alertsErrorTorID },
+            undefined,
+            tx,
+            logger
+        );
+        this.notificationDate = new Date().toISOString();
+        this.tx = tx;
+
+        const promises = TORHeaderData.map(this.loopOverTORHeader.bind(this));
+        // wait until all promises are resolved
+        const TORDataToSend = await Promise.all(promises);
+
+        return TORDataToSend;
+    }
+
+    static async loopOverTORHeader(TORRowData) {
+        const TORProductData = await DB.selectAllRowsWhere(
+            cds.entities.AlertTORResidenceTimeProductData,
+            { AlertsErrorTorID: TORRowData.AlertsErrorTorID },
+            undefined,
+            this.tx,
+            this.logger
+        );
+        this.logger.logObject("ProductData for TOR", TORProductData);
+
+        const TORHUData = await DB.selectAllRowsWhere(
+            cds.entities.AlertTORResidenceTimeHUDataCount,
+            { AlertsErrorTorID: TORRowData.AlertsErrorTorID },
+            undefined,
+            this.tx,
+            this.logger
+        );
+        this.logger.logObject("HUData for TOR", TORHUData);
+
+        const FromToArea = await DB.selectAllRowsWhere(
+            cds.entities.AlertTORResidenceTimeProductStepData,
+            { AlertsErrorTorID: TORRowData.AlertsErrorTorID },
+            undefined,
+            this.tx,
+            this.logger
+        );
+        this.logger.logObject("From - To Area for TOR", FromToArea);
+
+        let singleOutPut = {};
+
+        for (let indexProduct = 0; indexProduct < TORProductData.length; indexProduct++) {
+            const HUData = [];
+            const singleTORProducData = TORProductData[indexProduct];
+
+            for (let indexHU = 0; indexHU < TORHUData.length; indexHU++) {
+                const singleHUProduct = TORHUData[indexHU];
+                if (singleHUProduct.ProductID === singleTORProducData.ProductID) {
+                    HUData.push({
+                        gtin: singleHUProduct.gtin,
+                        lot: singleHUProduct.lot,
+                        quantity: singleHUProduct.HU_Quantity,
+                        unitOfMeasure: singleHUProduct.unitOfMeasure,
+                    });
+                }
+            }
+            singleOutPut = {
+                guid: TORRowData.guid,
+                severity,
+                alarmType,
+                eventDate: TORRowData.eventDate,
+                notificationDate: this.notificationDate,
+                gtin: singleTORProducData.gtin,
+                TOR: TORRowData.TOR,
+                maxTOR: singleTORProducData.maxTOR,
+                fromArea: {
+                    guid: this.checkNullValue(FromToArea[0].FromDestinatioAreaID),
+                    department: {
+                        guid: this.checkNullValue(FromToArea[0].FromDestinatioAreaID),
+                    },
+                    location: {
+                        guid: this.checkNullValue(FromToArea[0].FromDestinatioAreaID),
+                    },
+                },
+                toArea: {
+                    guid: this.checkNullValue(FromToArea[0].ToDestinatioAreaID),
+                    department: {
+                        guid: this.checkNullValue(FromToArea[0].ToDepartmentID),
+                    },
+                    location: {
+                        guid: this.checkNullValue(FromToArea[0].ToLocationID),
+                    },
+                },
+                handlingUnits: HUData,
+            };
+        }
+        return singleOutPut;
+    }
+
+    static checkNullValue(value) {
+        this.logger.info(`Check value : ${value}`);
+        return value !== null ? value : "";
     }
 }
 
