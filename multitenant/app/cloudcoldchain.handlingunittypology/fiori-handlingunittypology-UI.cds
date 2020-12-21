@@ -40,7 +40,7 @@ annotate Services.HandlingUnitTypology with @(
 		},
 		FieldGroup#General: {
 			Data: [
-				// {Value: name}
+				{Value: uom}
 			]
 		}
 	}
