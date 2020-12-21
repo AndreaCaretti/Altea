@@ -48,7 +48,6 @@ annotate Services.HandlingUnits with @(UI : {
         TypeName       : 'HandlingUnit',
         TypeNamePlural : 'HandlingUnits',
         Title          : {Value : huId},
-        Description    : {Value : huId},
     },
     Facets              : [
     {

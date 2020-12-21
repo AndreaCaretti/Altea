@@ -240,6 +240,7 @@ define entity RouteSteps : cuid {
 //| _HU_ID_ (HU_ID)      | lot     | lastKnownArea(Locations)    | inAreaBusinessTime (Timestamp) | jsonSummary (LargeString)             | blockchainHash (100)
 @UI.Identification : [{Value : ID}]
 define entity HandlingUnits : cuid, managed {
+    @title       : '{i18n>huId}'
     huId               : cloudcoldchain.HU_ID;
     @Common      : {
         Text            : lot.name,
@@ -278,6 +279,7 @@ define entity HandlingUnits : cuid, managed {
                              on residenceTimes.handlingUnit = $self;
 }
 
+@cds.odata.valuelist
 define entity HandlingUnitTypology : cuid, managed {
     name : String(50);
     uom  : String(50);
