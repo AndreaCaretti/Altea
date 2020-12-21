@@ -176,7 +176,7 @@ class IotService extends ZApplicationService {
                 cds.entities.outOfRange,
                 dataOutOfRange,
                 tx,
-                this.logger
+                this.coldChainLogger
             );
             oorID = res.req.data.ID;
         }
@@ -204,7 +204,7 @@ class IotService extends ZApplicationService {
             outOfRangeToUpdate.ID,
             values,
             tx,
-            this.logger
+            this.coldChainLogger
         );
         return outOfRangeToUpdate.ID;
     }

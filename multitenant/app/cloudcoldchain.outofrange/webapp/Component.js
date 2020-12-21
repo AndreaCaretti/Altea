@@ -1,5 +1,5 @@
 sap.ui.define(["sap/fe/core/AppComponent"], (ac) =>
-ac.extend("cloudcoldchain.outOfRange.Component", {
+    ac.extend("cloudcoldchain.outofrange.Component", {
         metadata: { manifest: "json" },
     }),
 );

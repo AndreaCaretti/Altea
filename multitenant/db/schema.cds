@@ -366,15 +366,30 @@ define entity Alerts : cuid, managed {
 define entity outOfRange : cuid, managed {
     @title : 'ID Device IoT'
     ID_DeviceIoT : String;
+    @Common : {
+        Text            : area.name,
+        TextArrangement : #TextOnly
+    }
+    @title : 'Area'
     area         : Association to one Areas;
+    @title : 'Alert Started At'
     startEventTS : Timestamp;
+    @title : 'Alert End At'
     endEventTS   : Timestamp;
+    @title : 'Status'
     status       : String;
+    @title : 'IoT Segment ID'
     segmentId    : UUID;
+    handlingUnits: Composition of many OutOfRangeHandlingUnits on handlingUnits.outOfRange = $self;
 }
 
 define entity OutOfRangeHandlingUnits : cuid, managed {
     outOfRange   : Association to outOfRange;
+    @title : 'Handling Unit'
+    @Common : {
+        Text            : handlingUnit.huId,
+        TextArrangement : #TextOnly
+    }
     handlingUnit : Association to HandlingUnits;
     startTime    : Timestamp;
     endTime      : Timestamp;

@@ -1,6 +1,6 @@
 specVersion: "1.0"
 metadata:
-  name: outOfRange
+  name: outofrange
 type: application
 resources:
   configuration:
@@ -30,7 +30,7 @@ builder:
     - name: "ui5-task-zipper"
       afterTask: "generateCachebusterInfo"
       configuration:
-        archiveName: "uimodule_outOfRange"
+        archiveName: "uimodule_outofrange"
         debug: true
         additionalFiles:
           - xs-app.json

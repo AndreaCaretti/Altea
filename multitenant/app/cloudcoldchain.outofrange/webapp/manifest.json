@@ -1,7 +1,7 @@
 {
 	"_version": "1.12.0",
 	"sap.app": {
-		"id": "cloudcoldchain.outOfRange",
+		"id": "cloudcoldchain.outofrange",
 		"type": "application",
 		"i18n": "i18n/i18n.properties",
 		"applicationVersion": {
@@ -16,8 +16,8 @@
 				}
 			}
 		},
-		"title": "Manage outOfRanges",
-		"description": "outOfRanges Maintenance",
+		"title": "Manage outOfRange",
+		"description": "outOfRange Maintenance",
 		"crossNavigation": {
 			"inbounds": {
 				"intent1": {
@@ -25,10 +25,10 @@
 						"parameters": {},
 						"additionalParameters": "allowed"
 					},
-					"semanticObject": "outOfRanges",
+					"semanticObject": "outOfRange",
 					"action": "manage",
-					"title": "Manage outOfRanges",
-					"description": "outOfRanges Maintenance",
+					"title": "Manage outOfRange",
+					"description": "outOfRange Maintenance",
 					"icon": "sap-icon://add"
 				}
 			}
@@ -70,7 +70,7 @@
 			"i18n": {
 				"type": "sap.ui.model.resource.ResourceModel",
 				"settings": {
-					"bundleName": "cloudcoldchain.outOfRange.i18n.i18n"
+					"bundleName": "cloudcoldchain.outofrange.i18n.i18n"
 				}
 			},
 			"": {
@@ -92,25 +92,25 @@
 			"routes": [
 				{
 					"pattern": ":?query:",
-					"name": "outOfRangesList",
-					"target": "outOfRangesList"
+					"name": "outOfRangeList",
+					"target": "outOfRangeList"
 				},
 				{
-					"pattern": "outOfRanges({key}):?query:",
+					"pattern": "outOfRange({key}):?query:",
 					"name": "outOfRangeDetails",
 					"target": "outOfRangeDetails"
 				}
 			],
 			"targets": {
-				"outOfRangesList": {
+				"outOfRangeList": {
 					"type": "Component",
-					"id": "outOfRangesList",
+					"id": "outOfRangeList",
 					"name": "sap.fe.templates.ListReport",
 					"options": {
 						"settings": {
-							"entitySet": "outOfRanges",
+							"entitySet": "outOfRange",
 							"navigation": {
-								"outOfRanges": {
+								"outOfRange": {
 									"detail": {
 										"route": "outOfRangeDetails"
 									}
@@ -125,7 +125,7 @@
 					"name": "sap.fe.templates.ObjectPage",
 					"options": {
 						"settings": {
-							"entitySet": "outOfRanges"
+							"entitySet": "outOfRange"
 						}
 					}
 				}

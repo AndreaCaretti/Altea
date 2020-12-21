@@ -255,9 +255,9 @@ modules:
       supported-platforms: []
       build-result: dist
   #
-  - name: ui_outOfRange
+  - name: ui_outofrange
     type: html5
-    path: app/cloudcoldchain.outOfRange
+    path: app/cloudcoldchain.outofrange
     build-parameters:
       builder: custom
       commands:
@@ -385,7 +385,7 @@ modules:
             - ./uimodule*.zip
           target-path: resources/
         #
-        - name: ui_outOfRange
+        - name: ui_outofrange
           artifacts:
             - ./uimodule*.zip
           target-path: resources/

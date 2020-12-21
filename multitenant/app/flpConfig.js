@@ -126,15 +126,6 @@ window["sap-ushell-config"] = {
             url: "./cloudcoldchain.handlingunits/webapp",
             navigationMode: "embedded"
         },
-        "outOfRanges-manage": {
-            title: "Manage outOfRanges",
-            description: "outOfRanges Maintenance",
-            icon: "sap-icon://add",
-            additionalInformation: "SAPUI5.Component=cloudcoldchain.outOfRange",
-            applicationType: "URL",
-            url: "./cloudcoldchain.outOfRange/webapp",
-            navigationMode: "embedded"
-        },
         "HandlingUnitTypology-manage": {
             title: "Manage HandlingUnitTypology",
             description: "HandlingUnitTypology Maintenance",
@@ -169,6 +160,15 @@ window["sap-ushell-config"] = {
             additionalInformation: "SAPUI5.Component=cloudcoldchain.notification",
             applicationType: "URL",
             url: "./cloudcoldchain.notification/webapp",
+            navigationMode: "embedded"
+        },
+        "outOfRange-manage": {
+            title: "Manage outOfRange",
+            description: "outOfRange Maintenance",
+            icon: "sap-icon://add",
+            additionalInformation: "SAPUI5.Component=cloudcoldchain.outofrange",
+            applicationType: "URL",
+            url: "./cloudcoldchain.outofrange/webapp",
             navigationMode: "embedded"
         }
     }
