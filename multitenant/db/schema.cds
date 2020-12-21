@@ -148,7 +148,7 @@ define entity Locations : cuid, managed {
 @cds.odata.valuelist
 @UI.Identification : [{Value : name}]
 define entity Department : cuid, managed {
-    @title : 'Departement'
+    @title : 'Department'
     name        : String(50);
     description : localized String(200);
     location    : Association to one Locations;

@@ -143,6 +143,15 @@ window["sap-ushell-config"] = {
             applicationType: "URL",
             url: "./cloudcoldchain.handlingunittypology/webapp",
             navigationMode: "embedded"
+        },
+        "Department-manage": {
+            title: "Manage Department",
+            description: "Department Maintenance",
+            icon: "sap-icon://add",
+            additionalInformation: "SAPUI5.Component=cloudcoldchain.department",
+            applicationType: "URL",
+            url: "./cloudcoldchain.department/webapp",
+            navigationMode: "embedded"
         }
     }
 }

@@ -104,6 +104,11 @@
               "id": "handlingunittypology",
               "appId": "cloudcoldchain.handlingunittypology",
               "vizId": "HandlingUnitTypology-manage"
+            },
+            {
+              "id": "department",
+              "appId": "cloudcoldchain.department",
+              "vizId": "Department-manage"
             }
           ]
         }

@@ -1,7 +1,5 @@
 using {
-    cloudcoldchain as cloudcoldchain,
-                      cloudcoldchain.GS1CompanyPrefix,
-                      cloudcoldchain.HandlingUnitTypology
+  cloudcoldchain as cloudcoldchain
 } from '../db/schema';
 
 @(requires : 'authenticated-user')
@@ -31,6 +29,9 @@ service Services {
 
     @odata.draft.enabled
     entity Locations               as projection on cloudcoldchain.Locations;
+
+    @odata.draft.enabled
+    entity Department               as projection on cloudcoldchain.Department;
 
     @odata.draft.enabled
     entity Products                as projection on cloudcoldchain.Products;

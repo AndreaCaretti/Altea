@@ -1,0 +1,10 @@
+{
+  "generator-easy-ui5-extra": {
+    "namespace": "cloudcoldchain",
+    "appname": "department",
+    "entitynameplural": "Department",
+    "entitynamesingolar": "Department",
+    "newdir": true,
+    "namespaceURI": "cloudcoldchain"
+  }
+}

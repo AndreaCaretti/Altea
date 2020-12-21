@@ -275,6 +275,16 @@ modules:
       supported-platforms: []
       build-result: dist
   #
+  - name: ui_departments
+    type: html5
+    path: app/cloudcoldchain.department
+    build-parameters:
+      builder: custom
+      commands:
+        - npm run build
+      supported-platforms: []
+      build-result: dist
+  #
   #   ╔═══════════════════════════════════════╗   #
   #   ║            HTML5 DEPLOYER             ║   #
   #   ╚═══════════════════════════════════════╝   #
@@ -361,6 +371,11 @@ modules:
           target-path: resources/
         #
         - name: ui_handlingunittypology
+          artifacts:
+            - ./uimodule*.zip
+          target-path: resources/
+        #
+        - name: ui_departments
           artifacts:
             - ./uimodule*.zip
           target-path: resources/
