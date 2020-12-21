@@ -9,15 +9,6 @@ window["sap-ushell-config"] = {
         }
     },
     applications: {
-        "AccessRights-manage": {
-            title: "Manage AccessRights",
-            description: "AccessRights Maintenance",
-            icon: "sap-icon://add",
-            additionalInformation: "SAPUI5.Component=com.alteaup.solutions.accessrights",
-            applicationType: "URL",
-            url: "./com.alteaup.solutions.accessrights/webapp",
-            navigationMode: "embedded"
-        },
         "CustomerCategories-manage": {
             title: "Manage CustomerCategories",
             description: "CustomerCategories Maintenance",

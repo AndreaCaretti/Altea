@@ -31,11 +31,6 @@
         "payload": {
           "viz": [
             {
-              "id": "accessrights",
-              "appId": "com.alteaup.solutions.accessrights",
-              "vizId": "AccessRights-manage"
-            },
-            {
               "id": "customercategories",
               "appId": "cloudcoldchain.customercategories",
               "vizId": "CustomerCategories-manage"

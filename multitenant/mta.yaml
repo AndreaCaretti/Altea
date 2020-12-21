@@ -121,16 +121,6 @@ modules:
   #   ║               HTML5 APPS              ║   #
   #   ╚═══════════════════════════════════════╝   #
   #
-  - name: ui_accessrights
-    type: html5
-    path: app/com.alteaup.solutions.accessrights
-    build-parameters:
-      builder: custom
-      commands:
-        - npm run build
-      supported-platforms: []
-      build-result: dist
-  #
   - name: ui_customercategories
     type: html5
     path: app/cloudcoldchain.customercategories
@@ -319,11 +309,6 @@ modules:
     build-parameters:
       build-result: resources
       requires:
-        #
-        - name: ui_accessrights
-          artifacts:
-            - ./uimodule*.zip
-          target-path: resources/
         #
         - name: ui_customercategories
           artifacts:
