@@ -27,7 +27,7 @@ class JobProcessor {
 
         try {
             await this.doWork(jobInfo, this.technicalUserAndTenant, tx);
-            tx.commit();
+            await tx.commit();
         } catch (error) {
             this.logger.logException(`Errore esecuzione job ${jobInfo.name} ${jobInfo.id}`, error);
             tx.rollback();
