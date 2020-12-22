@@ -125,7 +125,7 @@ define entity Areas : cuid, managed {
         Text            : department.name,
         TextArrangement : #TextOnly
     }
-    department            : Association to one Department;
+    department            : Association to one Departments;
     @title  : 'ID Device IoT'
     ID_DeviceIoT          : String;
     @title  : 'Min Working Temperature'
@@ -144,15 +144,15 @@ define entity Locations : cuid, managed {
     @title : 'Locations'
     name        : String(50);
     description : localized String(200);
-    departments : Association to many Department
+    departments : Association to many Departments
                       on departments.location = $self;
 }
 
 @cds.autoexpose
 @cds.odata.valuelist
 @UI.Identification : [{Value : name}]
-define entity Department : cuid, managed {
-    @title  : 'Department'
+define entity Departments : cuid, managed {
+    @title  : 'Departments'
     name        : String(50);
     description : localized String(200);
     @title  : 'Location'
@@ -273,7 +273,7 @@ define entity HandlingUnits : cuid, managed {
     }
     @title       : '{i18n>HandlingUnitTypology}'
     @description : '{i18n>HandlingUnitTypology}'
-    typology           : Association to one HandlingUnitTypology;
+    typology           : Association to one HandlingUnitTypologies;
     @Common      : {
         Text            : lastKnownArea.name,
         TextArrangement : #TextOnly
@@ -300,7 +300,7 @@ define entity HandlingUnits : cuid, managed {
 }
 
 @cds.odata.valuelist
-define entity HandlingUnitTypology : cuid, managed {
+define entity HandlingUnitTypologies : cuid, managed {
     name : String(50);
     uom  : String(50);
 }
@@ -798,10 +798,10 @@ context DatatoExternalTools {
 
     @cds.autoexpose
     entity DepartmentView        as
-        select from cloudcoldchain.Department distinct {
-            Department.ID as guid,
-            name          as description,
-            location.ID   as LocationID
+        select from cloudcoldchain.Departments distinct {
+            Departments.ID as guid,
+            name           as description,
+            location.ID    as LocationID
         };
 
     @cds.autoexpose
@@ -813,7 +813,6 @@ context DatatoExternalTools {
             department.ID as DepartmentID,
             assetManager  as assetManager,
         };
-
 
     @cds.autoexpose
     entity ProductsView          as projection on cloudcoldchain.Products {
