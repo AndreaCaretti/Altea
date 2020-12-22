@@ -84,13 +84,16 @@ class OLTNotificationPrepare {
 
     static async getHandlingUnitData(data, tx) {
         const { OutOfRangeHandlingUnitDetails } = cds.entities;
+
         const oHandlingUnitData = await DB.selectAllRowsWhere(
             OutOfRangeHandlingUnitDetails,
             { OutOfRangeID: data.OutOfRangeID },
             null,
             tx,
-            this.logger
+            this.logger,
+            { errorWhenNoRecords: false }
         );
+
         return oHandlingUnitData;
     }
 }

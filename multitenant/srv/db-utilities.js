@@ -62,21 +62,22 @@ class DB {
      * @param {*} tx
      * @param {Logger} logger
      */
-    static async selectAllRowsWhere(tableName, whereClause, andClause, tx, logger) {
-        let allRows;
+    static async selectAllRowsWhere(tableName, whereClause, andClause, tx, logger, options) {
+        let allRows = [];
         if (!andClause) {
             allRows = await tx.read(tableName).where(whereClause);
         } else {
             allRows = await tx.read(tableName).where(whereClause).and(andClause);
         }
 
-        if (allRows.length === 0) {
+        if (allRows.length === 0 && (!options || options.errorWhenNoRecords)) {
             throw Error(
                 `selectAllRowsWhere - Record not found: ${tableName.name} where ${JSON.stringify(
                     whereClause
                 )} -> '${JSON.stringify(allRows)}'`
             );
         }
+
         let logString = `selectAllRowsWhere: ${tableName.name} where ${JSON.stringify(
             whereClause
         )}`;
