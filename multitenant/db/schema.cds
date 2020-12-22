@@ -594,6 +594,7 @@ entity AlertTORResidenceTimeHUPlain                as
     group by
         AlertsErrorTorDetails.parent.ID,
         ResidenceTime.handlingUnit.lot.name,
+        ResidenceTime.handlingUnit.lot.product.ID,
         ResidenceTime.handlingUnit.lot.product.gtin,
         ResidenceTime.handlingUnit.ID;
 
@@ -691,6 +692,7 @@ entity AlertTORResidenceTimeProductData            as
     }
     group by
         AlertsErrorTorID,
+        ProductID,
         gtin,
         maxTOR;
 
@@ -707,7 +709,6 @@ entity AlertTORResidenceTimeProductStepData        as
         and NextStep.RouteID     = AlertTORResidenceTimeProductCurrentStepData.RouteID
         and NextStep.RouteStepNr = AlertTORResidenceTimeProductCurrentStepData.NextStepNr
     distinct {
-
         AlertTORResidenceTimeProductCurrentStepData.AlertsErrorTorID,
         AlertTORResidenceTimeProductCurrentStepData.ProductID,
         AlertTORResidenceTimeProductCurrentStepData.RouteID,
@@ -754,7 +755,9 @@ entity AlertTORResidenceTimeProductCurrentStepData as
     }
     group by
         AlertsErrorTorDetails.parent.ID,
-        ResidenceTime.handlingUnit.lot.product.ID;
+        ResidenceTime.handlingUnit.lot.product.ID,
+        ResidenceTime.handlingUnit.lot.product.route.ID,
+        ResidenceTime.stepNr;
 
 entity ProductStepData                             as
     select from cloudcoldchain.Products distinct {
