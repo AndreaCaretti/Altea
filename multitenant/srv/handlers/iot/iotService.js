@@ -117,7 +117,7 @@ class IotService extends ZApplicationService {
         } catch (error) {
             this.coldChainLogger.logException(
                 "ERRORE SERVIZIO iotService/createOutOfRangeHandlingUnits: ",
-                error.message
+                error
             );
             await tx.rollback();
         }
@@ -125,22 +125,20 @@ class IotService extends ZApplicationService {
 
     // eslint-disable-next-line class-methods-use-this
     async getHandlingUnitsInArea(areaID, segmentTime, tx) {
-        let result;
+        this.coldChainLogger.debug(
+            `Recupero handling units presenti nell'area ${areaID} all'ora ${segmentTime}`
+        );
+        let result = [];
 
-        try {
-            // TODO: gestire con DB-UTILITIES
-            result = await tx.run(
-                SELECT("handlingUnit_ID")
-                    .from(cds.entities.ResidenceTime)
-                    .where("inBusinessTime <= ", `${segmentTime}`)
-                    .and("outBusinessTime IS NULL")
-                    .or("outBusinessTime >= ", `${segmentTime}`)
-            );
+        // TODO: gestire con DB-UTILITIES
+        result = await tx.run(
+            SELECT("handlingUnit_ID")
+                .from(cds.entities.ResidenceTime)
+                .where(
+                    `area_ID = '${areaID}' and inBusinessTime <= '${segmentTime}' and ( outBusinessTime IS NULL or outBusinessTime >= '${segmentTime}')`
+                )
+        );
 
-            this.coldChainLogger.debug(result);
-        } catch (error) {
-            this.coldChainLogger.error(error);
-        }
         return result;
     }
 
