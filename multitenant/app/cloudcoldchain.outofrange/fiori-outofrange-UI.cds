@@ -41,6 +41,11 @@ annotate Services.outOfRange with @(UI : {
         Label  : '{i18n>HandlingUnitsInArea}',
         Target : 'handlingUnits/@UI.LineItem',
     },
+    {
+        $Type  : 'UI.ReferenceFacet',
+        Label  : '{i18n>Admin}',
+        Target : '@UI.FieldGroup#Admin'
+    },
     ],
     FieldGroup #Header  : {Data : [
     {Value : area_ID},
@@ -49,7 +54,13 @@ annotate Services.outOfRange with @(UI : {
     ]},
     FieldGroup #General : {Data : [
                                    // {Value: name}
-                                  ]}
+                                  ]},
+    FieldGroup #Admin   : {Data : [
+    {Value : createdBy},
+    {Value : createdAt},
+    {Value : modifiedBy},
+    {Value : modifiedAt}
+    ]}
 });
 
 
