@@ -10,6 +10,10 @@ class ProcessorInsertResidenceTime extends JobProcessor {
 
         await this.createRecordResidentTime(movement, info, tx);
 
+        if (info.previousResidenceTime) {
+            await this.updateOutBusinessTime(info.previousResidenceTime, movement, tx);
+        }
+
         // FIXME: Se ci sono più istanze dell'app CAP può essere che il campo TE
         // dell'handling unit sia già stato aggiornato da un altro processo con
         // un valore più alto e noi per errore mettiamo un movimento vecchio
@@ -34,14 +38,15 @@ class ProcessorInsertResidenceTime extends JobProcessor {
         );
         const maxResidenceTime = await this.getMaxResidenceTime(movement, product, routeStep, tx);
 
-        const outBusinessTime = await this.getOutBusinessTime(movement, routeStep, tx);
+        const nearResidenceTimes = await this.getPreviousNextResidenceTime(movement, routeStep, tx);
 
         return {
             handlingUnit,
             routeStep,
             product,
             maxResidenceTime,
-            outBusinessTime,
+            previousResidenceTime: nearResidenceTimes.previousResidenceTime,
+            nextResidenceTime: nearResidenceTimes.nextResidenceTime,
         };
     }
 
@@ -93,8 +98,15 @@ class ProcessorInsertResidenceTime extends JobProcessor {
             inBusinessTime: movement.TE,
             area_ID: info.routeStep.destinationArea_ID,
             maxResidenceTime: info.maxResidenceTime,
-            outBusinessTime: info.outBusinessTime,
         };
+
+        if (info.nextResidenceTime) {
+            this.logger.logObject(
+                "Esiste già un movimento successivo, la data di uscita viene impostata",
+                info.nextResidenceTime.inBusinessTime
+            );
+            row.outBusinessTime = info.nextResidenceTime.inBusinessTime;
+        }
 
         this.logger.logObject("Creazione record residence_time", row);
 
@@ -143,30 +155,54 @@ class ProcessorInsertResidenceTime extends JobProcessor {
         );
     }
 
-    async getNearResidentTimes(movement, stepNr, tx) {
-        let record;
+    async getNearResidentTimes(handlingUnitID, TE, stepNr, tx) {
+        this.logger.debug(
+            `Recupero previous e next residence times ${handlingUnitID} ${TE} ${stepNr}`
+        );
+
+        const nearResidenceTime = {};
         try {
-            record = await tx.run(
+            nearResidenceTime.previousResidenceTime = await tx.run(
                 SELECT.one
                     .from(cds.entities.ResidenceTime)
-                    .where({ handlingUnit_ID: movement.handlingUnitID })
+                    .where({ handlingUnit_ID: handlingUnitID })
                     .and(`stepNr = ${stepNr + 1} or stepNr = ${stepNr - 1}`)
-                    .and("inBusinessTime > ", movement.TE)
+                    .and("inBusinessTime < ", TE)
+                    .orderBy([{ ref: ["inBusinessTime"], sort: "des" }])
+            );
+            nearResidenceTime.nextResidenceTime = await tx.run(
+                SELECT.one
+                    .from(cds.entities.ResidenceTime)
+                    .where({ handlingUnit_ID: handlingUnitID })
+                    .and(`stepNr = ${stepNr + 1} or stepNr = ${stepNr - 1}`)
+                    .and("inBusinessTime > ", TE)
                     .orderBy([{ ref: ["inBusinessTime"], sort: "asc" }])
             );
         } catch (error) {
             this.logger.logException("Errore select NearResidenceTime: ", error);
         }
-        return record;
+        return nearResidenceTime;
     }
 
-    async getOutBusinessTime(movement, routeStep, tx) {
-        let outBusinessTime;
-        const record = await this.getNearResidentTimes(movement, routeStep.stepNr, tx);
-        if (record) {
-            outBusinessTime = record.inBusinessTime;
-        }
-        return outBusinessTime;
+    async getPreviousNextResidenceTime(movement, routeStep, tx) {
+        const nearResidenceTime = await this.getNearResidentTimes(
+            movement.handlingUnitID,
+            movement.TE,
+            routeStep.stepNr,
+            tx
+        );
+        this.logger.logObject(`Near residence times recuperati`, nearResidenceTime);
+        return nearResidenceTime;
+    }
+
+    async updateOutBusinessTime(previousResidenceTime, movement, tx) {
+        await DB.updateSomeFields(
+            cds.entities.ResidenceTime,
+            previousResidenceTime.ID,
+            { outBusinessTime: movement.TE },
+            tx,
+            this.logger
+        );
     }
 }
 
