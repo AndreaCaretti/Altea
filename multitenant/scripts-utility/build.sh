@@ -64,6 +64,7 @@ function preparaFilename() {
     GITCOMMIT=`git show-ref | grep origin/main | cut -f 1 -d ' ' | cut -c -7`
     DATA=`date --iso-8601=seconds`
     FILENAME="ccp-$DATA-$GITCOMMIT"
+    FILENAME="$(echo -e "${FILENAME}" | tr -d '[:space:]')"
 
     echo -e "${GREEN}Creazione file $FILENAME${NC}\n"
 }
