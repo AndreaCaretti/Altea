@@ -154,4 +154,8 @@ annotate Services.HandlingUnitsMovements with @(UI : {LineItem : [
     $Type : 'UI.DataField',
     Value : TS,
 },
+{
+    $Type : 'UI.DataField',
+    Value : createdAt,
+},
 ]});
