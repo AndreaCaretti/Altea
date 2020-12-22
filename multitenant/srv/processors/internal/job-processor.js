@@ -26,8 +26,9 @@ class JobProcessor {
         const tx = this.getTx(this.request);
 
         try {
-            await this.doWork(jobInfo, this.technicalUserAndTenant, tx);
+            const jobData = await this.doWork(jobInfo, this.technicalUserAndTenant, tx);
             await tx.commit();
+            await this.doWorkAfterCommit(jobData, jobInfo, this.technicalUserAndTenant, tx);
         } catch (error) {
             this.logger.logException(`Errore esecuzione job ${jobInfo.name} ${jobInfo.id}`, error);
             tx.rollback();
@@ -58,6 +59,9 @@ class JobProcessor {
         this.logger.debug(`Recupero transaction da request`);
         return cds.transaction(request);
     }
+
+    // eslint-disable-next-line class-methods-use-this, no-unused-vars
+    doWorkAfterCommit(data, jobInfo, technicalUserAndTenant, tx) {}
 }
 
 module.exports = JobProcessor;
