@@ -43,7 +43,7 @@ function updateRelease() {
     SOTTO=`tail mta.yaml -n +10`
     VERSION="$MAJOR_VERSION.$MINOR_VERSION-$GITCOMMIT"
     VERSION="$(echo -e "${VERSION}" | tr -d '[:space:]')"
-    VERSION="$(echo "${VERSION//:/ :})
+    VERSION="$(echo "${VERSION//:/ :}")"
 
     echo -e "${GREEN}Versione MTA [$VERSION${NC}]\n"
 
