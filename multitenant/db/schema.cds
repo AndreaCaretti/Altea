@@ -690,6 +690,7 @@ entity AlertTORResidenceTimeProductData            as
     }
     group by
         AlertsErrorTorID,
+        ProductID,
         gtin,
         maxTOR;
 
@@ -706,7 +707,6 @@ entity AlertTORResidenceTimeProductStepData        as
         and NextStep.RouteID     = AlertTORResidenceTimeProductCurrentStepData.RouteID
         and NextStep.RouteStepNr = AlertTORResidenceTimeProductCurrentStepData.NextStepNr
     distinct {
-
         AlertTORResidenceTimeProductCurrentStepData.AlertsErrorTorID,
         AlertTORResidenceTimeProductCurrentStepData.ProductID,
         AlertTORResidenceTimeProductCurrentStepData.RouteID,
