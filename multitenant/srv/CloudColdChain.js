@@ -98,7 +98,7 @@ class CloudColdChain {
             "a1d03e7f-53e4-414b-aca0-c4d44157f2a0",
             QUEUE_NAMES.ALERT_ERROR_TOR,
             "JOB_ALERT_ERROR_TOR",
-            "9 * * * *"
+            "*/3 * * * *"
         );
 
         // Engine Started

@@ -3,7 +3,7 @@ const xsenv = require("@sap/xsenv");
  * DB utilities methods
  */
 class GlobalUtilities {
-    static async isRunnungInLocalHost() {
+    static async isRunningInLocalHost() {
         try {
             return (
                 xsenv.serviceCredentials({ label: "redis-cache" }).hostname === "127.0.0.1" ||

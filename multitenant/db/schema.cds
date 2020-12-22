@@ -307,18 +307,18 @@ define entity HandlingUnitTypology : cuid, managed {
 
 define entity HandlingUnitsMovements : cuid, managed {
     MSG_ID       : UUID;
-    @Common      : {
+    @Common : {
         Text            : controlPoint.name,
         TextArrangement : #TextOnly
     }
-    @title       : '{i18n>ControlPoint}'
+    @title  : '{i18n>ControlPoint}'
     controlPoint : Association to one ControlPoints;
-    @title       : '{i18n>EventTime}'
+    @title  : '{i18n>EventTime}'
     TE           : Timestamp;
-    @title       : '{i18n>NotificationTime}'
+    @title  : '{i18n>NotificationTime}'
     TS           : Timestamp;
     handlingUnit : Association to one HandlingUnits;
-    @title       : '{i18n>Direction}'
+    @title  : '{i18n>Direction}'
     DIR          : cloudcoldchain.direction;
     STATUS       : Boolean;
     rawMovement  : Association to one HandlingUnitsRawMovements;
@@ -567,16 +567,14 @@ define entity OutOfRangeHandlingUnitDetailCount    as
  * # ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
  */
 
-entity AlertTORData                                as
+entity AlertTORDataHeader                          as
     select from cloudcoldchain.AlertsErrorTor distinct {
         AlertsErrorTor.ID         as AlertsErrorTorID,
-        alertsErrorTorDetails.ID  as guid,
         AlertsErrorTor.modifiedAt as eventDate,
         alertsErrorTorDetails.tor as TOR
     }
     group by
         AlertsErrorTor.ID,
-        alertsErrorTorDetails.ID,
         AlertsErrorTor.modifiedAt,
         alertsErrorTorDetails.tor;
 
@@ -586,14 +584,14 @@ entity AlertTORResidenceTimeHUPlain                as
         on AlertsErrorTorDetails.residenceTime.ID = ResidenceTime.ID
     distinct {
         AlertsErrorTorDetails.parent.ID             as AlertsErrorTorID,
-        ResidenceTime.handlingUnit.lot.ID           as lot,
+        ResidenceTime.handlingUnit.lot.name         as lot,
         ResidenceTime.handlingUnit.lot.product.ID   as ProductID,
         ResidenceTime.handlingUnit.lot.product.gtin as gtin,
         ResidenceTime.handlingUnit.ID               as HU_ID,
     }
     group by
         AlertsErrorTorDetails.parent.ID,
-        ResidenceTime.handlingUnit.lot.ID,
+        ResidenceTime.handlingUnit.lot.name,
         ResidenceTime.handlingUnit.lot.product.gtin,
         ResidenceTime.handlingUnit.ID;
 
@@ -620,7 +618,7 @@ entity AlertTORResidenceTimeHUData                 as
     distinct {
 
         AlertsErrorTorDetails.parent.ID               as AlertsErrorTorID,
-        ResidenceTime.handlingUnit.lot.ID             as lot,
+        ResidenceTime.handlingUnit.lot.name           as lot,
         ResidenceTime.handlingUnit.lot.product.ID     as ProductID,
         ResidenceTime.handlingUnit.lot.product.gtin   as gtin,
         ResidenceTime.handlingUnit.lot.product.maxTor as maxTOR,
@@ -628,7 +626,7 @@ entity AlertTORResidenceTimeHUData                 as
     }
     group by
         AlertsErrorTorDetails.parent.ID,
-        ResidenceTime.handlingUnit.lot.ID,
+        ResidenceTime.handlingUnit.lot.name,
         ResidenceTime.handlingUnit.lot.product.gtin,
         ResidenceTime.handlingUnit.lot.product.maxTor,
         ResidenceTime.handlingUnit.typology.uom;
