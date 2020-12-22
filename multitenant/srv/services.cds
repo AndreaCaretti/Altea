@@ -1,7 +1,7 @@
 using {
-  cloudcoldchain as cloudcoldchain,
-                    cloudcoldchain.AlertsErrorTor,
-                    cloudcoldchain.Notification
+    cloudcoldchain as cloudcoldchain,
+                      cloudcoldchain.AlertsErrorTor,
+                      cloudcoldchain.Notification
 } from '../db/schema';
 
 @(requires : 'authenticated-user')
@@ -33,7 +33,7 @@ service Services {
     entity Locations               as projection on cloudcoldchain.Locations;
 
     @odata.draft.enabled
-    entity Department               as projection on cloudcoldchain.Department;
+    entity Department              as projection on cloudcoldchain.Departments;
 
     @odata.draft.enabled
     entity Products                as projection on cloudcoldchain.Products;
@@ -55,7 +55,7 @@ service Services {
         inBusinessTime asc;
 
     @odata.draft.enabled
-    entity HandlingUnitTypology    as projection on cloudcoldchain.HandlingUnitTypology
+    entity HandlingUnitTypology    as projection on cloudcoldchain.HandlingUnitTypologies;
 
     @odata.draft.enabled
     entity HandlingUnits           as projection on cloudcoldchain.HandlingUnits;
@@ -63,8 +63,6 @@ service Services {
     entity HandlingUnitsMovements  as projection on cloudcoldchain.HandlingUnitsMovements;
     entity outOfRange              as projection on cloudcoldchain.outOfRange;
     entity OutOfRangeHandlingUnits as projection on cloudcoldchain.OutOfRangeHandlingUnits;
-
-    entity AlertsErrorTor as projection on cloudcoldchain.AlertsErrorTor;
-
-    entity Notification as projection on cloudcoldchain.Notification;
+    entity AlertsErrorTor          as projection on cloudcoldchain.AlertsErrorTor;
+    entity Notification            as projection on cloudcoldchain.Notification;
 }
