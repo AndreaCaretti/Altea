@@ -73,11 +73,11 @@ annotate Services.AlertsErrorTor with @(UI : {
 annotate Services.AlertsErrorTorDetails with @(UI : {LineItem : [
 {
     $Type : 'UI.DataField',
-    Value : residenceTime.area_ID,
+    Value : residenceTime.area.name,
 },
 {
     $Type : 'UI.DataField',
-    Value : residenceTime.handlingUnit_ID,
+    Value : residenceTime.handlingUnit.huId,
 },
 {
     $Type : 'UI.DataField',
