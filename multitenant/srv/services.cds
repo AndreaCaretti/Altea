@@ -60,6 +60,7 @@ service Services {
     @odata.draft.enabled
     entity HandlingUnits           as projection on cloudcoldchain.HandlingUnits;
 
+
     entity HandlingUnitsMovements  as projection on cloudcoldchain.HandlingUnitsMovements;
     entity outOfRange              as projection on cloudcoldchain.outOfRange;
     entity OutOfRangeHandlingUnits as projection on cloudcoldchain.OutOfRangeHandlingUnits;
