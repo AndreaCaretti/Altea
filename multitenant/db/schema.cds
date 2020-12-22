@@ -639,7 +639,6 @@ entity AlertTORResidenceTimeHUDataCount            as
         and Count.gtin             = AlertTORResidenceTimeHUData.gtin
         and Count.lot              = AlertTORResidenceTimeHUData.lot
     distinct {
-
         AlertTORResidenceTimeHUData.AlertsErrorTorID,
         AlertTORResidenceTimeHUData.lot,
         AlertTORResidenceTimeHUData.ProductID,
@@ -647,7 +646,15 @@ entity AlertTORResidenceTimeHUDataCount            as
         AlertTORResidenceTimeHUData.maxTOR,
         AlertTORResidenceTimeHUData.unitOfMeasure,
         Count.HU_Quantity
-    };
+    }
+    group by
+        AlertTORResidenceTimeHUData.AlertsErrorTorID,
+        AlertTORResidenceTimeHUData.lot,
+        AlertTORResidenceTimeHUData.ProductID,
+        AlertTORResidenceTimeHUData.gtin,
+        AlertTORResidenceTimeHUData.maxTOR,
+        AlertTORResidenceTimeHUData.unitOfMeasure,
+        Count.HU_Quantity;
 
 define entity ResidenceTimeAlertsErrorTor          as
     select from ResidenceTime
