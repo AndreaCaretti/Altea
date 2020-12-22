@@ -91,15 +91,12 @@ class TORNotificationPrepare {
                     ),
                     department: {
                         guid: this.checkNullValue(
-                            FromToArea[0].FromDestinatioAreaID,
-                            "FromDestinatioAreaID"
+                            FromToArea[0].FromDepartmentID,
+                            "FromDepartmentID"
                         ),
                     },
                     location: {
-                        guid: this.checkNullValue(
-                            FromToArea[0].FromDestinatioAreaID,
-                            "FromDestinatioAreaID"
-                        ),
+                        guid: this.checkNullValue(FromToArea[0].FromLocationID, "FromLocationID"),
                     },
                 },
                 toArea: {
