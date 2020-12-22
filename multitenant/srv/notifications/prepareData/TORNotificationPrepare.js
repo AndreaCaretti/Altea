@@ -14,7 +14,7 @@ class TORNotificationPrepare {
         const notificationPayload = notification.payload;
 
         const TORHeaderData = await DB.selectAllRowsWhere(
-            cds.entities.AlertTORData,
+            cds.entities.AlertTORDataHeader,
             { AlertsErrorTorID: notificationPayload.alertsErrorTorID },
             undefined,
             tx,
@@ -85,21 +85,33 @@ class TORNotificationPrepare {
                 TOR: TORRowData.TOR,
                 maxTOR: singleTORProducData.maxTOR,
                 fromArea: {
-                    guid: this.checkNullValue(FromToArea[0].FromDestinatioAreaID),
+                    guid: this.checkNullValue(
+                        FromToArea[0].FromDestinatioAreaID,
+                        "FromDestinatioAreaID"
+                    ),
                     department: {
-                        guid: this.checkNullValue(FromToArea[0].FromDestinatioAreaID),
+                        guid: this.checkNullValue(
+                            FromToArea[0].FromDestinatioAreaID,
+                            "FromDestinatioAreaID"
+                        ),
                     },
                     location: {
-                        guid: this.checkNullValue(FromToArea[0].FromDestinatioAreaID),
+                        guid: this.checkNullValue(
+                            FromToArea[0].FromDestinatioAreaID,
+                            "FromDestinatioAreaID"
+                        ),
                     },
                 },
                 toArea: {
-                    guid: this.checkNullValue(FromToArea[0].ToDestinatioAreaID),
+                    guid: this.checkNullValue(
+                        FromToArea[0].ToDestinatioAreaID,
+                        "ToDestinatioAreaID"
+                    ),
                     department: {
-                        guid: this.checkNullValue(FromToArea[0].ToDepartmentID),
+                        guid: this.checkNullValue(FromToArea[0].ToDepartmentID, "ToDepartmentID"),
                     },
                     location: {
-                        guid: this.checkNullValue(FromToArea[0].ToLocationID),
+                        guid: this.checkNullValue(FromToArea[0].ToLocationID, "ToLocationID"),
                     },
                 },
                 handlingUnits: HUData,
@@ -108,8 +120,12 @@ class TORNotificationPrepare {
         return singleOutPut;
     }
 
-    static checkNullValue(value) {
-        this.logger.info(`Check value : ${value}`);
+    static checkNullValue(value, propertyName) {
+        if (value === null) {
+            this.logger.info(
+                `${LOG_PREFIX} 'null' value changed for ${propertyName} as empty string ""`
+            );
+        }
         return value !== null ? value : "";
     }
 }
