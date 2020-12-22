@@ -627,6 +627,7 @@ entity AlertTORResidenceTimeHUData                 as
     group by
         AlertsErrorTorDetails.parent.ID,
         ResidenceTime.handlingUnit.lot.name,
+        ResidenceTime.handlingUnit.lot.product.ID,
         ResidenceTime.handlingUnit.lot.product.gtin,
         ResidenceTime.handlingUnit.lot.product.maxTor,
         ResidenceTime.handlingUnit.typology.uom;
