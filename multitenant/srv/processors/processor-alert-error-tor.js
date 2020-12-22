@@ -6,19 +6,33 @@ const JobProcessor = require("./internal/job-processor");
 
 class ProcessorAlertErrorTOR extends JobProcessor {
     async doWork(jobInfo, technicalUser, tx) {
-        await this.sendNotificationTOR(technicalUser, tx);
+        return this.sendNotificationTOR(technicalUser, tx);
     }
 
-    async sendNotificationTOR(technicalUser, tx) {
+    async doWorkAfterCommit(notificationData, _jobInfo, technicalUserAndTenant, _tx) {
+        if (notificationData) {
+            this.logger.logObject("ProcessorAlertErrorTOR doWorkAfterCommit", notificationData);
+            await this.notificationAlert(
+                notificationData.now,
+                notificationData.alertsErrorTorID,
+                technicalUserAndTenant
+            );
+        }
+    }
+
+    async sendNotificationTOR(_technicalUser, tx) {
         const now = new Date().toISOString();
         const expiredTorData = await this.getExpiredTOR(now, tx);
 
         if (expiredTorData.length === 0) {
-            return;
+            return null;
         }
         const alertsErrorTorID = await this.insertIntoAlertsErrorTor(now, expiredTorData, tx);
-        await tx.commit();
-        await this.notificationAlert(now, alertsErrorTorID, technicalUser);
+
+        return {
+            now,
+            alertsErrorTorID,
+        };
     }
 
     async checkExistingTOR(expiredTorData, tx) {
