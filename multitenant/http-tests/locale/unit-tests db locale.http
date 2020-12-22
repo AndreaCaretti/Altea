@@ -26,7 +26,7 @@ Content-Type: application/json
     "DIR": "F"
 }
 
-### Creazione segmento iot
+### Apertura problema di temperatura nella cella
 POST http://localhost:4004/iot/segment  HTTP/1.1
 Authorization: Basic Alice:Alice
 Content-Type: application/json
