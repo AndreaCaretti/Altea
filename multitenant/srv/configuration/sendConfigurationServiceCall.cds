@@ -1,4 +1,4 @@
-service ConfigurationServiveCall {
+service ConfigurationServiceCall {
 
     action sendConfiguration() returns ServiceResultCall;
 

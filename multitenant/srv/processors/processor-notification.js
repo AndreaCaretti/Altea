@@ -1,3 +1,4 @@
+/* eslint no-unused-vars: ["error", { "varsIgnorePattern": "[iI]gnored" }] */
 const cds = require("@sap/cds");
 const NotificationPrepareData = require("../notifications/prepareData/notificationPrepareData");
 const EnterpriseMessageNotification = require("../enterprise-messaging/em_notification");
@@ -54,7 +55,13 @@ class ProcessorNotification extends JobProcessor {
             GUID: notificationData.GUID,
             notificationTime: notificationData.notificationTime,
         };
-        await DB.insertIntoTable(Notification, dataNotification, tx, this.logger, true);
+        const resultIgnored = await DB.insertIntoTable(
+            Notification,
+            dataNotification,
+            tx,
+            this.logger,
+            true
+        );
     }
 
     async sendAndInsertRow(notificationPayload) {
