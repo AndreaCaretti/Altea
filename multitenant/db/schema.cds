@@ -37,20 +37,20 @@ define entity CustomerCategories : cuid, managed {
 @cds.autoexpose
 define entity Customers : cuid, managed {
     @title  : 'Customers'
-    name                         : String(50);
+    name                        : String(50);
     @title  : 'Category'
     @Common : {
         Text            : category.name,
         TextArrangement : #TextOnly
     }
-    category                     : Association to one CustomerCategories;
+    category                    : Association to one CustomerCategories;
     @title  : 'Tenant Token Endpoint'
-    customerTennantTokenEndpoint : String;
+    customerTenantTokenEndpoint : String;
     @title  : 'Tenant Services URI'
-    customerTennantUri           : String;
+    customerTenantUri           : String;
     @title  : 'GS1 Company Prefixes'
-    gs1CompanyPrefixes           : Composition of many GS1CompanyPrefix
-                                       on gs1CompanyPrefixes.parent = $self;
+    gs1CompanyPrefixes          : Composition of many GS1CompanyPrefix
+                                      on gs1CompanyPrefixes.parent = $self;
 }
 
 @cds.odata.valuelist
@@ -301,9 +301,9 @@ define entity HandlingUnits : cuid, managed {
 
 @cds.odata.valuelist
 define entity HandlingUnitTypologies : cuid, managed {
-    @title       : '{i18n>HandlingUnitTypology}'
+    @title : '{i18n>HandlingUnitTypology}'
     name : String(50);
-    @title       : '{i18n>UnitOfMeasure}'
+    @title : '{i18n>UnitOfMeasure}'
     uom  : String(50);
 }
 
@@ -792,7 +792,7 @@ entity ProductStepData                             as
 @cds.autoexpose
 context DatatoExternalTools {
     entity CustomerView          as projection on cloudcoldchain.Customers {
-        Customers.ID as guid, Customers.name as companyName, customerTennantTokenEndpoint as tokenEndpoint, customerTennantUri as uri
+        Customers.ID as guid, Customers.name as companyName, customerTenantTokenEndpoint as tokenEndpoint, customerTenantUri as uri
     };
 
     @cds.autoexpose
@@ -831,5 +831,17 @@ context DatatoExternalTools {
     entity ProductsView          as projection on cloudcoldchain.Products {
         Products.gtin as gtin, Products.name as description, Products.QAManager as QAManager, Products.productManager as productManager
     };
+
+
+    define entity ConfigurationLog : cuid, managed {
+        @title : 'Configuation Log Time'
+        configurationLogTime : Timestamp;
+        @title : 'Payload'
+        payload              : String;
+        @title : 'HTTP Response Status'
+        HTTPStatus           : Integer;
+        @title : 'HTTP Response Message Body'
+        HTTPMessageBody      : String;
+    }
 
 };
