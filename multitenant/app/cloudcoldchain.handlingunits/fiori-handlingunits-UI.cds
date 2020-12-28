@@ -59,7 +59,7 @@ annotate Services.HandlingUnits with @(UI : {
     {
         $Type  : 'UI.ReferenceFacet',
         Label  : '{i18n>ResidenceTimes}',
-        Target : 'residenceTimes/@UI.LineItem',
+        Target : 'residenceTimes/@UI.PresentationVariant',
     },
     {
         $Type  : 'UI.ReferenceFacet',
@@ -109,28 +109,39 @@ annotate Services.HandlingUnits with @(UI : {
 //	ResidenceTime List Page
 //
 
-annotate Services.ResidenceTime with @(UI : {LineItem : [
-{
-    $Type : 'UI.DataField',
-    Value : area_ID,
-},
-{
-    $Type : 'UI.DataField',
-    Value : inBusinessTime,
-},
-{
-    $Type : 'UI.DataField',
-    Value : outBusinessTime,
-},
-{
-    $Type : 'UI.DataField',
-    Value : maxResidenceTime,
-},
-{
-    $Type : 'UI.DataField',
-    Value : stepNr,
-},
-]});
+annotate Services.ResidenceTime with @(UI : {
+    PresentationVariant     : {
+        $Type          : 'UI.PresentationVariantType',
+        SortOrder      : [{
+            $Type      : 'Common.SortOrderType',
+            Property   : stepNr,
+            Descending : false,
+        }, ],
+        Visualizations : ['@UI.LineItem#ResidenceTime'],
+    },
+    LineItem #ResidenceTime : [
+    {
+        $Type : 'UI.DataField',
+        Value : area_ID,
+    },
+    {
+        $Type : 'UI.DataField',
+        Value : inBusinessTime,
+    },
+    {
+        $Type : 'UI.DataField',
+        Value : outBusinessTime,
+    },
+    {
+        $Type : 'UI.DataField',
+        Value : maxResidenceTime,
+    },
+    {
+        $Type : 'UI.DataField',
+        Value : stepNr,
+    },
+    ]
+});
 
 ////////////////////////////////////////////////////////////////////////////
 //
@@ -139,13 +150,12 @@ annotate Services.ResidenceTime with @(UI : {LineItem : [
 annotate Services.HandlingUnitsMovements with @(UI : {
     PresentationVariant              : {
         $Type          : 'UI.PresentationVariantType',
-        Text           : 'Sort decending',
         SortOrder      : [{
             $Type      : 'Common.SortOrderType',
             Property   : TE,
             Descending : true,
         }, ],
-        Visualizations : ['@UI.LineItem#HandlingUnitsMovements']
+        Visualizations : ['@UI.LineItem#HandlingUnitsMovements'],
     },
     LineItem #HandlingUnitsMovements : [
     {
