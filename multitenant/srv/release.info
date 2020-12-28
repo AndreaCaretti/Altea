@@ -1,6 +1,6 @@
-BUILD Tue Dec 22 17:43:14 CET 2020 user@N0962
+BUILD Tue Dec 22 18:16:50 CET 2020 sbarzaghi@N2008
 
-VERSIONE MTA version : 0.0.82-d2f086aee829a4727098ab77123d08614d64cb3820a012cb1c49487e3c633e7537ffb65e7829029a
+VERSIONE MTA version : 0.0.84-71613c9bd1531e4b6c9d611d6ba891a86f8696a620a012cb1c49487e3c633e7537ffb65e7829029a
 
 On branch main
 Your branch is up to date with 'origin/main'.
@@ -8,5 +8,5 @@ Your branch is up to date with 'origin/main'.
 nothing to commit, working tree clean
 
 Git Commit:
-d2f086aee829a4727098ab77123d08614d64cb38 refs/remotes/origin/main
+71613c9bd1531e4b6c9d611d6ba891a86f8696a6 refs/remotes/origin/main
 20a012cb1c49487e3c633e7537ffb65e7829029a refs/remotes/origin/main-alert-tor

@@ -35,7 +35,7 @@ class OLTNotificationPrepare {
             notificationDate: new Date().toISOString(),
             details: {
                 measurementUnit: MEASURE_UNIT,
-                eventTemperature: "20.00", // TODO: Togliere hardcode temperatura
+                eventTemperature: "8.00", // TODO: Togliere hardcode temperatura
                 // eventTemperature invece che currentTemperatura, nel momento dell'evento
                 workingTemperature: {
                     // Range di temperatura impostato nella cella nel

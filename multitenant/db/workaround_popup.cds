@@ -51,10 +51,14 @@ annotate cloudcoldchain.outOfRange with {
     ID @Core.Computed;
 }
 
-annotate cloudcoldchain.HandlingUnitTypology with {
+annotate cloudcoldchain.HandlingUnitTypologies with {
     ID @Core.Computed;
 }
 
 annotate cloudcoldchain.HandlingUnits with {
+    ID @Core.Computed;
+}
+
+annotate cloudcoldchain.Departments with {
     ID @Core.Computed;
 }

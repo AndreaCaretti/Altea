@@ -301,7 +301,9 @@ define entity HandlingUnits : cuid, managed {
 
 @cds.odata.valuelist
 define entity HandlingUnitTypologies : cuid, managed {
+    @title       : '{i18n>HandlingUnitTypology}'
     name : String(50);
+    @title       : '{i18n>UnitOfMeasure}'
     uom  : String(50);
 }
 
