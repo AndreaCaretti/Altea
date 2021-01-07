@@ -1,3 +1,4 @@
+/* eslint no-unused-vars: ["error", { "varsIgnorePattern": "[iI]gnored" }] */
 const cds = require("@sap/cds");
 const DB = require("../db-utilities");
 const WS = require("../ws-utilities");
@@ -32,7 +33,7 @@ class Configuration {
         const customerDataLine = {
             guid: customerData[0].guid,
             companyName: customerData[0].companyName,
-            customerTenant: this.setCustomerTennantData(customerData[0]),
+            customerTenant: this.setCustomerTenantData(customerData[0]),
         };
 
         configurationData.customer = customerDataLine;
@@ -142,8 +143,8 @@ class Configuration {
         return oLocationToReturn;
     }
 
-    setCustomerTennantData(data) {
-        this.logger.info("Set Tennant information for Customer");
+    setCustomerTenantData(data) {
+        this.logger.info("Set Tenant information for Customer");
         return {
             tokenEndpoint: data.tokenEndpoint,
             uri: data.uri,
@@ -151,22 +152,52 @@ class Configuration {
     }
 
     async sendConfigurationData(tx) {
+        let HTTPStatus = 0;
+        let configurationToSend = {};
+        let configurationLogTime;
+        let HTTPMessageBody = "";
+
         try {
-            const configurationTosend = await this.getConfigurationData(tx);
+            configurationToSend = JSON.stringify(await this.getConfigurationData(tx));
             const configurationEndpoint = await this.getServiceConfiguration(tx);
             // LOG INVIO
+            configurationLogTime = new Date().toISOString();
             const returnData = await WS.send(
                 configurationEndpoint.uri,
                 configurationEndpoint.method,
                 this.logger,
                 configurationEndpoint.headers,
-                JSON.stringify(configurationTosend)
+                configurationToSend
             );
+
+            HTTPStatus = returnData.HTTPStatus;
+            HTTPMessageBody = returnData.body;
+            returnData.configurationToSend = configurationToSend;
 
             return returnData;
         } catch (oError) {
-            return JSON.parse(oError.message);
+            const ErrorMessage = JSON.parse(oError.message);
+
+            HTTPStatus = ErrorMessage.HTTPStatus;
+            HTTPMessageBody = ErrorMessage.body;
+            ErrorMessage.configurationToSend = configurationToSend;
+
+            return ErrorMessage;
         } finally {
+            const ConfigurationLog = cds.entities["DatatoExternalTools.ConfigurationLog"];
+
+            const configurationLogData = {
+                configurationLogTime,
+                payload: JSON.stringify(configurationToSend),
+                HTTPStatus,
+                HTTPMessageBody,
+            };
+            const resultIgnored = await DB.insertIntoTable(
+                ConfigurationLog,
+                configurationLogData,
+                tx,
+                this.logger
+            );
             tx.commit();
         }
     }

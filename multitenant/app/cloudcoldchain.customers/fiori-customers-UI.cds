@@ -53,8 +53,8 @@ annotate Services.Customers with
                                   ]},
     FieldGroup #General : {Data : [
     {Value : category_ID},
-    {Value : customerTennantTokenEndpoint},
-    {Value : customerTennantUri},
+    {Value : customerTenantTokenEndpoint},
+    {Value : customerTenantUri},
     ]},
 
     FieldGroup #Admin   : {Data : [

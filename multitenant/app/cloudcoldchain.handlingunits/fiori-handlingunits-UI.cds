@@ -1,4 +1,4 @@
-using { cloudcoldchain.direction } from '../../db/global_types';
+using {cloudcoldchain.direction} from '../../db/global_types';
 using Services from '../../srv/services';
 
 ////////////////////////////////////////////////////////////////////////////
@@ -59,12 +59,12 @@ annotate Services.HandlingUnits with @(UI : {
     {
         $Type  : 'UI.ReferenceFacet',
         Label  : '{i18n>ResidenceTimes}',
-        Target : 'residenceTimes/@UI.LineItem',
+        Target : 'residenceTimes/@UI.PresentationVariant',
     },
     {
         $Type  : 'UI.ReferenceFacet',
         Label  : '{i18n>Movements}',
-        Target : 'movements/@UI.LineItem',
+        Target : 'movements/@UI.PresentationVariant',
     },
     {
         $Type  : 'UI.ReferenceFacet',
@@ -109,53 +109,74 @@ annotate Services.HandlingUnits with @(UI : {
 //	ResidenceTime List Page
 //
 
-annotate Services.ResidenceTime with @(UI : {LineItem : [
-{
-    $Type : 'UI.DataField',
-    Value : area_ID,
-},
-{
-    $Type : 'UI.DataField',
-    Value : inBusinessTime,
-},
-{
-    $Type : 'UI.DataField',
-    Value : outBusinessTime,
-},
-{
-    $Type : 'UI.DataField',
-    Value : maxResidenceTime,
-},
-{
-    $Type : 'UI.DataField',
-    Value : stepNr,
-},
-]});
+annotate Services.ResidenceTime with @(UI : {
+    PresentationVariant     : {
+        $Type          : 'UI.PresentationVariantType',
+        SortOrder      : [{
+            $Type      : 'Common.SortOrderType',
+            Property   : stepNr,
+            Descending : false,
+        }, ],
+        Visualizations : ['@UI.LineItem#ResidenceTime'],
+    },
+    LineItem #ResidenceTime : [
+    {
+        $Type : 'UI.DataField',
+        Value : area_ID,
+    },
+    {
+        $Type : 'UI.DataField',
+        Value : inBusinessTime,
+    },
+    {
+        $Type : 'UI.DataField',
+        Value : outBusinessTime,
+    },
+    {
+        $Type : 'UI.DataField',
+        Value : maxResidenceTime,
+    },
+    {
+        $Type : 'UI.DataField',
+        Value : stepNr,
+    },
+    ]
+});
 
 ////////////////////////////////////////////////////////////////////////////
 //
 //	Movements List Page
 //
-
-annotate Services.HandlingUnitsMovements with @(UI : {LineItem : [
-{
-    $Type : 'UI.DataField',
-    Value : TE,
-},
-{
-    $Type : 'UI.DataField',
-    Value : controlPoint_ID,
-},
-{
-    $Type : 'UI.DataField',
-    Value : DIR,
-},
-{
-    $Type : 'UI.DataField',
-    Value : TS,
-},
-{
-    $Type : 'UI.DataField',
-    Value : createdAt,
-},
-]});
+annotate Services.HandlingUnitsMovements with @(UI : {
+    PresentationVariant              : {
+        $Type          : 'UI.PresentationVariantType',
+        SortOrder      : [{
+            $Type      : 'Common.SortOrderType',
+            Property   : TE,
+            Descending : true,
+        }, ],
+        Visualizations : ['@UI.LineItem#HandlingUnitsMovements'],
+    },
+    LineItem #HandlingUnitsMovements : [
+    {
+        $Type : 'UI.DataField',
+        Value : TE,
+    },
+    {
+        $Type : 'UI.DataField',
+        Value : controlPoint_ID,
+    },
+    {
+        $Type : 'UI.DataField',
+        Value : DIR,
+    },
+    {
+        $Type : 'UI.DataField',
+        Value : TS,
+    },
+    {
+        $Type : 'UI.DataField',
+        Value : createdAt,
+    },
+    ]
+});
