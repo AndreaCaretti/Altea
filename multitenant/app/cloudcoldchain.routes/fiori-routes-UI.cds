@@ -19,6 +19,7 @@ annotate Services.Routes with @(UI : {
         TypeName       : 'Route',
         TypeNamePlural : 'Routes',
         Title          : {Value : name},
+        Description    : {Value : ''},
     },
     HeaderFacets        : [{
         $Type  : 'UI.ReferenceFacet',
@@ -34,7 +35,7 @@ annotate Services.Routes with @(UI : {
     {
         $Type  : 'UI.ReferenceFacet',
         Label  : '{i18n>Steps}',
-        Target : 'steps/@UI.LineItem',
+        Target : 'steps/@UI.PresentationVariant',
     },
     {
         $Type  : 'UI.ReferenceFacet',
@@ -54,29 +55,38 @@ annotate Services.Routes with @(UI : {
     {Value : modifiedBy},
     {Value : modifiedAt}
     ]}
-
-
 }
 
 );
 
-annotate Services.RouteSteps with @(UI : {LineItem : [
-{
-    Value : stepNr,
-    Label : 'Step Nr.'
-},
-{
-    Value : controlPoint_ID,
-    Label : 'Control Point'
+annotate Services.RouteSteps with @(UI : {
+    PresentationVariant  : {
+        $Type          : 'UI.PresentationVariantType',
+        SortOrder      : [{
+            $Type      : 'Common.SortOrderType',
+            Property   : stepNr,
+            Descending : false,
+        }, ],
+        Visualizations : ['@UI.LineItem#RouteSteps'],
+    },
+    LineItem #RouteSteps : [
+    {
+        Value : stepNr,
+        Label : 'Step Nr.'
+    },
+    {
+        Value : controlPoint_ID,
+        Label : 'Control Point'
 
-},
-{
-    Value : direction,
-    Label : 'Direction'
-},
-{
-    Value : destinationArea_ID,
-    Label : 'Destination Area'
-},
+    },
+    {
+        Value : direction,
+        Label : 'Direction'
+    },
+    {
+        Value : destinationArea_ID,
+        Label : 'Destination Area'
+    },
 
-]}, );
+    ]
+}, );
