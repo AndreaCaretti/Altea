@@ -215,9 +215,9 @@ define entity Products : cuid, managed {
 define entity Lots : cuid, managed {
     @title  : 'Lots'
     name           : String(50);
-    @title  : 'ProductionDate'
+    @title  : '{i18n>ProductionDate}'
     productionDate : Timestamp;
-    @title  : 'ExpirationDate'
+    @title  : '{i18n>ExpirationDate}'
     expirationDate : Timestamp;
     @Common : {
         Text            : product.name,
@@ -343,28 +343,29 @@ define entity HandlingUnitsRawMovements : cuid, managed {
 
 
 define entity ResidenceTime : cuid, managed {
-    @Common : {
+    @Common      : {
         Text            : handlingUnit.huId,
         TextArrangement : #TextOnly
     }
-    @title  : '{i18n>HandlingUnit}'
+    @title       : '{i18n>HandlingUnit}'
     handlingUnit       : Association to one HandlingUnits;
     stepNr             : RouteStepNr;
-    @Common : {
+    @Common      : {
         Text            : area.name,
         TextArrangement : #TextOnly
     }
-    @title  : '{i18n>Area}'
+    @title       : '{i18n>Area}'
     area               : Association to one Areas;
-    @title  : '{i18n>InBusinessTime}'
+    @title       : '{i18n>InBusinessTime}'
     inBusinessTime     : Timestamp;
-    @title  : '{i18n>OutBusinessTime}'
+    @title       : '{i18n>OutBusinessTime}'
     outBusinessTime    : Timestamp;
     residenceTime      : Integer;
     tmin               : Decimal;
     tmax               : Decimal;
     torElaborationTime : Timestamp;
-    @title  : '{i18n>MaxResidenceTime}'
+    @title       : '{i18n>MaxResidenceTime}'
+    @description : '{i18n>MaxResidenceTime}'
     maxResidenceTime   : Timestamp;
 }
 

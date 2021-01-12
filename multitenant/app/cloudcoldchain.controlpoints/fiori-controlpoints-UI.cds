@@ -25,8 +25,8 @@ annotate Services.ControlPoints with @(UI : {
 annotate Services.ControlPoints with @(UI : {
     Identification                      : [{Value : name}],
     HeaderInfo                          : {
-        TypeName       : 'ControlPoint',
-        TypeNamePlural : 'ControlPoints',
+        TypeName       : '{i18n>ControlPoint}',
+        TypeNamePlural : '{i18n>ControlPoints}',
         Title          : {
             Value : name,
             Label : 'Control Point'
@@ -43,7 +43,7 @@ annotate Services.ControlPoints with @(UI : {
     }, ],
     Facets                              : [{
         $Type  : 'UI.ReferenceFacet',
-        Label  : '{i18n>General}',
+        Label  : '{i18n>Admin}',
         Target : '@UI.FieldGroup#Admin'
     }, ],
 

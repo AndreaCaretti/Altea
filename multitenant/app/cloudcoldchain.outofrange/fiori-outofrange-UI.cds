@@ -21,8 +21,8 @@ annotate Services.outOfRange with @(UI : {
 annotate Services.outOfRange with @(UI : {
     Identification      : [{Value : ID}],
     HeaderInfo          : {
-        TypeName       : 'outOfRange',
-        TypeNamePlural : 'outOfRange',
+        TypeName       : '{i18n>outOfRange}',
+        TypeNamePlural : '{i18n>outOfRanges}',
         Title          : {Value : ID},
     },
     HeaderFacets        : [{

@@ -30,10 +30,12 @@ annotate Services.HandlingUnits with @(UI : {
     },
     {
         $Type : 'UI.DataField',
+        Label : '{i18n>LastKnowArea}',
         Value : lastKnownArea_ID,
     },
     {
         $Type : 'UI.DataField',
+        Label : '{i18n>inAreaBusinessTime}',
         Value : inAreaBusinessTime,
     },
     ]
@@ -46,8 +48,8 @@ annotate Services.HandlingUnits with @(UI : {
 annotate Services.HandlingUnits with @(UI : {
     Identification      : [{Value : huId}],
     HeaderInfo          : {
-        TypeName       : 'HandlingUnit',
-        TypeNamePlural : 'HandlingUnits',
+        TypeName       : '{i18n>HandlingUnit}',
+        TypeNamePlural : '{i18n>HandlingUnits}',
         Title          : {Value : huId},
         Description    : {Value : ''}
     },

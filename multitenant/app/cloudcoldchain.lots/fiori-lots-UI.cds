@@ -24,6 +24,7 @@ annotate Services.Lots with @(UI : {
         TypeName       : 'Lot',
         TypeNamePlural : 'Lots',
         Title          : {Value : name},
+        Description    : {Value : ''},
     },
     HeaderFacets        : [
                            // {$Type: 'UI.ReferenceFacet', Label: 'Identification', Target: '@UI.FieldGroup@Header'},
@@ -44,18 +45,9 @@ annotate Services.Lots with @(UI : {
                                    // {Value: name}
                                   ]},
     FieldGroup #General : {Data : [
-    {
-        Value : productionDate,
-        Label : 'Production Date'
-    },
-    {
-        Value : expirationDate,
-        Label : 'Expiration Date'
-    },
-    {
-        Value : product_ID,
-        Label : 'Product'
-    },
+    {Value : productionDate, },
+    {Value : expirationDate, },
+    {Value : product_ID, },
     ]},
     FieldGroup #Admin   : {Data : [
     {Value : createdBy},
@@ -63,4 +55,5 @@ annotate Services.Lots with @(UI : {
     {Value : modifiedBy},
     {Value : modifiedAt}
     ]}
+
 });

@@ -7,14 +7,14 @@ using Services from '../../srv/services';
 annotate Services.AlertsErrorTor with @(UI : {
     SelectionFields : [
     jobStartTime,
-    ID
+    ID,
     ],
     LineItem        : [
     {Value : jobStartTime},
     {
         Value : ID,
-        Label : 'Job ID',
-    }
+        Label : '{i18n>AlarmID}',
+    },
     ]
 });
 

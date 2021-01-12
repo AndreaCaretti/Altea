@@ -26,13 +26,19 @@ annotate Services.CustomerCategories with @(UI : {
                           ],
     Facets              : [{
         $Type  : 'UI.ReferenceFacet',
-        Label  : '{i18n>General}',
-        Target : '@UI.FieldGroup#General'
+        Label  : '{i18n>Admin}',
+        Target : '@UI.FieldGroup#Admin'
     }, ],
     FieldGroup #Header  : {Data : [
                                    // {Value: name}
                                   ]},
     FieldGroup #General : {Data : [
                                    // {Value: name}
-                                  ]}
+                                  ]},
+    FieldGroup #Admin   : {Data : [
+    {Value : createdBy},
+    {Value : createdAt},
+    {Value : modifiedBy},
+    {Value : modifiedAt}
+    ]}
 });
