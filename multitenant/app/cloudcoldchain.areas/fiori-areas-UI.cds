@@ -36,7 +36,8 @@ annotate Services.Areas with @(UI : {
     HeaderInfo              : {
         TypeName       : 'Area',
         TypeNamePlural : 'Areas',
-        Title          : {Value : name}
+        Title          : {Value : name},
+        Description    : {Value : ''}
     },
     HeaderFacets            : [
                                // {$Type: 'UI.ReferenceFacet', Label: 'Identification', Target: '@UI.FieldGroup@Header'},

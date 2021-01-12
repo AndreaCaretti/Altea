@@ -57,6 +57,8 @@ define entity Customers : cuid, managed {
 /**
  * GS1CompanyPrefix Prefissi Company tipo GS1
  */
+@title       : '{i18n>gs1CompanyPrefixsNameListTitle}'
+@description : '{i18n>gs1CompanyPrefixsNameListDescription}'
 define entity GS1CompanyPrefix : cuid {
     parent      : Association to Customers;
     @title       : '{i18n>gs1CompanyPrefixsNameTitle}'
@@ -93,7 +95,7 @@ annotate cloudcoldchain.ControlPoints with {
 @cds.odata.valuelist
 @UI.Identification : [{Value : name}]
 define entity ControlPointsCategories : cuid, managed {
-    @title : 'ControlPoints Category'
+    @title : 'Control Points Category'
     name        : String(50);
     description : localized String(200);
 }

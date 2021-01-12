@@ -5,7 +5,10 @@ using Services from '../../srv/services';
 //	Department List Page
 //
 annotate Services.Department with @(UI : {
-    SelectionFields : [name, location_ID],
+    SelectionFields : [
+    name,
+    location_ID
+    ],
     LineItem        : [
     {Value : name},
     {Value : location_ID},
@@ -22,6 +25,7 @@ annotate Services.Department with @(UI : {
         TypeName       : 'Department',
         TypeNamePlural : 'Department',
         Title          : {Value : name},
+        Description    : {Value : ''}
     },
     HeaderFacets        : [
                            // {$Type: 'UI.ReferenceFacet', Label: 'Identification', Target: '@UI.FieldGroup@Header'},

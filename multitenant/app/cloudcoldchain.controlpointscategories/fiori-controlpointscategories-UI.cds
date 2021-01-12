@@ -16,13 +16,10 @@ annotate Services.ControlPointsCategories with @(UI : {
 annotate Services.ControlPointsCategories with @(UI : {
     Identification      : [{Value : name}],
     HeaderInfo          : {
-        TypeName       : 'ControlPointsCategory',
-        TypeNamePlural : 'ControlPointsCategories',
+        TypeName       : '{i18n>ControlPointsCategory}',
+        TypeNamePlural : '{i18n>ControlPointsCategories}',
         Title          : {Value : name},
-        Description    : {
-            Value : description,
-            Label : '{i18n>controlPointCategoryDescr}'
-        },
+        Description    : {Value : ''}
     },
     HeaderFacets        : [
                            // {$Type: 'UI.ReferenceFacet', Label: 'Identification', Target: '@UI.FieldGroup@Header'},

@@ -27,6 +27,7 @@ annotate Services.Customers with
         TypeName       : 'Customer',
         TypeNamePlural : 'Customers',
         Title          : {Value : name},
+        Description    : {Value : ''}
     },
     HeaderFacets        : [
                            // {$Type: 'UI.ReferenceFacet', Label: 'Identification', Target: '@UI.FieldGroup@Header'},
@@ -69,6 +70,7 @@ annotate Services.Customers with
 //
 //	GS1
 //
+
 annotate Services.GS1CompanyPrefix with
 @(UI : {LineItem : [
 {Value : name},

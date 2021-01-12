@@ -25,8 +25,8 @@ annotate Services.AlertsErrorTor with @(UI : {
 annotate Services.AlertsErrorTor with @(UI : {
     Identification      : [{Value : ID}],
     HeaderInfo          : {
-        TypeName       : 'AlertErrorTor',
-        TypeNamePlural : 'AlertsErrorTor',
+        TypeName       : '{i18n>AlertErrorTor}',
+        TypeNamePlural : '{i18n>AlertsErrorTor}',
         Title          : {Value : ID},
         Description    : {Value : jobStartTime},
     },
