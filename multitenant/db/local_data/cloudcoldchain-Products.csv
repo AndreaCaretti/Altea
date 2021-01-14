@@ -1,2 +1,2 @@
 ID,createdAt,createdBy,modifiedAt,modifiedBy,gtin,name,erpProductCode,maxTor,productManager,QAManager,temperatureRange_ID,route_ID
-bcd1d512-9e0f-4417-ab71-253d1ec13440,2020-12-21T16:46:42.700Z,alice,2020-12-22T08:33:54.290Z,alice,0340092697146,"Aspirina 1000mg",ASP001,120,PM@customera.it,QM@customera.it,d0134f5e-afbd-42bc-b850-7a6fb5a0b707,df0bf605-bec6-4ee8-91fc-d4b02931b1e4
+bcd1d512-9e0f-4417-ab71-253d1ec13440,2020-12-21T16:46:42.700Z,alice,2020-12-22T08:33:54.290Z,alice,0340092697146,"PRODOTTO DI TEST1",ASP001,120,PM@customera.it,QM@customera.it,d0134f5e-afbd-42bc-b850-7a6fb5a0b707,df0bf605-bec6-4ee8-91fc-d4b02931b1e4

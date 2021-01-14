@@ -57,11 +57,23 @@ service Services {
     @odata.draft.enabled
     entity HandlingUnitTypology    as projection on cloudcoldchain.HandlingUnitTypologies;
 
-    @odata.draft.enabled
+    //@odata.draft.enabled
     entity HandlingUnits           as projection on cloudcoldchain.HandlingUnits;
 
+    @readonly
+    entity HandlingUnitsMovements  as projection on cloudcoldchain.HandlingUnitsMovements {
+        * , case DIR
+                when
+                    'F'
+                then
+                    'OutBound'
+                when
+                    'B'
+                then
+                    'InBound'
+            end as Direction : String(20)
+    };
 
-    entity HandlingUnitsMovements  as projection on cloudcoldchain.HandlingUnitsMovements;
     entity outOfRange              as projection on cloudcoldchain.outOfRange;
     entity OutOfRangeHandlingUnits as projection on cloudcoldchain.OutOfRangeHandlingUnits;
     entity AlertsErrorTor          as projection on cloudcoldchain.AlertsErrorTor;

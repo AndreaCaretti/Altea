@@ -299,6 +299,12 @@ define entity HandlingUnits : cuid, managed {
                              on residenceTimes.handlingUnit = $self;
     movements          : Association to many HandlingUnitsMovements
                              on movements.handlingUnit = $self;
+    @title       : '{i18n>RemainingTOR}'
+    @description : '{i18n>RemainingTOR}'
+    remainingTOR       : String(50);
+    @title       : '{i18n>HandlingUnitsMaxTOR}'
+    @description : '{i18n>HandlingUnitsMaxTOR}'
+    maxTor             : Integer;
 }
 
 @cds.odata.valuelist
@@ -367,6 +373,9 @@ define entity ResidenceTime : cuid, managed {
     @title       : '{i18n>MaxResidenceTime}'
     @description : '{i18n>MaxResidenceTime}'
     maxResidenceTime   : Timestamp;
+    @title       : '{i18n>ConsumedTOR}'
+    @description : '{i18n>ConsumedTOR}'
+    consumedTOR        : Decimal;
 }
 
 
@@ -445,10 +454,13 @@ define entity AlertsErrorTor : cuid, managed {
                                 on alertsErrorTorDetails.parent = $self;
 }
 
+@cds.autoexpose
+@cds.odata.valuelist
+@UI.Identification : [{Value : ID}]
 define entity AlertsErrorTorDetails : cuid {
-    parent        : Association to AlertsErrorTor;
-    residenceTime : Association to one ResidenceTime;
-    tor           : Integer
+    key parent        : Association to AlertsErrorTor;
+        residenceTime : Association to one ResidenceTime;
+        tor           : Integer
 }
 
 /**
@@ -589,6 +601,7 @@ entity AlertTORResidenceTimeHUPlain                as
         on AlertsErrorTorDetails.residenceTime.ID = ResidenceTime.ID
     distinct {
         AlertsErrorTorDetails.parent.ID             as AlertsErrorTorID,
+        AlertsErrorTorDetails.parent.jobStartTime   as JobStartTime,
         ResidenceTime.handlingUnit.lot.name         as lot,
         ResidenceTime.handlingUnit.lot.product.ID   as ProductID,
         ResidenceTime.handlingUnit.lot.product.gtin as gtin,
@@ -601,15 +614,19 @@ entity AlertTORResidenceTimeHUPlain                as
         ResidenceTime.handlingUnit.lot.product.gtin,
         ResidenceTime.handlingUnit.ID;
 
+
+@UI.Identification : [{Value : AlertsErrorTorID}]
+@Common.QuickInfo  : 'AlertTORResidenceTimeHUCount'
 entity AlertTORResidenceTimeHUCount                as
     select from cloudcoldchain.AlertTORResidenceTimeHUPlain distinct {
-        AlertsErrorTorID,
-        lot,
-        ProductID,
-        gtin,
+        AlertsErrorTorID : AlertsErrorTor : ID,
+        JobStartTime     : AlertsErrorTor : jobStartTime,
+        lot              : Lots : name,
+        ProductID        : Products : ID,
+        gtin             : Products : gtin,
         count(
             HU_ID
-        ) as HU_Quantity,
+        ) as HU_Quantity : Integer,
     }
     group by
         AlertsErrorTorID,

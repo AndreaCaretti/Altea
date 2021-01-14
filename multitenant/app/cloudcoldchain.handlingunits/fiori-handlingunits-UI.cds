@@ -45,7 +45,15 @@ annotate Services.HandlingUnits with @(UI : {
 //
 //	HandlingUnits Object Page
 //
-annotate Services.HandlingUnits with @(UI : {
+@readonly
+annotate Services.HandlingUnits with
+@(Capabilities : {
+    // entity-level
+    InsertRestrictions.Insertable : false,
+    UpdateRestrictions.Updatable  : false,
+    DeleteRestrictions.Deletable  : false
+})
+@(UI : {
     Identification      : [{Value : huId}],
     HeaderInfo          : {
         TypeName       : '{i18n>HandlingUnit}',
@@ -97,6 +105,14 @@ annotate Services.HandlingUnits with @(UI : {
         $Type : 'UI.DataField',
         Value : inAreaBusinessTime,
     },
+    {
+        $Type : 'UI.DataField',
+        Value : remainingTOR,
+    },
+    {
+        $Type : 'UI.DataField',
+        Value : maxTor,
+    },
     ]},
 
     FieldGroup #Admin   : {Data : [
@@ -104,7 +120,7 @@ annotate Services.HandlingUnits with @(UI : {
     {Value : createdAt},
     {Value : modifiedBy},
     {Value : modifiedAt}
-    ]}
+    ]},
 });
 
 ////////////////////////////////////////////////////////////////////////////
@@ -134,10 +150,6 @@ annotate Services.ResidenceTime with @(UI : {
     {
         $Type : 'UI.DataField',
         Value : outBusinessTime,
-    },
-    {
-        $Type : 'UI.DataField',
-        Value : maxResidenceTime,
     },
     {
         $Type : 'UI.DataField',
@@ -171,7 +183,8 @@ annotate Services.HandlingUnitsMovements with @(UI : {
     },
     {
         $Type : 'UI.DataField',
-        Value : DIR,
+        Value : Direction,
+        Label : '{i18n>Direction}'
     },
     {
         $Type : 'UI.DataField',
