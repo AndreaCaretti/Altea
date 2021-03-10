@@ -1,5 +1,6 @@
 using {cloudcoldchain as cloudcoldchain} from '../../db/schema';
 
+//Modifica
 @(requires : 'authenticated-user')
 @(path : '/erpservice')
 @cds.api.ignore
@@ -26,4 +27,6 @@ service erpservice {
             huId,
             HandlingUnits.lot.name as lotName
         from cloudcoldchain.HandlingUnits;
+
+//Modifica
 };
